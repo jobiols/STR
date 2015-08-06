@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/jobiols/curso.svg)](https://travis-ci.org/jobiols/curso)
-
 # curso
 administración de cursos en una academia 
 Actualmente solo lo probamos en la v7
