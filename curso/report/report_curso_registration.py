@@ -48,7 +48,6 @@ class report_curso_registration(osv.osv):
             readonly=True, required=True),
         'user_id': fields.many2one('res.users', 'curso Responsible', readonly=True),
         'user_id_registration': fields.many2one('res.users', 'Register', readonly=True),
-        'name_registration': fields.char('Participant / Contact Name', size=45, readonly=True),
         'speaker_id': fields.many2one('res.partner', 'Speaker', readonly=True),
         'company_id': fields.many2one('res.company', 'Company', readonly=True),
     }
@@ -67,7 +66,6 @@ class report_curso_registration(osv.osv):
                 e.id AS curso_id,
                 e.user_id AS user_id,
                 r.user_id AS user_id_registration,
-                r.name AS name_registration,
                 e.company_id AS company_id,
                 e.main_speaker_id AS speaker_id,
                 to_char(e.date_begin, 'YYYY-MM-DD') AS curso_date,
@@ -100,7 +98,6 @@ class report_curso_registration(osv.osv):
                 year,
                 month,
                 e.register_max,
-                name_registration
         )
         """)
 
