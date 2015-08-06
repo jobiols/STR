@@ -1,0 +1,5 @@
+.bzr/
+.idea/
+Thumbs.db
+__pycache__
+*.pyc

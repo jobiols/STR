@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!--
+        ++++++++++++++++++++================================================================================================
+         Feriados
+        -->
+        <!--                                        Feriados Form View
+        -->
+        <record model="ir.ui.view" id="view_curso_feriado_form">
+            <field name="name">Feriados</field>
+            <field name="model">curso.holiday</field>
+            <field name="arch" type="xml">
+                <form string="Planilla de feriados" version="7.0">
+                    <group col="2">
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                    </group>
+                    <group col="2">
+                        <field name="date"/>
+                        <field name="start_time" widget="float_time"/>
+                        <field name="end_time" widget="float_time"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!--                                        Feriados Tree View
+        -->
+        <record model="ir.ui.view" id="view_curso_feriado_tree">
+            <field name="name">Feriados</field>
+            <field name="model">curso.holiday</field>
+            <field name="arch" type="xml">
+                <tree string="Plantilla de feriados">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="start_time" widget="float_time"/>
+                    <field name="end_time" widget="float_time"/>
+                    <field name="elapsed_time" widget="float_time"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--                                        Feriados Action
+        -->
+        <record id="action_curso_feriado" model="ir.actions.act_window">
+            <field name="name">Feriados</field>
+            <field name="res_model">curso.holiday</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <!--                                        Feriados Menu
+        -->
+        <menuitem name="Feriados"
+                  id="menu_curso_feriado" parent="base.menu_curso_main"
+                  action="action_curso_feriado" groups="curso.group_curso_manager,curso.group_curso_user"/>
+
+
+        <!--
+        ====================================================================================================================
+        Horarios
+        -->
+
+        <!--                                    Horarios Form View
+        -->
+        <record model="ir.ui.view" id="view_curso_horario_form">
+            <field name="name">Horarios</field>
+            <field name="model">curso.schedule</field>
+            <field name="arch" type="xml">
+                <form string="Planilla de horarios">
+                    <group col="4">
+                        <field name="start_time" widget="float_time"/>
+                        <field name="end_time" widget="float_time"/>
+                        <field name="name"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!--                                    Horarios Tree View
+        -->
+        <record model="ir.ui.view" id="view_curso_horario_tree">
+            <field name="name">Horarios</field>
+            <field name="model">curso.schedule</field>
+            <field name="arch" type="xml">
+                <tree string="Plantilla de curso">
+                    <field name="name"/>
+                    <field name="start_time" widget="float_time"/>
+                    <field name="end_time" widget="float_time"/>
+                    <field name="elapsed_time" widget="float_time"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--                                    Horarios Action View
+        -->
+        <record model="ir.actions.act_window" id="action_curso_horario">
+            <field name="name">Horarios</field>
+            <field name="res_model">curso.schedule</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <!--                                        Horarios Menu
+        -->
+        <menuitem name="Horarios"
+                  id="menu_curso_horario" parent="base.menu_curso_main"
+                  action="action_curso_horario" groups="curso.group_curso_manager,curso.group_curso_user"/>
+
+
+        <!--
+        ================================================================================================================
+        Clases
+        -->
+
+        <!--                                    Clases Form View
+        -->
+        <record model="ir.ui.view" id="view_curso_lecture_form">
+            <field name="name">Clases</field>
+            <field name="model">curso.lecture</field>
+            <field name="arch" type="xml">
+                <form string="Planilla de clases">
+                    <group col="2">
+                        <field name="date"/>
+                        <field name="curso_id"/>
+                        <field name="schedule_id"/>
+                    </group>
+                    <group>
+                        <field name="desc" nolabel="1"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!--                         Clases Tree View
+        -->
+        <record model="ir.ui.view" id="view_curso_lecture_tree">
+            <field name="name">Clases</field>
+            <field name="model">curso.lecture</field>
+            <field name="arch" type="xml">
+                <tree string="lista de clases">
+                    <field name="date"/>
+                    <field name="weekday" type="string"/>
+                    <field name="schedule_id"/>
+                    <field name="curso_id"/>
+                    <field name="desc"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Clases Search View -->
+
+        <record model="ir.ui.view" id="view_lecture_search">
+            <field name="name">Clases</field>
+            <field name="model">curso.lecture</field>
+            <field name="arch" type="xml">
+                <search string="Clases">
+                    <field name="weekday"/>
+                    <field name="curso_id"/>
+                    <field name="schedule_id"/>
+                    <group expand="0" string="Agrupar por...">
+                        <filter string="Curso" icon="terp-personal" context="{'group_by': 'curso_id'}"/>
+                        <filter string="Horario" icon="terp-stock_effects-object-colorize"
+                                context="{'group_by':'schedule_id'}"/>
+                        <filter string="Fecha de inicio" icon="terp-go-month" domain="[]"
+                                context="{'group_by':'date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Clases Calendar view -->
+
+        <record model="ir.ui.view" id="view_lecture_calendar">
+            <field name="name">curso.lecture.calendar</field>
+            <field name="model">curso.lecture</field>
+            <field name="arch" type="xml">
+                <calendar color="curso_id" date_start="date_start" date_stop="date_stop"
+                          string="Inscripciones en los curs">
+                    <field name="curso_id"/>
+                    <field name="desc"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!--                                    Clases Action View
+        -->
+        <record model="ir.actions.act_window" id="action_curso_lecture">
+            <field name="name">Clases</field>
+            <field name="res_model">curso.lecture</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <!--                                        Clases Menu
+        -->
+        <menuitem name="Clases"
+                  id="menu_curso_lecture" parent="base.menu_curso_main"
+                  action="action_curso_lecture" groups="curso.group_curso_manager,curso.group_curso_user"/>
+
+        <!--
+        ================================================================================================================
+        Cuotas
+        -->
+
+        <!--                                    Quota Form View
+        -->
+        <record model="ir.ui.view" id="view_curso_quota_form">
+            <field name="name">Cuotas</field>
+            <field name="model">curso.quota</field>
+            <field name="arch" type="xml">
+                <form string="Planilla de cuotas">
+                    <group col="4">
+                        <field name="registration_id"/>
+                        <field name="date"/>
+                        <field name="amount"/>
+                        <field name="curso_inst"/>
+                        <field name="quota"/>
+                        <field name="invoice_id"/>
+                        <field name="state"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!--                         Quota Tree View
+        -->
+        <record model="ir.ui.view" id="view_curso_quota_tree">
+            <field name="name">Cuotas</field>
+            <field name="model">curso.quota</field>
+            <field name="arch" type="xml">
+                <tree string="lista de cuotas"
+                      fonts="bold:state=='Pagado'"
+                      colors="grey:state=='Pendiente';
+                              green:state=='Pagado';
+                              red:state=='Abierto';
+                              black:state=='Borrador'">
+                    <field name="curso_inst"/>
+                    <field name="partner_id"/>
+                    <field name="date"/>
+                    <field name="invoice_id"/>
+                    <field name="amount"/>
+                    <field name="quota"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--                             Quota Search View
+        -->
+
+        <record model="ir.ui.view" id="view_quota_search">
+            <field name="name">Cuotas</field>
+            <field name="model">curso.quota</field>
+            <field name="arch" type="xml">
+                <search string="Cuotas">
+                    <field name="partner_id"/>
+                    <field name="date"/>
+                    <field name="curso_inst"/>
+                    <field name="list_price"/>
+                    <group expand="0" string="Agrupar por...">
+                        <filter string="Fecha de factura" icon="terp-personal" context="{'group_by': 'date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--                           Cuotas Calendar view
+        -->
+
+        <record model="ir.ui.view" id="view_quota_calendar">
+            <field name="name">vista de calendario</field>
+            <field name="model">curso.quota</field>
+            <field name="arch" type="xml">
+                <calendar color="registration_id" date_start="date" string="cuotas">
+                    <field name="curso_inst"/>
+                    <field name="state"/>
+                </calendar>
+            </field>
+        </record>
+
+
+        <!--                                    Cuotas Action View
+        -->
+        <record model="ir.actions.act_window" id="action_curso_quota">
+            <field name="name">Cuotas</field>
+            <field name="res_model">curso.quota</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <!--                                        Clases Menu
+        -->
+        <menuitem name="Cuotas"
+                  id="menu_curso_quota" parent="base.menu_curso_main"
+                  action="action_curso_quota" groups="curso.group_curso_manager,curso.group_curso_user"/>
+
+    </data>
+
+</openerp>

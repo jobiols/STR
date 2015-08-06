@@ -1,2 +1,2 @@
 # str
-modulos odoo
+modulos odoo v7.0

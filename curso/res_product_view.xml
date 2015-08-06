@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+
+    <data>
+        <record model='ir.ui.view' id='product_form_extension_view'>
+            <field name='name'>product.form.extension</field>
+            <field name='model'>product.product</field>
+            <field name='inherit_id' ref='product.product_normal_form_view'/>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+
+                <notebook position="inside">
+                    <page string="Cursos" groups="base.group_user">
+                        <group name="Cursos" string="Características del curso">
+                            <group colspan="4" col="4">
+                                <field name="tot_hs_lecture"/>
+                                <field name="classes_per_week"/>
+                                <field name="hs_lecture"/>
+                                <field name="default_registration_min"/>
+                                <field name="default_registration_max"/>
+                                <field name="default_reply_to"/>
+                                <field name="default_email_registration"/>
+                                <field name="default_email_curso"/>
+                                <field name="no_quotes"/>
+                                <button name="generate_doc" string="Generar documentación" type="object"
+                                        class="oe_highlight"/>
+                            </group>
+                            <div>   <!-- este div le saca los nombres a los campos -->
+                                <!--                                <field name="observ" placeholder="Detalles del curso, Por ejemplo no se requieren conocimientos previos. NO PONER ACA LAS PROMOCIONES!!" /> -->
+                                <field name="agenda" placeholder="Temario del curso" widget="text_html"/>
+                            </div>
+                        </group>
+                    </page>
+                </notebook>
+
+            </field>
+        </record>
+    </data>
+
+</openerp>

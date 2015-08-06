@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <!--  Partners inherited form aha-->
+
+        <record id="view_curso_partner_info_form" model="ir.ui.view">
+            <field name="name">res.partner.curso.info.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <field name="function" position="replace">
+                    <field name="function" placeholder="Ej. Esteticista"
+                           attrs="{'invisible': [('is_company','=', True)]}"/>
+                </field>
+
+                <field name="user_id" position="replace"></field>
+
+                <field name="title" position="replace">
+                    <field name="teacher" options='{"no_open": True}'
+                           attrs="{'invisible': [('is_company','=', True)]}"/>
+                </field>
+
+                <field name="website" position="replace">
+                    <field name="website" string="Facebook" widget="url"
+                           placeholder="Ej: www.facebook.com/makeoverlabs"/>
+                </field>
+
+                <field name="date" position="replace">
+                </field>
+
+                <field name="website" position="after">
+                    <field name="date" string="Fecha de nacimiento"
+                           attrs="{'invisible': [('is_company','=', True)]}"/>
+                </field>
+
+                <field name="phone" position="replace">
+                    <field name="phone" placeholder="Ej: 11 4861 5612"/>
+                </field>
+
+                <field name="title" invisible="True"/>
+
+                <xpath expr="//page[@name='page_history']" position="attributes">
+                    <attribute name="invisible">False</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='page_history']" position="inside">
+                    <group name="grp_curso" string="Cursos">
+                        <field name="curso_ids" colspan="4" nolabel="1">
+                            <tree string="Cursos">
+                                <field name="name" string="Curso"/>
+                                <field name="main_speaker_id"/>
+                            </tree>
+                        </field>
+                    </group>
+
+                    <group name="grp_registration" string="Inscripciones">
+                        <field name="curso_registration_ids" colspan="4" nolabel="1">
+                            <tree string="Inscripciones en Cursos">
+                                <field name="curso_begin_date" string="Fecha Inicio"/>
+                                <field name="curso_id" string="Curso"/>
+                                <field name="state" string="Estado"/>
+                                <button name="button_reg_cancel" string="Cancelar Inscripción" states="draft,open"
+                                        type="object" icon="gtk-cancel"/>
+                                <button name="button_reg_close" string="Close Registration" states="open" type="object"
+                                        icon="gtk-close"/>
+                                <button name="check_confirm" string="Confirmar Inscripción" states="draft" type="object"
+                                        icon="gtk-apply"/>
+                            </tree>
+                        </field>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!--  Partners inherited view -->
+
+        <record id="view_partner_tree_curso" model="ir.ui.view">
+            <field name="name">res.partner.tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="l10n_ar_invoice.view_res_partner_tree"/>
+            <field name="arch" type="xml">
+                <field name="responsability_id" position="replace">
+                </field>
+                <field name="document_type_id" position="replace">
+                </field>
+
+                <field name="name" position="after">
+                    <field name="date" string="Cumpleaños"/>
+                </field>
+
+                <field name="phone" position="after">
+                    <field name="mobile"/>
+                </field>
+                <field name="document_number" position="after">
+                    <field name="fax"/>
+                </field>
+            </field>
+        </record>
+
+        <!--  Partners inherited searcho view -->
+
+        <record id="inherited_view_res_partner_filter" model="ir.ui.view">
+            <field name="name">Alumnas - Busqueda</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <!-- agrego el filtro después de proveedore -->
+                <xpath expr="filter[@string='Customers']"
+                       position="after">
+                    <filter string="Profesoras" domain="[('teacher', '=', 1)]"/>
+                    <field name="email"/>
+                    <field name="street"/>
+                    <field name="comment"/>
+                    <field name="document_number"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

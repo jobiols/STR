@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_curso_daily_report" model="ir.ui.view">
+            <field name="name">Reporte diario de alumnas y cursos</field>
+            <field name="model">curso.daily.report</field>
+            <field name="arch" type="xml">
+                <form string="Reporte diario" version="7.0">
+                    <group>
+                        <label string="Se va a generar el reporte diario de alumnas, ingresá la fecha para el reporte"/>
+                    </group>
+                    <group>
+                        <field name="date"/>
+                    </group>
+                    <footer>
+                        <button name="button_generate_daily_report" string="Confirmar" type="object"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="wizard_curso_daily_report" model="ir.actions.act_window">
+            <field name="name">Reporte diario de alumnas</field>
+            <field name="res_model">curso.daily.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Reporte"
+                  id="menu_action_curso_daily_report" parent="base.menu_curso_main"
+                  action="wizard_curso_daily_report" groups="curso.group_curso_manager,curso.group_curso_user"/>
+
+    </data>
+</openerp>

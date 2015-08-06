@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!--
+        ====================================================================================================================
+        Facturacion -->
+
+        <!--
+                res_model= modelo a abrir
+                src_model= modelo donde aparece el menuw
+        -->
+
+        <!-- con esto aparece en el boton MAS -->
+        <!--
+                <act_window name="Facturar los cursos del mes"
+                res_model="curso.invoice"
+                src_model="curso.registration"
+                key2="client_action_multi"
+                view_mode="form" target="new"
+                view_type="form"
+                id="act_new_sub_menu" />
+        -->
+
+        <record model="ir.ui.view" id="view_curso_invoice_wizard_form">
+            <field name="name">Imprimir facturas</field>
+            <field name="model">curso.invoice</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Facturacion de cursos" version="7.0">
+                    <div>
+                        <p>
+                            Este es el asistente para generar facturas.
+                        </p>
+                        <p>
+                            Se va a generar una factura en estado borrador por cada alumna que esté cursando en estado
+                            confirmada, y cuyo importe no es cero, o sea no se facturan las charlas gratuitas.
+                            Luego es necesario revisar las facturas que se generon y confirmarlas.
+                        </p>
+                    </div>
+                    <footer>
+                        <button string="Generar facturas" name="button_gen_invoice" type="object" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="wizard_curso_invoice" model="ir.actions.act_window">
+            <field name="name">Facturacion de cursos</field>
+            <field name="res_model">curso.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Facturacion"
+                  id="menu_action_curso_invoice" parent="base.menu_curso_main"
+                  action="wizard_curso_invoice" groups="curso.group_curso_manager,curso.group_curso_user"/>
+    </data>
+</openerp>

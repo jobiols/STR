@@ -1,0 +1,16 @@
+-
+  Copy of curso.
+-
+  !python {model: curso.curso}: |
+    try:
+      self.copy(cr, uid, ref("curso_2"))
+    except:
+      pass
+-
+  Copy of curso registarion.
+-
+  !python {model: curso.registration}: |
+    try:
+      self.copy(cr, uid, ref("reg_1_1"))
+    except:
+      pass
