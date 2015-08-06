@@ -33,11 +33,7 @@ install:
   #- git clone -b 7.0 https://github.com/jobiols/odoo-addons.git ${HOME}/odoo-addons
 
   # odoo argentina
-  - git clone --depth 1 -b 7.0 https://github.com/jobiols/odoo-argentina.git ${HOME}/odoo-argentina
-#  - pip install geopy==0.95.1 BeautifulSoup 
-#  - git clone --depth 1 https://www.github.com/jobiols/localizacion.git ${HOME}/localizacion
-
-
+  - git clone --depth 1 https://www.github.com/jobiols/localizacion.git ${HOME}/localizacion
 
 
   # oca server tools
