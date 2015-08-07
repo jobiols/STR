@@ -97,7 +97,7 @@ class report_curso_registration(osv.osv):
                 e.main_speaker_id,
                 year,
                 month,
-                e.register_max,
+                e.register_max
         )
         """)
 
