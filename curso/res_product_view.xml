@@ -23,7 +23,7 @@
                                 <field name="default_email_registration"/>
                                 <field name="default_email_curso"/>
                                 <field name="no_quotes"/>
-                                <button name="generate_doc" string="Generar documentación" type="object"
+                                <button name="button_generate_doc" string="Generar documentación" type="object"
                                         class="oe_highlight"/>
                             </group>
                             <div>   <!-- este div le saca los nombres a los campos -->

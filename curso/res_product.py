@@ -5,6 +5,18 @@ from datetime import datetime
 
 from openerp.osv import fields, osv
 
+def mark_down(text):
+    ret = []
+    # split text in paragraphs
+    list = text.split("\n"),
+    for li in list:
+        if li[0] == '#':
+            ret.append('<h1>'+ li[1:]+'</h1>')
+        elif li[0] == '-':
+            ret.append('<li>'+ li[1:] + '</li>')
+        else:
+            ret.append(li)
+    return ''.join(ret)
 
 def generate_html(dict):
     ret = ""
@@ -47,7 +59,10 @@ def generate_html(dict):
         ret += "<br>"
         if data['temario']:
             ret += "<h2>Temario</h2>"
-            ret += data['temario']
+            ret += '<ul>'
+            for tema in data['temario']:
+                ret += '<li>' + tema + '</li>'
+            ret += '</ul>'
 
     ret += "<br>"
     ret += "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\">"
@@ -125,7 +140,7 @@ class product_product(osv.osv):
             '6': 'Domingo'}
         return dict[wd]
 
-    def generate_doc(self, cr, uid, ids, context=None):
+    def button_generate_doc(self, cr, uid, ids, context=None):
         for prod in self.browse(cr, uid, ids, context=context):
 
             cursos = []
@@ -139,7 +154,6 @@ class product_product(osv.osv):
                 schedule = ""
                 if inst.schedule_1:
                     schedule = inst.schedule_1.name
-
                 cursos.append({'inicio': datetime.strftime(datetime.strptime(inst.date_begin, '%Y-%m-%d'), '%d/%m/%Y'),
                                'instancia': '{}/{:0>2d}'.format(prod.default_code, inst.instance),
                                'dias': self.wd2day(inst.weekday_1),
@@ -158,7 +172,7 @@ class product_product(osv.osv):
                 'horas_catedra': str(prod.tot_hs_lecture),
                 'modalidad': str(prod.classes_per_week) + ' clase de ' + str(prod.hs_lecture) + ' hs por semana',
                 'cursos': cursos,
-                'temario': prod.agenda,
+                'temario': mark_down(prod.agenda),
                 'matricula': 'Bonificada',
                 'cuotas': str(prod.no_quotes),
                 'valor': str(prod.list_price),

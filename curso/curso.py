@@ -64,7 +64,6 @@ class curso_information(osv.osv_memory):
         return True
 
 
-# -----------------------------------------------------------------------------------------------------------------------
 class curso_curso(osv.osv):
     """ Representa una instancia de un curso """
     _name = 'curso.curso'
@@ -75,7 +74,6 @@ class curso_curso(osv.osv):
     class weekdays():
         _weekload = []
 
-        # -----------------------------------------------------------------------------------------------------------------------
         def __init__(self, wl, date):
             self._weekload = wl
             self._start_day = date
@@ -93,12 +91,9 @@ class curso_curso(osv.osv):
             if (self._current_ix == None):
                 raise osv.except_osv(('Error!'), (u"La fecha de inicio no corresponde con Dia 1 ni con Dia 2"))
 
-                # -----------------------------------------------------------------------------------------------------------------------
-
         def current_weekload(self):
             return self._weekload[self._current_ix]
 
-        # -----------------------------------------------------------------------------------------------------------------------
         def next_delta(self):
             last_weekday = int(self._weekload[self._current_ix].get('weekday'))
 
@@ -194,7 +189,6 @@ class curso_curso(osv.osv):
 
         return ret
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def generate_doc_curso(self, cr, uid, ids, context=None):
         for curso in self.browse(cr, uid, ids, context=context):
             alumnas = []
@@ -234,7 +228,6 @@ class curso_curso(osv.osv):
 
         return True
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def name_get(self, cr, uid, ids, context=None):
         if not ids:
             return []
@@ -249,7 +242,6 @@ class curso_curso(osv.osv):
             res.append((record['id'], display_name))
         return res
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def copy(self, cr, uid, id, default=None, context=None):
         """ Reset the state and the registrations while copying an curso
         """
@@ -261,11 +253,9 @@ class curso_curso(osv.osv):
         })
         return super(curso_curso, self).copy(cr, uid, id, default=default, context=context)
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def button_draft(self, cr, uid, ids, context=None):
         return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def button_cancel(self, cr, uid, ids, context=None):
         registration = self.pool.get('curso.registration')
         reg_ids = registration.search(cr, uid, [('curso_id', 'in', ids)], context=context)
@@ -275,7 +265,6 @@ class curso_curso(osv.osv):
         registration.write(cr, uid, reg_ids, {'state': 'cancel'}, context=context)
         return self.write(cr, uid, ids, {'state': 'cancel'}, context=context)
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def button_done(self, cr, uid, ids, context=None):
         registration = self.pool.get('curso.registration')
         reg_ids = registration.search(cr, uid, [('curso_id', 'in', ids)], context=context)
@@ -286,7 +275,6 @@ class curso_curso(osv.osv):
                 #        registration.write(cr, uid, reg_ids, {'state': 'cancel'}, context=context)
         return self.write(cr, uid, ids, {'state': 'done'}, context=context)
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def check_registration_limits(self, cr, uid, ids, context=None):
         for self.curso in self.browse(cr, uid, ids, context=context):
             total_confirmed = self.curso.register_current
@@ -294,8 +282,6 @@ class curso_curso(osv.osv):
                 raise osv.except_osv(('Error!'), (
                     u"El total de inscripciones confirmadas para el curso '%s' no cumple con los requerimientos esperados de minimo/maximo. Reconsidere estos limites antes de continuar.") % (
                                          self.curso.name))
-
-                # -----------------------------------------------------------------------------------------------------------------------
 
     def check_registration_limits_before(self, cr, uid, ids, no_of_registration, context=None):
         for curso in self.browse(cr, uid, ids, context=context):
@@ -317,7 +303,6 @@ class curso_curso(osv.osv):
         # register_pool.mail_user_confirm(cr, uid, reg_ids)
         return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def button_confirm(self, cr, uid, ids, context=None):
         """ Confirmar curso and send confirmation email to all register peoples
         """
@@ -334,7 +319,6 @@ class curso_curso(osv.osv):
         self.check_registration_limits(cr, uid, ids, context=context)
         return self.confirm_curso(cr, uid, ids, context=context)
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def _get_register(self, cr, uid, ids, fields, args, context=None):
         """ Get Confirm or uncofirm register value.
         @param ids: List of curso registration type's id
@@ -368,7 +352,6 @@ class curso_curso(osv.osv):
                 res[curso.id][field] = number
         return res
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def _subscribe_fnc(self, cr, uid, ids, fields, args, context=None):
         """This functional fields compute if the current user (uid) is already subscribed or not to the curso passed in parameter (ids)
         """
@@ -384,7 +367,6 @@ class curso_curso(osv.osv):
                         continue
         return res
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def get_holiday_dates(self, cr, uid, ids, context=None):
         hd = []
         holidays = self.pool.get('curso.holiday')
@@ -393,7 +375,6 @@ class curso_curso(osv.osv):
             hd.append(datetime.strptime(holiday.date, '%Y-%m-%d'))
         return hd
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def _get_day(self, cursor, user_id, context=None):
         return (
             ('0', u'Lunes'),
@@ -404,7 +385,6 @@ class curso_curso(osv.osv):
             ('5', u'Sábado'),
             ('6', u'Domingo'))
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def compute_lecture_data(self, cr, uid, ids, date_begin, weekload, tot_lectures, context=None):
 
         date = datetime.strptime(date_begin, '%Y-%m-%d')
@@ -424,7 +404,6 @@ class curso_curso(osv.osv):
                 date = date + timedelta(days=weekdays.next_delta())
         return lecture_data
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def create_lectures(self, cr, uid, ids, lecture_data, default_code, context=None):
         lectures_pool = self.pool.get('curso.lecture')
         for reg in self.browse(cr, uid, ids, context=context):
@@ -435,8 +414,6 @@ class curso_curso(osv.osv):
                 'schedule_id': data.get('schedule'),
                 'curso_id': curso_id
             })
-
-            # -----------------------------------------------------------------------------------------------------------------------
 
     def generate_lectures(self, cr, uid, ids, context=None):
         """ Generar las clases que correspondan a este curso
@@ -476,7 +453,6 @@ class curso_curso(osv.osv):
         self.create_lectures(cr, uid, ids, lecture_data, default_code, context=None)
         return 0
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def _get_name(self, cr, uid, ids, fields, args, context=None):
 
         def _week_day(day):
@@ -532,7 +508,6 @@ class curso_curso(osv.osv):
             res[curso.id] = name
         return res
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def onchange_curso_product(self, cr, uid, ids, product, context=None):
         values = {}
         if product:
@@ -553,7 +528,6 @@ class curso_curso(osv.osv):
         })
         return {'value': values}
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def _get_no_lectures(self, cr, uid, ids, fields, args, context=None):
         res = {}
         for curso in self.browse(cr, uid, ids, context=context):
@@ -565,7 +539,6 @@ class curso_curso(osv.osv):
                 res[curso.id] = 'Error!'
         return res
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def _get_instance(self, cr, uid, ids, fields, args, context=None):
         res = {}
         for curso in self.browse(cr, uid, ids, context=context):
@@ -661,7 +634,6 @@ class curso_curso(osv.osv):
         'user_id': lambda obj, cr, uid, context: uid,
     }
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def subscribe_to_curso(self, cr, uid, ids, context=None):
         register_pool = self.pool.get('curso.registration')
         user_pool = self.pool.get('res.users')
@@ -678,7 +650,6 @@ class curso_curso(osv.osv):
             register_pool.write(cr, uid, curr_reg_ids, {'nb_register': num_of_seats}, context=context)
         return register_pool.confirm_registration(cr, SUPERUSER_ID, curr_reg_ids, context=context)
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def unsubscribe_to_curso(self, cr, uid, ids, context=None):
         register_pool = self.pool.get('curso.registration')
         # the unsubscription is done with SUPERUSER_ID because in case we share the kanban view, we want anyone to be able to unsubscribe
@@ -687,7 +658,6 @@ class curso_curso(osv.osv):
 
 
 class curso_registration(osv.osv):
-    # -----------------------------------------------------------------------------------------------------------------------
     def _get_weekday(self, cr, uid, ids, fields, args, context=None):
 
         def _week_day(day):
@@ -765,7 +735,6 @@ class curso_registration(osv.osv):
     }
     _order = 'create_date desc'
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def confirm_registration(self, cr, uid, ids, context=None):
         for reg in self.browse(cr, uid, ids, context=context or {}):
             self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
@@ -774,7 +743,6 @@ class curso_registration(osv.osv):
                                                       subtype="curso.mt_curso_registration", context=context)
         return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def sign_registration(self, cr, uid, ids, context=None):
         for reg in self.browse(cr, uid, ids, context=context or {}):
             self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
@@ -783,7 +751,6 @@ class curso_registration(osv.osv):
                                                       subtype="curso.mt_curso_registration", context=context)
         return self.write(cr, uid, ids, {'state': 'signed'}, context=context)
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def button_reg_sign(self, cr, uid, ids, context=None):
         """ Boton senio el curso
         """
@@ -798,7 +765,6 @@ class curso_registration(osv.osv):
         #        self.mail_user(cr, uid, ids, context=context)
         return res
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def button_reg_confirm(self, cr, uid, ids, context=None):
         """ Boton empezo el curso
         """
@@ -809,7 +775,6 @@ class curso_registration(osv.osv):
                                                       subtype="curso.mt_curso_registration", context=context)
         return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def button_reg_draft(self, cr, uid, ids, context=None):
         """ Boton volver a interesada
         """
@@ -820,7 +785,6 @@ class curso_registration(osv.osv):
                                                       subtype="curso.mt_curso_registration", context=context)
         return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def button_reg_done(self, cr, uid, ids, context=None):
         """ Boton Termino el curso
         """
@@ -843,7 +807,6 @@ class curso_registration(osv.osv):
 
         return True
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def button_reg_cancel(self, cr, uid, ids, context=None, *args):
         # Eliminar todas las cuotas pendientes para no seguir cobrandole
         for registration in self.browse(cr, uid, ids, context=context):
@@ -853,7 +816,6 @@ class curso_registration(osv.osv):
         register_pool.unlink(cr, uid, records, context=None)
         return self.write(cr, uid, ids, {'state': 'cancel'})
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def button_gen_quotes(self, cr, uid, ids, context=None, *args):
         for registration in self.browse(cr, uid, ids, context=context):
             registration_id = registration.id
@@ -869,7 +831,6 @@ class curso_registration(osv.osv):
             self.pool.get('curso.quota').create(cr, uid, quota_data, context=context)
         return True
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def mail_user(self, cr, uid, ids, context=None):
         """
         Send email to user with email_template when registration is done
@@ -883,7 +844,6 @@ class curso_registration(osv.osv):
                     mail_message = self.pool.get('email.template').send_mail(cr, uid, template_id, registration.id)
         return True
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def mail_user_confirm(self, cr, uid, ids, context=None):
         """
         Send email to user when the curso is confirmed
