@@ -123,15 +123,18 @@ class product_product(osv.osv):
     #    _sql_constraints = [('default_code_unique', 'unique (default_code)', 'ya hay un producto con esta referencia.')]
     def wd2day(self, wd):
         print 'w2day >>>>>>>>>> ', wd
-        dict = {
-            '0': 'Lunes',
-            '1': 'Martes',
-            '2': 'Miercoles',
-            '3': 'Jueves',
-            '4': 'Viernes',
-            '5': 'Sabado',
-            '6': 'Domingo'}
-        return dict[wd]
+        if wd:
+            dict = {
+                '0': 'Lunes',
+                '1': 'Martes',
+                '2': 'Miercoles',
+                '3': 'Jueves',
+                '4': 'Viernes',
+                '5': 'Sabado',
+                '6': 'Domingo'}
+            return dict[wd]
+        else:
+            return '---'
 
     def button_generate_doc(self, cr, uid, ids, context=None):
         for prod in self.browse(cr, uid, ids, context=context):
