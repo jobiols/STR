@@ -10,7 +10,7 @@ def mark_down(text):
     return html
 
 def generate_html(dict):
-    print dict
+    print '>>>>> generate_html dict ',dict
     ret = ""
     for data in dict:
         ret += "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
@@ -122,6 +122,7 @@ class product_product(osv.osv):
 
     #    _sql_constraints = [('default_code_unique', 'unique (default_code)', 'ya hay un producto con esta referencia.')]
     def wd2day(self, wd):
+        print 'w2day >>>>>>>>>> ', wd
         dict = {
             '0': 'Lunes',
             '1': 'Martes',
