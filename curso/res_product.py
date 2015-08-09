@@ -51,10 +51,7 @@ def generate_html(dict):
         ret += "<br>"
         if data['temario']:
             ret += "<h2>Temario</h2>"
-            ret += '<ul>'
-            for tema in data['temario']:
-                ret += '<li>' + tema + '</li>'
-            ret += '</ul>'
+            ret += data['temario']:
 
     ret += "<br>"
     ret += "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\">"
