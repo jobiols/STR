@@ -2,21 +2,12 @@
 #################################################################################
 
 from datetime import datetime
-
 from openerp.osv import fields, osv
+import markdown
 
 def mark_down(text):
-    ret = []
-    # split text in paragraphs
-    list = text.split("\n"),
-    for li in list:
-        if li[0] == '#':
-            ret.append('<h1>'+ li[1:]+'</h1>')
-        elif li[0] == '-':
-            ret.append('<li>'+ li[1:] + '</li>')
-        else:
-            ret.append(li)
-    return ''.join(ret)
+    html = markdown.markdown(text)
+    return html
 
 def generate_html(dict):
     ret = ""
