@@ -10,6 +10,7 @@ def mark_down(text):
     return html
 
 def generate_html(dict):
+    print dict
     ret = ""
     for data in dict:
         ret += "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
