@@ -1,15 +1,20 @@
--
-  I want to organize an curso,
-  into this conference I should create two registration.
-  One confirmed and attended the curso and the other cancelled.
 
-  I create an curso
+  I want to organize a curso,
+  I have to create a product to define the curso
+
+  I create a product
+-
+  !record {model: product.product, id: product_curso}:
+   name: curso
+   tot_hs_lecture: 10
+   classes_per_week: 1
+   hs_lecture: 5
+-
+  I create a curso
 -
   !record {model: curso.curso, id: curso_curso}:
-   name: curso
-   date_begin: 2012-01-01 19:05:15
-   date_end: 2012-01-01 20:05:15
-   register_max: 10
+   instance: 1
+   product: product_curso
 -
   I create a registration for the curso
 -
