@@ -1,0 +1,22 @@
+-
+  Test for module curso
+-
+  First I create a product to define a curso
+-
+  !record {model: product.product, id: curso_product_1}:
+    name: Curso de maquillaje Social
+    tot_hs_lecture: 10
+    classes_per_week: 1
+    hs_lecture: 5
+    agenda: tema uno, tema dos, tema tres
+-
+  Then I create a curso based on this product
+-
+  !record {model: curso.curso, id: curso_curso_1}:
+    product: curso_product_1
+-
+  I check that state is draft
+-
+  !assert {model: curso.curso, id: curso_curso_1}:
+    - state == 'draft'  , "State is not draft"
+    - instance == 1     , "Instance is not 1"
