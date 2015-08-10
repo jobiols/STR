@@ -35,6 +35,9 @@ install:
   # odoo argentina
   - git clone --depth 1 https://www.github.com/jobiols/localizacion.git ${HOME}/localizacion
 
+  # Markdown package
+  - git clone --depth 1 https://github.com/jobiols/Python-Markdown.git /python-markdown
+  - cd /python-markdown && python setup.py install
 
   # oca server tools
  # - git clone https://github.com/OCA/server-tools.git ${HOME}/server-tools
