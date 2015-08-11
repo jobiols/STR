@@ -39,7 +39,7 @@ class report_curso_registration(osv.osv):
         'confirm_state': fields.integer(' # Nro de Inscripciones confirmadas', size=20),
         'register_max': fields.integer('Máximo de Inscripciones'),
         'nbcurso': fields.integer('Number Of cursos'),
-        'curso_type': fields.many2one('curso.type', 'curso Type'),
+
         'registration_state': fields.selection(
             [('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Attended'), ('cancel', 'Cancelled')],
             'Registration State', readonly=True, required=True),
@@ -74,7 +74,7 @@ class report_curso_registration(osv.osv):
                 count(e.id) AS nbcurso,
                 CASE WHEN r.state IN ('draft') THEN r.nb_register ELSE 0 END AS draft_state,
                 CASE WHEN r.state IN ('open','done') THEN r.nb_register ELSE 0 END AS confirm_state,
-                e.type AS curso_type,
+
                 e.register_max AS register_max,
                 e.state AS curso_state,
                 r.state AS registration_state
@@ -88,7 +88,7 @@ class report_curso_registration(osv.osv):
                 r.id,
                 registration_state,
                 r.nb_register,
-                curso_type,
+
                 e.id,
                 e.date_begin,
                 e.user_id,

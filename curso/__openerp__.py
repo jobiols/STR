@@ -50,7 +50,8 @@ Puntos Clave
         'curso_view.xml',
         'engine_view.xml',
         'curso_data.xml',
-        'report/report_curso_registration_view.xml',
+
+#        'report/report_curso_registration_view.xml',
         'board_association_view.xml',
         'res_partner_view.xml',
         'res_product_view.xml',

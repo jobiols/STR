@@ -26,13 +26,6 @@ from openerp.osv import fields, osv
 from openerp import SUPERUSER_ID
 
 
-class curso_type(osv.osv):
-    #    """ curso Type DEPRECATED!! """
-    _name = 'curso.type'
-    _description = __doc__
-    _columns = {
-    }
-
 def calculate_invoice_date1(sourcedate, months):
     return sourcedate + timedelta(days=30 * (months))
 
