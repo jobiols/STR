@@ -32,8 +32,9 @@
                             Este es el asistente para generar facturas.
                         </p>
                         <p>
-                            Se va a generar una factura en estado borrador por cada alumna que esté cursando en estado
-                            confirmada, y cuyo importe no es cero, o sea no se facturan las charlas gratuitas.
+                            Se va a generar una factura en estado borrador por cada alumna que esté en estado
+                            señada o en estado cursando, y cuyo importe no es cero, o sea no se facturan las
+                            charlas gratuitas.
                             Luego es necesario revisar las facturas que se generon y confirmarlas.
                         </p>
                     </div>
