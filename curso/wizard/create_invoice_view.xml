@@ -51,9 +51,10 @@
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
-
+<!--
         <menuitem name="Facturacion"
                   id="menu_action_curso_invoice" parent="base.menu_curso_main"
                   action="wizard_curso_invoice" groups="curso.group_curso_manager,curso.group_curso_user"/>
+-->
     </data>
 </openerp>
