@@ -20,3 +20,14 @@
   !assert {model: curso.curso, id: curso_curso_1}:
     - state == 'draft'  , "State is not draft"
     - instance == 1     , "Instance is not 1"
+-
+  Then I create another curso based on this product
+-
+  !record {model: curso.curso, id: curso_curso_2}:
+    product: curso_product_1
+-
+  I check that state is draft and instance is 1 (this will fail)
+-
+  !assert {model: curso.curso, id: curso_curso_1}:
+    - state == 'draft'  , "State is not draft"
+    - instance == 1     , "Instance is 2 assert 1 this must fail"
