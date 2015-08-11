@@ -14,7 +14,7 @@
         <menuitem name="Cursos"
                   id="curso_main_menu" groups="curso.group_curso_manager,curso.group_curso_user" sequence="115"/>
         <menuitem name="Organización de cursos"
-                  id="base.menu_curso_main" parent="curso_main_menu"/>
+                  id="menu_curso_main" parent="curso_main_menu"/>
 
         <!--
         ================================================================================================================
@@ -406,7 +406,7 @@
 
         <menuitem name="Cursos"
                   id="menu_curso_curso" action="action_curso_view"
-                  parent="base.menu_curso_main"/>
+                  parent="menu_curso_main"/>
 
         <!-- Registration tree view  -->
 
@@ -573,7 +573,7 @@
         </record>
 
         <menuitem name="Inscripciones"
-                  id="menu_action_registration" parent="base.menu_curso_main"
+                  id="menu_action_registration" parent="menu_curso_main"
                   action="action_registration" groups="curso.group_curso_manager,curso.group_curso_user"/>
 
         <menuitem name="Reporting" id="base.menu_report_association" parent="curso_main_menu" sequence="20"/>

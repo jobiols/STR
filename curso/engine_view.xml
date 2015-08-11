@@ -55,7 +55,7 @@
         <!--                                        Feriados Menu
         -->
         <menuitem name="Feriados"
-                  id="menu_curso_feriado" parent="base.menu_curso_main"
+                  id="menu_curso_feriado" parent="menu_curso_main"
                   action="action_curso_feriado" groups="curso.group_curso_manager,curso.group_curso_user"/>
 
 
@@ -106,7 +106,7 @@
         <!--                                        Horarios Menu
         -->
         <menuitem name="Horarios"
-                  id="menu_curso_horario" parent="base.menu_curso_main"
+                  id="menu_curso_horario" parent="menu_curso_main"
                   action="action_curso_horario" groups="curso.group_curso_manager,curso.group_curso_user"/>
 
 
@@ -197,7 +197,7 @@
         <!--                                        Clases Menu
         -->
         <menuitem name="Clases"
-                  id="menu_curso_lecture" parent="base.menu_curso_main"
+                  id="menu_curso_lecture" parent="menu_curso_main"
                   action="action_curso_lecture" groups="curso.group_curso_manager,curso.group_curso_user"/>
 
         <!--
@@ -294,7 +294,7 @@
         <!--                                        Clases Menu
         -->
         <menuitem name="Cuotas"
-                  id="menu_curso_quota" parent="base.menu_curso_main"
+                  id="menu_curso_quota" parent="menu_curso_main"
                   action="action_curso_quota" groups="curso.group_curso_manager,curso.group_curso_user"/>
 
     </data>
