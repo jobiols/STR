@@ -21,7 +21,7 @@
 
 {
     'name': 'Organización de Cursos',
-    'version': '0.2',
+    'version': '0.9',
     'category': 'Tools',
     'summary': 'Cursos, Inscripciones, Reservas etc.',
     'description': """
@@ -38,6 +38,7 @@ Puntos Clave
 * Generación automática de la facturación
 * Vista de calendario de las clases
 
+version 0.9
 
 """,
     'author': 'Sistemas en Tiempo Real SRL',
@@ -45,20 +46,20 @@ Puntos Clave
     'data': [
         'security/curso_security.xml',
         'security/ir.model.access.csv',
+        #        'wizard/curso_confirm_view.xml',
         'wizard/create_invoice_view.xml',
         'wizard/daily_report_view.xml',
         'curso_view.xml',
         'engine_view.xml',
         'curso_data.xml',
-
-#        'report/report_curso_registration_view.xml',
+        'report/report_curso_registration_view.xml',
         'board_association_view.xml',
         'res_partner_view.xml',
         'res_product_view.xml',
         'email_template.xml',
     ],
     # 'demo': ['curso_demo.xml'],
-    'test': ['test/process/test_curso.yml'],
+    'test': ['test/process/curso_draft2done.yml'],
     'css': ['static/src/css/curso.css'],
     'js': ['static/src/js/announcement.js'],
     'installable': True,

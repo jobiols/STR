@@ -26,6 +26,23 @@ from openerp.osv import fields, osv
 from openerp import SUPERUSER_ID
 
 
+class curso_type(osv.osv):
+    #    """ curso Type DEPRECATED!! """
+    _name = 'curso.type'
+    _description = __doc__
+    _columns = {
+    }
+
+
+def calculate_invoice_date(curso_date):
+    dd = datetime.strptime(curso_date, '%Y-%m-%d')
+
+    year = datetime.now().year
+    month = datetime.now().month
+    day = int(dd.strftime('%d'))
+    return datetime.strftime(date(year, month, day), '%Y-%m-%d')
+
+
 def calculate_invoice_date1(sourcedate, months):
     return sourcedate + timedelta(days=30 * (months))
 
@@ -800,7 +817,6 @@ class curso_registration(osv.osv):
         return self.write(cr, uid, ids, {'state': 'cancel'})
 
     def button_gen_quotes(self, cr, uid, ids, context=None, *args):
-
         for registration in self.browse(cr, uid, ids, context=context):
             registration_id = registration.id
             date = datetime.strptime(registration.curso_begin_date, '%Y-%m-%d')

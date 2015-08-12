@@ -15,7 +15,7 @@
                     <field name="month" invisible="1"/>
                     <field name="curso_id" invisible="1"/>
                     <field name="curso_state" invisible="1"/>
-
+                    <field name="curso_type" invisible="1"/>
                     <field name="nbcurso"/>
                     <field name="draft_state" invisible="context.get('no_of_draft_invisible', False)"/>
                     <field name="confirm_state"/>
@@ -54,7 +54,7 @@
                     <field name="curso_id" string="curso"/>
                     <field name="user_id"/>
                     <group expand="0" string="Extended Filters...">
-
+                        <field name="curso_type" widget="selection"/>
                         <field name="curso_date"/>
                     </group>
                     <newline/>
@@ -64,7 +64,7 @@
                         <filter string="Speaker" name="speaker" icon="terp-personal+" context="{'group_by': 'speaker_id'}" groups="base.group_no_one"/>
                         <filter string="curso Responsible" name="user_id" icon="terp-personal" context="{'group_by': 'user_id'}"/>
                         <filter string="curso" name="curso" icon="terp-crm" context="{'group_by':'curso_id', 'max_reg_curso_visible':0}"/>
-
+                        <filter string="curso Type" icon="terp-crm"  context="{'group_by':'curso_type'}"/>
                         <filter string="curso State" icon="terp-stock_effects-object-colorize" context="{'group_by':'curso_state'}"/>
                         <filter string="Registration State" icon="terp-stock_effects-object-colorize" context="{'group_by':'registration_state'}"/>
                         <filter string="Company" icon="terp-go-home" domain="[]" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
