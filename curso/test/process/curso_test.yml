@@ -1,14 +1,34 @@
- I want to organize a curso,
-  I have to create a product to define the curso first
 -
-  !record {model: product.product, id: product_curso}:
-    name: curso de maquillaje
+  Test for module curso.
+-
+  First I create a product to define a curso
+-
+  !record {model: product.product, id: curso_product_1}:
+    name: Curso de maquillaje Social Profesional
     tot_hs_lecture: 10
     classes_per_week: 1
     hs_lecture: 5
-    list_price: 980
+    default_code: SPR
+    list_price: 800
+    type: 'service'
+    agenda: tema uno, tema dos, tema tres
 -
   Then I create a curso based on this product
 -
-  !record {model: curso.curso, id: curso_curso}:
-    product: product_curso
+  !record {model: curso.curso, id: curso_curso_1}:
+    product: curso_product_1
+-
+  I check that state is draft
+-
+  !assert {model: curso.curso, id: curso_curso_1}:
+    - instance == 1     , "Instance is not 1"
+-
+  Then I create another curso based on this product
+-
+  !record {model: curso.curso, id: curso_curso_2}:
+    product: curso_product_1
+-
+  I check that state is draft and instance is 1 (this will fail)
+-
+  !assert {model: curso.curso, id: curso_curso_1}:
+    - instance == 1     , "Instance is not 2"
