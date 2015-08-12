@@ -1,5 +1,3 @@
-  Test for module curso.
-
   First I create a product to define a curso
 -
   !record {model: product.product, id: curso_product_1}:
