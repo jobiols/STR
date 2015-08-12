@@ -1,0 +1,14 @@
+ I want to organize a curso,
+  I have to create a product to define the curso first
+-
+  !record {model: product.product, id: product_curso}:
+    name: curso de maquillaje
+    tot_hs_lecture: 10
+    classes_per_week: 1
+    hs_lecture: 5
+    list_price: 980
+-
+  Then I create a curso based on this product
+-
+  !record {model: curso.curso, id: curso_curso}:
+    product: product_curso

@@ -59,7 +59,7 @@ version 0.9
         'email_template.xml',
     ],
     # 'demo': ['curso_demo.xml'],
-    'test': ['test/process/curso_draft2done.yml'],
+    'test': ['test/process/curso_test.yml'],
     'css': ['static/src/css/curso.css'],
     'js': ['static/src/js/announcement.js'],
     'installable': True,
