@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-#
 #################################################################################
 
 from datetime import datetime, timedelta
+
 from openerp.osv import fields, osv
 
 
@@ -26,11 +26,10 @@ class curso_lapse(osv.osv):
     _columns = {
         'start_time': fields.float('Desde', required=True),
         'end_time': fields.float('Hasta', required=True),
-        'elapsed_time': fields.function(_elapsed_time, string="Duración", type="float", method=True)
+        'elapsed_time': fields.function(_elapsed_time, string="Duración", type="float",
+                                        method=True)
     }
 
-
-#######################################################################################################################
 
 class curso_holiday(osv.osv):
     """ define los periodos donde estamos en vacaciones, puede ser parte de un dia """
@@ -47,8 +46,6 @@ class curso_holiday(osv.osv):
         'end_time': 22,
     }
 
-
-#######################################################################################################################
 
 class curso_schedule(osv.osv):
     """ horarios que puede tener un curso """
@@ -81,14 +78,14 @@ class curso_schedule(osv.osv):
         return res
 
     _columns = {
-        'name': fields.function(_get_name, fnct_search=None, string='Nombre del horario', method=True, store=True,
+        'name': fields.function(_get_name, fnct_search=None, string='Nombre del horario',
+                                method=True, store=True,
                                 type='char'),
     }
 
-    _sql_constraints = [('default_code_unique', 'unique (name)', 'Este horario ya existe.')]
+    _sql_constraints = [
+        ('default_code_unique', 'unique (name)', 'Este horario ya existe.')]
 
-
-#######################################################################################################################
 
 class curso_lecture(osv.osv):
     """ Representa las clases del curso """
@@ -133,15 +130,17 @@ class curso_lecture(osv.osv):
     _columns = {
         'date': fields.date('Fecha'),
         'desc': fields.text('Descripcion'),
-        'curso_id': fields.many2one('curso.curso', 'Curso', readonly=False, required=True),
-        'schedule_id': fields.many2one('curso.schedule', 'Horario', readonly=False, required=True),
+        'curso_id': fields.many2one('curso.curso', 'Curso', readonly=False,
+                                    required=True),
+        'schedule_id': fields.many2one('curso.schedule', 'Horario', readonly=False,
+                                       required=True),
         'weekday': fields.function(_weekday, string="Dia", type="char", method=True),
-        'date_start': fields.function(_get_start, string="Inicio de clase", type="datetime", method=True),
-        'date_stop': fields.function(_get_stop, string="Fin de clase", type="datetime", method=True),
+        'date_start': fields.function(_get_start, string="Inicio de clase",
+                                      type="datetime", method=True),
+        'date_stop': fields.function(_get_stop, string="Fin de clase", type="datetime",
+                                     method=True),
     }
 
-
-# -----------------------------------------------------------------------------------------------------------------------
 
 class curso_quota(osv.osv):
     def _get_state(self, cr, uid, ids, fields, args, context=None):
@@ -150,7 +149,8 @@ class curso_quota(osv.osv):
             res[quota.id] = 'Pendiente'
             register_pool = self.pool.get('account.invoice')
             if quota.invoice_id:
-                records = register_pool.search(cr, uid, [('id', '=', quota.invoice_id.id)])
+                records = register_pool.search(cr, uid,
+                                               [('id', '=', quota.invoice_id.id)])
                 for reg in register_pool.browse(cr, uid, records, context):
                     if reg.state == 'draft':
                         res[quota.id] = 'Borrador'
@@ -168,7 +168,8 @@ class curso_quota(osv.osv):
             res[quota.id] = 0
             register_pool = self.pool.get('account.invoice')
             if quota.invoice_id:
-                records = register_pool.search(cr, uid, [('id', '=', quota.invoice_id.id)])
+                records = register_pool.search(cr, uid,
+                                               [('id', '=', quota.invoice_id.id)])
                 for reg in register_pool.browse(cr, uid, records, context):
                     res[quota.id] = reg.amount_total
         return res
@@ -179,15 +180,19 @@ class curso_quota(osv.osv):
     _columns = {
         'registration_id': fields.many2one('curso.registration', 'Inscripcion'),
         'date': fields.date('Fecha factura'),
-        'amount': fields.function(_get_amount_paid, fnct_search=None, string='Facturado', method=True, store=False,
+        'amount': fields.function(_get_amount_paid, fnct_search=None, string='Facturado',
+                                  method=True, store=False,
                                   type='char'),
-        'state': fields.function(_get_state, fnct_search=None, string='Estado Factura', method=True, store=False,
+        'state': fields.function(_get_state, fnct_search=None, string='Estado Factura',
+                                 method=True, store=False,
                                  type='char'),
         'list_price': fields.float('Precio'),
         'quota': fields.integer('#cuota', readonly=False),
-        'curso_inst': fields.related('registration_id', 'curso_id', 'curso_instance', string='Instancia', type='char',
+        'curso_inst': fields.related('registration_id', 'curso_id', 'curso_instance',
+                                     string='Instancia', type='char',
                                      size=128, readonly=True),
-        'partner_id': fields.related('registration_id', 'partner_id', 'name', string='Alumna', type='char', size=128,
+        'partner_id': fields.related('registration_id', 'partner_id', 'name',
+                                     string='Alumna', type='char', size=128,
                                      readonly=True),
         'invoice_id': fields.many2one('account.invoice', 'Factura', required=False),
     }

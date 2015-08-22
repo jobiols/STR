@@ -28,6 +28,23 @@ class curso_daily_report(osv.osv_memory):
     Daily report
     """
 
+    def missing_data(self, alumna):
+        ret = u''
+        if alumna.partner_id.document_number == False:
+            ret += u' documento'
+        if alumna.partner_id.street == False:
+            ret += u' dirección'
+        if alumna.partner_id.date == False:
+            ret += u' nacimiento'
+        if alumna.partner_id.email == False:
+            ret += u' mail'
+        if alumna.partner_id.mobile == False:
+            ret += u' celular'
+        if ret != '':
+            ret = 'Falta ' + ret
+
+        return ret
+
     def generate_html(self, data):
 
         ret = ""
@@ -43,6 +60,7 @@ class curso_daily_report(osv.osv_memory):
                 ret += "			<td>" + str(alumna.partner_id.email) + "</td>"
                 ret += "			<td>" + str(alumna.partner_id.mobile) + "</td>"
                 ret += "			<td>" + str(alumna.partner_id.credit) + "</td>"
+                ret += "			<td>" + self.missing_data(alumna) + "</td>"
                 ret += "		</tr>"
             ret += "	</tbody>"
             ret += "</table>"
@@ -68,7 +86,10 @@ class curso_daily_report(osv.osv_memory):
         pool_reg = self.pool.get('curso.registration')
         for lecture in lectures:
             alumnas = []
-            alumnas_ids = pool_reg.search(cr, uid, [('curso_id', '=', lecture.curso_id.id), ('state', '=', 'confirm')])
+            alumnas_ids = pool_reg.search(cr, uid,
+                                          [('curso_id', '=', lecture.curso_id.id),
+                                           '|', ('state', '=', 'confirm'),
+                                           ('state', '=', 'signed')])
             for alumna in pool_reg.browse(cr, uid, alumnas_ids, context):
                 alumnas.append(alumna)
             data.append(
@@ -78,7 +99,8 @@ class curso_daily_report(osv.osv_memory):
                  }
             )
 
-        report_name = "Reporte Diario " + datetime.strftime(datetime.strptime(date, '%Y-%m-%d'), '%d/%m/%Y')
+        report_name = "Reporte Diario " + datetime.strftime(
+            datetime.strptime(date, '%Y-%m-%d'), '%d/%m/%Y')
 
         new_page = {
             'name': report_name,
@@ -99,7 +121,8 @@ class curso_daily_report(osv.osv_memory):
     _description = "Reporte diario de alumnas"
 
     _columns = {
-        'date': fields.date('Fecha', required=True, help=u"La fecha para la que se va a generar el reporte"),
+        'date': fields.date('Fecha', required=True,
+                            help=u"La fecha para la que se va a generar el reporte"),
     }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
