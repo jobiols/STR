@@ -21,7 +21,7 @@
 
 {
     'name': 'Organización de Cursos',
-    'version': '0.9',
+    'version': '0.8',
     'category': 'Tools',
     'summary': 'Cursos, Inscripciones, Reservas etc.',
     'description': """
@@ -38,7 +38,6 @@ Puntos Clave
 * Generación automática de la facturación
 * Vista de calendario de las clases
 
-version 0.9
 
 """,
     'author': 'Sistemas en Tiempo Real SRL',
