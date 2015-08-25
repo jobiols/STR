@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <!--  Partners inherited form aha-->
+        <!--  Partners inherited form -->
 
         <record id="view_curso_partner_info_form" model="ir.ui.view">
             <field name="name">res.partner.curso.info.inherit</field>
@@ -44,9 +44,8 @@
                     <group name="grp_registration" string="Historial">
                         <field name="curso_registration_ids" colspan="4" nolabel="1">
                             <tree string="Inscripciones en Cursos">
-                                <field name="partner_id"/>
-                                <field name="email"/>
-                                <field name="phone"/>
+                                <field name="discount"/>
+                                <field name="curso_id"/>
                                 <field name="state"/>
                                 <!-- ESTADOS -->
                                 <button name="button_reg_sign" string="Seña el curso"

@@ -2,15 +2,18 @@
 #################################################################################
 
 from datetime import datetime
+
 from openerp.osv import fields, osv
 import markdown
+
 
 def mark_down(text):
     html = markdown.markdown(text)
     return html
 
+
 def generate_html(dict):
-    print '>>>>> generate_html dict ',dict
+    print '>>>>> generate_html dict ', dict
     ret = ""
     for data in dict:
         ret += "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
@@ -27,7 +30,8 @@ def generate_html(dict):
         ret += "</table>"
 
         ret += "<p>" + data['acerca_de'] + "</p>"
-        ret += "<p>Duracion " + data['duracion_semanas'] + " semanas, (" + data['horas_catedra'] + "hs)<br/>"
+        ret += "<p>Duracion " + data['duracion_semanas'] + " semanas, (" + data[
+            'horas_catedra'] + "hs)<br/>"
         ret += "Modalidad " + data['modalidad'] + "</p>"
 
         ret += "<table  border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 500px;\">"
@@ -40,10 +44,14 @@ def generate_html(dict):
         ret += "        </tr>"
         for line in data['cursos']:
             ret += "        <tr bgcolor=\"#E0ECF8\">"
-            ret += "            <td><span style=\"font-size:14px;\">" + line['inicio'] + "</span></td>"
-            ret += "            <td><span style=\"font-size:14px;\">" + line['instancia'] + "</span></td>"
-            ret += "            <td><span style=\"font-size:14px;\">" + line['dias'] + "</span></td>"
-            ret += "            <td><span style=\"font-size:14px;\">" + line['horario'] + "</span></td>"
+            ret += "            <td><span style=\"font-size:14px;\">" + line[
+                'inicio'] + "</span></td>"
+            ret += "            <td><span style=\"font-size:14px;\">" + line[
+                'instancia'] + "</span></td>"
+            ret += "            <td><span style=\"font-size:14px;\">" + line[
+                'dias'] + "</span></td>"
+            ret += "            <td><span style=\"font-size:14px;\">" + line[
+                'horario'] + "</span></td>"
             ret += "        </tr>"
 
         ret += "    </tbody>"
@@ -81,7 +89,8 @@ def generate_html(dict):
         else:
             ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
 
-        ret += "			   <p>Matr&iacute;cula: " + data['matricula'] + " - " + ss + "</p>"
+        ret += "			   <p>Matr&iacute;cula: " + data[
+            'matricula'] + " - " + ss + "</p>"
         ret += "			</td>"
         ret += "		</tr>"
     ret += "</tbody>"
@@ -92,15 +101,19 @@ def generate_html(dict):
 class product_product(osv.osv):
     _inherit = 'product.product'  # Permite la herencia propiamente dicho del modulo product
     _columns = {
-        'tot_hs_lecture': fields.integer('Horas catedra', help="Cantidad de horas que tiene el curso en total."),
-        'classes_per_week': fields.integer('Clases por semana', help="Cantidad de clases en la semana."),
-        'hs_lecture': fields.integer('Horas de clase', help="Duración de cada una de las clases."),
+        'tot_hs_lecture': fields.integer('Horas catedra',
+                                         help="Cantidad de horas que tiene el curso en total."),
+        'classes_per_week': fields.integer('Clases por semana',
+                                           help="Cantidad de clases en la semana."),
+        'hs_lecture': fields.integer('Horas de clase',
+                                     help="Duración de cada una de las clases."),
         'agenda': fields.text('Tema'),
         'no_quotes': fields.integer('Cantidad de cuotas'),
 
         'default_reply_to': fields.char('Respuesta por defecto', size=64,
                                         help="El mail del organizador, que se pondra en el campo de respuesta de todos los mails enviados automaticamente en inscripciones y confirmaciones de cursos."),
-        'default_email_registration': fields.many2one('email.template', 'Mail de inscripcion',
+        'default_email_registration': fields.many2one('email.template',
+                                                      'Mail de inscripcion',
                                                       help="Selecciona el mail de inscripcion que se enviara a la alumna"),
         'default_email_curso': fields.many2one('email.template', 'Mail de confirmacion',
                                                help="Selecciona el mail de confirmacion que se enviara a la alumna en el momento de la confirmacion"),
@@ -142,18 +155,22 @@ class product_product(osv.osv):
 
             instance_pool = self.pool.get('curso.curso')
             records = instance_pool.search(cr, uid,
-                                           [('default_code', '=', prod.default_code), ('state', '!=', 'cancel')])
+                                           [('default_code', '=', prod.default_code),
+                                            ('state', '!=', 'cancel')])
             for inst in instance_pool.browse(cr, uid, records, context=context):
                 schedule = ""
                 if inst.schedule_1:
                     schedule = inst.schedule_1.name
-                cursos.append({'inicio': datetime.strftime(datetime.strptime(inst.date_begin, '%Y-%m-%d'), '%d/%m/%Y'),
-                               'instancia': '{}/{:0>2d}'.format(prod.default_code, inst.instance),
+                cursos.append({'inicio': datetime.strftime(
+                    datetime.strptime(inst.date_begin, '%Y-%m-%d'), '%d/%m/%Y'),
+                    'instancia': '{}/{:0>2d}'.format(prod.default_code,
+                                                     inst.instance),
                                'dias': self.wd2day(inst.weekday_1),
                                'horario': schedule,
                                })
             try:
-                weeks = str((prod.tot_hs_lecture / prod.hs_lecture) / prod.classes_per_week)
+                weeks = str(
+                    (prod.tot_hs_lecture / prod.hs_lecture) / prod.classes_per_week)
             except:
                 weeks = "error!"
 
@@ -163,7 +180,8 @@ class product_product(osv.osv):
                 'acerca_de': prod.description,
                 'duracion_semanas': weeks,
                 'horas_catedra': str(prod.tot_hs_lecture),
-                'modalidad': str(prod.classes_per_week) + ' clase de ' + str(prod.hs_lecture) + ' hs por semana',
+                'modalidad': str(prod.classes_per_week) + ' clase de ' + str(
+                    prod.hs_lecture) + ' hs por semana',
                 'cursos': cursos,
                 'temario': mark_down(prod.agenda),
                 'matricula': 'Bonificada',
