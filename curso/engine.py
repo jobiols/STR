@@ -109,7 +109,8 @@ class curso_lecture(osv.osv):
 
         tt = datetime(dt.year, dt.month, dt.day, hh, mm, tzinfo=None)
 
-        # TODO aca sumamos tres horas porque inexplicablemente al mostrar el campo le resta tres horas.
+        # TODO aca sumamos tres horas porque inexplicablemente al mostrar
+        # el campo le resta tres horas.
         tt = tt + timedelta(hours=3)
         b = tt.strftime("%Y-%m-%d %H:%M:%S")
 

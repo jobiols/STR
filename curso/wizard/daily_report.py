@@ -94,14 +94,15 @@ class curso_daily_report(osv.osv_memory):
             date = reg.date
 
         data = []
-        # Obtener todas las clases de hoy
+        # Obtener todas las clases de la fecha del reporte solo para cursos confirmados.
         lectures = []
         pool = self.pool.get('curso.lecture')
         lectures_ids = pool.search(cr, uid, [('date', '=', date)])
         for lecture in pool.browse(cr, uid, lectures_ids, context):
-            lectures.append(lecture)
+            if lecture.curso_id.state == 'confirm':
+                lectures.append(lecture)
 
-        # por cada curso obtener todas las alumnas
+        # por cada clase obtener todas las alumnas en estado confirmado o señado
         pool_reg = self.pool.get('curso.registration')
         for lecture in lectures:
             alumnas = []
@@ -112,6 +113,7 @@ class curso_daily_report(osv.osv_memory):
                                            ('state', '=', 'signed')])
             for alumna in pool_reg.browse(cr, uid, alumnas_ids, context):
                 alumnas.append(alumna)
+
             data.append(
                 {'curso': lecture.curso_id.name,
                  'tema': lecture.desc,

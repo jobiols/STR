@@ -84,13 +84,13 @@ class curso_curso(osv.osv):
             # chequear con cada horario para ver si coincide con alguno
             self._current_ix = None
             for ix, rec in enumerate(self._weekload):
-                if (int(rec.get('weekday')) == self._start_weekday):
+                if int(rec.get('weekday')) == self._start_weekday:
                     self._current_ix = ix
                     break
 
-            if (self._current_ix == None):
+            if self._current_ix == None:
                 raise osv.except_osv(('Error!'), (
-                u"La fecha de inicio no corresponde con Dia 1 ni con Dia 2"))
+                    u"La fecha de inicio no corresponde con Dia 1 ni con Dia 2"))
 
         def current_weekload(self):
             return self._weekload[self._current_ix]
@@ -98,7 +98,7 @@ class curso_curso(osv.osv):
         def next_delta(self):
             last_weekday = int(self._weekload[self._current_ix].get('weekday'))
 
-            self._current_ix = self._current_ix + 1
+            self._current_ix += self._current_ix
             if (self._current_ix >= len(self._weekload)):
                 self._current_ix = 0
 
@@ -164,12 +164,6 @@ class curso_curso(osv.osv):
             ret += "			<td>&nbsp; " + str(alumna['credit']) + "</td>"
 
             ret += "		</tr>"
-
-        # ret += "		<tr>"
-        #            ret += "			<td align=\"right\">Pagos</td>"
-        #            for fecha in dict['clases']:
-        #                ret += "			<td>&nbsp;</td>"
-        #            ret += "		</tr>"
 
         ret += "	</tbody>"
         ret += "</table>"
@@ -268,7 +262,8 @@ class curso_curso(osv.osv):
         for curso_reg in registration.browse(cr, uid, reg_ids, context=context):
             if curso_reg.state != 'cancel':
                 raise osv.except_osv('Error!',
-                                     u"Para cancelar el curso debe cancelar todas las alumnas.")
+                                     u"Para cancelar el curso debe cancelar todas \
+                                     las alumnas.")
         registration.write(cr, uid, reg_ids, {'state': 'cancel'}, context=context)
         return self.write(cr, uid, ids, {'state': 'cancel'}, context=context)
 
@@ -277,9 +272,10 @@ class curso_curso(osv.osv):
         reg_ids = registration.search(cr, uid, [('curso_id', 'in', ids)], context=context)
         for curso_reg in registration.browse(cr, uid, reg_ids, context=context):
             if not ((curso_reg.state == 'done') or (curso_reg.state == 'cancel') or (
-                curso_reg.state == 'draft')):
+                        curso_reg.state == 'draft')):
                 raise osv.except_osv(('Error!'), (
-                    u"Para terminar el curso las alumnas deben estar en estado cumplido, cancelado o interesada."))
+                    u"Para terminar el curso las alumnas deben estar en estado \
+                    cumplido, cancelado o interesada."))
                 #        registration.write(cr, uid, reg_ids, {'state': 'cancel'}, context=context)
         return self.write(cr, uid, ids, {'state': 'done'}, context=context)
 
@@ -287,8 +283,10 @@ class curso_curso(osv.osv):
         for self.curso in self.browse(cr, uid, ids, context=context):
             total_confirmed = self.curso.register_current
             if total_confirmed < self.curso.register_min or total_confirmed > self.curso.register_max and self.curso.register_max != 0:
-                raise osv.except_osv(('Error!'), (
-                    u"El total de inscripciones confirmadas para el curso '%s' no cumple con los requerimientos esperados de minimo/maximo. Reconsidere estos limites antes de continuar.") % (
+                raise osv.except_osv('Error!', (
+                    u"El total de inscripciones confirmadas para el curso '%s' no \
+                    cumple con los requerimientos esperados de minimo/maximo. \
+                    Reconsidere estos limites antes de continuar.") % (
                                          self.curso.name))
 
     def check_registration_limits_before(self, cr, uid, ids, no_of_registration,
@@ -298,17 +296,16 @@ class curso_curso(osv.osv):
             if available_seats and no_of_registration > available_seats:
                 raise osv.except_osv(('Cuidado!'),
                                      (u"Solo hay %d vacantes disponnibles!") % (
-                                     available_seats))
+                                         available_seats))
             elif available_seats == 0:
                 raise osv.except_osv(('Cuidado!'),
                                      (u"No Hay mas vacantes en este curso!"))
 
-                # -----------------------------------------------------------------------------------------------------------------------
-
     def confirm_curso(self, cr, uid, ids, context=None):
         register_pool = self.pool.get('curso.registration')
         if self.curso.email_confirmation_id:
-            # send reminder that will confirm the curso for all the people that were already confirmed
+            # send reminder that will confirm the curso for all
+            # the people that were already confirmed
             reg_ids = register_pool.search(cr, uid, [
                 ('curso_id', '=', self.curso.id),
                 ('state', 'not in', ['draft', 'cancel'])], context=context)
@@ -322,11 +319,11 @@ class curso_curso(osv.osv):
         for curso in self.browse(cr, uid, ids, context=context):
             if not (curso.date_begin):
                 raise osv.except_osv(('Error!'), (
-                u"No se puede confirmar el curso porque no tiene fecha de inicio."))
+                    u"No se puede confirmar el curso porque no tiene fecha de inicio."))
 
             if not ((curso.schedule_1) and (curso.weekday_1)):
-                raise osv.except_osv(('Error!'), (
-                u"No se puede confirmar el curso porque no horario y día asignados."))
+                raise osv.except_osv('Error!', (
+                    u"No se puede confirmar el curso porque no horario y día asignados."))
 
         if isinstance(ids, (int, long)):
             ids = [ids]
@@ -360,14 +357,18 @@ class curso_curso(osv.osv):
                 elif field == 'register_prospect':
                     number = reg_draft
                 elif field == 'register_avail':
-                    # the number of ticket is unlimited if the curso.register_max field is not set.
-                    # In that cas we arbitrary set it to 9999, it is used in the kanban view to special case the display of the 'subscribe' button
+                    # the number of ticket is unlimited if the curso.register_max
+                    # field is not set.
+                    # In that cas we arbitrary set it to 9999, it is used in the
+                    # kanban view to special case the display of the 'subscribe' button
                     number = curso.register_max - reg_open if curso.register_max != 0 else 9999
                 res[curso.id][field] = number
         return res
 
     def _subscribe_fnc(self, cr, uid, ids, fields, args, context=None):
-        """This functional fields compute if the current user (uid) is already subscribed or not to the curso passed in parameter (ids)
+        """
+        This functional fields compute if the current user (uid) is already
+        subscribed or not to the curso passed in parameter (ids)
         """
         register_pool = self.pool.get('curso.registration')
         res = {}
@@ -446,7 +447,7 @@ class curso_curso(osv.osv):
 
         if (operator.mod(tot_hs_lecture, hs_lecture) != 0):
             raise osv.except_osv(('Error!'), (
-            u"la cantidad de horas catedra no es divisible por las horas de clase!."))
+                u"la cantidad de horas catedra no es divisible por las horas de clase!."))
 
         tot_lectures = tot_hs_lecture // hs_lecture
         weekload = []
@@ -578,11 +579,17 @@ class curso_curso(osv.osv):
                                    readonly=True,
                                    states={'draft': [('readonly', False)]}),
         'register_max': fields.integer('Vacantes max',
-                                       help=u"La cantidd máxima de vacantes del curso. Si la cantidad de inscripciones es mayor, no se puede arrancar el curso. (poner 0 para ignorar la regla)",
+                                       help=u"La cantidd máxima de vacantes del curso. \
+                                       Si la cantidad de inscripciones es mayor, no se \
+                                       puede arrancar el curso. \
+                                       (poner 0 para ignorar la regla)",
                                        readonly=True,
                                        states={'draft': [('readonly', False)]}),
         'register_min': fields.integer('Vacantes min', readonly=True,
-                                       help=u"La cantidad mínima de inscripciones en el curso. Si no hay suficientes inscripcones no se puede arrancar el curso. (poner 0 para ignorar la regla)",
+                                       help=u"La cantidad mínima de inscripciones en el \
+                                       curso. Si no hay suficientes inscripcones no se \
+                                       puede arrancar el curso. \
+                                       (poner 0 para ignorar la regla)",
                                        states={'draft': [('readonly', False)]}),
         'registration_ids': fields.one2many('curso.registration', 'curso_id',
                                             'Inscripciones',
@@ -592,7 +599,9 @@ class curso_curso(osv.osv):
         'lecture_ids': fields.one2many('curso.lecture', 'curso_id', 'Clases',
                                        readonly=False),
         'date_begin': fields.date('Inicio', required=False,
-                                  help=u"La fecha en la que inicia el curso, se puede dejar en blanco si no está definida todavia pero se debe ingresar para confirmar el curso",
+                                  help=u"La fecha en la que inicia el curso, se puede \
+                                  dejar en blanco si no está definida todavia pero se \
+                                  debe ingresar para confirmar el curso",
                                   readonly=True, states={'draft': [('readonly', False)]}),
         'schedule_1': fields.many2one('curso.schedule', 'Horario 1',
                                       readonly=True,
@@ -613,15 +622,23 @@ class curso_curso(osv.osv):
             ('done', 'Terminado')],
             'Status', readonly=True, required=True,
             track_visibility='onchange',
-            help=u'Cuando se crea el curso el estado es \'Borrador\'. Si se confirma el curso el estado es \'Cursando\'. Si el curso termina el estado es \'Terminado\'. Si el curso es cancelado el estado pasa a \'Cancelado\'.'),
+            help=u'Cuando se crea el curso el estado es \'Borrador\'. Si se confirma el \
+            curso el estado es \'Cursando\'. Si el curso termina el estado \
+            es \'Terminado\'. Si el curso es cancelado el estado pasa a \'Cancelado\'.'),
         'email_registration_id': fields.many2one('email.template',
                                                  'Confirmación de inscripción',
-                                                 help=u'Si definís una plantilla, la misma se enviará cada vez que se confirme una inscripción a este curso.'),
+                                                 help=u'Si definís una plantilla, la \
+                                                 misma se enviará cada vez que se \
+                                                 confirme una inscripción a este curso.'),
         'email_confirmation_id': fields.many2one('email.template', 'Confirmación curso',
-                                                 help=u"Si definis una plantilla de mail, cada participante recibirá este mail anunciando la confirmación del curso."),
+                                                 help=u"Si definis una plantilla de mail, \
+                                                 cada participante recibirá este mail \
+                                                 anunciando la confirmación del curso."),
         'reply_to': fields.char('Mail de respuesta', size=64, readonly=False,
                                 states={'done': [('readonly', True)]},
-                                help=u"La dirección de mail del que organiza los cursos, cuando el alumno responde el mail que se le envia en automático responderá a esta dirección."),
+                                help=u"La dirección de mail del que organiza los cursos, \
+                                cuando el alumno responde el mail que se le envia en \
+                                automático responderá a esta dirección."),
         'main_speaker_id': fields.many2one('res.partner', 'Profesora', readonly=False,
                                            states={'done': [('readonly', True)]},
                                            help=u"La profesora que va a dar el curso."),
@@ -650,16 +667,19 @@ class curso_curso(osv.osv):
                                        type='char',
                                        help=u"La cantidad de clases que tiene el curso"),
         'register_current': fields.function(_get_register, string='Alumnas',
-                                            help=u"La cantidad de alumnas que confirmaron pagando (al menos una seña)",
+                                            help=u"La cantidad de alumnas que \
+                                            confirmaron pagando (al menos una seña)",
                                             multi='register_numbers'),
         'register_avail': fields.function(_get_register, string='Vacantes',
                                           multi='register_numbers', type='integer'),
         'register_prospect': fields.function(_get_register, string='Interesadas',
-                                             help=u"La cantidad de alumnas interesadas que todavía no concretaron",
+                                             help=u"La cantidad de alumnas interesadas \
+                                             que todavía no concretaron",
                                              multi='register_numbers'),
         'register_attended': fields.function(_get_register, string='Egresadas',
                                              multi='register_numbers',
-                                             help=u"Cantidad de alumnas que termino el curso con exito."),
+                                             help=u"Cantidad de alumnas que termino el \
+                                             curso con exito."),
 
         # Related fields
         'tot_hs_lecture': fields.related('product', 'tot_hs_lecture', type='float',
@@ -693,7 +713,8 @@ class curso_curso(osv.osv):
         user = user_pool.browse(cr, uid, uid, context=context)
         curr_reg_ids = register_pool.search(cr, uid, [('user_id', '=', user.id),
                                                       ('curso_id', '=', ids[0])])
-        # the subscription is done with SUPERUSER_ID because in case we share the kanban view, we want anyone to be able to subscribe
+        # the subscription is done with SUPERUSER_ID because in case we share the
+        # kanban view, we want anyone to be able to subscribe
         if not curr_reg_ids:
             curr_reg_ids = [register_pool.create(cr, SUPERUSER_ID,
                                                  {'curso_id': ids[0], 'email': user.email,
@@ -708,7 +729,8 @@ class curso_curso(osv.osv):
 
     def unsubscribe_to_curso(self, cr, uid, ids, context=None):
         register_pool = self.pool.get('curso.registration')
-        # the unsubscription is done with SUPERUSER_ID because in case we share the kanban view, we want anyone to be able to unsubscribe
+        # the unsubscription is done with SUPERUSER_ID because in case we share the
+        # kanban view, we want anyone to be able to unsubscribe
         curr_reg_ids = register_pool.search(cr, SUPERUSER_ID, [('user_id', '=', uid),
                                                                ('curso_id', '=', ids[0])])
         return register_pool.button_reg_cancel(cr, SUPERUSER_ID, curr_reg_ids,
@@ -807,7 +829,7 @@ class curso_registration(osv.osv):
         for reg in self.browse(cr, uid, ids, context=context or {}):
             self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
                                                       body=(
-                                                           u'Nuevo inicio de curso: %s.') % (
+                                                               u'Nuevo inicio de curso: %s.') % (
                                                                reg.partner_id.name or '',),
                                                       subtype="curso.mt_curso_registration",
                                                       context=context)
@@ -817,7 +839,7 @@ class curso_registration(osv.osv):
         for reg in self.browse(cr, uid, ids, context=context or {}):
             self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
                                                       body=(
-                                                           u'Nueva seña para el curso: %s.') % (
+                                                               u'Nueva seña para el curso: %s.') % (
                                                                reg.partner_id.name or '',),
                                                       subtype="curso.mt_curso_registration",
                                                       context=context)
@@ -845,7 +867,7 @@ class curso_registration(osv.osv):
         for reg in self.browse(cr, uid, ids, context=context or {}):
             self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
                                                       body=(
-                                                           u'Nueva inscripción en el curso: %s.') % (
+                                                               u'Nueva inscripción en el curso: %s.') % (
                                                                reg.partner_id.name or '',),
                                                       subtype="curso.mt_curso_registration",
                                                       context=context)
@@ -857,7 +879,7 @@ class curso_registration(osv.osv):
         for reg in self.browse(cr, uid, ids, context=context or {}):
             self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
                                                       body=(
-                                                           u'Vuelve a interesarse: %s.') % (
+                                                               u'Vuelve a interesarse: %s.') % (
                                                                reg.partner_id.name or '',),
                                                       subtype="curso.mt_curso_registration",
                                                       context=context)
@@ -876,15 +898,16 @@ class curso_registration(osv.osv):
                                             ('list_price', '=', 0)])
             if len(records) != 0:
                 raise osv.except_osv(('Error!'), (
-                    u"No puede terminar el curso porque tiene cuotas pendientes. Se debería cancelar, o cobrarle las cuotas"))
+                    u"No puede terminar el curso porque tiene cuotas pendientes. \
+                    Se debería cancelar, o cobrarle las cuotas"))
 
             if today >= registration.curso_id.date_begin:
                 values = {'state': 'done', 'date_closed': today}
                 self.write(cr, uid, ids, values)
             else:
                 raise osv.except_osv(('Error!'),
-                                     (
-                                     u"Hay que esperar al dia de inicio del curso para decir que lo terminó."))
+                                     (u"Hay que esperar al dia de inicio del curso para \
+                                     decir que lo terminó."))
 
         return True
 

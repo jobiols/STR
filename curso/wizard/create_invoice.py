@@ -18,14 +18,15 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
-from openerp.osv import fields, osv
 from datetime import datetime, timedelta
+
+from openerp.osv import osv
+
 
 class curso_invoice(osv.osv_memory):
     """ Wizard para generar las facturas """
     _name = 'curso.invoice'
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def create_invoice(self, cr, uid, ids, invoice_data, context):
 
         print('creando la factura -------->>>>>>>>>>>>>>>>>> ')
@@ -40,7 +41,9 @@ class curso_invoice(osv.osv_memory):
         print('producto', invoice_data.get('curso_id').product.name)
         print('instancia', invoice_data.get('curso_id').curso_instance)
         print('a facturar', '[{}] {}'.format(invoice_data.get('instance_code'),
-                                             invoice_data.get('curso_id').product.name.encode('utf-8')))
+                                             invoice_data.get(
+                                                 'curso_id').product.name.encode(
+                                                 'utf-8')))
 
         product_id = invoice_data.get('curso_id').product
         date_invoice = datetime.strptime(invoice_data.get('date_invoice'), '%Y-%m-%d')
@@ -53,7 +56,8 @@ class curso_invoice(osv.osv_memory):
 
         invoice_lines = []
         invoice_line = {
-            'name': '[{}] {}'.format(invoice_data.get('instance_code'), product_id.name.encode('utf-8')),
+            'name': '[{}] {}'.format(invoice_data.get('instance_code'),
+                                     product_id.name.encode('utf-8')),
             'sequence': 5,
             'invoice_id': False,
             'account_id': 87,
@@ -61,7 +65,9 @@ class curso_invoice(osv.osv_memory):
             'price_unit': actual_price,
             'quantity': 1.0,
         }
-        invoice_line_id = self.pool.get('account.invoice.line').create(cr, uid, invoice_line, context=context)
+        invoice_line_id = self.pool.get('account.invoice.line').create(cr, uid,
+                                                                       invoice_line,
+                                                                       context=context)
         invoice_lines.append(invoice_line_id)
 
         if invoice_data.get('discount') != 0:
@@ -75,30 +81,35 @@ class curso_invoice(osv.osv_memory):
                 'price_unit': product_id.list_price * invoice_data.get('discount'),
                 'quantity': -1.0,
             }
-            invoice_line_id = self.pool.get('account.invoice.line').create(cr, uid, invoice_line, context=context)
+            invoice_line_id = self.pool.get('account.invoice.line').create(cr, uid,
+                                                                           invoice_line,
+                                                                           context=context)
             invoice_lines.append(invoice_line_id)
 
         new_invoice = {
             'date_due': date_due.strftime('%Y-%m-%d'),
             'date_invoice': date_invoice.strftime('%Y-%m-%d'),
-            'name': '{} C{:.0f}'.format(invoice_data.get('instance_code'), invoice_data.get('quota')),
+            'name': '{} C{:.0f}'.format(invoice_data.get('instance_code'),
+                                        invoice_data.get('quota')),
             'type': 'out_invoice',
-            'reference': '{} C{:.0f}'.format(invoice_data.get('instance_code'), invoice_data.get('quota')),
+            'reference': '{} C{:.0f}'.format(invoice_data.get('instance_code'),
+                                             invoice_data.get('quota')),
             'account_id': 11,
             'partner_id': invoice_data.get('partner_id').id,
             'journal_id': 10,
             'invoice_line': [(6, 0, invoice_lines)],
             'currency_id': 20,  # commission.invoice.currency_id.id,
             'comment': 'generado automáticamente',
-            'fiscal_position': invoice_data.get('partner_id').property_account_position.id,
+            'fiscal_position': invoice_data.get(
+                'partner_id').property_account_position.id,
             'company_id': invoice_data.get('company_id').id,
             'user_id': uid
         }
-        invoice_id = self.pool.get('account.invoice').create(cr, uid, new_invoice, context=context)
+        invoice_id = self.pool.get('account.invoice').create(cr, uid, new_invoice,
+                                                             context=context)
 
         return invoice_id
 
-    # -----------------------------------------------------------------------------------------------------------------------
     def button_gen_invoice(self, cr, uid, ids, context=None):
         """ Generar facturas en borrador de todos los alumnos que están cursando.
             proceso:
@@ -137,6 +148,7 @@ class curso_invoice(osv.osv_memory):
 
                 invoice_id = self.create_invoice(cr, uid, ids, invoice_data, context=None)
                 r = register_pool.search(cr, uid, [('id', '=', quote.id)])
-                register_pool.write(cr, uid, r, {'invoice_id': invoice_id}, context=context)
+                register_pool.write(cr, uid, r, {'invoice_id': invoice_id},
+                                    context=context)
 
         return True

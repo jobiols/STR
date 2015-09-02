@@ -30,8 +30,8 @@ class curso_confirm(osv.osv_memory):
     _description = "curso Confirmation"
 
     def confirm(self, cr, uid, ids, context=None):
-        self.pool.get('curso.curso').do_confirm(cr, uid, context.get('curso_ids', []), context=context)
+        self.pool.get('curso.curso').do_confirm(cr, uid, context.get('curso_ids', []),
+                                                context=context)
         return {'type': 'ir.actions.act_window_close'}
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

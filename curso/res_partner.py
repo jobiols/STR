@@ -26,9 +26,11 @@ class res_partner(osv.osv):
     _inherit = 'res.partner'
 
     _columns = {
-        'teacher': fields.boolean('Profesora', help="Poner el tilde si el contacto es una profesora."),
+        'teacher': fields.boolean('Profesora',
+                                  help="Poner el tilde si el contacto es una profesora."),
         'curso_ids': fields.one2many('curso.curso', 'main_speaker_id', readonly=True),
-        'curso_registration_ids': fields.one2many('curso.registration', 'partner_id', readonly=True),
+        'curso_registration_ids': fields.one2many('curso.registration', 'partner_id',
+                                                  readonly=True),
     }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

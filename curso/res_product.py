@@ -111,16 +111,28 @@ class product_product(osv.osv):
         'no_quotes': fields.integer('Cantidad de cuotas'),
 
         'default_reply_to': fields.char('Respuesta por defecto', size=64,
-                                        help="El mail del organizador, que se pondra en el campo de respuesta de todos los mails enviados automaticamente en inscripciones y confirmaciones de cursos."),
+                                        help="El mail del organizador, que se pondra en \
+                                        el campo de respuesta de todos los mails \
+                                        enviados automaticamente en inscripciones \
+                                        y confirmaciones de cursos."),
         'default_email_registration': fields.many2one('email.template',
                                                       'Mail de inscripcion',
-                                                      help="Selecciona el mail de inscripcion que se enviara a la alumna"),
+                                                      help="Selecciona el mail de \
+                                                      inscripcion que se enviara a la \
+                                                      alumna"),
         'default_email_curso': fields.many2one('email.template', 'Mail de confirmacion',
-                                               help="Selecciona el mail de confirmacion que se enviara a la alumna en el momento de la confirmacion"),
+                                               help="Selecciona el mail de confirmacion \
+                                               que se enviara a la alumna en el momento \
+                                               de la confirmacion"),
         'default_registration_min': fields.integer('Minimo de alumnas en el curso',
-                                                   help="define la cantidad minima de alumnas para arrancar el curso. (Pone cero para no tener en cuenta la regla)"),
+                                                   help="define la cantidad minima de \
+                                                   alumnas para arrancar el curso. (Pone \
+                                                   cero para no tener en cuenta la regla)"),
         'default_registration_max': fields.integer('Maximo de alumnas en el curso',
-                                                   help="Define la cantidad maxima de alumnas que puede tener el curso. (Pone cero para no tener en cuenta la regla)"),
+                                                   help="Define la cantidad maxima de \
+                                                   alumnas que puede tener el curso. \
+                                                   (Pone cero para no tener en cuenta \
+                                                   la regla)"),
     }
     _defaults = {
         'default_registration_min': 0,
@@ -132,7 +144,6 @@ class product_product(osv.osv):
 
     #    _sql_constraints = [('default_code_unique', 'unique (default_code)', 'ya hay un producto con esta referencia.')]
     def wd2day(self, wd):
-        print 'w2day >>>>>>>>>> ', wd
         if wd:
             dict = {
                 '0': 'Lunes',
@@ -165,9 +176,9 @@ class product_product(osv.osv):
                     datetime.strptime(inst.date_begin, '%Y-%m-%d'), '%d/%m/%Y'),
                     'instancia': '{}/{:0>2d}'.format(prod.default_code,
                                                      inst.instance),
-                               'dias': self.wd2day(inst.weekday_1),
-                               'horario': schedule,
-                               })
+                    'dias': self.wd2day(inst.weekday_1),
+                    'horario': schedule,
+                })
             try:
                 weeks = str(
                     (prod.tot_hs_lecture / prod.hs_lecture) / prod.classes_per_week)
