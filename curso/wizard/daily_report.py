@@ -31,15 +31,15 @@ class curso_daily_report(osv.osv_memory):
     def missing_data(self, alumna):
         ret = u''
         if alumna.partner_id.document_number == False:
-            ret += u' documento'
+            ret += u' Documento'
         if alumna.partner_id.street == False:
-            ret += u' dirección'
+            ret += u' Dirección'
         if alumna.partner_id.date == False:
-            ret += u' nacimiento'
+            ret += u' Fecha de nacimiento'
         if alumna.partner_id.email == False:
-            ret += u' mail'
+            ret += u' Mail'
         if alumna.partner_id.mobile == False:
-            ret += u' celular'
+            ret += u' Celular'
         if ret != '':
             ret = 'Falta ' + ret
 
@@ -59,12 +59,31 @@ class curso_daily_report(osv.osv_memory):
                 ret += "			<td>" + alumna.partner_id.name + "</td>"
                 ret += "			<td>" + str(alumna.partner_id.email) + "</td>"
                 ret += "			<td>" + str(alumna.partner_id.mobile) + "</td>"
-                ret += "			<td>" + str(alumna.partner_id.credit) + "</td>"
-                ret += "			<td>" + self.missing_data(alumna) + "</td>"
                 ret += "		</tr>"
             ret += "	</tbody>"
             ret += "</table>"
             ret += "<br>"
+
+        ret += "<hr/>"
+        ret += '<table border="0" cellpadding="0" cellspacing="0" style="width:100%;">'
+        ret += '    <tbody>'
+        ret += '        <tr>'
+        ret += '            <td><strong>Nombre</strong></td>'
+        ret += '            <td><strong>Deuda</strong></td>'
+        ret += '            <td><strong>Observaciones</strong></td>'
+        ret += '        </tr>'
+
+        for dict in data:
+            for alumna in dict['alumnas']:
+                if self.missing_data(alumna) or alumna.partner_id.credit <> 0:
+                    ret += '<tr>'
+                    ret += '    <td>' + alumna.partner_id.name + '</td>'
+                    ret += '    <td>' + str(alumna.partner_id.credit) + '</td>'
+                    ret += '    <td>' + self.missing_data(alumna) + '</td>'
+                    ret += '</tr>'
+
+        ret += '    </tbody>'
+        ret += '</table>'
 
         return ret
 
@@ -88,7 +107,8 @@ class curso_daily_report(osv.osv_memory):
             alumnas = []
             alumnas_ids = pool_reg.search(cr, uid,
                                           [('curso_id', '=', lecture.curso_id.id),
-                                           '|', ('state', '=', 'confirm'),
+                                           '|',
+                                           ('state', '=', 'confirm'),
                                            ('state', '=', 'signed')])
             for alumna in pool_reg.browse(cr, uid, alumnas_ids, context):
                 alumnas.append(alumna)
