@@ -60,7 +60,7 @@ class curso_invoice(osv.osv_memory):
                                      product_id.name.encode('utf-8')),
             'sequence': 5,
             'invoice_id': False,
-            'account_id': 87,
+            'account_id': 88,
             'account_analytic_id': 4,
             'price_unit': actual_price,
             'quantity': 1.0,
