@@ -162,7 +162,9 @@ class product_product(osv.osv):
             instance_pool = self.pool.get('curso.curso')
             records = instance_pool.search(cr, uid,
                                            [('default_code', '=', prod.default_code),
-                                            ('state', '!=', 'cancel')])
+                                            '|',
+                                            ('state', '=', 'draft'),
+                                            ('state', '=', 'confirm')])
             for inst in instance_pool.browse(cr, uid, records, context=context):
                 schedule = ""
                 if inst.schedule_1:
