@@ -7,11 +7,6 @@ from openerp.osv import fields, osv
 import markdown
 
 
-def mark_down(text):
-    html = markdown.markdown(text)
-    return html
-
-
 def generate_html(dict):
     print '>>>>> generate_html dict ', dict
     ret = ""
@@ -185,6 +180,10 @@ class product_product(osv.osv):
             except:
                 weeks = "error!"
 
+            # si está vacio trae False y da una excepcion en mark_down
+            if not prod.agenda:
+                prod.agenda = ""
+
             data = {
                 'titulo': prod.name,
                 'codigo': prod.default_code,
@@ -194,7 +193,7 @@ class product_product(osv.osv):
                 'modalidad': str(prod.classes_per_week) + ' clase de ' + str(
                     prod.hs_lecture) + ' hs por semana',
                 'cursos': cursos,
-                'temario': mark_down(prod.agenda),
+                'temario': markdown.markdown(prod.agenda),
                 'matricula': 'Bonificada',
                 'cuotas': str(prod.no_quotes),
                 'valor': str(prod.list_price),
