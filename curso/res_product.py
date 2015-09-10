@@ -137,16 +137,18 @@ class product_product(osv.osv):
     }
 
     #    _sql_constraints = [('default_code_unique', 'unique (default_code)', 'ya hay un producto con esta referencia.')]
-    def wd2day(self, wd):
+
+    def d2day(self, date):
+        wd = datetime.strftime(datetime.strptime(date, '%Y-%m-%d'), '%w')
         if wd:
             dict = {
-                '0': 'Lunes',
-                '1': 'Martes',
-                '2': 'Miercoles',
-                '3': 'Jueves',
-                '4': 'Viernes',
-                '5': 'Sabado',
-                '6': 'Domingo'}
+                '0': u'Domingo',
+                '1': u'Lunes',
+                '2': u'Martes',
+                '3': u'Miercoles',
+                '4': u'Jueves',
+                '5': u'Viernes',
+                '6': u'Sabado'}
             return dict[wd]
         else:
             return '---'
@@ -172,7 +174,7 @@ class product_product(osv.osv):
                     datetime.strptime(inst.date_begin, '%Y-%m-%d'), '%d/%m/%Y'),
                     'instancia': '{}/{:0>2d}'.format(prod.default_code,
                                                      inst.instance),
-                    'dias': self.wd2day(inst.weekday_1),
+                    'dias': self.d2day(inst.date_begin),
                     'horario': schedule,
                 })
             try:
@@ -188,7 +190,7 @@ class product_product(osv.osv):
             data = {
                 'titulo': prod.name,
                 'codigo': prod.default_code,
-                'acerca_de': prod.description,
+                'acerca_de': markdown.markdown(prod.description),
                 'duracion_semanas': weeks,
                 'horas_catedra': str(prod.tot_hs_lecture),
                 'modalidad': str(prod.classes_per_week) + ' clase de ' + str(
