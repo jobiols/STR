@@ -8,7 +8,6 @@ import markdown
 
 
 def generate_html(dict):
-    print '>>>>> generate_html dict ', dict
     ret = ""
     for data in dict:
         ret += "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
