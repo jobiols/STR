@@ -161,8 +161,6 @@ class curso_curso(osv.osv):
             for fecha in dict['clases']:
                 ret += "			<td>&nbsp;</td>"
 
-            ret += "			<td>&nbsp; " + str(alumna['credit']) + "</td>"
-
             ret += "		</tr>"
 
         ret += "	</tbody>"
@@ -188,8 +186,12 @@ class curso_curso(osv.osv):
         for curso in self.browse(cr, uid, ids, context=context):
             alumnas = []
             reg_pool = self.pool.get('curso.registration')
+            # mostrar las alumnas confirmada y señadas
             records = reg_pool.search(cr, uid, [('curso_id', '=', curso.id),
-                                                ('state', '=', 'confirm')])
+                                                '|',
+                                                ('state', '=', 'confirm')
+                , ('state', '=', 'signed')
+                                                ])
             for reg in reg_pool.browse(cr, uid, records, context=context):
                 alumnas.append(
                     {'name': reg.partner_id.name, 'credit': reg.partner_id.credit})
