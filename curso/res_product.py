@@ -6,7 +6,6 @@ from datetime import datetime
 from openerp.osv import fields, osv
 import markdown
 
-
 def generate_html(dict):
     ret = ""
     for data in dict:
@@ -23,7 +22,7 @@ def generate_html(dict):
         ret += "</tbody>"
         ret += "</table>"
 
-        ret += "<p>" + data['acerca_de'] + "</p>"
+        ret += "<p style='text-align: justify;'>" + data['acerca_de'] + "</p>"
         ret += "<p>Duracion " + data['duracion_semanas'] + " semanas, (" + data[
             'horas_catedra'] + "hs)<br/>"
         ret += "Modalidad " + data['modalidad'] + "</p>"
@@ -60,7 +59,7 @@ def generate_html(dict):
     ret += "	<tbody>"
     ret += "		<tr>"
     ret += "			<td>"
-    ret += "			<h3 style=\"text-align: center;\">Se entrega certificado</h3>"
+    ret += "			<h3 style=\"text-align: left;\">Se entrega certificado</h3>"
     ret += "			<p style=\"text-align: center;\"><img alt=\"\" src=\"https://d3njjcbhbojbot.cloudfront.net/web/images/promos/cdp_cert_logo.png\" style=\"width: 110px; height: 110px;\" /></p>"
     ret += "			<p style=\"text-align: center;\">Materiales inclu&iacute;dos en el costo del curso.</p>"
     ret += "			</td>"
@@ -68,53 +67,18 @@ def generate_html(dict):
     ret += "</tbody>"
     ret += "</table>"
     ret += "<br>"
-    ret += "<h2>Aranceles</h2>"
-    ret += "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 500px;\">"
-    ret += "	<tbody>"
+    ret += "<h3 style=\"text-align: left;\">Aranceles</h3>"
+
 
     for data in dict:
-        ret += "		<tr>"
-        #        ret += "			<td>"
-        #        ret += "			   <p>" + data['codigo'] + " " + data['titulo'] + "</p>"
-        #        ret += "			</td>"
-        #        ret += "			<td>"
-
         if data['cuotas'] == '1':
             ss = data['cuotas'] + " cuota de $" + data['valor']
         else:
             ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
 
-        ret += "<td>"
-        ret += "			   <strong><p>Matr&iacute;cula: " + \
-               data['matricula'] + "</p></strong>"
-        ret += "			</td>"
-        ret += "		</tr>"
+        ret += u"<p><strong>Matrícula: " + data['matricula'] + "</strong><br />"
+        ret += "<strong>Pagos: " + ss + "</strong></p>"
 
-        ret += "		<tr>"
-        ret += "<td>"
-        if data['cuotas'] == '1':
-            ss = data['cuotas'] + " cuota de $" + data['valor']
-        else:
-            ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
-
-        ret += "<p><strong>" + ss + "</strong></p>"
-        ret += "			</td>"
-        ret += "		</tr>"
-
-        """
-        if data['cuotas'] == '1':
-            ss = data['cuotas'] + " cuota de $" + data['valor']
-        else:
-            ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
-
-        ret += "			   <p>Matr&iacute;cula: " + data[
-            'matricula'] + " - " + ss + "</p>"
-        ret += "			</td>"
-        ret += "		</tr>"
-        """
-
-    ret += "</tbody>"
-    ret += "</table>"
     return ret
 
 
