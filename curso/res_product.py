@@ -54,7 +54,19 @@ def generate_html(dict):
             ret += "<h2>Temario</h2>"
             ret += data['temario']
 
-    ret += "<br>"
+    ret += "<hr/>"
+
+    ret += "<h3 style=\"text-align: left;\">Aranceles</h3>"
+    for data in dict:
+        if data['cuotas'] == '1':
+            ss = data['cuotas'] + " cuota de $" + data['valor']
+        else:
+            ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
+
+        ret += u"<p><strong>Matrícula: " + data['matricula'] + "</strong><br />"
+        ret += "<strong>Pagos: " + ss + "</strong></p>"
+
+
     ret += "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\">"
     ret += "	<tbody>"
     ret += "		<tr>"
@@ -67,17 +79,8 @@ def generate_html(dict):
     ret += "</tbody>"
     ret += "</table>"
     ret += "<br>"
-    ret += "<h3 style=\"text-align: left;\">Aranceles</h3>"
 
 
-    for data in dict:
-        if data['cuotas'] == '1':
-            ss = data['cuotas'] + " cuota de $" + data['valor']
-        else:
-            ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
-
-        ret += u"<p><strong>Matrícula: " + data['matricula'] + "</strong><br />"
-        ret += "<strong>Pagos: " + ss + "</strong></p>"
 
     return ret
 
