@@ -71,13 +71,37 @@ def generate_html(dict):
     ret += "<h2>Aranceles</h2>"
     ret += "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 500px;\">"
     ret += "	<tbody>"
+
     for data in dict:
         ret += "		<tr>"
-        ret += "			<td>"
-        ret += "			   <p>" + data['codigo'] + " " + data['titulo'] + "</p>"
-        ret += "			</td>"
-        ret += "			<td>"
+        #        ret += "			<td>"
+        #        ret += "			   <p>" + data['codigo'] + " " + data['titulo'] + "</p>"
+        #        ret += "			</td>"
+        #        ret += "			<td>"
 
+        if data['cuotas'] == '1':
+            ss = data['cuotas'] + " cuota de $" + data['valor']
+        else:
+            ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
+
+        ret += "<td>"
+        ret += "			   <strong><p>Matr&iacute;cula: " + \
+               data['matricula'] + "</p></strong>"
+        ret += "			</td>"
+        ret += "		</tr>"
+
+        ret += "		<tr>"
+        ret += "<td>"
+        if data['cuotas'] == '1':
+            ss = data['cuotas'] + " cuota de $" + data['valor']
+        else:
+            ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
+
+        ret += "<p><strong>" + ss + "</strong></p>"
+        ret += "			</td>"
+        ret += "		</tr>"
+
+        """
         if data['cuotas'] == '1':
             ss = data['cuotas'] + " cuota de $" + data['valor']
         else:
@@ -87,6 +111,8 @@ def generate_html(dict):
             'matricula'] + " - " + ss + "</p>"
         ret += "			</td>"
         ret += "		</tr>"
+        """
+
     ret += "</tbody>"
     ret += "</table>"
     return ret
