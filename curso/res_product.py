@@ -9,42 +9,40 @@ import markdown
 def generate_html(dict):
     ret = ""
     for data in dict:
-        ret += "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
-        ret += "	<tbody>"
-        ret += "		<tr>"
-        ret += "			<td>"
-        ret += "			<h2>" + data['titulo'] + "</h2>"
-        ret += "			</td>"
-        ret += "			<td>"
-        ret += "			<h5><sub>&nbsp;cod " + data['codigo'] + "</sub></h5>"
-        ret += "			</td>"
-        ret += "		</tr>"
-        ret += "</tbody>"
-        ret += "</table>"
+        ret += u"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
+        ret += u"	<tbody>"
+        ret += u"		<tr>"
+        ret += u"			<td>"
+        ret += u"			<h2>" + data['titulo'] + "</h2>"
+        ret += u"			</td>"
+        ret += u"			<td>"
+        ret += u"			<h5><sub>&nbsp;cod " + data['codigo'] + "</sub></h5>"
+        ret += u"			</td>"
+        ret += u"		</tr>"
+        ret += u"   </tbody>"
+        ret += u"</table>"
 
-        ret += "<p style='text-align: justify;'>" + data['acerca_de'] + "</p>"
-        ret += "<p>Duracion " + data['duracion_semanas'] + " semanas, (" + data[
-            'horas_catedra'] + "hs)<br/>"
-        ret += "Modalidad " + data['modalidad'] + "</p>"
+        # viene del markdown ya con los <p>
+        ret += data['acerca_de']
+
+        ret += u"<p>Duración " + data['duracion_semanas'] + u" semanas, (" + data[
+            'horas_catedra'] + u"hs)<br/>"
+        ret += u"Modalidad " + data['modalidad'] + "</p>"
 
         ret += "<table  border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 500px;\">"
         ret += "    <tbody>"
         ret += "        <tr>"
-        ret += "            <td><strong>Inicio</strong></td>"
-        ret += "            <td><strong>Cod</strong></td>"
-        ret += "            <td><strong>Dias de cursada</strong></td>"
-        ret += "            <td><strong>Horario</strong></td>"
+        ret += u"            <td><strong>Inicio</strong></td>"
+        ret += u"            <td><strong>Cód</strong></td>"
+        ret += u"            <td><strong>Días de cursada</strong></td>"
+        ret += u"            <td><strong>Horario</strong></td>"
         ret += "        </tr>"
         for line in data['cursos']:
             ret += "        <tr bgcolor=\"#E0ECF8\">"
-            ret += "            <td><span style=\"font-size:14px;\">" + line[
-                'inicio'] + "</span></td>"
-            ret += "            <td><span style=\"font-size:14px;\">" + line[
-                'instancia'] + "</span></td>"
-            ret += "            <td><span style=\"font-size:14px;\">" + line[
-                'dias'] + "</span></td>"
-            ret += "            <td><span style=\"font-size:14px;\">" + line[
-                'horario'] + "</span></td>"
+            ret += "            <td><span>" + line['inicio'] + "</span></td>"
+            ret += "            <td><span>" + line['instancia'] + "</span></td>"
+            ret += "            <td><span>" + line['dias'] + "</span></td>"
+            ret += "            <td><span>" + line['horario'] + "</span></td>"
             ret += "        </tr>"
 
         ret += "    </tbody>"
@@ -138,10 +136,10 @@ class product_product(osv.osv):
                 '0': u'Domingo',
                 '1': u'Lunes',
                 '2': u'Martes',
-                '3': u'Miercoles',
+                '3': u'Miércoles',
                 '4': u'Jueves',
                 '5': u'Viernes',
-                '6': u'Sabado'}
+                '6': u'Sábado'}
             return dict[wd]
         else:
             return '---'
