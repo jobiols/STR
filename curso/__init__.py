@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from curso.models import curso, engine, res_partner, res_product
+import models
 import wizard
 import report
 import curso.models.res_partner
