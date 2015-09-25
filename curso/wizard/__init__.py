@@ -23,5 +23,6 @@
 # import curso_confirm
 import daily_report
 import create_invoice
+import add_registration
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

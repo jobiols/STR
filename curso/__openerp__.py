@@ -56,6 +56,7 @@ Puntos Clave
         'email_template.xml',
         'wizard/create_invoice_view.xml',
         'wizard/daily_report_view.xml',
+        'wizard/add_registration_view.xml',
     ],
     # 'demo': ['curso_demo.xml'],
     'test': ['test/process/curso_test.yml'],

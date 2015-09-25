@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_curso_add_registration" model="ir.ui.view">
+            <field name="name">Agregar Inscripcion a curso</field>
+            <field name="model">curso.add_registration</field>
+            <field name="arch" type="xml">
+                <form string="Anotar como interesada" version="7.0">
+                    <group>
+                        <label string="Seleccione el curso en el que está interesada esta alumna. Para eliminarlo oprima Editar y luego podrá borrar el curso"/>
+                    </group>
+                    <group>
+                        <field name="curso_id"/>
+                    </group>
+                    <footer>
+                        <button name="button_add_curso" string="Confirmar" type="object"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</openerp>

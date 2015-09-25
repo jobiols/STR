@@ -32,13 +32,17 @@
                             Este es el asistente para generar facturas.
                         </p>
                         <p>
-                            Se va a generar una factura en estado borrador por cada alumna que esté cursando en estado
-                            confirmada, y cuyo importe no es cero, o sea no se facturan las charlas gratuitas.
-                            Luego es necesario revisar las facturas que se generon y confirmarlas.
+                            Se va a generar una factura en estado borrador por cada alumna
+                            que esté cursando en estado
+                            confirmada, y cuyo importe no es cero, o sea no se facturan
+                            las charlas gratuitas.
+                            Luego es necesario revisar las facturas que se generon y
+                            confirmarlas.
                         </p>
                     </div>
                     <footer>
-                        <button string="Generar facturas" name="button_gen_invoice" type="object" class="oe_highlight"/>
+                        <button string="Generar facturas" name="button_gen_invoice"
+                                type="object" class="oe_highlight"/>
                     </footer>
                 </form>
             </field>
@@ -54,6 +58,7 @@
 
         <menuitem name="Facturacion"
                   id="menu_action_curso_invoice" parent="base.menu_curso_main"
-                  action="wizard_curso_invoice" groups="curso.group_curso_manager,curso.group_curso_user"/>
+                  action="wizard_curso_invoice"
+                  groups="curso.group_curso_manager,curso.group_curso_user"/>
     </data>
 </openerp>

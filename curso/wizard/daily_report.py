@@ -131,8 +131,8 @@ class curso_daily_report(osv.osv_memory):
 
         # Borrar el documento si es que existe
         doc_pool = self.pool.get('document.page')
-        records = doc_pool.search(cr, uid, [('name', '=', report_name)])
-        doc_pool.unlink(cr, uid, records)
+        ids = doc_pool.search(cr, uid, [('name', '=', report_name)])
+        doc_pool.unlink(cr, uid, ids)
 
         # Generar el documento
         self.pool.get('document.page').create(cr, uid, new_page, context=context)
