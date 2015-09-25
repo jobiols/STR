@@ -21,11 +21,11 @@
 
 {
     'name': 'Organización de Cursos',
-    'version': '0.8',
+    'version': '7.0.1.0',
     'category': 'Tools',
     'summary': 'Cursos, Inscripciones, Reservas etc.',
     'description': """
-Manejo de Cursos de una Academia.
+Manejo de Cursos en una Academia.
 =================================
 
 El módulo curso le ayuda a manejar y organizar en forma eficiente los cursos de una academia.
@@ -36,29 +36,33 @@ Puntos Clave
 * Estados de los alumnos, Interesado, Señado, Cursando, Terminado, Cancelado
 * Historia de las cursadas registradas en la ficha del alumno
 * Generación automática de la facturación
+* Reporte diario de asistentes con detalle de cuotas adeudadas e información faltante en la ficha
 * Vista de calendario de las clases
 
-
 """,
-    'author': 'Sistemas en Tiempo Real SRL',
-    'depends': ['base_setup', 'board', 'email_template', 'sale', 'purchase', 'l10n_ar_invoice'],
+    'author': 'jeo software',
+    'depends': ['base_setup', 'board', 'email_template', 'sale', 'purchase',
+                'l10n_ar_invoice'],
     'data': [
         'security/curso_security.xml',
         'security/ir.model.access.csv',
         #        'wizard/curso_confirm_view.xml',
-        'curso_view.xml',
-        'engine_view.xml',
-        'curso_data.xml',
+
+        'views/curso_view.xml',
+        'views/engine_view.xml',
+        'views/board_association_view.xml',
+        'views/res_product_view.xml',
+        'views/email_template.xml',
+        'views/res_partner_view.xml',
+
         'report/report_curso_registration_view.xml',
-        'board_association_view.xml',
-        'res_product_view.xml',
-        'email_template.xml',
         'wizard/create_invoice_view.xml',
         'wizard/daily_report_view.xml',
         'wizard/add_registration_view.xml',
-        'res_partner_view.xml',
+
+        'data/curso_data.xml',
     ],
-    # 'demo': ['curso_demo.xml'],
+    # 'demo': ['data/curso_demo.xml'],
     'test': ['test/process/curso_test.yml'],
     'css': ['static/src/css/curso.css'],
     'js': ['static/src/js/announcement.js'],
