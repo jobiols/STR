@@ -48,6 +48,10 @@ Puntos Clave
         'security/ir.model.access.csv',
         #        'wizard/curso_confirm_view.xml',
 
+        'wizard/create_invoice_view.xml',
+        'wizard/daily_report_view.xml',
+        'wizard/add_registration_view.xml',
+
         'views/curso_view.xml',
         'views/engine_view.xml',
         'views/board_association_view.xml',
@@ -56,9 +60,6 @@ Puntos Clave
         'views/res_partner_view.xml',
 
         'report/report_curso_registration_view.xml',
-        'wizard/create_invoice_view.xml',
-        'wizard/daily_report_view.xml',
-        'wizard/add_registration_view.xml',
 
         'data/curso_data.xml',
     ],
