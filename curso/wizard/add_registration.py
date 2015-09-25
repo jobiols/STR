@@ -27,7 +27,7 @@ class add_registration(osv.osv_memory):
     def button_add_curso(self, cr, uid, ids, context=None):
         """ Agrega un curso a la ficha de la alumna, y la pone como interesada
         """
-        #  obtener el id de la alumna que esta en el contexto
+        #  obtener el id de la alumna que viene en el contexto
         ids_alumna = context.get("active_ids")
 
         # Obtener el id del curso donde inscribir la alumna
@@ -35,7 +35,7 @@ class add_registration(osv.osv_memory):
         for reg in pool.browse(cr, uid, ids, context):
             curso_id = reg.curso_id.id
 
-        # Crear la la inscripcion y agregarla
+        # Crear la inscripcion y agregarla
         registration_data = {
             'curso_id': curso_id,
             'partner_id': ids_alumna[0],
@@ -51,5 +51,5 @@ class add_registration(osv.osv_memory):
 
     _columns = {
         'curso_id': fields.many2one('curso.curso', 'Curso', required=True,
-                                    readonly=False),
+                                    readonly=False, domain="[('next','=',True)]"),
     }

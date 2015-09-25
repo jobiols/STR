@@ -569,6 +569,19 @@ class curso_curso(osv.osv):
             res[curso.id] = format_instance(curso.default_code, curso.instance)
         return res
 
+    def _get_next(self, cr, uid, ids, fields, args, context=None):
+        res = {}
+        for curso in self.browse(cr, uid, ids, context=context):
+            res[curso.id] = True
+
+            # me traigo los que estan en borrador de prepo porque no tienen fecha
+            res[curso.id] = True
+            if curso.state <> 'draft':
+                if curso.date_begin < str(date.today()):
+                    res[curso.id] = False
+
+        return res
+
     #   curso definition
     _columns = {
         'instance': fields.integer('Instancia',
@@ -659,6 +672,9 @@ class curso_curso(osv.osv):
                                          string='Subscribed'),
 
         # Calculated fields
+        'next': fields.function(_get_next, fnct_search=None,
+                                string='Curso por venir', method=True,
+                                store=True, type='boolean'),
         'curso_instance': fields.function(_get_instance, fnct_search=None,
                                           string='Instancia del curso', method=True,
                                           store=False, type='char'),
