@@ -20,11 +20,8 @@
 ##############################################################################
 
 import models
-import wizard
 import report
-import curso.models.res_partner
-import curso.models.res_product
-import curso.models.engine
+import wizard
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
