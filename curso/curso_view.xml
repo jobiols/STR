@@ -604,13 +604,19 @@
                     <separator/>
                     <filter icon="terp-check" string="Interesadas" name="draft"
                             domain="[('state','=','draft')]"
-                            help="Interesadas en los cursos"/>
+                            help="Alumnas que estan interesadas en el curso"/>
+                    <filter icon="terp-camera_test" string="Señado"
+                            domain="[('state','=','signed')]"
+                            help="Alumnas que señaron el curso"/>
                     <filter icon="terp-camera_test" string="Cursando"
                             domain="[('state','=','confirm')]"
-                            help="Inscripciones confirmadas"/>
+                            help="Alumnas que están cursando"/>
                     <filter icon="terp-camera_test" string="Terminado"
                             domain="[('state','=','done')]"
-                            help="Inscripciones terminadas"/>
+                            help="Alumnas que terminaron el curso"/>
+                    <filter icon="terp-camera_test" string="Cancelado"
+                            domain="[('state','=','cancel')]"
+                            help="Alumnas que cancelaron el curso"/>
                     <separator/>
                     <field name="curso_id"/>
                     <field name="user_id"/>
