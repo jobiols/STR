@@ -582,7 +582,7 @@ class curso_curso(osv.osv):
 
         return res
 
-    #   curso definition
+    # curso model
     _columns = {
         'instance': fields.integer('Instancia',
                                    readonly=True,
@@ -789,10 +789,11 @@ class curso_registration(osv.osv):
             res[registration.id] = weekday
         return res
 
-    """ Curso Registration"""
     _name = 'curso.registration'
     _description = __doc__
     _inherit = ['mail.thread', 'ir.needaction_mixin']
+
+    # curso registration model
     _columns = {
         'id': fields.integer('ID'),
         'quota_id': fields.one2many('curso.quota', 'registration_id', 'Cuotas'),
@@ -831,6 +832,10 @@ class curso_registration(osv.osv):
                                 size=128, readonly=True),
         'discount': fields.float('Descuento (%)', digits=(2, 2)),
         'disc_desc': fields.char('Razon del descuento', size=128, select=True),
+
+        # Related fields
+        'curso_state': fields.related('curso_id', 'state', type='char',
+                                      string='Estado del curso', readonly=True),
 
         # Deprecated fields
         'nb_register': fields.integer('Number of Participants', required=True,
