@@ -71,7 +71,7 @@
         </record>
 
         <!--  Partners inherited view -->
-
+<!-- migracion
         <record id="view_partner_tree_curso" model="ir.ui.view">
             <field name="name">res.partner.tree</field>
             <field name="model">res.partner</field>
@@ -94,7 +94,7 @@
                 </field>
             </field>
         </record>
-
+-->
         <!--  Partners inherited searcho view -->
 
         <record id="inherited_view_res_partner_filter" model="ir.ui.view">
