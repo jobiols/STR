@@ -61,7 +61,7 @@ class curso_invoice(osv.osv_memory):
             'sequence': 5,
             'invoice_id': False,
             'account_id': 88,  # venta de cursos
-            'account_analytic_id': 4,
+#            'account_analytic_id': 4,
             'price_unit': actual_price,
             'quantity': 1.0,
         }
@@ -77,7 +77,7 @@ class curso_invoice(osv.osv_memory):
                 'sequence': 5,
                 'invoice_id': False,
                 'account_id': 88,  # venta de cursos
-                'account_analytic_id': 4,
+#                'account_analytic_id': 4,
                 'price_unit': product_id.list_price * invoice_data.get('discount'),
                 'quantity': -1.0,
             }
@@ -96,7 +96,7 @@ class curso_invoice(osv.osv_memory):
                                              invoice_data.get('quota')),
             'account_id': 11,
             'partner_id': invoice_data.get('partner_id').id,
-            'journal_id': 10,
+            'journal_id': 29,
             'invoice_line': [(6, 0, invoice_lines)],
             'currency_id': 20,  # commission.invoice.currency_id.id,
             'comment': 'generado automáticamente',
