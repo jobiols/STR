@@ -546,10 +546,10 @@ class curso_curso(osv.osv):
                         instance = item.instance
             instance = instance + 1
 
-        values.update({
-            'instance': instance,
-            'default_code': type_info.default_code,
-        })
+            values.update({
+                'instance': instance,
+                'default_code': type_info.default_code,
+            })
         return {'value': values}
 
     def _get_no_lectures(self, cr, uid, ids, fields, args, context=None):
