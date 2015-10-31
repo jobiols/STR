@@ -14,9 +14,8 @@ python:
   - "2.7"
 
 env:
-#  - VERSION="7.0" LINT_CHECK="1"
-  - VERSION="7.0" ODOO_REPO="odoo/odoo" LINT_CHECK="0"
-  - VERSION="7.0" UNIT_TEST="1" LINT_CHECK="0"
+  - VERSION="8.0" ODOO_REPO="odoo/odoo" LINT_CHECK="0"
+  - VERSION="8.0" UNIT_TEST="1" LINT_CHECK="0"
 
 virtualenv:
   system_site_packages: true
@@ -29,11 +28,9 @@ install:
 #  - sudo apt-get install -qq libcups2-dev
 #  - pip install git+https://github.com/aeroo/aeroolib.git@master pycups==1.9.68
 
-  # odoo addons adhoc
-  #- git clone -b 7.0 https://github.com/jobiols/odoo-addons.git ${HOME}/odoo-addons
-
   # odoo argentina
-  - git clone --depth 1 https://www.github.com/jobiols/localizacion.git ${HOME}/localizacion
+  - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-argentina.git ${HOME}/odoo-argentina
+  - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-addons.git ${HOME}/odoo-addons
 
   # Markdown package
   - git clone --depth 1 https://github.com/jobiols/Python-Markdown.git ${HOME}/python-markdown
