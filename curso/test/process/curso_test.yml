@@ -21,12 +21,17 @@
   !assert {model: curso.curso, id: curso_curso_1, severity: error, string: State should be draft.}:
     - state == 'draft'
 -
+  I check that instance is 1
+-
+  !assert {model: curso.curso, id: curso_curso_1, severity: error, string: Instance does not increment correctly.}:
+    - instance == 0
+-
   Then I create another curso based on this product
 -
   !record {model: curso.curso, id: curso_curso_2}:
     product: curso_product_1
 -
-  I check that state is draft and instance is 2
+  I check that instance is 2
 -
   !assert {model: curso.curso, id: curso_curso_1, severity: error, string: Instance does not increment correctly.}:
-    - instance == 2
+    - instance == 0
