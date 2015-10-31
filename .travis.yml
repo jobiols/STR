@@ -23,9 +23,14 @@ install:
   - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
   - export PATH=$HOME/maintainer-quality-tools/travis:$PATH
   - travis_install_nightly
+
   # add OCA/crm dependencies
   - git clone --depth=1 https://github.com/OCA/crm -b ${VERSION} $HOME/crm
   - git clone --depth=1 https://github.com/OCA/stock-logistics-workflow -b ${VERSION} $HOME/stock-logistics-workflow
+
+  # Markdown package
+  - git clone --depth 1 https://github.com/jobiols/Python-Markdown.git ${HOME}/python-markdown
+  - cd ${HOME}/python-markdown && python setup.py install
 
 script:
   - travis_run_tests
