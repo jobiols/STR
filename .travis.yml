@@ -10,14 +10,14 @@ addons:
     packages:
       - expect-dev  # provides unbuffer utility
       - python-lxml  # because pip installation is slow
-      - libcups2-dev # for aeroo
+#      - libcups2-dev # for aeroo
       # FE
-      - python-dev
-      - swig
-      - libffi-dev
-      - libssl-dev
-      - python-m2crypto
-      - python-httplib2
+#      - python-dev
+#      - swig
+#      - libffi-dev
+#      - libssl-dev
+#      - python-m2crypto
+#      - python-httplib2
 
 env:
   - VERSION="8.0" LINT_CHECK="0"  # en algun momento poner lint = 1
@@ -26,6 +26,10 @@ env:
 
 virtualenv:
   system_site_packages: true
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y swig libffi-dev libssl-dev python-m2crypto python-httplib2 mercurial
 
 install:
   - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
@@ -43,10 +47,7 @@ install:
   # odoo argentina
   - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-argentina.git ${HOME}/odoo-argentina
   - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-addons.git ${HOME}/odoo-addons
-#  - apt-get install -y swig libffi-dev libssl-dev python-m2crypto python-httplib2 mercurial
   - pip install geopy==0.95.1 BeautifulSoup pyOpenSSL suds
-
-
 
 
 script:
