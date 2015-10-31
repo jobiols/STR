@@ -2,7 +2,7 @@ language: python
 python:
   - "2.7"
 
-sudo: false
+sudo: true
 cache: pip
 
 addons:
@@ -10,14 +10,14 @@ addons:
     packages:
       - expect-dev  # provides unbuffer utility
       - python-lxml  # because pip installation is slow
-      - libcups2-dev # for aeroo
+#      - libcups2-dev # for aeroo
       # FE
-      - python-dev
-      - swig
-      - libffi-dev
-      - libssl-dev
-      - python-m2crypto
-      - python-httplib2
+#      - python-dev
+#      - swig
+#      - libffi-dev
+#      - libssl-dev
+#      - python-m2crypto
+#      - python-httplib2
 
 env:
   - VERSION="8.0" LINT_CHECK="0"  # en algun momento poner lint = 1
