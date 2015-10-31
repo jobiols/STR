@@ -19,14 +19,14 @@
   I check that state is draft
 -
   !assert {model: curso.curso, id: curso_curso_1, severity: error, string: State should be draft.}:
-    - state == 'open'
+    - state == 'draft'
 -
   Then I create another curso based on this product
 -
   !record {model: curso.curso, id: curso_curso_2}:
     product: curso_product_1
 -
-  I check that state is draft and instance is 10 (this will fail)
+  I check that state is draft and instance is 2
 -
-  !assert {model: curso.curso, id: curso_curso_1}:
-    - instance == 10     , "Instance is not 10!!"
+  !assert {model: curso.curso, id: curso_curso_1, severity: error, string: Instance does not increment correctly.}:
+    - instance == 2
