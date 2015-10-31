@@ -24,16 +24,11 @@ install:
   # aeroo reports
   # we install libcups2-dev here because it is not on travis whitelist so it is not installable by addons/apt/packages
   # you can check if available on https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
-#  - sudo apt-get update -qq
-#  - sudo apt-get install -qq libcups2-dev
-#  - pip install git+https://github.com/aeroo/aeroolib.git@master pycups==1.9.68
+  #  - sudo apt-get update -qq
+  #  - sudo apt-get install -qq libcups2-dev
+  #  - pip install git+https://github.com/aeroo/aeroolib.git@master pycups==1.9.68
 
   # odoo argentina
-
-dddd--
-
-
-
 
   - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-argentina.git ${HOME}/odoo-argentina
   - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-addons.git ${HOME}/odoo-addons
@@ -42,12 +37,12 @@ dddd--
   - git clone --depth 1 https://github.com/jobiols/Python-Markdown.git ${HOME}/python-markdown
   - cd ${HOME}/python-markdown && python setup.py install
 
- # oca server tools
+  # oca server tools
   - git clone https://github.com/OCA/server-tools.git ${HOME}/server-tools
 
- # for odoo pdf reports (tested on sale for eg.)
-#  - wget http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-precise-amd64.deb
-#  - sudo dpkg -i wkhtmltox-0.12.1_linux-precise-amd64.deb
+  # for odoo pdf reports (tested on sale for eg.)
+  #  - wget http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-precise-amd64.deb
+  #  - sudo dpkg -i wkhtmltox-0.12.1_linux-precise-amd64.deb
 
  # repository requirements
    - pip install -r requirements.txt
