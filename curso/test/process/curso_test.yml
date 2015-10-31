@@ -19,7 +19,7 @@
   I check that state is draft
 -
   !assert {model: curso.curso, id: curso_curso_1}:
-    - state == 'draft'     , "State is not draft"
+    - stateXsdsd == 'draft'     , "State is not draft"
 -
   Then I create another curso based on this product
 -
