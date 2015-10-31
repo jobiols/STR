@@ -14,7 +14,7 @@
   Then I create a curso based on this product
 -
   !record {model: curso.curso, id: curso_curso_1}:
-    product: curso_product_2
+    product: curso_product_1
 -
   I check that state is draft
 -
