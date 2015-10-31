@@ -15,11 +15,7 @@ addons:
       - libssl-dev
       - python-m2crypto
       - python-httplib2
-      - mercurial
-
-#      - libcups2-dev # for aeroo
-      # FE
-#      - python-dev
+#      - mercurial
 
 env:
   - VERSION="8.0" LINT_CHECK="0"  # en algun momento poner lint = 1
