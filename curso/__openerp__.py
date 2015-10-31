@@ -69,7 +69,10 @@ faltante en la ficha del alumno
         'data/curso_data.xml',
     ],
     # 'demo': ['data/curso_demo.xml'],
-    'test': ['test/process/curso_test.yml'],
+
+    'test': [
+        'test/process/curso_test.yml'
+    ],
     'css': ['static/src/css/curso.css'],
     'js': ['static/src/js/announcement.js'],
     'installable': True,

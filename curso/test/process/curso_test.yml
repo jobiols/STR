@@ -13,13 +13,13 @@
 -
   Then I create a curso based on this product
 -
-  !record {model: curso.curso, id: curso_curso_1}:
+  !record {model: curso.curso, id: curso_curso_2}:
     product: curso_product_1
 -
   I check that state is draft
 -
   !assert {model: curso.curso, id: curso_curso_1}:
-    - state <> 'draft'     , "State is not draft"
+    - state == 'draft'     , "State is not draft"
 -
   Then I create another curso based on this product
 -
