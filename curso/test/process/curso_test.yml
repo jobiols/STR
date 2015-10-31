@@ -24,7 +24,7 @@
   I check that instance is 1
 -
   !assert {model: curso.curso, id: curso_curso_1, severity: error, string: Instance does not increment correctly.}:
-    - instance == 0
+    - instance == 1
 -
   Then I create another curso based on this product
 -
@@ -34,4 +34,4 @@
   I check that instance is 2
 -
   !assert {model: curso.curso, id: curso_curso_1, severity: error, string: Instance does not increment correctly.}:
-    - instance == 0
+    - instance == 1
