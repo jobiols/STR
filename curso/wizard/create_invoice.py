@@ -41,9 +41,9 @@ class curso_invoice(osv.osv_memory):
 #        print('producto', invoice_data.get('curso_id').product.name)
 #        print('instancia', invoice_data.get('curso_id').curso_instance)
 #        print('a facturar', '[{}] {}'.format(invoice_data.get('instance_code'),
-                                             invoice_data.get(
-                                                 'curso_id').product.name.encode(
-                                                 'utf-8')))
+#                                             invoice_data.get(
+#                                                 'curso_id').product.name.encode(
+#                                                 'utf-8')))
 
         product_id = invoice_data.get('curso_id').product
         date_invoice = datetime.strptime(invoice_data.get('date_invoice'), '%Y-%m-%d')
