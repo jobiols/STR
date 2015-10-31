@@ -43,7 +43,7 @@ install:
   # odoo argentina
   - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-argentina.git ${HOME}/odoo-argentina
   - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-addons.git ${HOME}/odoo-addons
-  - apt-get install -y swig libffi-dev libssl-dev python-m2crypto python-httplib2 mercurial
+#  - apt-get install -y swig libffi-dev libssl-dev python-m2crypto python-httplib2 mercurial
   - pip install geopy==0.95.1 BeautifulSoup pyOpenSSL suds
 
 

@@ -2,5 +2,5 @@
 [![Coverage Status](https://coveralls.io/repos/jobiols/str/badge.svg?branch=master&service=github)](https://coveralls.io/github/jobiols/str?branch=7.0)
 # str
 
-## modulos odoo v7.0
+## modulos odoo v8.0
 
