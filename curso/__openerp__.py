@@ -21,7 +21,7 @@
 
 {
     'name': 'Organización de Cursos',
-    'version': '7.0.1.0',
+    'version': '8.0.1.0',
     'category': 'Tools',
     'summary': 'Cursos, Inscripciones, Reservas etc.',
     'description': """
