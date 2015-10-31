@@ -19,9 +19,9 @@
 #
 ##############################################################################
 
-import curso
-import engine
-import res_partner
-import res_product
+import curso.models.curso
+import curso.models.engine
+import curso.models.res_partner
+import curso.models.res_product
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

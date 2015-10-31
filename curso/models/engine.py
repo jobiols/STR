@@ -180,7 +180,7 @@ class curso_quota(osv.osv):
                     res[quota.id] = reg.amount_total
         return res
 
-    """ Curso Quota """
+#   Curso Quota
     _name = 'curso.quota'
     _description = __doc__
     _columns = {
