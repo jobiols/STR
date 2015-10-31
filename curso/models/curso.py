@@ -156,7 +156,10 @@ class curso_curso(osv.osv):
         ret += "		</tr>"
         for alumna in dict['alumnas']:
             ret += "		<tr>"
-            ret += "			<td>" + alumna['name'] + "</td>"
+            if alumna['state'] <> 'confirm':
+                ret += "			<td>" + alumna['name'] + ' (Sin confirmar)'+ "</td>"
+            else:
+                ret += "			<td>" + alumna['name'] + "</td>"
 
             for fecha in dict['clases']:
                 ret += "			<td>&nbsp;</td>"
@@ -170,7 +173,7 @@ class curso_curso(osv.osv):
         ret += "	<tbody>"
         for clase in dict['clases']:
             ret += "		<tr>"
-            ret += "			<td>" + clase['fecha'] + "</td>"
+            ret += "			<td>" + clase['fecha'] + "&nbsp;</td>"
             if clase['desc']:
                 dd = clase['desc']
             else:
@@ -187,14 +190,18 @@ class curso_curso(osv.osv):
             alumnas = []
             reg_pool = self.pool.get('curso.registration')
             # mostrar las alumnas confirmada y señadas
-            records = reg_pool.search(cr, uid, [('curso_id', '=', curso.id),
-                                                '|',
-                                                ('state', '=', 'confirm')
-                , ('state', '=', 'signed')
-                                                ])
+            records = reg_pool.search(
+                cr,
+                uid,
+                [
+                    ('curso_id', '=', curso.id),
+                    '|', ('state', '=', 'confirm'), ('state', '=', 'signed')
+                ])
             for reg in reg_pool.browse(cr, uid, records, context=context):
                 alumnas.append(
-                    {'name': reg.partner_id.name, 'credit': reg.partner_id.credit})
+                    {'name': reg.partner_id.name,
+                     'credit': reg.partner_id.credit,
+                     'state': reg.state})
 
             clases = []
             lect_pool = self.pool.get('curso.lecture')
@@ -202,14 +209,14 @@ class curso_curso(osv.osv):
                                        order="date")
             for lect in lect_pool.browse(cr, uid, records, context=context):
                 d = {
-                    'fecha': datetime.strftime(datetime.strptime(lect.date, "%Y-%m-%d"),
-                                               "%d/%m/%y"),
+                    'fecha': datetime.strftime(
+                        datetime.strptime(lect.date, "%Y-%m-%d"), "%d/%m/%y"),
                     'desc': lect.desc,
                 }
                 clases.append(d)
 
             data = {
-                'titulo': curso.name,
+                'titulo': curso.curso_instance,
                 'alumnas': alumnas,
                 'clases': clases,
             }
@@ -284,7 +291,9 @@ class curso_curso(osv.osv):
     def check_registration_limits(self, cr, uid, ids, context=None):
         for self.curso in self.browse(cr, uid, ids, context=context):
             total_confirmed = self.curso.register_current
-            if total_confirmed < self.curso.register_min or total_confirmed > self.curso.register_max and self.curso.register_max != 0:
+            if total_confirmed < self.curso.register_min or \
+                                    total_confirmed > self.curso.register_max and \
+                                    self.curso.register_max != 0:
                 raise osv.except_osv('Error!', (
                     u"El total de inscripciones confirmadas para el curso '%s' no \
                     cumple con los requerimientos esperados de minimo/maximo. \
