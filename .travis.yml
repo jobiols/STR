@@ -43,6 +43,8 @@ install:
 #  - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-addons.git ${HOME}/odoo-addons
 #  - pip install geopy==0.95.1 BeautifulSoup pyOpenSSL suds
 
+# repository requirements
+  - pip install -r requirements.txt
 
 script:
   - travis_run_tests
