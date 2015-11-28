@@ -33,6 +33,9 @@ install:
 # upgrade pip from 6.0.7
   - pip install --upgrade pip
 
+# aeroo reports
+  - pip install git+https://github.com/aeroo/aeroolib.git@master pycups==1.9.68
+
   - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
   - export PATH=$HOME/maintainer-quality-tools/travis:$PATH
   - travis_install_nightly
