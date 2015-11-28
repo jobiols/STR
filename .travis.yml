@@ -30,7 +30,7 @@ virtualenv:
   system_site_packages: true
 
 install:
-# upgrade pip from 6.0.7 to
+# upgrade pip from 6.0.7 to ?
   - pip install --upgrade pip
 
   - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
@@ -49,11 +49,10 @@ install:
   # odoo argentina
 #  - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-argentina.git ${HOME}/odoo-argentina
 #  - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-addons.git ${HOME}/odoo-addons
-#  - pip install geopy==0.95.1 BeautifulSoup pyOpenSSL suds
+  - pip install geopy==0.95.1 BeautifulSoup pyOpenSSL suds
 
 # repository requirements
-  - pwd
-  - pip install -r requirements.txt
+#  - pip install -r requirements.txt
 
 script:
   - travis_run_tests
