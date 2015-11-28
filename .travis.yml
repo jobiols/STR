@@ -26,11 +26,12 @@ virtualenv:
   system_site_packages: true
 
 install:
+  - pip install --upgrade pip
+
   - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
   - export PATH=$HOME/maintainer-quality-tools/travis:$PATH
   - travis_install_nightly
 
-  - pip install --upgrade pip
 
   # add OCA/crm dependencies
 #  - git clone --depth=1 https://github.com/OCA/crm -b ${VERSION} $HOME/crm
