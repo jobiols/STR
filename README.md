@@ -3,4 +3,7 @@
 # str
 
 ## modulos odoo v8.0
+`- curso
+- partner_first_name
+- web_ckeditor4
 
