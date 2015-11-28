@@ -31,17 +31,17 @@ install:
   - travis_install_nightly
 
   # add OCA/crm dependencies
-  - git clone --depth=1 https://github.com/OCA/crm -b ${VERSION} $HOME/crm
-  - git clone --depth=1 https://github.com/OCA/stock-logistics-workflow -b ${VERSION} $HOME/stock-logistics-workflow
+#  - git clone --depth=1 https://github.com/OCA/crm -b ${VERSION} $HOME/crm
+#  - git clone --depth=1 https://github.com/OCA/stock-logistics-workflow -b ${VERSION} $HOME/stock-logistics-workflow
 
   # Markdown package
   - git clone --depth 1 https://github.com/jobiols/Python-Markdown.git ${HOME}/python-markdown
   - cd ${HOME}/python-markdown && python setup.py install
 
   # odoo argentina
-  - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-argentina.git ${HOME}/odoo-argentina
-  - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-addons.git ${HOME}/odoo-addons
-  - pip install geopy==0.95.1 BeautifulSoup pyOpenSSL suds
+#  - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-argentina.git ${HOME}/odoo-argentina
+#  - git clone --depth 1 -b 8.0 https://www.github.com/jobiols/odoo-addons.git ${HOME}/odoo-addons
+#  - pip install geopy==0.95.1 BeautifulSoup pyOpenSSL suds
 
 
 script:
