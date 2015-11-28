@@ -13,12 +13,16 @@ addons:
     packages:
       - expect-dev  # provides unbuffer utility
       - python-lxml  # because pip installation is slow
+      - python-simplejson
+      - python-serial
+      - python-yaml
+      - libcups2-dev # for aeroo
+      - python-dev
       - swig
       - libffi-dev
       - libssl-dev
       - python-m2crypto
       - python-httplib2
-#      - mercurial
 
 env:
   global:
@@ -31,22 +35,22 @@ virtualenv:
 
 install:
 # upgrade pip from 6.0.7
-  - pip install --upgrade pip
+#  - pip install --upgrade pip
 
 # aeroo reports
   - pip install git+https://github.com/aeroo/aeroolib.git@master pycups==1.9.68
 
-  - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
-  - export PATH=$HOME/maintainer-quality-tools/travis:$PATH
-  - travis_install_nightly
+  # repository requirements
+  - pip install -r requirements.txt
+#  - pip install geopy==0.95.1 BeautifulSoup pyOpenSSL suds
 
   # Markdown package
   - git clone --depth 1 https://github.com/jobiols/Python-Markdown.git ${HOME}/python-markdown
   - cd ${HOME}/python-markdown && python setup.py install
 
-# repository requirements (no se porque no encuentra el requirements.txt
-#  - pip install -r requirements.txt
-  - pip install geopy==0.95.1 BeautifulSoup pyOpenSSL suds
+  - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
+  - export PATH=$HOME/maintainer-quality-tools/travis:$PATH
+  - travis_install_nightly
 
 script:
   - travis_run_tests
