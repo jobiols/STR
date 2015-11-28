@@ -51,7 +51,7 @@ install:
 #  - pip install geopy==0.95.1 BeautifulSoup pyOpenSSL suds
 
 # repository requirements
-  - pip install -r requirements.txt
+  - pip install -r /requirements.txt
 
 script:
   - travis_run_tests
