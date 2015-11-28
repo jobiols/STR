@@ -1,1 +1,2 @@
 odoo-argentina https://github.com/jobiols/odoo-argentina.git
+aeroo_reports https://github.com/aeroo/aeroo_reports.git
