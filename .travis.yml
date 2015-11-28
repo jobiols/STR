@@ -30,6 +30,7 @@ virtualenv:
   system_site_packages: true
 
 install:
+# upgrade pip from 6.0.7 to
   - pip install --upgrade pip
 
   - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
@@ -51,7 +52,8 @@ install:
 #  - pip install geopy==0.95.1 BeautifulSoup pyOpenSSL suds
 
 # repository requirements
-  - pip install -r /requirements.txt
+  - pwd
+  - pip install -r requirements.txt
 
 script:
   - travis_run_tests
