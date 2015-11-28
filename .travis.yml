@@ -35,7 +35,7 @@ virtualenv:
 
 install:
 # upgrade pip from 6.0.7
-#  - pip install --upgrade pip
+  - pip install --upgrade pip
 
 # aeroo reports
   - pip install git+https://github.com/aeroo/aeroolib.git@master pycups==1.9.68
@@ -45,7 +45,7 @@ install:
 
   # Markdown package
   - git clone --depth 1 https://github.com/jobiols/Python-Markdown.git ${HOME}/python-markdown
-#  - cd ${HOME}/python-markdown && python setup.py install
+  - cd ${HOME}/python-markdown && python setup.py install
 
   - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
   - export PATH=$HOME/maintainer-quality-tools/travis:$PATH
