@@ -42,11 +42,10 @@ install:
 
   # repository requirements
   - pip install -r requirements.txt
-#  - pip install geopy==0.95.1 BeautifulSoup pyOpenSSL suds
 
   # Markdown package
   - git clone --depth 1 https://github.com/jobiols/Python-Markdown.git ${HOME}/python-markdown
-  - cd ${HOME}/python-markdown && python setup.py install
+#  - cd ${HOME}/python-markdown && python setup.py install
 
   - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
   - export PATH=$HOME/maintainer-quality-tools/travis:$PATH
