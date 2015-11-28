@@ -1,9 +1,12 @@
 language: python
+sudo: false
+cache:
+  apt: true
+  directories:
+    - $HOME/.cache/pip
+
 python:
   - "2.7"
-
-sudo: false
-cache: pip
 
 addons:
   apt:
@@ -18,6 +21,7 @@ addons:
 #      - mercurial
 
 env:
+  global:
   - VERSION="8.0" LINT_CHECK="0"  # en algun momento poner lint = 1
 #  - VERSION="8.0" ODOO_REPO="odoo/odoo" LINT_CHECK="0"
 #  - VERSION="8.0" ODOO_REPO="OCA/OCB" LINT_CHECK="0"
