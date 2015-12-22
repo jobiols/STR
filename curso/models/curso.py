@@ -509,13 +509,13 @@ class curso_curso(osv.osv):
                 hhs = mms = hhe = mme = 0
 
             # https://docs.python.org/2/library/datetime.html#datetime-objects
-            name = "[{}] {} {}/{}/{} ({:0>2d}:{:0>2d} {:0>2d}:{:0>2d}) - {}".format(
+            name = u'[{}] {} {}/{}/{} ({:0>2d}:{:0>2d} {:0>2d}:{:0>2d}) - {}'.format(
                 format_instance(curso.product.default_code, curso.instance),
                 # Codigo de producto, Nro de instancia
                 weekday.capitalize(),  # dia de la semana en letras
                 day_n, month_n, year_n,  # dia , mes, anio en numeros
                 hhs, mms, hhe, mme,  # hora de inicio hora de fin
-                curso.product.name.encode('utf-8'))  # nombre del producto
+                curso.product.name)  # nombre del producto
             res[curso.id] = name
         return res
 
