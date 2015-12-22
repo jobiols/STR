@@ -21,7 +21,7 @@
 {
     "name" : "Product extension to track sales and purchases",
     "version" : "1.0",
-    "author" : "OpenERP S.A.",
+    "author" : "OpenERP S.A. Modifyed by jeo",
     'website': 'https://www.odoo.com',
     "depends" : ["product", "purchase", "sale", "mrp", "stock_account"],
     "category" : "Generic Modules/Inventory Control",

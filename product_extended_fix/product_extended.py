@@ -68,6 +68,8 @@ class product_template(osv.osv):
 
 
     def _calc_price(self, cr, uid, bom, test = False, real_time_accounting=False, context=None):
+        print 'calc_price >>>>> ', bom
+
         if context is None:
             context={}
         price = 0
@@ -85,8 +87,11 @@ class product_template(osv.osv):
                 cycle = wline.cycle_nbr
                 hour = (wc.time_start + wc.time_stop + cycle * wc.time_cycle) *  (wc.time_efficiency or 1.0)
                 price += wc.costs_cycle * cycle + wc.costs_hour * hour
-                price = self.pool.get('product.uom')._compute_price(cr,uid,bom.product_uom.id, price, bom.product_id.uom_id.id)
-        
+                print '1-----------', price
+
+        price = self.pool.get('product.uom')._compute_price(cr,uid,bom.product_uom.id, price, bom.product_id.uom_id.id)
+        print '2-----------', price
+
         #Convert on product UoM quantities
         if price > 0:
             price = uom_obj._compute_price(cr, uid, bom.product_uom.id, price / bom.product_qty, bom.product_id.uom_id.id)

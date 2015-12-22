@@ -24,7 +24,7 @@ import operator
 
 from openerp.osv import fields, osv
 from openerp import SUPERUSER_ID
-
+import babel.dates
 
 class curso_type(osv.osv):
     #    """ curso Type DEPRECATED!! """
@@ -484,27 +484,6 @@ class curso_curso(osv.osv):
         return 0
 
     def _get_name(self, cr, uid, ids, fields, args, context=None):
-
-        def _week_day(day):
-            day = int(day)
-            if day == 0:
-                ret = "Dom"
-            elif day == 1:
-                ret = "Lun"
-            elif day == 2:
-                ret = "Mar"
-            elif day == 3:
-                ret = "Mie"
-            elif day == 4:
-                ret = "Jue"
-            elif day == 5:
-                ret = "Vie"
-            elif day == 6:
-                ret = "Sab"
-            else:
-                ret = "---"
-            return ret
-
         res = {}
         for curso in self.browse(cr, uid, ids, context=context):
             try:
@@ -512,9 +491,10 @@ class curso_curso(osv.osv):
             except:
                 weekday = day_n = month_n = '?'
             else:
-                weekday = _week_day(init.strftime('%w'))
+                weekday = babel.dates.format_datetime(init, format='EEE', locale=context['lang'])
                 day_n = init.strftime('%d')
                 month_n = init.strftime('%m')
+                year_n = init.strftime('%y')
 
             try:
                 ss = curso.schedule_1.start_time
@@ -529,11 +509,11 @@ class curso_curso(osv.osv):
                 hhs = mms = hhe = mme = 0
 
             # https://docs.python.org/2/library/datetime.html#datetime-objects
-            name = "[{}] {} {}/{} ({:0>2d}:{:0>2d} {:0>2d}:{:0>2d}) - {}".format(
+            name = "[{}] {} {}/{}/{} ({:0>2d}:{:0>2d} {:0>2d}:{:0>2d}) - {}".format(
                 format_instance(curso.product.default_code, curso.instance),
                 # Codigo de producto, Nro de instancia
-                weekday,  # dia de la semana en letras
-                day_n, month_n,  # dia , mes en numeros
+                weekday.capitalize(),  # dia de la semana en letras
+                day_n, month_n, year_n,  # dia , mes, anio en numeros
                 hhs, mms, hhe, mme,  # hora de inicio hora de fin
                 curso.product.name.encode('utf-8'))  # nombre del producto
             res[curso.id] = name
@@ -766,36 +746,15 @@ class curso_curso(osv.osv):
 
 class curso_registration(osv.osv):
     def _get_weekday(self, cr, uid, ids, fields, args, context=None):
-
-        def _week_day(day):
-            day = int(day)
-            if day == 0:
-                ret = "Dom"
-            elif day == 1:
-                ret = "Lun"
-            elif day == 2:
-                ret = "Mar"
-            elif day == 3:
-                ret = "Mie"
-            elif day == 4:
-                ret = "Jue"
-            elif day == 5:
-                ret = "Vie"
-            elif day == 6:
-                ret = "Sab"
-            else:
-                ret = "---"
-            return ret
-
         res = {}
         for registration in self.browse(cr, uid, ids, context=context):
             try:
                 init = datetime.strptime(registration.curso_begin_date, "%Y-%m-%d")
             except:
-                weekday = '?'
+                weekday = '???'
             else:
-                weekday = _week_day(init.strftime('%w'))
-            res[registration.id] = weekday
+                weekday = babel.dates.format_datetime(init, format='EEE', locale=context['lang'])
+            res[registration.id] = weekday.capitalize()
         return res
 
     _name = 'curso.registration'
