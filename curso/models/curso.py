@@ -489,13 +489,12 @@ class curso_curso(osv.osv):
             try:
                 init = datetime.strptime(curso.date_begin, "%Y-%m-%d")
             except:
-                weekday = day_n = month_n = '?'
+                weekday = day_n = month_n = year_n = '?'
             else:
                 weekday = babel.dates.format_datetime(init, format='EEE', locale=context['lang'])
                 day_n = init.strftime('%d')
                 month_n = init.strftime('%m')
                 year_n = init.strftime('%y')
-
             try:
                 ss = curso.schedule_1.start_time
                 ee = curso.schedule_1.end_time
