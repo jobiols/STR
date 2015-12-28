@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Import QIF Bank Statement',
+    'name': 'Import Bank Frances',
     'category': 'Banking addons',
     'version': '8.0.1.0.1',
     'license': 'AGPL-3',

@@ -5,7 +5,7 @@ from openerp.modules.module import get_module_resource
 
 
 class TestQifFile(TransactionCase):
-    """Tests for import bank statement qif file format
+    """Tests for import bank statement for frances file format
     (account.bank.statement.import)
     """
 

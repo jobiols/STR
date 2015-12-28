@@ -1,15 +1,16 @@
 .. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
     :alt: License: AGPL-3
 
-Module to import QIF bank statements.
-=====================================
+Module to import bank statements from Banco Frances
+===================================================
 
 This module allows you to import the machine readable QIF Files in Odoo: they are parsed and stored in human readable format in
 Accounting \ Bank and Cash \ Bank Statements.
 
 Important Note
 ---------------
-Because of the QIF format limitation, we cannot ensure the same transactions aren't imported several times or handle multicurrency.
+Because of the QIF format limitation, we cannot ensure the same transactions aren't imported
+several times or handle multicurrency.
 Whenever possible, you should use a more appropriate file format like OFX.
 
 The module has been initiated by a backport of the new framework developed
