@@ -63,7 +63,8 @@ class AccountBankStatementImport(models.TransientModel):
         vals_bank_statement = {}
         for line in csv.DictReader(data_list):
             # date of transaction
-            vals_line['date'] = dateutil.parser.parse(line['Fecha'], fuzzy=True).date()
+#            vals_line['date'] = dateutil.parser.parse(line['Fecha'], fuzzy=True).date()
+            vals_line['date'] = line['Fecha']
             # Total amount
             total += self._get_monto(line['Monto'])
             vals_line['amount'] = self._get_monto(line['Monto'])
