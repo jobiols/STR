@@ -6,6 +6,7 @@ import csv
 from openerp.tools.translate import _
 from openerp import api, models
 from openerp.exceptions import Warning as UserError
+from datetime import datetime
 
 class AccountBankStatementImport(models.TransientModel):
     _inherit = "account.bank.statement.import"
@@ -63,8 +64,7 @@ class AccountBankStatementImport(models.TransientModel):
         vals_bank_statement = {}
         for line in csv.DictReader(data_list):
             # date of transaction
-#            vals_line['date'] = dateutil.parser.parse(line['Fecha'], fuzzy=True).date()
-            vals_line['date'] = line['Fecha']
+            vals_line['date'] = datetime.strptime(line['Fecha'],"%d/%m/%Y")
             # Total amount
             total += self._get_monto(line['Monto'])
             vals_line['amount'] = self._get_monto(line['Monto'])
