@@ -47,12 +47,12 @@ install:
   - git clone --depth 1 https://github.com/jobiols/Python-Markdown.git ${HOME}/python-markdown
   - cd ${HOME}/python-markdown && python setup.py install
 
+# dependency for bank_statement_import_frances 
+  - git clone --depth 1 https://github.com/OCA/bank-statement-import.git -b ${VERSION} ${HOME}/bank-statement-import
+
   - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
   - export PATH=$HOME/maintainer-quality-tools/travis:$PATH
   - travis_install_nightly
-  
-# dependency for bank_statement_import_frances 
-  - git clone --depth 1 https://github.com/OCA/bank-statement-import.git -b ${VERSION} ${HOME}/bank-statement-import  
 
 script:
   - travis_run_tests
