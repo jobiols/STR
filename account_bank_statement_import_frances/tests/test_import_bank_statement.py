@@ -19,7 +19,11 @@ class TestQifFile(TransactionCase):
         qif_file_path = get_module_resource(
             'account_bank_statement_import_frances',
             'test_qif_file', 'test_frances.csv')
+
+        print 'file path >>>>>>>>>>>>>>>>>>>', qif_file_path
         qif_file = open(qif_file_path, 'rb').read().encode('base64')
+        print 'file opened >>>>>>>>>>>>>>>>>>>', qif_file
+
         bank_statement_improt = self.statement_import_model.with_context(
             journal_id=self.ref('account.bank_journal')).create(
             dict(data_file=qif_file))
