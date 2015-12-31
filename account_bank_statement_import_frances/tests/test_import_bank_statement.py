@@ -20,7 +20,7 @@ class TestQifFile(TransactionCase):
             'account_bank_statement_import_frances',
             'test_qif_file', 'test_frances.csv')
 
-        print 'file path >>>>>>>>>>>>>>>>>>>', qif_file_path
+        print 'file path >>>>>>>>>>>>>>>>>>>>', qif_file_path
         qif_file = open(qif_file_path, 'rb').read().encode('base64')
         print 'file opened >>>>>>>>>>>>>>>>>>>', qif_file
 
