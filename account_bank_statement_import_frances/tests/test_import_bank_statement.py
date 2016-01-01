@@ -30,4 +30,4 @@ class TestQifFile(TransactionCase):
             [('name', '=', 'TRANSFERENCIA XX0000001266940 / 100 - FRANCES NET')], limit=1)[0].statement_id
         print '>>>>>> 3'
         print '>>>>>> ', bank_statement.balance_end_real
-        assert float_compare(bank_statement.balance_end_real, -1896.09, 2) == 0
+        assert float_compare(bank_statement.balance_end_real, -1484.81, 2) == 0
