@@ -20,13 +20,14 @@ class TestQifFile(TransactionCase):
             'account_bank_statement_import_frances',
             'test_qif_file', 'test_frances.csv')
         qif_file = open(qif_file_path, 'rb').read().encode('base64')
-        bank_statement_improt = self.statement_import_model.with_context(
+        bank_statement_import = self.statement_import_model.with_context(
             journal_id=self.ref('account.bank_journal')).create(
             dict(data_file=qif_file))
         print '>>>>>> 1'
-        bank_statement_improt.import_file()
+        bank_statement_import.import_file()
         print '>>>>>> 2'
 #        bank_statement = self.statement_line_model.search(
 #            [('name', '=', 'TRANSFERENCIA XX0000001266940')], limit=1)[0].statement_id
 #        print '>>>>>> 3'
-#        assert float_compare(bank_statement.balance_end_real, -1896.09, 2) == 0
+        print '>>>>>> ', bank_statement.balance_end_real
+        assert float_compare(bank_statement.balance_end_real, -1896.09, 2) == 0
