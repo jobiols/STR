@@ -26,8 +26,8 @@ class TestQifFile(TransactionCase):
         print '>>>>>> 1'
         bank_statement_import.import_file()
         print '>>>>>> 2'
-#        bank_statement = self.statement_line_model.search(
-#            [('name', '=', 'TRANSFERENCIA XX0000001266940')], limit=1)[0].statement_id
-#        print '>>>>>> 3'
+        bank_statement = self.statement_line_model.search(
+            [('name', '=', 'TRANSFERENCIA XX0000001266940 / 100 - FRANCES NET')], limit=1)[0].statement_id
+        print '>>>>>> 3'
         print '>>>>>> ', bank_statement.balance_end_real
         assert float_compare(bank_statement.balance_end_real, -1896.09, 2) == 0
