@@ -19,7 +19,7 @@
   I check that state is draft
 -
   !assert {model: curso.curso, id: curso_curso_1, severity: error, string: State should be draft.}:
-    - state == 'draft'
+    - state == 'draft1'
 -
   I check that instance is 1
 -
