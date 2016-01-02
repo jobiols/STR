@@ -42,7 +42,7 @@
 -
   I check that name is ok
 -
-  !assert {model: curso.schedule, id: curso_schedule_1, severity: error, string: Name should be 04:00 - 06:00 (2hs).}:
+  !assert {model: curso.schedule, id: curso_schedule_1, severity: error, string: 'Name should be 04:00 - 06:00 (2hs)'}:
     - name == '04:00 - 06:00 (2hs)'
 -
   I modify curso 1 to add date and schedule
