@@ -523,19 +523,20 @@ class curso_curso(osv.osv):
         if product:
             type_info = self.pool.get('product.product').browse(cr, uid, product, context)
 
-            instance = 0
             r_pool = self.pool.get('curso.curso')
             records = r_pool.search(cr, uid,
                                     [('default_code', '=', type_info.default_code)],
                                     context=context)
+
+            instance = 0
             for item in r_pool.browse(cr, uid, records, context):
-                if (item):
+                if item:
                     if (instance < item.instance):
                         instance = item.instance
+
             instance = instance + 1
             values.update({
                 'instance': instance,
-#                'default_code': type_info.default_code,
             })
         return {'value': values}
 
