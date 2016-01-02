@@ -1,4 +1,6 @@
 -
+  *** Test module curso
+
   First I create a product to define a curso
 -
   !record {model: product.product, id: curso_product_1}:
@@ -16,10 +18,11 @@
   !record {model: curso.curso, id: curso_curso_1}:
     product: curso_product_1
 -
-  I check that state is draft
+  I check that state is draft and instance is 1
 -
   !assert {model: curso.curso, id: curso_curso_1, severity: error, string: State should be draft.}:
     - state == 'draft'
+    - instance == 1
 -
   Then I create another curso based on this product
 -
@@ -39,11 +42,13 @@
 -
   I check that name is ok
 -
-  !assert {model: curso.schedule, id: curso_schedule_1, severity: error, string: name should be non so.}:
-    - name == 'draft'
+  !assert {model: curso.schedule, id: curso_schedule_1, severity: error, string: name should be 04:00 - 06:00 (2hs).}:
+    - name == '04:00 - 06:00 (2hs)'
 -
   I modify curso 1 to add date and schedule
 -
   !record {model: curso.curso, id: curso_curso_1}:
-    date_begin: !eval time.strftime('%Y-%m-%d')
+    date_begin: !eval strptime('2016-01-04').strftime('%d/%m/%Y')
     schedule_1: curso_schedule_1
+-
+
