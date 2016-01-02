@@ -30,8 +30,8 @@
 -
   !assert {model: curso.curso, id: curso_curso_1, severity: error, string: Instance does not increment correctly.}:
     - instance == 1
-
+-
   I check that instance is 2
 -
-  !assert {model: curso.curso, id: curso_curso_1, severity: error, string: Instance does not increment correctly.}:
+  !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
     - instance == 2
