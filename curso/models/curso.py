@@ -533,10 +533,9 @@ class curso_curso(osv.osv):
                     if (instance < item.instance):
                         instance = item.instance
             instance = instance + 1
-            print 'default_code ------------- > ', type_info.default_code,
             values.update({
                 'instance': instance,
-                'default_code': type_info.default_code,
+#                'default_code': type_info.default_code,
             })
         return {'value': values}
 
