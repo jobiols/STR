@@ -48,7 +48,7 @@
   I modify curso 1 to add date and schedule
 -
   !record {model: curso.curso, id: curso_curso_1}:
-    date_begin: !eval strptime('2016-01-04').strftime('%d/%m/%Y')
+    date_begin: !eval datetime.strptime('2016-01-04').strftime('%d/%m/%Y')
     schedule_1: curso_schedule_1
 -
 
