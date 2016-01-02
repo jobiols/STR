@@ -39,7 +39,7 @@
 -
   I check that name is ok
 -
-  !assert {model: curso.schedule, id: curso_schedule_1, severity: error, string: name should be ??.}:
+  !assert {model: curso.schedule, id: curso_schedule_1, severity: error, string: name should be non so.}:
     - name == 'draft'
 -
   I modify curso 1 to add date and schedule
