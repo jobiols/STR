@@ -5,7 +5,7 @@ una academia.
 
 Puntos Clave
 ------------
-- Definición de los cursos como Productos _(servicios)_
+- Definición de los cursos como Productos de tipo _(servicio)_
 - Definicion las instancias de los cursos, cada vez que se vuelve a 
 dictar un curso se autoincrementa en nro de instancia.
 - Estados de los cursos Borrador, Cursando, Terminado, Cancelado
