@@ -31,18 +31,19 @@
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
     - instance == 2
 -
-  I modify curso 1 to add date
--
-  !record {model: curso.curso, id: curso_curso_1}:
-    date_begin: !eval time.strftime('%Y-%m-%d')
--
-  I create an schedule
+  I create an schedule ----------------------------------->
 -
   !record {model: curso.schedule, id: curso_schedule_1}:
     start_time: 4
     end_time: 6
 -
- I modify curso 1 to add schedule
+  I check that name is ok
+-
+  !assert {model: curso.schedule, id: curso_schedule_1, severity: error, string: name should be ??.}:
+    - name == 'draft'
+-
+  I modify curso 1 to add date and schedule
 -
   !record {model: curso.curso, id: curso_curso_1}:
+    date_begin: !eval time.strftime('%Y-%m-%d')
     schedule_1: curso_schedule_1
