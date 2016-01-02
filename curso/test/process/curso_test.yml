@@ -34,7 +34,7 @@
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
     - instance == 2
 -
-  I create an schedule ----------------------------------->
+  I create an schedule
 -
   !record {model: curso.schedule, id: curso_schedule_1}:
     start_time: 4
@@ -48,7 +48,7 @@
   I modify curso 1 to add date and schedule
 -
   !record {model: curso.curso, id: curso_curso_1}:
-    date_begin: !eval datetime.strptime('2016-01-04','%Y-%m-%d').strftime('%d/%m/%Y')
+    date_begin: !eval datetime.strptime('2016-01-04','%Y-%m-%d')
     schedule_1: curso_schedule_1
 -
 
