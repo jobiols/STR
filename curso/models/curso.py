@@ -34,13 +34,13 @@ class curso_type(osv.osv):
     }
 
 
-def calculate_invoice_date(curso_date):
-    dd = datetime.strptime(curso_date, '%Y-%m-%d')
-
-    year = datetime.now().year
-    month = datetime.now().month
-    day = int(dd.strftime('%d'))
-    return datetime.strftime(date(year, month, day), '%Y-%m-%d')
+# def calculate_invoice_date(curso_date):
+#    dd = datetime.strptime(curso_date, '%Y-%m-%d')
+#
+#    year = datetime.now().year
+#    month = datetime.now().month
+#    day = int(dd.strftime('%d'))
+#    return datetime.strftime(date(year, month, day), '%Y-%m-%d')
 
 
 def calculate_invoice_date1(sourcedate, months):

@@ -58,7 +58,20 @@
     desc: Primera clase del curso
     curso_id: curso_curso_2
     schedule_id: curso_schedule_1
-
+-
+  I add a Student
+-
+  !record {model: res.partner, id: res_partner_1}:
+    name: Juana Alumna
+    date: '1962-01-01'
+    customer: True
+-
+  I Register the student in the course
+-
+  !record {model: curso.registration, id: curso_registration_1}:
+    curso_id: curso_curso_2
+    partner_id: res_partner_1
+-
 
 
 

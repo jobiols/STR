@@ -95,7 +95,7 @@ class curso_registration(osv.osv):
                                       states={'draft': [('readonly', False)]}),
     }
     _defaults = {
-        'nb_register': 1,
+        #        'nb_register': 1,
         'state': 'draft',
     }
     _order = 'create_date desc'
