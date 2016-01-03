@@ -19,6 +19,7 @@
 #
 ##############################################################################
 
+import lapse
 import curso
 import engine
 import res_partner
