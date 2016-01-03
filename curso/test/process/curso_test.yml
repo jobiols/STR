@@ -45,8 +45,22 @@
   !assert {model: curso.schedule, id: curso_schedule_1, severity: error, string: 'Name should be 04:00 - 06:00 (2hs)'}:
     - name == '04:00 - 06:00 (2hs)'
 -
-  I modify curso 1 to add date and schedule -----------------------------------------------
+  I modify curso 1 to add date and schedule ---------------------------------------------
 -
   !record {model: curso.curso, id: curso_curso_1}:
     schedule_1: curso_schedule_1
+    date_begin: '2015-01-11'
+-
+  I add a lecture
+-
+  !record {model: curso.lecture, id: curso_lecture_1}:
+    date: '2015-01-11'
+    desc: Primera clase del curso
+    curso_id: curso_curso_2
+    schedule_id: curso_schedule_1
+
+
+
+
+
 
