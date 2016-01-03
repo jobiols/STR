@@ -100,6 +100,10 @@ class curso_registration(osv.osv):
     }
     _order = 'create_date desc'
 
+    def calculate_invoice_date1(sourcedate, months):
+        return sourcedate + timedelta(days=30 * (months))
+
+
     def confirm_registration(self, cr, uid, ids, context=None):
         for reg in self.browse(cr, uid, ids, context=context or {}):
             self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
@@ -204,7 +208,7 @@ class curso_registration(osv.osv):
         for quota in range(1, registration.curso_id.product.no_quotes + 1):
             quota_data = {
                 'registration_id': registration_id,
-                'date': calculate_invoice_date1(date, quota - 1),
+                'date': self.calculate_invoice_date1(date, quota - 1),
                 'quota': quota,
                 'list_price': registration.curso_id.product.list_price
             }

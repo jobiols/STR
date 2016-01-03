@@ -42,11 +42,6 @@ class curso_type(osv.osv):
 #    day = int(dd.strftime('%d'))
 #    return datetime.strftime(date(year, month, day), '%Y-%m-%d')
 
-
-def calculate_invoice_date1(sourcedate, months):
-    return sourcedate + timedelta(days=30 * (months))
-
-
 def format_instance(default_code, instance):
     return '{}/{:0>2d}'.format(default_code, instance)
 

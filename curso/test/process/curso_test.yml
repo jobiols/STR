@@ -78,6 +78,3 @@
      self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
 
 
-
-
-
