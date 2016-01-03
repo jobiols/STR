@@ -7,3 +7,4 @@ access_curso_schedule,curso.schedule,model_curso_schedule,curso.group_curso_user
 access_curso_holiday,curso.holiday,model_curso_holiday,curso.group_curso_user,1,1,1,1
 access_curso_lecture,curso.lecture,model_curso_lecture,curso.group_curso_user,1,1,1,1
 access_curso_quota,curso.quota,model_curso_quota,curso.group_curso_manager,1,1,1,1
+access_curso_lapse,curso.lapse,model_curso_lapse,,1,1,1,1
