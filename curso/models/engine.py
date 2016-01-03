@@ -14,7 +14,7 @@ class account_invoice(models.Model):
 class curso_holiday(osv.osv):
     """ define los periodos donde estamos en vacaciones, puede ser parte de un dia """
     _name = 'curso.holiday'
-    _inherit = 'curso.lapse'
+    _inherit = 'lapse.lapse'
 
     _columns = {
         'name': fields.char('Nombre', size=64, required=False, readonly=False),
@@ -30,7 +30,7 @@ class curso_holiday(osv.osv):
 class curso_schedule(osv.osv):
     """ horarios que puede tener un curso """
     _name = 'curso.schedule'
-    _inherit = 'curso.lapse'
+    _inherit = 'lapse.lapse'
 
     def _f2h(self, t):
         mm = t - int(t)
