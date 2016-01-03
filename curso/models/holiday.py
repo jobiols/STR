@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
+#    OpenERP, Open Source Management Solution.
 #    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -15,17 +15,24 @@
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
+from openerp.osv import fields, osv
 
-import curso
-import engine
-import holiday
-import lapse
-import lecture
-import quota
-import res_partner
-import res_product
+class curso_holiday(osv.osv):
+    """ define los periodos donde estamos en vacaciones, puede ser parte de un dia """
+    _name = 'curso.holiday'
+    _inherit = 'curso.lapse'
+
+    _columns = {
+        'name': fields.char('Nombre', size=64, required=False, readonly=False),
+        'date': fields.date('Fecha'),
+    }
+
+    _defaults = {
+        'start_time': 8,
+        'end_time': 22,
+    }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
