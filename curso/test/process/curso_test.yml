@@ -75,7 +75,7 @@
   I make Juana sign the course
 -
    !python {model: curso.registration}: |
-     self.button_reg_close(cr, uid, [ref("curso_registration1")],context=context)
+     self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
 
 
 
