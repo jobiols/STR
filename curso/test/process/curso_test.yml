@@ -49,5 +49,4 @@
 -
   !record {model: curso.curso, id: curso_curso_1}:
     schedule_1: curso_schedule_1
--
 
