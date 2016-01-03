@@ -19,6 +19,7 @@
 #
 ##############################################################################
 
+import schedule
 import lapse
 import holiday
 import lecture
