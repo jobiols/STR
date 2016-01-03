@@ -491,8 +491,7 @@ class curso_curso(osv.osv):
             except:
                 weekday = day_n = month_n = year_n = '?'
             else:
-                lang = self.pool.get('res.users').browse(cr, uid, uid).lang.id
-                print '>>>>>>>>', lang
+                lang = self.pool.get('res.users').browse(cr, uid, uid).lang
                 weekday = babel.dates.format_datetime(init, format='EEE', locale=lang)
                 day_n = init.strftime('%d')
                 month_n = init.strftime('%m')
