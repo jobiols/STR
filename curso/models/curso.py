@@ -26,12 +26,12 @@ from openerp.osv import fields, osv
 from openerp import SUPERUSER_ID
 import babel.dates
 
-class curso_type(osv.osv):
-    #    """ curso Type DEPRECATED!! """
-    _name = 'curso.type'
-    _description = __doc__
-    _columns = {
-    }
+# class curso_type(osv.osv):
+#    #    """ curso Type DEPRECATED!! """
+#    _name = 'curso.type'
+#    _description = __doc__
+#    _columns = {
+#    }
 
 
 # def calculate_invoice_date(curso_date):
