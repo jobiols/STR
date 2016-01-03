@@ -45,9 +45,9 @@
   !assert {model: curso.schedule, id: curso_schedule_1, severity: error, string: 'Name should be 04:00 - 06:00 (2hs)'}:
     - name == '04:00 - 06:00 (2hs)'
 -
-  I modify curso 1 to add date and schedule
+  I modify curso 2 to add date and schedule
 -
-  !record {model: curso.curso, id: curso_curso_1}:
+  !record {model: curso.curso, id: curso_curso_2}:
     schedule_1: curso_schedule_1
     date_begin: '2015-01-11'
 -
@@ -66,13 +66,13 @@
     date: '1962-01-01'
     customer: True
 -
-  I Register the student in the course ---------------------------------------------
+  I Register the student in the course
 -
   !record {model: curso.registration, id: curso_registration_1}:
     curso_id: curso_curso_2
     partner_id: res_partner_1
 -
-  I make Juana sign the course
+  I make Juana sign the course ---------------------------------------------
 -
    !python {model: curso.registration}: |
      self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
