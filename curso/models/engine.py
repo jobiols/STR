@@ -11,31 +11,6 @@ class account_invoice(models.Model):
     _order = 'id desc'
 
 
-class curso_lapse(osv.osv):
-    """ Define un lapso de tiempo se usa como clase abstracta """
-    _name = 'curso.lapse'
-    _description = __doc__
-
-    #   def _check_elapsed(self, cr, uid, ids, context=None):
-    #        for curso in self.browse(cr, uid, ids, context=context):
-    #            if curso.date_end < curso.date_begin:
-    #                return False
-    #        return True
-
-    def _elapsed_time(self, cr, uid, ids, field_name, arg, context):
-        res = {}
-        for rec in self.browse(cr, uid, ids):
-            res[rec.id] = rec.end_time - rec.start_time
-        return res
-
-    _columns = {
-        'start_time': fields.float('Desde', required=True),
-        'end_time': fields.float('Hasta', required=True),
-        'elapsed_time': fields.function(_elapsed_time, string="Duración", type="float",
-                                        method=True)
-    }
-
-
 class curso_holiday(osv.osv):
     """ define los periodos donde estamos en vacaciones, puede ser parte de un dia """
     _name = 'curso.holiday'
