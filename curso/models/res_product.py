@@ -2,7 +2,6 @@
 #################################################################################
 
 from datetime import datetime
-
 from openerp.osv import fields, osv
 import markdown
 
@@ -207,3 +206,5 @@ class product_product(osv.osv):
         self.pool.get('document.page').create(cr, uid, new_page, context=context)
 
         return True
+
+        # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

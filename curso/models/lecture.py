@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from openerp.osv import fields, osv
+# from datetime import datetime
 
 class curso_lecture(osv.osv):
     """ Representa las clases del curso """
