@@ -100,7 +100,7 @@ class curso_registration(osv.osv):
     }
     _order = 'create_date desc'
 
-    def calculate_invoice_date1(sourcedate, months):
+    def calculate_invoice_date(self, sourcedate, months):
         return sourcedate + timedelta(days=30 * (months))
 
 
@@ -208,7 +208,7 @@ class curso_registration(osv.osv):
         for quota in range(1, registration.curso_id.product.no_quotes + 1):
             quota_data = {
                 'registration_id': registration_id,
-                'date': self.calculate_invoice_date1(date, quota - 1),
+                'date': self.calculate_invoice_date(date, quota - 1),
                 'quota': quota,
                 'list_price': registration.curso_id.product.list_price
             }
