@@ -19,11 +19,9 @@
 #
 ##############################################################################
 
-from datetime import datetime, date, timedelta
-import operator
+from datetime import datetime, timedelta
 
 from openerp.osv import fields, osv
-from openerp import SUPERUSER_ID
 import babel.dates
 
 
@@ -100,10 +98,6 @@ class curso_registration(osv.osv):
     }
     _order = 'create_date desc'
 
-    def calculate_invoice_date(self, sourcedate, months):
-        return sourcedate + timedelta(days=30 * (months))
-
-
     def confirm_registration(self, cr, uid, ids, context=None):
         for reg in self.browse(cr, uid, ids, context=context or {}):
             self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
@@ -116,12 +110,12 @@ class curso_registration(osv.osv):
 
     def sign_registration(self, cr, uid, ids, context=None):
         for reg in self.browse(cr, uid, ids, context=context or {}):
-            self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
-                                                      body=(
-                                                               u'Nueva seña para el curso: %s.') % (
-                                                               reg.partner_id.name or '',),
-                                                      subtype="curso.mt_curso_registration",
-                                                      context=context)
+            self.pool.get('curso.curso'). \
+                message_post(cr, uid, [reg.curso_id.id],
+                             body=(u'Nueva seña para el curso: %s.') % (
+                                 reg.partner_id.name or '',),
+                             subtype="curso.mt_curso_registration",
+                             context=context)
         return self.write(cr, uid, ids, {'state': 'signed'}, context=context)
 
     def button_reg_sign(self, cr, uid, ids, context=None):
@@ -144,12 +138,12 @@ class curso_registration(osv.osv):
         """ Boton empezo el curso
         """
         for reg in self.browse(cr, uid, ids, context=context or {}):
-            self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
-                                                      body=(
-                                                               u'Nueva inscripción en el curso: %s.') % (
-                                                               reg.partner_id.name or '',),
-                                                      subtype="curso.mt_curso_registration",
-                                                      context=context)
+            self.pool.get('curso.curso'). \
+                message_post(cr, uid, [reg.curso_id.id],
+                             body=(u'Nueva inscripción en el curso: %s.') % (
+                                 reg.partner_id.name or '',),
+                             subtype="curso.mt_curso_registration",
+                             context=context)
         return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
 
     def button_reg_draft(self, cr, uid, ids, context=None):
@@ -200,7 +194,11 @@ class curso_registration(osv.osv):
         register_pool.unlink(cr, uid, records, context=None)
         return self.write(cr, uid, ids, {'state': 'cancel'})
 
+    def calculate_invoice_date(self, sourcedate, months):
+        return sourcedate + timedelta(days=30 * (months))
+
     def button_gen_quotes(self, cr, uid, ids, context=None, *args):
+
         for registration in self.browse(cr, uid, ids, context=context):
             registration_id = registration.id
             date = datetime.strptime(registration.curso_begin_date, '%Y-%m-%d')

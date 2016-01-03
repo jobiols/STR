@@ -21,6 +21,7 @@
 from openerp.osv import fields, osv
 
 class curso_quota(osv.osv):
+
     def _get_state(self, cr, uid, ids, fields, args, context=None):
         res = {}
         for quota in self.browse(cr, uid, ids, context=context):
@@ -58,21 +59,24 @@ class curso_quota(osv.osv):
     _columns = {
         'registration_id': fields.many2one('curso.registration', 'Inscripcion'),
         'date': fields.date('Fecha factura'),
+        'list_price': fields.float('Precio'),
+        'quota': fields.integer('#cuota', readonly=False),
+        'invoice_id': fields.many2one('account.invoice', 'Factura', required=False),
+
+        # function
         'amount': fields.function(_get_amount_paid, fnct_search=None, string='Facturado',
                                   method=True, store=False,
                                   type='char'),
         'state': fields.function(_get_state, fnct_search=None, string='Estado Factura',
                                  method=True, store=False,
                                  type='char'),
-        'list_price': fields.float('Precio'),
-        'quota': fields.integer('#cuota', readonly=False),
+        # related
         'curso_inst': fields.related('registration_id', 'curso_id', 'curso_instance',
                                      string='Instancia', type='char',
                                      size=128, readonly=True),
         'partner_id': fields.related('registration_id', 'partner_id', 'name',
                                      string='Alumna', type='char', size=128,
                                      readonly=True),
-        'invoice_id': fields.many2one('account.invoice', 'Factura', required=False),
     }
     _order = 'date desc'
 

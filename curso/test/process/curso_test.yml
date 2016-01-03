@@ -12,6 +12,7 @@
     list_price: 800
     type: 'service'
     agenda: tema uno, tema dos, tema tres
+    no_quotes: 10
 -
   Then I create a curso based on this product
 -
@@ -76,5 +77,9 @@
 -
    !python {model: curso.registration}: |
      self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
-
+-
+  I Begin the course
+-
+   !python {model: curso.registration}: |
+     self.button_reg_confirm(cr, uid, [ref("curso_registration_1")],context=context)
 
