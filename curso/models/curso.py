@@ -88,8 +88,8 @@ class curso_curso(osv.osv):
                     self._current_ix = ix
                     break
 
-            if self._current_ix == None:
-                raise osv.except_osv(('Error!'), (
+            if self._current_ix is None:
+                raise osv.except_osv('Error!', (
                     u"La fecha de inicio no corresponde con Dia 1 ni con Dia 2"))
 
         def current_weekload(self):
@@ -99,7 +99,7 @@ class curso_curso(osv.osv):
             last_weekday = int(self._weekload[self._current_ix].get('weekday'))
 
             self._current_ix += self._current_ix
-            if (self._current_ix >= len(self._weekload)):
+            if self._current_ix >= len(self._weekload):
                 self._current_ix = 0
 
             current_weekday = int(self._weekload[self._current_ix].get('weekday'))
@@ -107,7 +107,7 @@ class curso_curso(osv.osv):
 
             if (delta == 0) and (self._current_ix == 0):
                 delta = 7
-            if (delta < 0):
+            if delta < 0:
                 delta = delta + 7
 
             return delta

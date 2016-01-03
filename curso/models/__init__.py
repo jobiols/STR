@@ -24,7 +24,6 @@ import holiday
 import lecture
 import quota
 import curso
-
 import account_invoice
 import res_partner
 import res_product

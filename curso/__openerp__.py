@@ -49,8 +49,6 @@ faltante en la ficha del alumno
     'depends': ['base_setup', 'board', 'email_template', 'sale', 'purchase',
                 'l10n_ar_invoice'],
     'data': [
-        'security/curso_security.xml',
-        'security/ir.model.access.csv',
         # 'wizard/curso_confirm_view.xml',
 
         'wizard/add_registration_view.xml',
@@ -67,6 +65,8 @@ faltante en la ficha del alumno
         'report/report_curso_registration_view.xml',
 
         'data/curso_data.xml',
+        'security/curso_security.xml',
+        'security/ir.model.access.csv',
     ],
     # 'demo': ['data/curso_demo.xml'],
 
