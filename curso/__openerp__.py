@@ -68,6 +68,7 @@ faltante en la ficha del alumno
 
     'test': [
         'test/process/curso_test.yml'
+        'test/process/holiday_test.yml'
     ],
     'css': ['static/src/css/curso.css'],
     'js': ['static/src/js/announcement.js'],
