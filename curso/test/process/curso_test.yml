@@ -73,12 +73,12 @@
     curso_id: curso_curso_2
     partner_id: res_partner_1
 -
-  I make Juana sign the course ---------------------------------------------
+  I make Juana sign the course
 -
    !python {model: curso.registration}: |
      self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
 -
-  I Begin the course
+  I Begin the course ---------------------------------------------
 -
    !python {model: curso.registration}: |
      self.button_reg_confirm(cr, uid, [ref("curso_registration_1")],context=context)

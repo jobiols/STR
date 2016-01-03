@@ -42,14 +42,14 @@
             <field name="key">default</field>
             <field name="key2"></field>
             <field eval="ref('confirmation_curso')" name="value_unpickle"/>
-            <field name="model">curso.type</field>
+            <!--            <field name="model">curso.type</field> -->
         </record>
         <record model="ir.values" id="default_value_registration_mail_confirmation">
             <field name="name">default_email_registration</field>
             <field name="key">default</field>
             <field name="key2"></field>
             <field eval="ref('confirmation_registration')" name="value_unpickle"/>
-            <field name="model">curso.type</field>
+            <!--            <field name="model">curso.type</field> -->
         </record>
 
     </data>

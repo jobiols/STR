@@ -46,7 +46,11 @@ faltante en la ficha del alumno
 
 """,
     'author': 'jeo software',
-    'depends': ['base_setup', 'board', 'email_template', 'sale', 'purchase',
+    'depends': ['base_setup',
+                'board',
+                'email_template',
+                'sale',
+                'purchase',
                 'l10n_ar_invoice'],
     'data': [
         # 'wizard/curso_confirm_view.xml',
@@ -54,6 +58,7 @@ faltante en la ficha del alumno
         'security/ir.model.access.csv',
         'wizard/add_registration_view.xml',
         'views/curso_view.xml',
+        'views/registration_view.xml',
         'views/engine_view.xml',
         'views/board_association_view.xml',
         'views/res_product_view.xml',
