@@ -19,8 +19,8 @@
 #
 ##############################################################################
 
-import schedule
 import lapse
+import schedule
 import holiday
 import lecture
 import quota

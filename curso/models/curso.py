@@ -108,7 +108,7 @@ class curso_curso(osv.osv):
             if (delta == 0) and (self._current_ix == 0):
                 delta = 7
             if delta < 0:
-                delta = delta + 7
+                delta += 7
 
             return delta
 
@@ -305,12 +305,12 @@ class curso_curso(osv.osv):
         for curso in self.browse(cr, uid, ids, context=context):
             available_seats = curso.register_avail
             if available_seats and no_of_registration > available_seats:
-                raise osv.except_osv(('Cuidado!'),
-                                     (u"Solo hay %d vacantes disponnibles!") % (
-                                         available_seats))
+                raise osv.except_osv('Cuidado!',
+                                     u"Solo hay %d vacantes disponnibles!" %
+                                     available_seats)
             elif available_seats == 0:
-                raise osv.except_osv(('Cuidado!'),
-                                     (u"No Hay mas vacantes en este curso!"))
+                raise osv.except_osv('Cuidado!',
+                                     u"No Hay mas vacantes en este curso!")
 
     def confirm_curso(self, cr, uid, ids, context=None):
         register_pool = self.pool.get('curso.registration')
