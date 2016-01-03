@@ -743,6 +743,9 @@ class curso_curso(osv.osv):
                                                context=context)
 
 
+#########################################################################################
+
+
 class curso_registration(osv.osv):
     def _get_weekday(self, cr, uid, ids, fields, args, context=None):
         res = {}

@@ -44,3 +44,5 @@ class curso_lapse(osv.osv):
         'elapsed_time': fields.function(_elapsed_time, string="Duración", type="float",
                                         method=True)
     }
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

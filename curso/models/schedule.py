@@ -58,3 +58,5 @@ class curso_schedule(osv.osv):
 
     _sql_constraints = [
         ('default_code_unique', 'unique (name)', 'Este horario ya existe.')]
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
