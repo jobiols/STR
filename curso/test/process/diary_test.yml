@@ -1,0 +1,6 @@
+-
+  I create a diary
+-
+  !record {model: curso.diary, id: curso_product_1}:
+    day: 1
+    schedule: curso_schedule_1

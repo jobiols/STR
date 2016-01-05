@@ -33,7 +33,6 @@ import babel.dates
 #    _columns = {
 #    }
 
-
 # def calculate_invoice_date(curso_date):
 #    dd = datetime.strptime(curso_date, '%Y-%m-%d')
 #
@@ -152,7 +151,7 @@ class curso_curso(osv.osv):
         for alumna in dict['alumnas']:
             ret += "		<tr>"
             if alumna['state'] <> 'confirm':
-                ret += "			<td>" + alumna['name'] + ' (Sin confirmar)'+ "</td>"
+                ret += "			<td>" + alumna['name'] + ' (Sin confirmar)' + "</td>"
             else:
                 ret += "			<td>" + alumna['name'] + "</td>"
 
@@ -603,6 +602,8 @@ class curso_curso(osv.osv):
                                   dejar en blanco si no está definida todavia pero se \
                                   debe ingresar para confirmar el curso",
                                   readonly=True, states={'draft': [('readonly', False)]}),
+
+        ###
         'schedule_1': fields.many2one('curso.schedule', 'Horario 1',
                                       readonly=True,
                                       states={'draft': [('readonly', False)]}),
@@ -615,6 +616,12 @@ class curso_curso(osv.osv):
         'weekday_2': fields.selection(_get_day, 'Dia 2',
                                       readonly=True,
                                       states={'draft': [('readonly', False)]}),
+        ###
+
+        'diary': fields.many2one('curso.diary',
+                                 'Agenda',
+                                 readonly=True,
+                                 states={'draft': [('readonly', False)]}),
         'state': fields.selection([
             ('draft', 'Borrador'),
             ('cancel', 'Cancelado'),
@@ -623,22 +630,22 @@ class curso_curso(osv.osv):
             'Status', readonly=True, required=True,
             track_visibility='onchange',
             help=u'Cuando se crea el curso el estado es \'Borrador\'. Si se confirma el \
-            curso el estado es \'Cursando\'. Si el curso termina el estado \
-            es \'Terminado\'. Si el curso es cancelado el estado pasa a \'Cancelado\'.'),
+                curso el estado es \'Cursando\'. Si el curso termina el estado \
+                es \'Terminado\'. Si el curso es cancelado el estado pasa a \'Cancelado\'.'),
         'email_registration_id': fields.many2one('email.template',
                                                  'Confirmación de inscripción',
                                                  help=u'Si definís una plantilla, la \
-                                                 misma se enviará cada vez que se \
-                                                 confirme una inscripción a este curso.'),
+                                                     misma se enviará cada vez que se \
+                                                     confirme una inscripción a este curso.'),
         'email_confirmation_id': fields.many2one('email.template', 'Confirmación curso',
                                                  help=u"Si definis una plantilla de mail, \
-                                                 cada participante recibirá este mail \
-                                                 anunciando la confirmación del curso."),
+                                                     cada participante recibirá este mail \
+                                                     anunciando la confirmación del curso."),
         'reply_to': fields.char('Mail de respuesta', size=64, readonly=False,
                                 states={'done': [('readonly', True)]},
                                 help=u"La dirección de mail del que organiza los cursos, \
-                                cuando el alumno responde el mail que se le envia en \
-                                automático responderá a esta dirección."),
+                                    cuando el alumno responde el mail que se le envia en \
+                                    automático responderá a esta dirección."),
         'main_speaker_id': fields.many2one('res.partner', 'Profesora', readonly=False,
                                            states={'done': [('readonly', True)]},
                                            help=u"La profesora que va a dar el curso."),
@@ -671,18 +678,18 @@ class curso_curso(osv.osv):
                                        help=u"La cantidad de clases que tiene el curso"),
         'register_current': fields.function(_get_register, string='Alumnas',
                                             help=u"La cantidad de alumnas que \
-                                            confirmaron pagando (al menos una seña)",
+                                                confirmaron pagando (al menos una seña)",
                                             multi='register_numbers'),
         'register_avail': fields.function(_get_register, string='Vacantes',
                                           multi='register_numbers', type='integer'),
         'register_prospect': fields.function(_get_register, string='Interesadas',
                                              help=u"La cantidad de alumnas interesadas \
-                                             que todavía no concretaron",
+                                                 que todavía no concretaron",
                                              multi='register_numbers'),
         'register_attended': fields.function(_get_register, string='Egresadas',
                                              multi='register_numbers',
                                              help=u"Cantidad de alumnas que termino el \
-                                             curso con exito."),
+                                                 curso con exito."),
 
         # Related fields
         'tot_hs_lecture': fields.related('product', 'tot_hs_lecture', type='float',
@@ -708,37 +715,38 @@ class curso_curso(osv.osv):
         'user_id': lambda obj, cr, uid, context: uid,
     }
 
-    def subscribe_to_curso(self, cr, uid, ids, context=None):
-        register_pool = self.pool.get('curso.registration')
-        user_pool = self.pool.get('res.users')
-        num_of_seats = int(context.get('ticket', 1))
-        self.check_registration_limits_before(cr, uid, ids, num_of_seats, context=context)
-        user = user_pool.browse(cr, uid, uid, context=context)
-        curr_reg_ids = register_pool.search(cr, uid, [('user_id', '=', user.id),
-                                                      ('curso_id', '=', ids[0])])
-        # the subscription is done with SUPERUSER_ID because in case we share the
-        # kanban view, we want anyone to be able to subscribe
-        if not curr_reg_ids:
-            curr_reg_ids = [register_pool.create(cr, SUPERUSER_ID,
-                                                 {'curso_id': ids[0], 'email': user.email,
-                                                  'name': user.name,
-                                                  'user_id': user.id,
-                                                  'nb_register': num_of_seats})]
-        else:
-            register_pool.write(cr, uid, curr_reg_ids, {'nb_register': num_of_seats},
-                                context=context)
-        return register_pool.confirm_registration(cr, SUPERUSER_ID, curr_reg_ids,
-                                                  context=context)
 
-    def unsubscribe_to_curso(self, cr, uid, ids, context=None):
-        register_pool = self.pool.get('curso.registration')
-        # the unsubscription is done with SUPERUSER_ID because in case we share the
-        # kanban view, we want anyone to be able to unsubscribe
-        curr_reg_ids = register_pool.search(cr, SUPERUSER_ID, [('user_id', '=', uid),
-                                                               ('curso_id', '=', ids[0])])
-        return register_pool.button_reg_cancel(cr, SUPERUSER_ID, curr_reg_ids,
-                                               context=context)
+def subscribe_to_curso(self, cr, uid, ids, context=None):
+    register_pool = self.pool.get('curso.registration')
+    user_pool = self.pool.get('res.users')
+    num_of_seats = int(context.get('ticket', 1))
+    self.check_registration_limits_before(cr, uid, ids, num_of_seats, context=context)
+    user = user_pool.browse(cr, uid, uid, context=context)
+    curr_reg_ids = register_pool.search(cr, uid, [('user_id', '=', user.id),
+                                                  ('curso_id', '=', ids[0])])
+    # the subscription is done with SUPERUSER_ID because in case we share the
+    # kanban view, we want anyone to be able to subscribe
+    if not curr_reg_ids:
+        curr_reg_ids = [register_pool.create(cr, SUPERUSER_ID,
+                                             {'curso_id': ids[0], 'email': user.email,
+                                              'name': user.name,
+                                              'user_id': user.id,
+                                              'nb_register': num_of_seats})]
+    else:
+        register_pool.write(cr, uid, curr_reg_ids, {'nb_register': num_of_seats},
+                            context=context)
+    return register_pool.confirm_registration(cr, SUPERUSER_ID, curr_reg_ids,
+                                              context=context)
 
+
+def unsubscribe_to_curso(self, cr, uid, ids, context=None):
+    register_pool = self.pool.get('curso.registration')
+    # the unsubscription is done with SUPERUSER_ID because in case we share the
+    # kanban view, we want anyone to be able to unsubscribe
+    curr_reg_ids = register_pool.search(cr, SUPERUSER_ID, [('user_id', '=', uid),
+                                                           ('curso_id', '=', ids[0])])
+    return register_pool.button_reg_cancel(cr, SUPERUSER_ID, curr_reg_ids,
+                                           context=context)
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
