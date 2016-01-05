@@ -27,6 +27,10 @@ class curso_diary(osv.osv):
     _name = 'curso.diary'
 
     _columns = {
+        'curso_id': fields.many2one('curso.curso',
+                                    'Curso',
+                                    required=True,
+                                    readonly=False),
         'weekday': fields.integer('Dia',
                                   readonly=False),
         'schedule': fields.many2one('curso.schedule',

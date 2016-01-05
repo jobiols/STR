@@ -69,8 +69,8 @@
 
                             <!-- agenda -->
                             <field name='diary' colspan="4">
-                                <tree string="Registration" editable="top">
-                                    <field name="day"/>
+                                <tree string="diary" editable="top">
+                                    <field name="weekday"/>
                                     <field name="schedule"/>
                                     <field name="seq"/>
                                 </tree>

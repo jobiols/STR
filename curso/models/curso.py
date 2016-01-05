@@ -618,7 +618,7 @@ class curso_curso(osv.osv):
                                       states={'draft': [('readonly', False)]}),
         ###
 
-        'diary': fields.many2one('curso.diary',
+        'diary': fields.one2many('curso.diary', 'curso_id',
                                  'Agenda',
                                  readonly=True,
                                  states={'draft': [('readonly', False)]}),
