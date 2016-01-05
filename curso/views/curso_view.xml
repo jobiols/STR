@@ -66,6 +66,15 @@
                                 <field name="weekday_2"/>
                                 <field name="schedule_2"/>
                             </group>
+
+                            <!-- agenda -->
+                            <field name='diary' colspan="4">
+                                <tree string="Registration" editable="top">
+                                    <field name="day"/>
+                                    <field name="schedule"/>
+                                    <field name="seq"/>
+                                </tree>
+                            </field>
                             <button name="generate_doc_curso"
                                     string="Generar documentación" type="object"
                                     class="oe_highlight"/>
