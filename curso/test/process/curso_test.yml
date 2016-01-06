@@ -97,12 +97,12 @@
    !python {model: curso.registration}: |
      self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
 -
-  I Begin the course ---------------------------------------------
+  I Begin the course
 -
    !python {model: curso.registration}: |
      self.button_reg_confirm(cr, uid, [ref("curso_registration_1")],context=context)
 -
-  I confirm the curso
+  I confirm the curso ---------------------------------------------
 -
    !python {model: curso.registration}: |
      self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)

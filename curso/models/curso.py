@@ -26,6 +26,7 @@ from openerp.osv import fields, osv
 from openerp import SUPERUSER_ID
 import babel.dates
 
+
 # class curso_type(osv.osv):
 #    #    """ curso Type DEPRECATED!! """
 #    _name = 'curso.type'
@@ -330,16 +331,22 @@ class curso_curso(osv.osv):
             # chequear si tiene agenda
             register_pool = self.pool.get('curso.diary')
             regs_id = register_pool.search(cr, uid,
-                                           ['curso_id', '=', self.curso.id],
+                                           [('curso_id', '=', curso.id)],
                                            context=context)
             if not regs_id:
                 raise osv.except_osv('Error!', (
                     u"No se puede confirmar el curso porque no tiene agenda creada."))
 
+            # chequear si el dia de la semana de la fecha de inicio coincide con la agenda
+            for reg in register_pool.browse(cr, uid, regs_id, context=context):
+                dt = datetime.strptime(curso.date_begin, "%Y-%m-%d")
+                break
 
-                # chequear si el dia de la semana de la fecha de inicio coincide con la agenda
-
-
+            print '>>>>>>>>>> date_begin', dt.strftime('%w'), 'weekday', reg.weekday
+            if dt.strftime('%w') != reg.weekday:
+                raise osv.except_osv('Error!', (
+                    u'El dia de la semana definido por la fecha de inicio no coincide\
+                    con el primer dia de la agenda.'))
 
         if isinstance(ids, (int, long)):
             ids = [ids]

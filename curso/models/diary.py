@@ -29,14 +29,14 @@ class curso_diary(osv.osv):
 
     def _get_day(self, cursor, user_id, context=None):
         return (
-            (0, u'Lunes'),
-            (1, u'Martes'),
-            (2, u'Miércoles'),
-            (3, u'Jueves'),
-            (4, u'Viernes'),
-            (5, u'Sábado'),
-            (6, u'Domingo'))
-
+            ('0', u'Domingo'),
+            ('1', u'Lunes'),
+            ('2', u'Martes'),
+            ('3', u'Miércoles'),
+            ('4', u'Jueves'),
+            ('5', u'Viernes'),
+            ('6', u'Sábado')
+        )
     _columns = {
         'curso_id': fields.many2one('curso.curso',
                                     u'Curso',
