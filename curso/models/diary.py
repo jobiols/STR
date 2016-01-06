@@ -25,6 +25,7 @@ class curso_diary(osv.osv):
     """ relaciona un horario con un dia de la semana
     """
     _name = 'curso.diary'
+    _order = 'seq'
 
     def _get_day(self, cursor, user_id, context=None):
         return (
@@ -39,19 +40,16 @@ class curso_diary(osv.osv):
     _columns = {
         'curso_id': fields.many2one('curso.curso',
                                     u'Curso',
-                                    required=True,
                                     readonly=False),
-
-        'weekday': fields.selection([(0, u'Lunes'), (1, u'Martes')],
+        'weekday': fields.selection(_get_day,
                                     u'Día',
-                                  readonly=False),
+                                    readonly=False,
+                                    required=True,
+                                    track_visibility='onchange'),
         'schedule': fields.many2one('curso.schedule',
                                     u'Horario',
                                     readonly=False),
-        'seq': fields.integer('secuencia')
+        'seq': fields.integer('Secuencia')
     }
-
-
-
 
     # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
