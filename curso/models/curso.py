@@ -322,13 +322,24 @@ class curso_curso(osv.osv):
         """
         # Verificar si tiene fecha de inicio.
         for curso in self.browse(cr, uid, ids, context=context):
+            # chequear si tiene fecha de inicio
             if not (curso.date_begin):
                 raise osv.except_osv(('Error!'), (
                     u"No se puede confirmar el curso porque no tiene fecha de inicio."))
 
-            if not ((curso.schedule_1) and (curso.weekday_1)):
+            # chequear si tiene agenda
+            register_pool = self.pool.get('curso.diary')
+            regs_id = register_pool.search(cr, uid,
+                                           ['curso_id', '=', self.curso.id],
+                                           context=context)
+            if not regs_id:
                 raise osv.except_osv('Error!', (
-                    u"No se puede confirmar el curso porque no horario y día asignados."))
+                    u"No se puede confirmar el curso porque no tiene agenda creada."))
+
+
+                # chequear si el dia de la semana de la fecha de inicio coincide con la agenda
+
+
 
         if isinstance(ids, (int, long)):
             ids = [ids]
