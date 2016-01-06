@@ -30,3 +30,4 @@
 ##############################################################################
 
 from report import parser
+from report import create_report

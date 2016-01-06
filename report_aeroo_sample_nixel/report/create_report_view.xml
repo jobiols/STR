@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_curso_invoice_wizard_form">
+            <field name="name">Imprimir facturas</field>
+            <field name="model">tablero_nixel.report</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Facturacion de cursos" version="7.0">
+                    <div>
+                        <p>
+                            Este es el asistente para generar el reporte Nixel
+                        </p>
+                        <p>
+                            Se va a generar una reporte desde hasta.
+                        </p>
+                    </div>
+                    <footer>
+                        <button string="Generar reporte" name="button_report"
+                                type="object" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="wizard_curso_invoice" model="ir.actions.act_window">
+            <field name="name">Reportes financieros</field>
+            <field name="res_model">tablero_nixel.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem parent="base.menu_reporting"
+                  id="menu_reporting_tablero"
+                  sequence="20" name="Tablero Nixel"/>
+
+        <menuitem parent="menu_reporting_tablero"
+                  id="menu_item_reporting_tablero"
+                  sequence="4"
+                  action="wizard_curso_invoice"/>
+    </data>
+</openerp>

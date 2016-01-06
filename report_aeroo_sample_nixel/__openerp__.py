@@ -30,15 +30,18 @@
 ##############################################################################
 
 {
-    "name": "Aeroo Reports - Sample",
+    "name": "Aeroo Reports - Sample nixel",
     "version": "1.0",
-    'summary': 'Just a demo report',
+    'summary': 'Just a demo report for nixel',
     "description": "Report sample for Aeroo Reports (report_aeroo) module",
     "author": "Alistek",
     'website': 'http://www.alistek.com',
-    "depends": ["base", "report_aeroo"],
+    "depends": ["base", "report_aeroo", "curso"],
     "category": "Generic Modules/Aeroo Reporting",
-    "data": ["report/report_sample.xml"],
+    "data": [
+        "report/report_sample.xml",
+        "report/create_report_view.xml",
+    ],
     "installable": True,
     'application': True,
     "license": "GPL-3 or any later version",

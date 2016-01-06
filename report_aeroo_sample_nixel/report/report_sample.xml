@@ -26,9 +26,6 @@
             <field eval="True" name="replace"/>
         </ir_set>
 
-        <menuitem name="Tablero de control"
-                  id="menu_tablero_nixel"
-                  action="action_curso_horario"/>
 
 
     </data>
