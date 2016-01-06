@@ -342,11 +342,12 @@
                 <calendar color="type" date_start="date_begin"
                           string="curso Organization">
                     <field name="name"/>
-                    < ! --  <field name="type"/> - - >
+                    < ! - -  <field name="type"/> - - >
                 </calendar>
             </field>
         </record>
--->
+        -->
+
         <!-- Curso Search View -->
 
         <record model="ir.ui.view" id="view_curso_search">
