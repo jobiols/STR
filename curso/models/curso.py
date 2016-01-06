@@ -221,13 +221,13 @@ class curso_curso(osv.osv):
                 'content': self.generate_doc_curso_html(data),
             }
 
-        # Borrar el documento si es que existe
-        doc_pool = self.pool.get('document.page')
-        records = doc_pool.search(cr, uid, [('name', '=', curso.name)])
-        doc_pool.unlink(cr, uid, records)
+            # Borrar el documento si es que existe
+            doc_pool = self.pool.get('document.page')
+            records = doc_pool.search(cr, uid, [('name', '=', curso.name)])
+            doc_pool.unlink(cr, uid, records)
 
-        # Generar el documento
-        self.pool.get('document.page').create(cr, uid, new_page, context=context)
+            # Generar el documento
+            self.pool.get('document.page').create(cr, uid, new_page, context=context)
 
         return True
 
@@ -722,8 +722,8 @@ class curso_curso(osv.osv):
                                     string='#cuotas', readonly=True),
 
         # Deprecated fields
-        'type': fields.many2one('curso.type', 'Type of curso', readonly=False,
-                                states={'done': [('readonly', True)]}),
+        #        'type': fields.many2one('curso.type', 'Type of curso', readonly=False,
+        #                                states={'done': [('readonly', True)]}),
     }
     _defaults = {
         'state': 'draft',
