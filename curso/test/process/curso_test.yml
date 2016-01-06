@@ -46,11 +46,48 @@
   !assert {model: curso.schedule, id: curso_schedule_1, severity: error, string: 'Name should be 04:00 - 06:00 (2hs)'}:
     - name == '04:00 - 06:00 (2hs)'
 -
-  I modify curso 2 to add date and schedule
+  I create a diary with tree days adding it to curso_curso_2
+-
+  !record {model: curso.diary, id: curso_diary_1}:
+    curso_id: curso_curso_2
+    day: 1
+    seq: 1
+    schedule: curso_schedule_1
+-
+  !record {model: curso.diary, id: curso_diary_2}:
+    curso_id: curso_curso_2
+    day: 2
+    seq: 2
+    schedule: curso_schedule_1
+-
+  !record {model: curso.diary, id: curso_diary_3}:
+    curso_id: curso_curso_2
+    day: 3
+    seq: 3
+    schedule: curso_schedule_1
+-
+  I modify curso 2 to add date_begin
 -
   !record {model: curso.curso, id: curso_curso_2}:
-    schedule_1: curso_schedule_1
     date_begin: '2015-01-11'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -
   I add a lecture
 -
