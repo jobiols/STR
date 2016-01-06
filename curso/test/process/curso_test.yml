@@ -50,19 +50,19 @@
 -
   !record {model: curso.diary, id: curso_diary_1}:
     curso_id: curso_curso_2
-    day: 1
+    weekday: 1
     seq: 1
     schedule: curso_schedule_1
 -
   !record {model: curso.diary, id: curso_diary_2}:
     curso_id: curso_curso_2
-    day: 2
+    weekday: 2
     seq: 2
     schedule: curso_schedule_1
 -
   !record {model: curso.diary, id: curso_diary_3}:
     curso_id: curso_curso_2
-    day: 3
+    weekday: 3
     seq: 3
     schedule: curso_schedule_1
 -
@@ -119,4 +119,9 @@
 -
    !python {model: curso.registration}: |
      self.button_reg_confirm(cr, uid, [ref("curso_registration_1")],context=context)
+-
+  I confirm the curso
+-
+   !python {model: curso.registration}: |
+     self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
 
