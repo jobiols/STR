@@ -27,21 +27,6 @@ from openerp import SUPERUSER_ID
 import babel.dates
 
 
-# class curso_type(osv.osv):
-#    #    """ curso Type DEPRECATED!! """
-#    _name = 'curso.type'
-#    _description = __doc__
-#    _columns = {
-#    }
-
-# def calculate_invoice_date(curso_date):
-#    dd = datetime.strptime(curso_date, '%Y-%m-%d')
-#
-#    year = datetime.now().year
-#    month = datetime.now().month
-#    day = int(dd.strftime('%d'))
-#    return datetime.strftime(date(year, month, day), '%Y-%m-%d')
-
 def format_instance(default_code, instance):
     return '{}/{:0>2d}'.format(default_code, instance)
 
@@ -721,9 +706,6 @@ class curso_curso(osv.osv):
         'no_quotes': fields.related('product', 'no_quotes', type='integer',
                                     string='#cuotas', readonly=True),
 
-        # Deprecated fields
-        #        'type': fields.many2one('curso.type', 'Type of curso', readonly=False,
-        #                                states={'done': [('readonly', True)]}),
     }
     _defaults = {
         'state': 'draft',
@@ -765,6 +747,5 @@ def unsubscribe_to_curso(self, cr, uid, ids, context=None):
                                                            ('curso_id', '=', ids[0])])
     return register_pool.button_reg_cancel(cr, SUPERUSER_ID, curr_reg_ids,
                                            context=context)
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
