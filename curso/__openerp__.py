@@ -54,6 +54,8 @@ faltante en la ficha del alumno
                 'l10n_ar_invoice'],
     'data': [
         # 'wizard/curso_confirm_view.xml',
+        'curso_report.xml',
+        'views/report_curso.xml',
         'security/curso_security.xml',
         'security/ir.model.access.csv',
         'wizard/add_registration_view.xml',

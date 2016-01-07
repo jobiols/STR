@@ -19,32 +19,5 @@
 #
 ##############################################################################
 
-import time
-
-from openerp.osv import osv
-from openerp.report import report_sxw
-
-
-class sale_quotation_report(report_sxw.rml_parse):
-    def __init__(self, cr, uid, name, context):
-        super(sale_quotation_report, self).__init__(cr, uid, name, context=context)
-        self.localcontext.update({
-            'time': time,
-            'get_total': self._get_total,
-        })
-
-
-def _get_total(self, lines, field):
-    total = 0.0
-    for line in lines:
-        total += line.product_uom_qty or 0.0
-    return total
-
-
-class report_saleorderqweb(osv.AbstractModel):
-    _name = 'module_name.report_sale_order_qweb'
-    _inherit = 'report.abstract_report'
-    _template = 'module_name.report_sale_order_qweb'
-    _wrapped_report_class = sale_quotation_report
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

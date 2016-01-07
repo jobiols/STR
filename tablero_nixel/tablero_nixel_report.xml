@@ -2,13 +2,13 @@
 <openerp>
     <data>
         <report
-                id="custom_report_without_prices"
+                id="custom_report_nixel"
                 model="account.invoice"
-                string="Invoice without prices"
-                report_type="qweb-pdf"
+                string="Reporte jojo para nixel"
+                report_type="qweb-html"
                 attachment_use="False"
-                file="tablero_nixel.report_without_prices"
-                name="tablero_nixel.report_without_prices"
+                file="tablero_nixel.report_demo_nixel"
+                name="tablero_nixel.report_demo_nixel"
                 />
     </data>
 </openerp>
