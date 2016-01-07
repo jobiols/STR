@@ -8,7 +8,7 @@
             <field name="model">report.curso.registration</field>
             <field name="arch" type="xml">
                 <tree colors="blue:curso_state == 'draft';black:curso_state == 'confirm';gray:curso_state in('done','cancel')"
-                      create="false" string="Analisis de cursos">
+                      create="false" string="Analisis de Cursos Analisis de cursos">
                     <field name="curso_date" invisible="1"/>
                     <field name="user_id" invisible="1"/>
                     <field name="speaker_id" invisible="1"/>
@@ -104,7 +104,8 @@
             <field name="act_window_id" ref="action_report_curso_registration"/>
         </record>
 
-        <menuitem parent="base.menu_reporting" id="menu_reporting_cursos" sequence="30" groups="curso.group_curso_manager" name="cursos"/>
+        <menuitem parent="base.menu_reporting" id="menu_reporting_cursos" sequence="30"
+                  groups="curso.group_curso_manager" name="Cursos"/>
         <menuitem parent="menu_reporting_cursos" action="action_report_curso_registration" id="menu_report_curso_registration" sequence="3" groups="curso.group_curso_manager"/>
 
     </data>

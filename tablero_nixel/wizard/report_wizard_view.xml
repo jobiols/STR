@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_tablero_nixel" model="ir.ui.view">
+            <field name="name">Reporte financiero</field>
+            <field name="model">tablero_nixel.report_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Reporte diario" version="7.0">
+                    <group>
+                        <label string="Se va a generar el reporte diario, ingresá las fechas para el reporte"/>
+                    </group>
+                    <group>
+                        <field name="desde_date" string="Desde"/>
+                        <field name="hasta_date" string="Hasta"/>
+                    </group>
+                    <footer>
+                        <button name="button_generate_report" string="Confirmar"
+                                type="object"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="wizard_tablero_nixel" model="ir.actions.act_window">
+            <field name="name">Reporte diario financiero</field>
+            <field name="res_model">tablero_nixel.report_wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem parent="base.menu_reporting" id="menu_reporting_nixel"
+                  sequence="30" name="Reportes Nixel"/>
+
+        <menuitem parent="menu_reporting_nixel" action="wizard_tablero_nixel"
+                  id="menu_reporting_nixel_item" sequence="1"/>
+
+
+    </data>
+</openerp>

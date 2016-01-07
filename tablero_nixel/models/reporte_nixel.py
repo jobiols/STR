@@ -18,6 +18,28 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+import time
+from openerp.osv import osv
+from openerp.report import report_sxw
 
+
+class nixel_report_demo(report_sxw.rml_parse):
+    def __init__(self, cr, uid, name, context):
+        super(nixel_report_demo, self).__init__(cr, uid, name, context=context)
+        self.localcontext.update({
+            'time': time,
+            'get_total': self._get_total,
+        })
+
+    def _get_total(self, lines, field):
+        total = 10
+        return total
+
+
+class report_nixel_class(osv.AbstractModel):
+    _name = 'report.tablero_nixel.report_demo_nixel'
+    _inherit = 'report.abstract_report'
+    _template = 'tablero_nixel.report_demo_nixel'
+    _wrapped_report_class = nixel_report_demo
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
