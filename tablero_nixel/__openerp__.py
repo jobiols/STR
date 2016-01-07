@@ -34,6 +34,7 @@ Tablero de mando Nixel
     "init_xml": [],
     "demo_xml": [],
     "data": [
+        "reporte_view.xml"
     ],
     'installable': True,
     'auto_install': False,
