@@ -26,6 +26,10 @@ class report_wizard(orm.TransientModel):
     _columns = {
         'desde_date': fields.date('Desde'),
         'hasta_date': fields.date('Hasta'),
+        'test': fields.integer('test')
+    }
+    _default = {
+        'test': 1
     }
 
     def button_generate_report(self, cr, uid, ids, context=None):
@@ -40,31 +44,19 @@ class report_wizard(orm.TransientModel):
         partner_ids = partner_obj.search(cr, uid, [], context=context)
         if partner_ids:
             data = self.read(cr, uid, ids, context=context)[0]
-            print 'data >>', data
+            cur_obj.test = 123
+            print 'data >>>>>>>>>>>>>>>>>>>>>>>>>>', cur_obj.desde_date, cur_obj.test
             datas = {
                 'ids': partner_ids,
                 'model': 'tablero_nixel.wiz_report_nixel',  # wizard model name
                 'form': data,
                 'context': context
             }
-        print '-------------------->', datas
         return {
             'type': 'ir.actions.report.xml',
             'report_name': 'tablero_nixel.nixel_report',
-        # module name.report template name
             'datas': datas,
         }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

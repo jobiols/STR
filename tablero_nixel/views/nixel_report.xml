@@ -8,10 +8,15 @@
                 <t t-foreach="docs" t-as="o">
                     <!--                    <t t-call="report.external_layout"> -->
                     <div class="page">
-                        <h2>Titulo del reporte</h2>
-                        <p>This object's name is
-                            <span t-field="o.name"/>
-                        </p>
+                        <h2>Reporte Financiero</h2>
+
+                        <p>Cantidad</p>
+                        <span t-field="o.test"/>
+                        <p>desde</p>
+                        <span t-field="o.desde_date"/>
+                        <p>hasta</p>
+                        <span t-field="o.hasta_date"/>
+
                     </div>
                     <!--                    </t> -->
                 </t>
