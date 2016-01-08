@@ -3,7 +3,7 @@
     <data>
         <report
                 id="custom_report_nixel"
-                model="tablero_nixel.report_wizard"
+                model="tablero_nixel.wiz_report_nixel"
                 string="Reporte jojo para nixel"
                 report_type="qweb-html"
                 attachment_use="False"

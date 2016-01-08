@@ -4,7 +4,7 @@
 
         <record id="view_tablero_nixel" model="ir.ui.view">
             <field name="name">Reporte financiero</field>
-            <field name="model">tablero_nixel.report_wizard</field>
+            <field name="model">tablero_nixel.wiz_report_nixel</field>
             <field name="arch" type="xml">
                 <form string="Reporte diario" version="7.0">
                     <group>
@@ -27,7 +27,7 @@
 
         <record id="wizard_tablero_nixel" model="ir.actions.act_window">
             <field name="name">Reporte diario financiero</field>
-            <field name="res_model">tablero_nixel.report_wizard</field>
+            <field name="res_model">tablero_nixel.wiz_report_nixel</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>

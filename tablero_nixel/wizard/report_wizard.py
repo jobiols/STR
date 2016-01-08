@@ -21,9 +21,8 @@
 
 from openerp.osv import orm, fields
 
-
 class report_wizard(orm.TransientModel):
-    _name = 'tablero_nixel.report_wizard'
+    _name = 'tablero_nixel.wiz_report_nixel'
     _columns = {
         'desde_date': fields.date('Desde'),
         'hasta_date': fields.date('Hasta'),
@@ -32,25 +31,23 @@ class report_wizard(orm.TransientModel):
     def button_generate_report(self, cr, uid, ids, context=None):
         partner_obj = self.pool.get('res.partner')
         cur_obj = self.browse(cr, uid, ids, context=context)
-        print 'cur_obj', cur_obj
+
         datas = {}
-        cur_obj.desde_date = '2015-01-01'
-        cur_obj.desde_hasta = '2015-01-02'
-        if cur_obj.desde_date >= cur_obj.hasta_date:
-            raise orm.except_orm('Ojo!', 'La fech final (%s) debe ser mayor que \
-            la fecha inicial (%s)' % (cur_obj.desde_date, cur_obj.hasta_date))
+        #        if cur_obj.desde_date >= cur_obj.hasta_date:
+        #            raise orm.except_orm('Ojo!', 'La fech final (%s) debe ser mayor que \
+        #            la fecha inicial (%s)' % (cur_obj.desde_date, cur_obj.hasta_date))
 
         partner_ids = partner_obj.search(cr, uid, [], context=context)
-        print 'partner_ids', partner_ids
         if partner_ids:
             data = self.read(cr, uid, ids, context=context)[0]
+            print 'data >>', data
             datas = {
                 'ids': partner_ids,
-                'model': 'tablero_nixel.report_wizard',  # wizard model name
+                'model': 'tablero_nixel.wiz_report_nixel',  # wizard model name
                 'form': data,
                 'context': context
             }
-        print '--------------------', datas
+        print '-------------------->', datas
         return {
             'type': 'ir.actions.report.xml',
             'report_name': 'tablero_nixel.report_demo_nixel',
