@@ -2,13 +2,13 @@
 <openerp>
     <data>
         <report
-                id="custom_report_nixel"
+                id="nixel_report_id"
                 model="tablero_nixel.wiz_report_nixel"
                 string="Reporte jojo para nixel"
                 report_type="qweb-html"
                 attachment_use="False"
-                file="tablero_nixel.report_demo_nixel"
-                name="tablero_nixel.report_demo_nixel"
+                file="tablero_nixel.nixel_report"
+                name="tablero_nixel.nixel_report"
                 />
     </data>
 </openerp>

@@ -50,8 +50,8 @@ class report_wizard(orm.TransientModel):
         print '-------------------->', datas
         return {
             'type': 'ir.actions.report.xml',
-            'report_name': 'tablero_nixel.report_demo_nixel',
-            # module name.report template name
+            'report_name': 'tablero_nixel.nixel_report',
+        # module name.report template name
             'datas': datas,
         }
 

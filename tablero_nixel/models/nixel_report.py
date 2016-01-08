@@ -35,9 +35,9 @@ class nixel_report_demo(report_sxw.rml_parse):
         return total
 
 class report_nixel_class(osv.AbstractModel):
-    _name = 'report.tablero_nixel.report_demo_nixel'
+    _name = 'report.tablero_nixel.nixel_report'
     _inherit = 'report.abstract_report'
-    _template = 'tablero_nixel.report_demo_nixel'
+    _template = 'tablero_nixel.nixel_report'
     _wrapped_report_class = nixel_report_demo
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

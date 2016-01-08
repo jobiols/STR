@@ -3,7 +3,7 @@
 <openerp>
     <data>
 
-        <template id="report_demo_nixel">
+        <template id="nixel_report">
             <t t-call="report.html_container">
                 <t t-foreach="docs" t-as="o">
                     <!--                    <t t-call="report.external_layout"> -->

@@ -35,7 +35,7 @@ Tablero de mando Nixel
     "demo_xml": [],
     "data": [
         "tablero_nixel_report.xml",
-        "views/report_demo_nixel.xml",
+        "views/nixel_report.xml",
         "wizard/report_wizard_view.xml"
     ],
     'installable': True,
