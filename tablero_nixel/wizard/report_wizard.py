@@ -26,7 +26,8 @@ class report_wizard(orm.TransientModel):
     _columns = {
         'desde_date': fields.date('Desde'),
         'hasta_date': fields.date('Hasta'),
-        'test': fields.integer('test')
+        'facturado': fields.integer('Facturado')
+        'facturado': fields.integer('Facturado')
     }
     _default = {
         'test': 1

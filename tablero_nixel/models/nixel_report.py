@@ -27,12 +27,8 @@ class nixel_report_demo(report_sxw.rml_parse):
         super(nixel_report_demo, self).__init__(cr, uid, name, context=context)
         self.localcontext.update({
             'time': time,
-            'get_total': self._get_total,
         })
 
-    def _get_total(self, lines, field):
-        total = 10
-        return total
 
 class report_nixel_class(osv.AbstractModel):
     _name = 'report.tablero_nixel.nixel_report'
@@ -40,23 +36,4 @@ class report_nixel_class(osv.AbstractModel):
     _template = 'tablero_nixel.nixel_report'
     _wrapped_report_class = nixel_report_demo
 
-
-"""
-from openerp import api, models
-
-class ParticularReport(models.AbstractModel):
-    _name = 'report.tablero_nixel.nixel_report'
-    @api.multi
-    def render_html(self, data=None):
-        report_obj = self.env['report']
-        report = report_obj._get_report_from_name('tablero_nixel.nixel_report')
-
-        docargs = {
-            'doc_ids': self._ids,
-            'doc_model': report.model,
-            'docs': self,
-        }
-        return report_obj.render('tablero_nixel.nixel_report', docargs)
-
-"""
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
