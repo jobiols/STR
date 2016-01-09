@@ -40,7 +40,20 @@ class nixel_report_def(report_sxw.rml_parse):
             'get_gastos': self._get_gastos,
         })
 
+    def _get_period(self):
+        # get from, to dates from wizard
+        wiz = self.pool['tablero_nixel.wiz_report_nixel']
+        ids = wiz.search(self.cr, self.uid, [])
+        for data in wiz.browse(self.cr, self.uid, ids):
+            date_from = data.desde_date
+            date_to = data.hasta_date
+        return date_from, date_to
+
     def _get_compute_balance(self, cr, uid, account_id):
+        """
+        Obtiene una lista de los registros en una cuenta conciliable, indicando nombre
+        del partner y monto adeudado
+        """
         accounts = self.pool['account.account']
         ids = accounts.search(cr, uid, [('id', '=', account_id)])
         result = []
@@ -63,13 +76,16 @@ class nixel_report_def(report_sxw.rml_parse):
             result = cr.fetchall()
         return result
 
-    def _summarize_account(self, cr, uid, account_id):
+    def _summarize_account(self, cr, uid, account_id, date_from, date_to):
         """
-        Sumariza la cuenta account_id en elementos del elementos del diario dando
-        los créditos y débitos en un diccionario
+        Sumariza la cuenta account_id en elementos del elementos del diario sobre un
+        período dando el total de créditos y débitos en un diccionario.
         """
         accounts = self.pool['account.move.line']
-        ids = accounts.search(cr, uid, [('account_id', '=', account_id)])
+        ids = accounts.search(cr, uid, [('account_id', '=', account_id),
+                                        ('date', '<=', date_from),
+                                        ('date', '>=', date_to),
+                                        ])
         debit = credit = 0.0
         for account in accounts.browse(cr, uid, ids):
             debit += account.debit
@@ -95,17 +111,23 @@ class nixel_report_def(report_sxw.rml_parse):
         return {'creditors': creditors, 'total': total}
 
     def _get_venta(self):
-        dic = self._summarize_account(self.cr, self.uid, DEUDORES_POR_VENTAS)
+        date_from, date_to = self._get_period()
+        dic = self._summarize_account(self.cr, self.uid, DEUDORES_POR_VENTAS,
+                                      date_from, date_to)
         return {'fac': dic['debit'], 'cob': dic['credit'],
                 'pen': dic['debit'] - dic['credit']}
 
     def _get_compra(self):
-        dic = self._summarize_account(self.cr, self.uid, PROVEEDORES)
+        date_from, date_to = self._get_period()
+        dic = self._summarize_account(self.cr, self.uid, PROVEEDORES,
+                                      date_from, date_to)
         return {'fac': dic['credit'], 'cob': dic['debit'],
                 'pen': dic['credit'] - dic['debit']}
 
     def _get_gastos(self):
-        dic = self._summarize_account(self.cr, self.uid, GASTOS)
+        date_from, date_to = self._get_period()
+        dic = self._summarize_account(self.cr, self.uid, GASTOS,
+                                      date_from, date_to)
         return {'gas': dic['debit']}
 
 

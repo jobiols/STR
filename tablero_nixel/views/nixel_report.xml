@@ -8,9 +8,12 @@
                 <t t-foreach="docs" t-as="o">
 					<t t-call="report.external_layout">
                     <div class="page">
-						<!-- comienzo reporte -->
 
 						<h1>Reporte financiero</h1>
+
+						<p style="text-align: right;">Generado el
+							<span t-esc="time.strftime('%d/%m/%Y')"/>
+						</p>
 
 						<p style="text-align: right;">Desde
 							<span t-field="o.desde_date"/>
@@ -25,19 +28,16 @@
 								<tr>
 									<td>
 										<p>Facturado $
-											(<span t-field="o.venta_fac"/>)
 											<span t-esc="get_venta()['fac']"/>
 										</p>
 									</td>
 									<td>
 										<p>Cobrado $
-											(<span t-field="o.venta_cob"/>)
 											<span t-esc="get_venta()['cob']"/>
 										</p>
 									</td>
 									<td>
 										<p>Pendiente $
-											(<span t-field="o.venta_pen"/>)
 											<span t-esc="get_venta()['pen']"/>
 										</p>
 									</td>
@@ -52,19 +52,16 @@
 								<tr>
 									<td>
 										<p>Facturado $
-											(<span t-field="o.compra_fac"/>)
 											<span t-esc="get_compra()['fac']"/>
 										</p>
 									</td>
 									<td>
 										<p>Cobrado $
-											(<span t-field="o.compra_cob"/>)
 											<span t-esc="get_compra()['cob']"/>
 										</p>
 									</td>
 									<td>
 										<p>Pendiente $
-											(<span t-field="o.compra_pen"/>)
 											<span t-esc="get_compra()['pen']"/>
 										</p>
 									</td>
@@ -79,7 +76,6 @@
 								<tr>
 									<td>
 										<p>Gastos $
-											(<span t-field="o.gastos"/>)
 											<span t-esc="get_gastos()['gas']"/>
 										</p>
 									</td>
@@ -164,12 +160,8 @@
 										</p>
 									</td>
 								</tr>
-
 							</tbody>
 						</table>
-
-						<!-- termino reporte -->
-
 					</div>
 					</t>
                 </t>
