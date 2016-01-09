@@ -6,19 +6,140 @@
         <template id="nixel_report">
             <t t-call="report.html_container">
                 <t t-foreach="docs" t-as="o">
-                    <!--                    <t t-call="report.external_layout"> -->
+					<t t-call="report.external_layout">
                     <div class="page">
-                        <h2>Reporte Financiero</h2>
+						<!-- comienzo reporte -->
 
-                        <p>Cantidad</p>
-                        <span t-field="o.test"/>
-                        <p>desde</p>
-                        <span t-field="o.desde_date"/>
-                        <p>hasta</p>
-                        <span t-field="o.hasta_date"/>
+						<h1>Reporte financiero</h1>
 
-                    </div>
-                    <!--                    </t> -->
+						<p style="text-align: right;">Desde
+							<span t-field="o.desde_date"/>
+							Hasta
+							<span t-field="o.hasta_date"/>
+						</p>
+						<hr/>
+						<h3>Ventas del período (iva incluido)</h3>
+
+						<table style="width:100%;">
+							<tbody>
+								<tr>
+									<td>
+										<p>Facturado $
+											<span t-field="o.venta_fac"/>
+										</p>
+									</td>
+									<td>
+										<p>Cobrado $
+											<span t-field="o.venta_cob"/>
+										</p>
+									</td>
+									<td>
+										<p>Pendiente $
+											<span t-field="o.venta_pen"/>
+										</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<hr/>
+						<h3>Compras del período (iva incluido)</h3>
+
+						<table style="width:100%;">
+							<tbody>
+								<tr>
+									<td>
+										<p>Facturado $
+											<span t-field="o.compra_fac"/>
+										</p>
+									</td>
+									<td>
+										<p>Cobrado $
+											<span t-field="o.compra_cob"/>
+										</p>
+									</td>
+									<td>
+										<p>Pendiente $
+											<span t-field="o.compra_pen"/>
+										</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<hr/>
+						<h3>Gastos del período</h3>
+
+						<table style="width:100%;">
+							<tbody>
+								<tr>
+									<td>
+										<p>Gastos $
+											<span t-field="o.gastos"/>
+										</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<hr/>
+						<h3>Mis cobros pendientes</h3>
+
+						<table style="width:100%;">
+							<tbody>
+								<tr>
+									<td>
+										<p>Cliente</p>
+									</td>
+									<td>
+										<p>Monto</p>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<p>Juan perez</p>
+									</td>
+									<td>
+										<p>$500</p>
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+						<hr/>
+						<h3>Mis pagos pendientes</h3>
+
+						<table style="width:100%;">
+							<tbody>
+								<tr>
+									<td>
+										<p>Cliente</p>
+									</td>
+									<td>
+										<p>Monto</p>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<p>Juan perez</p>
+									</td>
+									<td>
+										<p>$500</p>
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+
+
+						<!-- termino reporte -->
+
+
+					</div>
+					</t>
                 </t>
             </t>
         </template>
