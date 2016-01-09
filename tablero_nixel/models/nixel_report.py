@@ -40,6 +40,29 @@ class nixel_report_def(report_sxw.rml_parse):
             'get_gastos': self._get_gastos,
         })
 
+    def _get_compute_balance(self, cr, uid, account_id):
+        accounts = self.pool['account.account']
+        ids = accounts.search(cr, uid, [('id', '=', account_id)])
+        result = []
+        for account in accounts.browse(cr, uid, ids):
+            type = account.type
+
+            if type == 'receivable':
+                sumarg = 'debit-credit'
+            else:
+                sumarg = 'credit-debit'
+
+            cr.execute("""
+                select sum(%s) as balance,  res_partner.name
+                from account_move_line
+                inner join res_partner
+                on res_partner.id = account_move_line.partner_id
+                where account_id = %s
+                group by partner_id, res_partner.name
+                """ % (sumarg, account_id))
+            result = cr.fetchall()
+        return result
+
     def _summarize_account(self, cr, uid, account_id):
         """
         Sumariza la cuenta account_id en elementos del elementos del diario dando
@@ -54,22 +77,18 @@ class nixel_report_def(report_sxw.rml_parse):
         return {'debit': debit, 'credit': credit}
 
     def _get_debtors(self):
-        lis = [
-            {'name': 'juan debe', 'amount': 50},
-            {'name': 'pepe', 'amount': 51},
-            {'name': 'maria', 'amount': 53},
-            {'name': 'pedro', 'amount': 55},
-        ]
-        return lis
+        debtors = []
+        elements = self._get_compute_balance(self.cr, self.uid, DEUDORES_POR_VENTAS)
+        for element in elements:
+            debtors.append({'amount': element[0], 'name': element[1]})
+        return debtors
 
     def _get_creditors(self):
-        lis = [
-            {'name': 'juan le debo', 'amount': 500},
-            {'name': 'pepe', 'amount': 510},
-            {'name': 'maria', 'amount': 530},
-            {'name': 'pedro', 'amount': 550},
-        ]
-        return lis
+        creditors = []
+        elements = self._get_compute_balance(self.cr, self.uid, PROVEEDORES)
+        for element in elements:
+            creditors.append({'amount': element[0], 'name': element[1]})
+        return creditors
 
     def _get_venta(self):
         dic = self._summarize_account(self.cr, self.uid, DEUDORES_POR_VENTAS)
