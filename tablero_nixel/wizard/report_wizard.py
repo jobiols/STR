@@ -21,12 +21,6 @@
 
 from openerp.osv import orm, fields
 
-# constantes
-PROVEEDORES = 79
-DEUDORES_POR_VENTAS = 8
-GASTOS = 155
-
-
 class report_wizard(orm.TransientModel):
     _name = 'tablero_nixel.wiz_report_nixel'
     _columns = {
