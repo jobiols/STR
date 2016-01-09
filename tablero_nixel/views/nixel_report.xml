@@ -99,7 +99,7 @@
 										<p>Monto</p>
 									</td>
 								</tr>
-								<t t-foreach="get_debtors()" t-as="debtor">
+								<t t-foreach="get_debtors()['debtors']" t-as="debtor">
 									<tr>
 										<td>
 											<span t-esc="debtor['name']"/>
@@ -109,6 +109,21 @@
 										</td>
 									</tr>
 								</t>
+								<tr>
+									<td>
+										<p>
+											<strong>Total</strong>
+										</p>
+									</td>
+									<td>
+										<p>
+											<strong>
+												<span t-esc="get_debtors()['total']"/>
+											</strong>
+										</p>
+									</td>
+								</tr>
+
 							</tbody>
 						</table>
 						<hr/>
@@ -124,7 +139,8 @@
 										<p>Monto</p>
 									</td>
 								</tr>
-								<t t-foreach="get_creditors()" t-as="creditor">
+								<t t-foreach="get_creditors()['creditors']"
+								   t-as="creditor">
 									<tr>
 										<td>
 											<span t-esc="creditor['name']"/>
@@ -134,6 +150,21 @@
 										</td>
 									</tr>
 								</t>
+								<tr>
+									<td>
+										<p>
+											<strong>Total</strong>
+										</p>
+									</td>
+									<td>
+										<p>
+											<strong>
+												<span t-esc="get_creditors()['total']"/>
+											</strong>
+										</p>
+									</td>
+								</tr>
+
 							</tbody>
 						</table>
 

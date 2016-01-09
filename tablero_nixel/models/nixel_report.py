@@ -19,6 +19,7 @@
 #
 ##############################################################################
 import time
+
 from openerp.osv import osv
 from openerp.report import report_sxw
 
@@ -34,7 +35,6 @@ class nixel_report_def(report_sxw.rml_parse):
             'time': time,
             'get_debtors': self._get_debtors,
             'get_creditors': self._get_creditors,
-
             'get_venta': self._get_venta,
             'get_compra': self._get_compra,
             'get_gastos': self._get_gastos,
@@ -78,17 +78,21 @@ class nixel_report_def(report_sxw.rml_parse):
 
     def _get_debtors(self):
         debtors = []
+        total = 0.0
         elements = self._get_compute_balance(self.cr, self.uid, DEUDORES_POR_VENTAS)
         for element in elements:
             debtors.append({'amount': element[0], 'name': element[1]})
-        return debtors
+            total += element[0]
+        return {'debtors': debtors, 'total': total}
 
     def _get_creditors(self):
         creditors = []
+        total = 0.0
         elements = self._get_compute_balance(self.cr, self.uid, PROVEEDORES)
         for element in elements:
             creditors.append({'amount': element[0], 'name': element[1]})
-        return creditors
+            total += element[0]
+        return {'creditors': creditors, 'total': total}
 
     def _get_venta(self):
         dic = self._summarize_account(self.cr, self.uid, DEUDORES_POR_VENTAS)
