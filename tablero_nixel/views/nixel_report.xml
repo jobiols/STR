@@ -25,17 +25,20 @@
 								<tr>
 									<td>
 										<p>Facturado $
-											<span t-field="o.venta_fac"/>
+											(<span t-field="o.venta_fac"/>)
+											<span t-esc="get_venta()['fac']"/>
 										</p>
 									</td>
 									<td>
 										<p>Cobrado $
-											<span t-field="o.venta_cob"/>
+											(<span t-field="o.venta_cob"/>)
+											<span t-esc="get_venta()['cob']"/>
 										</p>
 									</td>
 									<td>
 										<p>Pendiente $
-											<span t-field="o.venta_pen"/>
+											(<span t-field="o.venta_pen"/>)
+											<span t-esc="get_venta()['pen']"/>
 										</p>
 									</td>
 								</tr>
@@ -49,17 +52,20 @@
 								<tr>
 									<td>
 										<p>Facturado $
-											<span t-field="o.compra_fac"/>
+											(<span t-field="o.compra_fac"/>)
+											<span t-esc="get_compra()['fac']"/>
 										</p>
 									</td>
 									<td>
 										<p>Cobrado $
-											<span t-field="o.compra_cob"/>
+											(<span t-field="o.compra_cob"/>)
+											<span t-esc="get_compra()['cob']"/>
 										</p>
 									</td>
 									<td>
 										<p>Pendiente $
-											<span t-field="o.compra_pen"/>
+											(<span t-field="o.compra_pen"/>)
+											<span t-esc="get_compra()['pen']"/>
 										</p>
 									</td>
 								</tr>
@@ -73,7 +79,8 @@
 								<tr>
 									<td>
 										<p>Gastos $
-											<span t-field="o.gastos"/>
+											(<span t-field="o.gastos"/>)
+											<span t-esc="get_gastos()['gas']"/>
 										</p>
 									</td>
 								</tr>
@@ -92,18 +99,16 @@
 										<p>Monto</p>
 									</td>
 								</tr>
-								<tr>
-									<td>
-										<p>Juan perez</p>
-									</td>
-									<td>
-										<p>$500</p>
-									</td>
-								</tr>
-								<tr>
-									<td></td>
-									<td></td>
-								</tr>
+								<t t-foreach="get_debtors()" t-as="debtor">
+									<tr>
+										<td>
+											<span t-esc="debtor['name']"/>
+										</td>
+										<td>
+											<span t-esc="debtor['amount']"/>
+										</td>
+									</tr>
+								</t>
 							</tbody>
 						</table>
 						<hr/>
@@ -119,24 +124,20 @@
 										<p>Monto</p>
 									</td>
 								</tr>
-								<tr>
-									<td>
-										<p>Juan perez</p>
-									</td>
-									<td>
-										<p>$500</p>
-									</td>
-								</tr>
-								<tr>
-									<td></td>
-									<td></td>
-								</tr>
+								<t t-foreach="get_creditors()" t-as="creditor">
+									<tr>
+										<td>
+											<span t-esc="creditor['name']"/>
+										</td>
+										<td>
+											<span t-esc="creditor['amount']"/>
+										</td>
+									</tr>
+								</t>
 							</tbody>
 						</table>
 
-
 						<!-- termino reporte -->
-
 
 					</div>
 					</t>
