@@ -83,8 +83,8 @@ class nixel_report_def(report_sxw.rml_parse):
         """
         accounts = self.pool['account.move.line']
         ids = accounts.search(cr, uid, [('account_id', '=', account_id),
-                                        ('date', '<=', date_from),
-                                        ('date', '>=', date_to),
+                                        ('date', '>=', date_from),
+                                        ('date', '<=', date_to),
                                         ])
         debit = credit = 0.0
         for account in accounts.browse(cr, uid, ids):
@@ -97,8 +97,9 @@ class nixel_report_def(report_sxw.rml_parse):
         total = 0.0
         elements = self._get_compute_balance(self.cr, self.uid, DEUDORES_POR_VENTAS)
         for element in elements:
-            debtors.append({'amount': element[0], 'name': element[1]})
-            total += element[0]
+            if element[0] <> 0:
+                debtors.append({'amount': element[0], 'name': element[1]})
+                total += element[0]
         return {'debtors': debtors, 'total': total}
 
     def _get_creditors(self):
@@ -106,8 +107,9 @@ class nixel_report_def(report_sxw.rml_parse):
         total = 0.0
         elements = self._get_compute_balance(self.cr, self.uid, PROVEEDORES)
         for element in elements:
-            creditors.append({'amount': element[0], 'name': element[1]})
-            total += element[0]
+            if element[0] <> 0:
+                creditors.append({'amount': element[0], 'name': element[1]})
+                total += element[0]
         return {'creditors': creditors, 'total': total}
 
     def _get_venta(self):
