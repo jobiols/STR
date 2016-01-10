@@ -8,22 +8,22 @@
 					<t t-call="report.external_layout">
 						<div class="page">
 
-						<h1>Reporte financiero</h1>
+							<h1 style="text-align: center;">Reporte financiero</h1>
 
 							<div class="row">
 								<div class="col-xs-3">
 									<strong>Generado</strong>:
-									<br/>
+
 									<span t-esc="time.strftime('%d/%m/%Y')"/>
-								</div>
+							</div>
 								<div class="col-xs-3">
 									<strong>Desde</strong>:
-									<br/>
+
 									<span t-field="o.desde_date"/>
 								</div>
 								<div class="col-xs-3">
 									<strong>Hasta</strong>:
-									<br/>
+
 									<span t-field="o.hasta_date"/>
 								</div>
 								<div class="col-xs-3">
@@ -32,76 +32,70 @@
 								</div>
 							</div>
 
-						<h3>Ventas del período (iva incluido)</h3>
+							<hr style="border-width: 3px;"/>
+							<br/>
+							<h3 style="text-align: center;">Ventas del período (iva
+								incluido)
+							</h3>
 
-							<table class="table table-condensed">
-							<tbody>
-								<tr>
-									<td>
-										<p>Facturado
-											<span t-esc="get_venta()['fac']"
-												  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
-										</p>
-									</td>
-									<td>
-										<p>Cobrado
-											<span t-esc="get_venta()['cob']"
-												  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
-										</p>
-									</td>
-									<td>
-										<p>Pendiente
-											<span t-esc="get_venta()['pen']"
-												  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
-										</p>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+							<div class="row">
+								<div class="col-xs-3">
+									<strong>Facturado</strong>:
 
-						<h3>Compras del período (iva incluido)</h3>
+									<span t-esc="get_venta()['fac']"
+										  t-field-options='{"widget": "monetary"  "display_currency": "sale_order.company_id.currency_id"}'/>
+								</div>
+								<div class="col-xs-3">
+									<strong>Cobrado</strong>:
 
-							<table class="table table-condensed">
-							<tbody>
-								<tr>
-									<td>
-										<p>Facturado
-											<span t-esc="get_compra()['fac']"
+									<span t-esc="get_venta()['cob']"
 												  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
-										</p>
-									</td>
-									<td>
-										<p>Cobrado
-											<span t-esc="get_compra()['cob']"
-												  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
-										</p>
-									</td>
-									<td>
-										<p>Pendiente
-											<span t-esc="get_compra()['pen']"
-												  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
-										</p>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+								</div>
+								<div class="col-xs-3">
+									<strong>Pendiente</strong>:
 
-						<h3>Gastos del período</h3>
-
-							<table class="table table-condensed">
-							<tbody>
-								<tr>
-									<td>
-										<p>Gastos
-											<span t-esc="get_gastos()['gas']"
+									<span t-esc="get_venta()['pen']"
 												  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
-										</p>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+								</div>
+							</div>
 
-						<h3>Mis cobros pendientes</h3>
+							<hr/>
+							<h3 style="text-align: center;">Compras del período (iva
+								incluido)
+							</h3>
+
+
+							<div class="row">
+								<div class="col-xs-3">
+									<strong>Facturado</strong>:
+									<span t-esc="get_compra()['fac']"
+										  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+								</div>
+								<div class="col-xs-3">
+									<strong>Cobrado</strong>:
+									<span t-esc="get_compra()['cob']"
+										  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+								</div>
+								<div class="col-xs-3">
+									<strong>Pendiente</strong>:
+									<span t-esc="get_compra()['pen']"
+										  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+								</div>
+							</div>
+
+							<hr/>
+							<h3 style="text-align: center;">Gastos del período</h3>
+
+							<div class="row">
+								<div class="col-xs-3">
+									<strong>Gastos</strong>:
+									<span t-esc="get_gastos()['gas']"
+										  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+								</div>
+							</div>
+
+							<hr/>
+							<h3 style="text-align: center;">Mis cobros pendientes</h3>
 
 							<table class="table table-condensed">
 								<thead>
@@ -110,7 +104,6 @@
 									<th class="text-right">Monto</th>
 								</tr>
 								</thead>
-
 								<tbody>
 								<t t-foreach="get_debtors()['debtors']" t-as="debtor">
 									<tr>
@@ -124,9 +117,7 @@
 									</tr>
 								</t>
 							</tbody>
-
 						</table>
-
 							<div class="row">
 								<div class="col-xs-4 pull-right">
 									<table class="table table-condensed">
@@ -140,10 +131,10 @@
 											</td>
 										</tr>
 									</table>
-								</div>
+							</div>
 							</div>
 
-							<h3>Mis pagos pendientes</h3>
+							<h3 style="text-align: center;">Mis pagos pendientes</h3>
 
 							<table class="table table-condensed">
 								<thead>
@@ -155,15 +146,15 @@
 								<tbody>
 									<t t-foreach="get_creditors()['creditors']"
 									   t-as="creditor">
-									<tr>
-										<td>
-											<span t-esc="creditor['name']"/>
-										</td>
-										<td class="text-right">
-											<span t-esc="creditor['amount']"
-												  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
-										</td>
-									</tr>
+										<tr>
+											<td>
+												<span t-esc="creditor['name']"/>
+											</td>
+											<td class="text-right">
+												<span t-esc="creditor['amount']"
+													  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+											</td>
+										</tr>
 								</t>
 							</tbody>
 						</table>
@@ -176,13 +167,13 @@
 											</td>
 											<td class="text-right">
 												<span t-esc="get_creditors()['total']"
-													  t-field-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+													  t-field-options='{"widget": "monetary"}'/>
 											</td>
 										</tr>
 									</table>
 								</div>
 							</div>
-					</div>
+						</div>
 					</t>
 				</t>
 			</t>

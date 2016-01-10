@@ -6,9 +6,9 @@
             <field name="name">Reporte financiero</field>
             <field name="model">tablero_nixel.wiz_report_nixel</field>
             <field name="arch" type="xml">
-                <form string="Reporte diario" version="7.0">
+                <form string="Reporte financiero" version="7.0">
                     <group>
-                        <label string="Se va a generar el reporte diario, ingresá las fechas para el reporte"/>
+                        <label string="Se va a generar el reporte financiero, ingresá las fechas del período"/>
                     </group>
                     <group>
                         <field name="desde_date" string="Desde"/>
@@ -26,7 +26,7 @@
         </record>
 
         <record id="wizard_tablero_nixel" model="ir.actions.act_window">
-            <field name="name">Reporte diario financiero</field>
+            <field name="name">Reporte financiero</field>
             <field name="res_model">tablero_nixel.wiz_report_nixel</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
@@ -42,7 +42,7 @@
         <report
                 id="nixel_report_id"
                 model="tablero_nixel.wiz_report_nixel"
-                string="Reporte jojo para nixel"
+                string="Reporte nixel"
                 report_type="qweb-html"
                 attachment_use="False"
                 file="tablero_nixel.nixel_report"

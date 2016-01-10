@@ -23,10 +23,9 @@ import time
 from openerp.osv import osv
 from openerp.report import report_sxw
 
-PROVEEDORES = 79
-DEUDORES_POR_VENTAS = 8
-GASTOS = 155
-
+_PROVEEDORES = 79
+_DEUDORES_POR_VENTAS = 8
+_GASTOS = 155
 
 class nixel_report_def(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context=None):
@@ -39,6 +38,22 @@ class nixel_report_def(report_sxw.rml_parse):
             'get_compra': self._get_compra,
             'get_gastos': self._get_gastos,
         })
+
+    def _get_default_accounts(self):
+        # buscar los parners
+        pool = self.pool['res.partner']
+        ids = pool.search(self.cr, self.uid, [])
+        # me quedo con el primero
+        ids = [ids[0]]
+        for pp in pool.browse(self.cr, self.uid, ids):
+            # obtengo las cuentas
+            rec_account = pp.property_account_receivable.id
+            pay_account = pp.property_account_payable.id
+            print 'deud', rec_account, '        pay', pay_account
+        return {'property_account_receivable': rec_account,
+                'property_account_payable': pay_account,
+                'expenses': 155
+                }
 
     def _get_period(self):
         # get from, to dates from wizard
@@ -95,7 +110,8 @@ class nixel_report_def(report_sxw.rml_parse):
     def _get_debtors(self):
         debtors = []
         total = 0.0
-        elements = self._get_compute_balance(self.cr, self.uid, DEUDORES_POR_VENTAS)
+        clientes = self._get_default_accounts()['property_account_receivable']
+        elements = self._get_compute_balance(self.cr, self.uid, clientes)
         for element in elements:
             if element[0] <> 0:
                 debtors.append({'amount': element[0], 'name': element[1]})
@@ -105,7 +121,8 @@ class nixel_report_def(report_sxw.rml_parse):
     def _get_creditors(self):
         creditors = []
         total = 0.0
-        elements = self._get_compute_balance(self.cr, self.uid, PROVEEDORES)
+        proveedores = self._get_default_accounts()['property_account_payable']
+        elements = self._get_compute_balance(self.cr, self.uid, proveedores)
         for element in elements:
             if element[0] <> 0:
                 creditors.append({'amount': element[0], 'name': element[1]})
@@ -114,21 +131,24 @@ class nixel_report_def(report_sxw.rml_parse):
 
     def _get_venta(self):
         date_from, date_to = self._get_period()
-        dic = self._summarize_account(self.cr, self.uid, DEUDORES_POR_VENTAS,
+        clientes = self._get_default_accounts()['property_account_receivable']
+        dic = self._summarize_account(self.cr, self.uid, clientes,
                                       date_from, date_to)
         return {'fac': dic['debit'], 'cob': dic['credit'],
                 'pen': dic['debit'] - dic['credit']}
 
     def _get_compra(self):
         date_from, date_to = self._get_period()
-        dic = self._summarize_account(self.cr, self.uid, PROVEEDORES,
+        proveedores = self._get_default_accounts()['property_account_payable']
+        dic = self._summarize_account(self.cr, self.uid, proveedores,
                                       date_from, date_to)
         return {'fac': dic['credit'], 'cob': dic['debit'],
                 'pen': dic['credit'] - dic['debit']}
 
     def _get_gastos(self):
         date_from, date_to = self._get_period()
-        dic = self._summarize_account(self.cr, self.uid, GASTOS,
+        gastos = self._get_default_accounts()['expenses']
+        dic = self._summarize_account(self.cr, self.uid, gastos,
                                       date_from, date_to)
         return {'gas': dic['debit']}
 

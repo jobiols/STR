@@ -20,13 +20,17 @@
 ##############################################################################
 
 from openerp.osv import orm, fields
+import time
 
 class report_wizard(orm.TransientModel):
     _name = 'tablero_nixel.wiz_report_nixel'
     _columns = {
-        'desde_date': fields.date('Desde'),
-        'hasta_date': fields.date('Hasta'),
+        'desde_date': fields.date('Desde', default=lambda self: self._get_default_date()),
+        'hasta_date': fields.date('Hasta', default=lambda self: self._get_default_date()),
     }
+
+    def _get_default_date(self):
+        return time.strftime('%Y-%m-%d')
 
     def button_generate_report(self, cr, uid, ids, context=None):
         cur_obj = self.browse(cr, uid, ids, context=context)
