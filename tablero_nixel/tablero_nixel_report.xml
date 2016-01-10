@@ -5,7 +5,7 @@
                 id="nixel_report_id"
                 model="tablero_nixel.wiz_report_nixel"
                 string="Reporte jojo para nixel"
-                report_type="qweb-html"
+                report_type="qweb-pdf1"
                 attachment_use="False"
                 file="tablero_nixel.nixel_report"
                 name="tablero_nixel.nixel_report"

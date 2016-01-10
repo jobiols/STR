@@ -34,7 +34,7 @@ Tablero de mando Nixel
     "init_xml": [],
     "demo_xml": [],
     "data": [
-        "tablero_nixel_report.xml",
+
         "views/nixel_report.xml",
         "wizard/report_wizard_view.xml"
     ],

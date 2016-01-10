@@ -39,6 +39,15 @@
         <menuitem parent="menu_reporting_nixel" action="wizard_tablero_nixel"
                   id="menu_reporting_nixel_item" sequence="1"/>
 
+        <report
+                id="nixel_report_id"
+                model="tablero_nixel.wiz_report_nixel"
+                string="Reporte jojo para nixel"
+                report_type="qweb-html"
+                attachment_use="False"
+                file="tablero_nixel.nixel_report"
+                name="tablero_nixel.nixel_report"
+                />
 
     </data>
 </openerp>
