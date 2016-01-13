@@ -51,7 +51,7 @@
     seq: 3
     schedule: curso_schedule_1
 -
-  I check that name is [SPR/02] Lun 11/01/2016 (04:00 06:00) - Curso de maquillaje Social Profesional
+  I check that name is [SPR/02] Lun. 11/01/16 (04:00 06:00) - Curso de maquillaje Social Profesional
 -
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
     - name == '[SPR/02] Lun. 11/01/16 (04:00 06:00) - Curso de maquillaje Social Profesional'
@@ -59,25 +59,18 @@
   I add a lecture
 -
   !record {model: curso.lecture, id: curso_lecture_1}:
-    date: '2015-01-11'
+    date: '2016-01-11'
     desc: Primera clase del curso
     curso_id: curso_curso_2
     schedule_id: curso_schedule_1
 -
-  I add a Student
--
-  !record {model: res.partner, id: res_partner_1}:
-    name: Juana Alumna
-    date: '1962-01-01'
-    customer: True
--
-  I Register the student in the course
+  I Register a student in the course
 -
   !record {model: curso.registration, id: curso_registration_1}:
     curso_id: curso_curso_2
     partner_id: curso_student_1
 -
-  I make Juana sign the course
+  I make the student sign the course
 -
    !python {model: curso.registration}: |
      self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)

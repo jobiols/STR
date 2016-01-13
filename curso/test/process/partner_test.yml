@@ -1,0 +1,7 @@
+-
+  I add a student ------------------------------------------------------------------------
+-
+  !record {model: res.partner, id: res_partner_1}:
+    name: Juana molina
+    date: '1995-01-01'
+    customer: True
