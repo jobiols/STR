@@ -1,6 +1,5 @@
 -
-  ----------------------------------------------------------------------------------------
-  I create a schedule
+  I create a schedule --------------------------------------------------------------------
 -
   !record {model: curso.schedule, id: curso_schedule_1}:
     start_time: 4
@@ -10,4 +9,3 @@
 -
   !assert {model: curso.schedule, id: curso_schedule_1, severity: error, string: 'Name should be 04:00 - 06:00 (2hs)'}:
     - name == '04:00 - 06:00 (2hs)'
--

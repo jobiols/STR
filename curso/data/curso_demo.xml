@@ -18,5 +18,11 @@
             <field name="agenda">tema uno, tema dos, tema tres</field>
         </record>
 
+        <record id="curso_student_1" model="res.partner">
+            <field name="name">Juana Alumna</field>
+            <field name="date">1962-01-01</field>
+            <field name="customer">True</field>
+        </record>
+
     </data>
 </openerp>

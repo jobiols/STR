@@ -1,8 +1,5 @@
 -
-  Test module curso
-  Create curso
-  Check instance
-
+  Test curso -----------------------------------------------------------------------------
   First I create a product to define a curso
 -
   !record {model: product.product, id: curso_product_11}:
