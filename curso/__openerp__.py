@@ -52,7 +52,7 @@ faltante en la ficha del alumno
                 'sale',
                 'purchase',
                 'l10n_ar_invoice',
-                'document.page'],
+                'document_page'],
     'data': [
         # 'wizard/curso_confirm_view.xml',
         'curso_report.xml',
