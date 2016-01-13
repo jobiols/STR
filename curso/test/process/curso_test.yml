@@ -1,19 +1,5 @@
 -
-  Test curso -----------------------------------------------------------------------------
-  First I create a product to define a curso
--
-  !record {model: product.product, id: curso_product_11}:
-    name: Curso de maquillaje Social Profesional
-    tot_hs_lecture: 10
-    classes_per_week: 1
-    hs_lecture: 5
-    default_code: SPR
-    list_price: 800
-    type: 'service'
-    agenda: tema uno, tema dos, tema tres
-    no_quotes: 10
--
-  Then I create a curso based on this product (this must fail)
+  I create a curso based on a product ----------------------------------------------------
 -
   !record {model: curso.curso, id: curso_curso_1}:
     product: curso_product_1
@@ -29,10 +15,21 @@
   !record {model: curso.curso, id: curso_curso_2}:
     product: curso_product_1
 -
-  I check that instance is 2
+  I check that instance is 2 and name is [SPR/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional
 -
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
     - instance == 2
+    - name == '[SPR/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional'
+-
+  I modify curso 2 to add date_begin
+-
+  !record {model: curso.curso, id: curso_curso_2}:
+    date_begin: '2016-01-11'
+-
+  I modify curso 2 to add schedule 1
+-
+  !record {model: curso.curso, id: curso_curso_2}:
+    schedule_1: curso_schedule_1
 -
   I create a diary with tree days adding it to curso_curso_2
 -
@@ -54,10 +51,10 @@
     seq: 3
     schedule: curso_schedule_1
 -
-  I modify curso 2 to add date_begin
+  I check that name is [SPR/02] Lun 11/01/2016 (04:00 06:00) - Curso de maquillaje Social Profesional
 -
-  !record {model: curso.curso, id: curso_curso_2}:
-    date_begin: '2015-01-11'
+  !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
+    - name == '[SPR/02] Lun 11/01/2016 (04:00 06:00) - Curso de maquillaje Social Profesional'
 -
   I add a lecture
 -
@@ -78,7 +75,7 @@
 -
   !record {model: curso.registration, id: curso_registration_1}:
     curso_id: curso_curso_2
-    partner_id: res_partner_1
+    partner_id: curso_student_1
 -
   I make Juana sign the course
 -
