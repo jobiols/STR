@@ -71,7 +71,7 @@ faltante en la ficha del alumno
         'report/report_curso_registration_view.xml',
         'data/curso_data.xml',
     ],
-    # 'demo': ['data/curso_demo.xml'],
+    'demo': ['data/curso_demo.xml'],
 
     'test': [
         'test/process/holiday_test.yml',
@@ -84,5 +84,5 @@ faltante en la ficha del alumno
     'auto_install': False,
     'images': [],
 }
-# TODO arreglar el curso_demo.xml
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
