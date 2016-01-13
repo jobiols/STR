@@ -178,6 +178,9 @@ class product_product(osv.osv):
                 schedule = ''
                 if inst.schedule_1:
                     schedule = inst.schedule_1.name
+                if not inst.date_begin:
+                    raise osv.except_osv('Error!',
+                                         u"El curso no tiene fecha de inicio.")
                 cursos.append(
                     {
                         'inicio': datetime.strptime(inst.date_begin, '%Y-%m-%d').strftime(
