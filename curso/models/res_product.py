@@ -1,5 +1,23 @@
 # -*- coding: utf-8 -*-
-#################################################################################
+##############################################################################
+#
+#    OpenERP, Open Source Management Solution.
+#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>...
+#
+##############################################################################
 
 from datetime import datetime
 from openerp.osv import fields, osv
@@ -129,7 +147,7 @@ class product_product(osv.osv):
     #    _sql_constraints = [('default_code_unique', 'unique (default_code)', 'ya hay un producto con esta referencia.')]
 
     def d2day(self, date):
-        wd = datetime.strftime(datetime.strptime(date, '%Y-%m-%d'), '%w')
+        wd = datetime.strptime(date, '%Y-%m-%d').strftime('%w')
         if wd:
             dict = {
                 '0': u'Domingo',
@@ -160,18 +178,10 @@ class product_product(osv.osv):
                 schedule = ''
                 if inst.schedule_1:
                     schedule = inst.schedule_1.name
-
-                print '-------------------------------------------------------------------'
-                print inst.date_begin
-                bbb = datetime.strptime(inst.date_begin, '%Y-%m-%d')
-                print bbb
-                aaa = datetime.strftime(bbb, '%d/%m/%Y')
-                print aaa
-                print '-------------------------------------------------------------------'
-
                 cursos.append(
                     {
-                        'inicio': aaa,
+                        'inicio': datetime.strptime(inst.date_begin, '%Y-%m-%d').strftime(
+                            '%d/%m/%Y'),
                         'instancia': '{}/{:0>2d}'.format(prod.default_code,
                                                          inst.instance),
                     'dias': self.d2day(inst.date_begin),
@@ -207,13 +217,13 @@ class product_product(osv.osv):
                 'content': generate_html([data]),
             }
 
-        # Borrar el documento si es que existe
-        doc_pool = self.pool.get('document.page')
-        records = doc_pool.search(cr, uid, [('name', '=', prod.name)])
-        doc_pool.unlink(cr, uid, records)
+            # Borrar el documento si es que existe
+            doc_pool = self.pool.get('document.page')
+            records = doc_pool.search(cr, uid, [('name', '=', prod.name)])
+            doc_pool.unlink(cr, uid, records)
 
-        # Crear el documento
-        self.pool.get('document.page').create(cr, uid, new_page, context=context)
+            # Crear el documento
+            self.pool.get('document.page').create(cr, uid, new_page, context=context)
 
         return True
 
