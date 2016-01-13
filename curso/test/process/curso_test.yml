@@ -1,9 +1,11 @@
 -
   Test module curso
+  Create curso
+  Check instance
 
   First I create a product to define a curso
 -
-  !record {model: product.product, id: curso_product_1}:
+  !record {model: product.product, id: curso_product_11}:
     name: Curso de maquillaje Social Profesional
     tot_hs_lecture: 10
     classes_per_week: 1
@@ -14,7 +16,7 @@
     agenda: tema uno, tema dos, tema tres
     no_quotes: 10
 -
-  Then I create a curso based on this product
+  Then I create a curso based on this product (this must fail)
 -
   !record {model: curso.curso, id: curso_curso_1}:
     product: curso_product_1
@@ -34,17 +36,6 @@
 -
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
     - instance == 2
--
-  I create an schedule
--
-  !record {model: curso.schedule, id: curso_schedule_1}:
-    start_time: 4
-    end_time: 6
--
-  I check that name is ok
--
-  !assert {model: curso.schedule, id: curso_schedule_1, severity: error, string: 'Name should be 04:00 - 06:00 (2hs)'}:
-    - name == '04:00 - 06:00 (2hs)'
 -
   I create a diary with tree days adding it to curso_curso_2
 -
