@@ -54,7 +54,7 @@
   I check that name is [SPR/02] Lun 11/01/2016 (04:00 06:00) - Curso de maquillaje Social Profesional
 -
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
-    - name == '[SPR/02] Lun 11/01/2016 (04:00 06:00) - Curso de maquillaje Social Profesional'
+    - name == '[SPR/02] Lun. 11/01/16 (04:00 06:00) - Curso de maquillaje Social Profesional'
 -
   I add a lecture
 -
