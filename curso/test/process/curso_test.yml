@@ -56,6 +56,16 @@
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
     - name == '[SPR/02] Lun. 11/01/16 (04:00 06:00) - Curso de maquillaje Social Profesional'
 -
+  I generate attendance sheet for the curso
+-
+   !python {model: curso.curso}: |
+     self.button_generate_doc_curso(cr, uid, [ref("curso_curso_2")],context=context)
+-
+  I generate markdown site data for the curso
+-
+   !python {model: product.product}: |
+     self.button_generate_doc(cr, uid, [ref("curso_product_1")],context=context)
+-
   I add a lecture
 -
   !record {model: curso.lecture, id: curso_lecture_1}:

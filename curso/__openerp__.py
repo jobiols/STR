@@ -74,6 +74,7 @@ faltante en la ficha del alumno
     'demo': ['data/curso_demo.xml'],
 
     'test': [
+        'test/process/partner_test.yml',
         'test/process/schedule_test.yml',
         'test/process/holiday_test.yml',
         'test/process/curso_test.yml',

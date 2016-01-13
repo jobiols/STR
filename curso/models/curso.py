@@ -40,7 +40,7 @@ class curso_information(osv.osv_memory):
     def button_information(self, cr, uid, ids, context=None):
         curso_pool = self.pool.get('curso.curso')
         for curso in curso_pool.browse(cr, uid, context['active_ids'], context):
-            curso.generate_doc_curso()
+            curso.button_generate_doc_curso()
         return True
 
 
@@ -165,7 +165,7 @@ class curso_curso(osv.osv):
 
         return ret
 
-    def generate_doc_curso(self, cr, uid, ids, context=None):
+    def button_generate_doc_curso(self, cr, uid, ids, context=None):
         for curso in self.browse(cr, uid, ids, context=context):
             alumnas = []
             reg_pool = self.pool.get('curso.registration')
@@ -478,7 +478,7 @@ class curso_curso(osv.osv):
         lecture_data = self.compute_lecture_data(cr, uid, ids, date_begin, weekload,
                                                  tot_lectures, context=None)
         self.create_lectures(cr, uid, ids, lecture_data, default_code, context=None)
-        return 0
+        return True
 
     def _get_name(self, cr, uid, ids, fields, args, context=None):
         res = {}

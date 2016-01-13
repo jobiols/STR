@@ -75,7 +75,7 @@
                                     <field name="seq"/>
                                 </tree>
                             </field>
-                            <button name="generate_doc_curso"
+                            <button name="button_generate_doc_curso"
                                     string="Generar documentación" type="object"
                                     class="oe_highlight"/>
                         </group>
