@@ -157,13 +157,23 @@ class product_product(osv.osv):
                                             ('state', '=', 'draft'),
                                             ('state', '=', 'confirm')])
             for inst in instance_pool.browse(cr, uid, records, context=context):
-                schedule = ""
+                schedule = ''
                 if inst.schedule_1:
                     schedule = inst.schedule_1.name
-                cursos.append({'inicio': datetime.strftime(
-                    datetime.strptime(inst.date_begin, '%Y-%m-%d'), '%d/%m/%Y'),
-                    'instancia': '{}/{:0>2d}'.format(prod.default_code,
-                                                     inst.instance),
+
+                print '-------------------------------------------------------------------'
+                print inst.date_begin
+                bbb = datetime.strptime(inst.date_begin, '%Y-%m-%d')
+                print bbb
+                aaa = datetime.strftime(bbb, '%d/%m/%Y')
+                print aaa
+                print '-------------------------------------------------------------------'
+
+                cursos.append(
+                    {
+                        'inicio': aaa,
+                        'instancia': '{}/{:0>2d}'.format(prod.default_code,
+                                                         inst.instance),
                     'dias': self.d2day(inst.date_begin),
                     'horario': schedule,
                 })
