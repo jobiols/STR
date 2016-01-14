@@ -160,6 +160,19 @@ class product_product(osv.osv):
         else:
             return '---'
 
+    def _get_formatted_diary(self, cr, uid, curso_id, context=None):
+        formatted_diary = [
+            {'dias': u'Lunes', 'horario': u'17:30 - 20:30 (3hs)'},
+            {'dias': u'Martes y Miercoles', 'horario': u'07:30 - 09:30 (3hs)'},
+            {'dias': u'Lunes y Viernes', 'horario': u'11:00 - 13:00 (3hs)'}
+        ]
+
+        diary_pool = self.pool.get('curso.diary')
+        ids = diary_pool.search(cr, uid, [('curso_id', '=', curso_id)])
+        for diary_line in diary_pool.browse(cr, uid, ids, context=context):
+            print diary_line
+        return formatted_diary
+
     def _get_wordpress_data(self, cr, uid, ids, default_code, context=None):
         prod_pool = self.pool['product.product']
         ids = prod_pool.search(cr, uid, [
@@ -178,21 +191,27 @@ class product_product(osv.osv):
                 ('state', '=', 'draft'),
                 ('state', '=', 'confirm')
             ])
-            programacion = []
+
+            grid = []
             for curso in curso_pool.browse(cr, uid, ids, context=context):
-                schedule = ''
-                print '>>>>', curso.date_begin, curso.schedule_1, curso.name
-                if curso.schedule_1:
-                    schedule = curso.schedule_1.name
-                programacion.append(
+                formatted_diary = self._get_formatted_diary(cr, uid, curso.id, context=None)
+
+                grid.append(
                     {
-                        'inicio': datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime(
-                            '%d/%m/%Y'),
-                        'instancia': '{}/{:0>2d}'.format(prod.default_code,
-                                                         curso.instance),
-                        'dias': self.d2day(curso.date_begin),
-                        'horario': schedule,
+                        'inicio': datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%d/%m/%Y'),
+                        'instancia': '{}/{:0>2d}'.format(prod.default_code, curso.instance),
+                        'dias': formatted_diary[0]['dias'],
+                        'horario': formatted_diary[0]['horario'],
                     })
+
+                for diary in formatted_diary[1:]:
+                    grid.append(
+                        {
+                            'inicio': '',
+                            'instancia': '',
+                            'dias': diary['dias'],
+                            'horario': diary['horario'],
+                        })
             try:
                 weeks = (prod.tot_hs_lecture / prod.hs_lecture) / prod.classes_per_week
             except:
@@ -212,7 +231,7 @@ class product_product(osv.osv):
                 'horas_catedra': str(prod.tot_hs_lecture),
                 'modalidad': str(prod.classes_per_week) + ' clase de ' + str(
                     prod.hs_lecture) + ' hs por semana',
-                'cursos': programacion,
+                'grid': grid,
                 'temario': markdown.markdown(prod.agenda),
                 'matricula': 'Bonificada',
                 'cuotas': str(prod.no_quotes),
@@ -226,7 +245,8 @@ class product_product(osv.osv):
             print 'duracion_semanas ', data['duracion_semanas']
             print 'horas_catedra    ', data['horas_catedra']
             print 'modalidad        ', data['modalidad']
-            print 'cursos           ', data['cursos']
+            for dd in data['grid']:
+                print 'grid-data    ', dd
             print 'temario          ', data['temario']
             print 'matricula        ', data['matricula']
             print 'cuotas           ', data['cuotas']
