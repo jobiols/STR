@@ -21,10 +21,15 @@
     - instance == 2
     - name == '[SPR/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional'
 -
+  I modify curso 1 to add date_begin
+-
+  !record {model: curso.curso, id: curso_curso_1}:
+    date_begin: '2016-01-11'
+-
   I modify curso 2 to add date_begin
 -
   !record {model: curso.curso, id: curso_curso_2}:
-    date_begin: '2016-01-11'
+    date_begin: '2016-01-21'
 -
   I modify curso 2 to add schedule 1
 -
@@ -50,6 +55,26 @@
     weekday: '3'
     seq: 3
     schedule: curso_schedule_1
+-
+  I create a diary with tree days adding it to curso_curso_1
+-
+  !record {model: curso.diary, id: curso_diary_4}:
+    curso_id: curso_curso_1
+    weekday: '4'
+    seq: 1
+    schedule: curso_schedule_1
+-
+  !record {model: curso.diary, id: curso_diary_5}:
+    curso_id: curso_curso_1
+    weekday: '5'
+    seq: 2
+    schedule: curso_schedule_2
+-
+  !record {model: curso.diary, id: curso_diary_6}:
+    curso_id: curso_curso_1
+    weekday: '6'
+    seq: 3
+    schedule: curso_schedule_3
 -
   I check that name is [SPR/02] Lun. 11/01/16 (04:00 06:00) - Curso de maquillaje Social Profesional
 -
@@ -90,12 +115,12 @@
    !python {model: curso.registration}: |
      self.button_reg_confirm(cr, uid, [ref("curso_registration_1")],context=context)
 -
-  I confirm the curso ---------------------------------------------
+  I confirm the curso
 -
    !python {model: curso.registration}: |
      self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
 -
-   I test wordpress report data >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+   I test wordpress report data -------------------------------------
 -
    !python {model: product.product}: |
      data = self._get_wordpress_data(cr, uid, [ref("curso_product_1")],'SPR',context=context)
