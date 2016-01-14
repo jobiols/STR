@@ -166,7 +166,60 @@ class product_product(osv.osv):
             ('default_code', '=', default_code),
         ])
         for prod in prod_pool.browse(cr, uid, ids, context=context):
-            print  prod.default_code, prod.name
+            print 'producto para hacer el reporte', prod.default_code, prod.name
+
+            curso_pool = self.pool.get('curso.curso')
+            # traer cursos por default code, con fecha de inicio y en estado
+            # draft o confirm
+            ids = curso_pool.search(cr, uid, [
+                ('default_code', '=', prod.default_code),
+                ('date_begin', '<>', False),
+                '|',
+                ('state', '=', 'draft'),
+                ('state', '=', 'confirm')
+            ])
+            cursos = []
+            for curso in curso_pool.browse(cr, uid, ids, context=context):
+                schedule = ''
+                print '>>>>', curso.date_begin, curso.schedule_1, curso.name
+                if curso.schedule_1:
+                    schedule = curso.schedule_1.name
+                cursos.append(
+                    {
+                        'inicio': datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime(
+                            '%d/%m/%Y'),
+                        'instancia': '{}/{:0>2d}'.format(prod.default_code,
+                                                         curso.instance),
+                        'dias': self.d2day(curso.date_begin),
+                        'horario': schedule,
+                    })
+            try:
+                weeks = (prod.tot_hs_lecture / prod.hs_lecture) / prod.classes_per_week
+            except:
+                weeks = "error!"
+
+            # si está vacio trae False y da una excepcion en mark_down
+            if not prod.agenda:
+                prod.agenda = ""
+            print 'cursos :::::', cursos
+            data = {
+                'titulo': prod.name,
+                'codigo': prod.default_code,
+                'acerca_de': markdown.markdown(prod.description),
+                'duracion_semanas': str(weeks),
+                'horas_catedra': str(prod.tot_hs_lecture),
+                'modalidad': str(prod.classes_per_week) + ' clase de ' + str(
+                    prod.hs_lecture) + ' hs por semana',
+                'cursos': cursos,
+                'temario': markdown.markdown(prod.agenda),
+                'matricula': 'Bonificada',
+                'cuotas': str(prod.no_quotes),
+                'valor': str(prod.list_price),
+            }
+
+
+
+
         return 'wp_data'
 
     def button_generate_doc(self, cr, uid, ids, context=None):
