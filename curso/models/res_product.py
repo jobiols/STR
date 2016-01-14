@@ -178,13 +178,13 @@ class product_product(osv.osv):
                 ('state', '=', 'draft'),
                 ('state', '=', 'confirm')
             ])
-            cursos = []
+            programacion = []
             for curso in curso_pool.browse(cr, uid, ids, context=context):
                 schedule = ''
                 print '>>>>', curso.date_begin, curso.schedule_1, curso.name
                 if curso.schedule_1:
                     schedule = curso.schedule_1.name
-                cursos.append(
+                programacion.append(
                     {
                         'inicio': datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime(
                             '%d/%m/%Y'),
@@ -201,7 +201,8 @@ class product_product(osv.osv):
             # si está vacio trae False y da una excepcion en mark_down
             if not prod.agenda:
                 prod.agenda = ""
-            print 'cursos :::::', cursos
+            for progg in programacion:
+                print '>>> :::::', progg
             data = {
                 'titulo': prod.name,
                 'codigo': prod.default_code,
@@ -210,13 +211,26 @@ class product_product(osv.osv):
                 'horas_catedra': str(prod.tot_hs_lecture),
                 'modalidad': str(prod.classes_per_week) + ' clase de ' + str(
                     prod.hs_lecture) + ' hs por semana',
-                'cursos': cursos,
+                'cursos': programacion,
                 'temario': markdown.markdown(prod.agenda),
                 'matricula': 'Bonificada',
                 'cuotas': str(prod.no_quotes),
                 'valor': str(prod.list_price),
             }
 
+            print '-------------------------------------------------'
+            print 'titulo           ', data['titulo']
+            print 'codigo           ', data['codigo']
+            print 'acerca_de        ', data['acerca_de']
+            print 'duracion_semanas ', data['duracion_semanas']
+            print 'horas_catedra    ', data['horas_catedra']
+            print 'modalidad        ', data['modalidad']
+            print 'cursos           ', data['cursos']
+            print 'temario          ', data['temario']
+            print 'matricula        ', data['matricula']
+            print 'cuotas           ', data['cuotas']
+            print 'valor            ', data['valor']
+            print '-------------------------------------------------'
 
 
 
@@ -228,8 +242,6 @@ class product_product(osv.osv):
             self._get_wordpress_data(cr, uid, ids, prod.default_code, context=context)
 
             cursos = []
-            if not prod.description:
-                prod.description = ""
 
             instance_pool = self.pool.get('curso.curso')
             # traer cursos por default code, con fecha de inicio y en estado
@@ -262,7 +274,10 @@ class product_product(osv.osv):
 
             # si está vacio trae False y da una excepcion en mark_down
             if not prod.agenda:
-                prod.agenda = ""
+                prod.agenda = ''
+            if not prod.description:
+                prod.description = ''
+
             print 'cursos :::::', cursos
             data = {
                 'titulo': prod.name,
@@ -278,6 +293,21 @@ class product_product(osv.osv):
                 'cuotas': str(prod.no_quotes),
                 'valor': str(prod.list_price),
             }
+
+            print '-------------------------------------------------'
+            print 'titulo           ', data['titulo']
+            print 'codigo           ', data['codigo']
+            print 'acerca_de        ', data['acerca_de']
+            print 'duracion_semanas ', data['duracion_semanas']
+            print 'horas_catedra    ', data['horas_catedra']
+            print 'modalidad        ', data['modalidad']
+            print 'cursos           ', data['cursos']
+            print 'temario          ', data['temario']
+            print 'matricula        ', data['matricula']
+            print 'cuotas           ', data['cuotas']
+            print 'valor            ', data['valor']
+            print '-------------------------------------------------'
+
 
             new_page = {
                 'name': prod.name,
