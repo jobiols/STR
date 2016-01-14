@@ -20,8 +20,10 @@
 ##############################################################################
 
 from datetime import datetime
+
 from openerp.osv import fields, osv
 import markdown
+
 
 def generate_html(dict):
     ret = ""
@@ -81,7 +83,6 @@ def generate_html(dict):
         ret += u"<p><strong>Matrícula: " + data['matricula'] + "</strong><br />"
         ret += "<strong>Pagos: " + ss + "</strong></p>"
 
-
     ret += "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\">"
     ret += "	<tbody>"
     ret += "		<tr>"
@@ -94,8 +95,6 @@ def generate_html(dict):
     ret += "</tbody>"
     ret += "</table>"
     ret += "<br>"
-
-
 
     return ret
 
@@ -161,6 +160,9 @@ class product_product(osv.osv):
         else:
             return '---'
 
+    def _get_wordpress_data(self):
+        return 'wp_data'
+
     def button_generate_doc(self, cr, uid, ids, context=None):
         for prod in self.browse(cr, uid, ids, context=context):
 
@@ -169,43 +171,43 @@ class product_product(osv.osv):
                 prod.description = ""
 
             instance_pool = self.pool.get('curso.curso')
-            records = instance_pool.search(cr, uid,
-                                           [('default_code', '=', prod.default_code),
-                                            '|',
-                                            ('state', '=', 'draft'),
-                                            ('state', '=', 'confirm')])
+            # traer cursos por default code, con fecha de inicio y en estado
+            # draft o confirm
+            records = instance_pool.search(cr, uid, [
+                ('default_code', '=', prod.default_code),
+                ('date_begin', '<>', False),
+                '|',
+                ('state', '=', 'draft'),
+                ('state', '=', 'confirm')
+            ])
             for inst in instance_pool.browse(cr, uid, records, context=context):
                 schedule = ''
                 print '>>>>', inst.date_begin, inst.schedule_1, inst.name
                 if inst.schedule_1:
                     schedule = inst.schedule_1.name
-                if not inst.date_begin:
-                    raise osv.except_osv('Error!',
-                                         u"El curso no tiene fecha de inicio.")
                 cursos.append(
                     {
                         'inicio': datetime.strptime(inst.date_begin, '%Y-%m-%d').strftime(
                             '%d/%m/%Y'),
                         'instancia': '{}/{:0>2d}'.format(prod.default_code,
                                                          inst.instance),
-                    'dias': self.d2day(inst.date_begin),
-                    'horario': schedule,
-                })
+                        'dias': self.d2day(inst.date_begin),
+                        'horario': schedule,
+                    })
             try:
-                weeks = str(
-                    (prod.tot_hs_lecture / prod.hs_lecture) / prod.classes_per_week)
+                weeks = (prod.tot_hs_lecture / prod.hs_lecture) / prod.classes_per_week
             except:
                 weeks = "error!"
 
             # si está vacio trae False y da una excepcion en mark_down
             if not prod.agenda:
                 prod.agenda = ""
-
+            print 'cursos :::::', cursos
             data = {
                 'titulo': prod.name,
                 'codigo': prod.default_code,
                 'acerca_de': markdown.markdown(prod.description),
-                'duracion_semanas': weeks,
+                'duracion_semanas': str(weeks),
                 'horas_catedra': str(prod.tot_hs_lecture),
                 'modalidad': str(prod.classes_per_week) + ' clase de ' + str(
                     prod.hs_lecture) + ' hs por semana',
