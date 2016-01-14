@@ -1,5 +1,5 @@
    I test wordpress report data >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 -
    !python {model: product.product}: |
-     data = self._get_wordpress_data()
+     data = self._get_wordpress_data(cr, uid, [ref("curso_product_1")],'SPR',context=context)
      assert data == 'wp_data', "Failed report data"
