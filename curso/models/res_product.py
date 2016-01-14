@@ -176,6 +176,7 @@ class product_product(osv.osv):
                                             ('state', '=', 'confirm')])
             for inst in instance_pool.browse(cr, uid, records, context=context):
                 schedule = ''
+                print '>>>>', inst.date_begin, inst.schedule_1, inst.name
                 if inst.schedule_1:
                     schedule = inst.schedule_1.name
                 if not inst.date_begin:
