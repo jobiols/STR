@@ -200,13 +200,14 @@ class product_product(osv.osv):
 
             # si está vacio trae False y da una excepcion en mark_down
             if not prod.agenda:
-                prod.agenda = ""
-            for progg in programacion:
-                print '>>> :::::', progg
+                prod.agenda = ''
+            if not prod.description:
+                prod.description = ''
+
             data = {
                 'titulo': prod.name,
                 'codigo': prod.default_code,
-                'acerca_de': markdown.markdown(prod.description),
+                'description': markdown.markdown(prod.description),
                 'duracion_semanas': str(weeks),
                 'horas_catedra': str(prod.tot_hs_lecture),
                 'modalidad': str(prod.classes_per_week) + ' clase de ' + str(
@@ -218,10 +219,10 @@ class product_product(osv.osv):
                 'valor': str(prod.list_price),
             }
 
-            print '-------------------------------------------------'
+            print '------------------------------------------------- new'
             print 'titulo           ', data['titulo']
             print 'codigo           ', data['codigo']
-            print 'acerca_de        ', data['acerca_de']
+            print 'description      ', data['description']
             print 'duracion_semanas ', data['duracion_semanas']
             print 'horas_catedra    ', data['horas_catedra']
             print 'modalidad        ', data['modalidad']
@@ -278,7 +279,6 @@ class product_product(osv.osv):
             if not prod.description:
                 prod.description = ''
 
-            print 'cursos :::::', cursos
             data = {
                 'titulo': prod.name,
                 'codigo': prod.default_code,
@@ -294,7 +294,7 @@ class product_product(osv.osv):
                 'valor': str(prod.list_price),
             }
 
-            print '-------------------------------------------------'
+            print '------------------------------------------------- old'
             print 'titulo           ', data['titulo']
             print 'codigo           ', data['codigo']
             print 'acerca_de        ', data['acerca_de']
