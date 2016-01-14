@@ -160,15 +160,20 @@ class product_product(osv.osv):
         else:
             return '---'
 
-    def _get_wordpress_data(self, cr, uid, ids, context=None):
+    def _get_wordpress_data(self, cr, uid, ids, default_code, context=None):
         prod_pool = self.pool['product.product']
-
+        ids = prod_pool.search(cr, uid, [
+            ('default_code', '=', default_code),
+        ])
+        for prod in prod_pool.browse(cr, uid, ids, context=context):
+            print  prod.default_code, prod.name
         return 'wp_data'
 
     def button_generate_doc(self, cr, uid, ids, context=None):
 
         for prod in self.browse(cr, uid, ids, context=context):
-            print '<><><> ----------- ', prod
+            self._get_wordpress_data(cr, uid, ids, prod.default_code, context=context)
+
             cursos = []
             if not prod.description:
                 prod.description = ""
