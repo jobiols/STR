@@ -68,7 +68,7 @@
                             </group>
 
                             <!-- agenda -->
-                            <field name='diary' colspan="4">
+                            <field name='diary_ids' colspan="4">
                                 <tree string="diary" editable="top">
                                     <field name="weekday"/>
                                     <field name="schedule"/>

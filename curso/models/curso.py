@@ -189,8 +189,10 @@ class curso_curso(osv.osv):
                                        order="date")
             for lect in lect_pool.browse(cr, uid, records, context=context):
                 d = {
-                    'fecha': datetime.strftime(
-                        datetime.strptime(lect.date, "%Y-%m-%d"), "%d/%m/%y"),
+
+                    # TODO   chequear esto!!!
+
+                    'fecha': datetime.strptime(lect.date, "%Y-%m-%d").strftime("%d/%m/%y"),
                     'desc': lect.desc,
                 }
                 clases.append(d)
@@ -433,12 +435,13 @@ class curso_curso(osv.osv):
         lectures_pool = self.pool.get('curso.lecture')
         for reg in self.browse(cr, uid, ids, context=context):
             curso_id = reg.id
-        for data in lecture_data:
-            lectures_pool.create(cr, uid, {
-                'date': data.get('date'),
-                'schedule_id': data.get('schedule'),
-                'curso_id': curso_id
-            })
+
+            for data in lecture_data:
+                lectures_pool.create(cr, uid, {
+                    'date': data.get('date'),
+                    'schedule_id': data.get('schedule'),
+                    'curso_id': curso_id
+                })
 
     def generate_lectures(self, cr, uid, ids, context=None):
         """ Generar las clases que correspondan a este curso
@@ -453,9 +456,9 @@ class curso_curso(osv.osv):
             weekday_2 = reg.weekday_2
             default_code = reg.default_code
 
-        if (operator.mod(tot_hs_lecture, hs_lecture) != 0):
-            raise osv.except_osv(('Error!'), (
-                u"la cantidad de horas catedra no es divisible por las horas de clase!."))
+            if (operator.mod(tot_hs_lecture, hs_lecture) != 0):
+                raise osv.except_osv(('Error!'), (
+                    u"la cantidad de horas catedra no es divisible por las horas de clase!."))
 
         tot_lectures = tot_hs_lecture // hs_lecture
         weekload = []
@@ -582,8 +585,8 @@ class curso_curso(osv.osv):
                                    states={'draft': [('readonly', False)]}),
         'register_max': fields.integer('Vacantes max',
                                        help=u"La cantidd máxima de vacantes del curso. \
-                                       Si la cantidad de inscripciones es mayor, no se \
-                                       puede arrancar el curso. \
+                                       Si la cantidad de inscripciones es mayor, \
+                                       no se puede arrancar el curso. \
                                        (poner 0 para ignorar la regla)",
                                        readonly=True,
                                        states={'draft': [('readonly', False)]}),
@@ -593,20 +596,25 @@ class curso_curso(osv.osv):
                                        puede arrancar el curso. \
                                        (poner 0 para ignorar la regla)",
                                        states={'draft': [('readonly', False)]}),
-        'registration_ids': fields.one2many('curso.registration', 'curso_id',
-                                            'Inscripciones',
+
+        'registration_ids': fields.one2many('curso.registration', 'curso_id', 'Inscripciones',
                                             readonly=False,
                                             states={'done': [('readonly', True)],
                                                     'cancel': [('readonly', True)]}),
         'lecture_ids': fields.one2many('curso.lecture', 'curso_id', 'Clases',
                                        readonly=False),
+
+        'diary_ids': fields.one2many('curso.diary', 'curso_id', 'Agenda',
+                                     readonly=True,
+                                     states={'draft': [('readonly', False)]}),
+
         'date_begin': fields.date('Inicio', required=False,
                                   help=u"La fecha en la que inicia el curso, se puede \
                                   dejar en blanco si no está definida todavia pero se \
                                   debe ingresar para confirmar el curso",
                                   readonly=True, states={'draft': [('readonly', False)]}),
 
-        ###
+        ### borrar esto
         'schedule_1': fields.many2one('curso.schedule', 'Horario 1',
                                       readonly=True,
                                       states={'draft': [('readonly', False)]}),
@@ -619,12 +627,8 @@ class curso_curso(osv.osv):
         'weekday_2': fields.selection(_get_day, 'Dia 2',
                                       readonly=True,
                                       states={'draft': [('readonly', False)]}),
-        ###
+        ### borrar esto
 
-        'diary': fields.one2many('curso.diary', 'curso_id',
-                                 'Agenda',
-                                 readonly=True,
-                                 states={'draft': [('readonly', False)]}),
         'state': fields.selection([
             ('draft', 'Borrador'),
             ('cancel', 'Cancelado'),

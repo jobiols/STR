@@ -53,7 +53,8 @@ class curso_schedule(osv.osv):
     _columns = {
         'name': fields.function(_get_name, fnct_search=None, string='Nombre del horario',
                                 method=True, store=True,
-                                type='char'),
+                                type='char',
+                                help='Nombre del horario'),
     }
 
     _sql_constraints = [

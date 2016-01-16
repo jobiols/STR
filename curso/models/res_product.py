@@ -26,77 +26,80 @@ import markdown
 
 
 def generate_html(dict):
-    ret = ""
     for data in dict:
-        ret += u"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
-        ret += u"	<tbody>"
-        ret += u"		<tr>"
-        ret += u"			<td>"
-        ret += u"			<h2>" + data['titulo'] + "</h2>"
-        ret += u"			</td>"
-        ret += u"			<td>"
-        ret += u"			<h5><sub>&nbsp;cod " + data['codigo'] + "</sub></h5>"
-        ret += u"			</td>"
-        ret += u"		</tr>"
-        ret += u"   </tbody>"
-        ret += u"</table>"
+        ret = u"""
+        <table border='0' cellpadding='0' cellspacing='0'>
+            <tbody>
+                <tr>
+                    <td><h2>%s</h2>
+                    </td>
+                    <td><h5><sub>&nbsp;cod %s</sub></h5>
+                    </td>
+                </tr>
+           </tbody>
+        </table>
+        %s
+        <p>Duración %s semanas, (%s hs)<br/> Modalidad %s</p>
 
-        # viene del markdown ya con los <p>
-        ret += data['acerca_de']
+        <table  border='0' cellpadding='0' cellspacing='0' style='width: 500px;'>
+        <tbody>
+            <tr>
+                <td><strong>Inicio</strong></td>
+                <td><strong>Cód</strong></td>
+                <td><strong>Días de cursada</strong></td>
+                <td><strong>Horario</strong></td>
+            </tr>
 
-        ret += u"<p>Duración " + data['duracion_semanas'] + u" semanas, (" + data[
-            'horas_catedra'] + u"hs)<br/>"
-        ret += u"Modalidad " + data['modalidad'] + "</p>"
+            """ % (data['titulo'], data['codigo'], data['description'], data['duracion_semanas'], data['horas_catedra'],
+                   data['modalidad'])
 
-        ret += "<table  border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 500px;\">"
-        ret += "    <tbody>"
-        ret += "        <tr>"
-        ret += u"            <td><strong>Inicio</strong></td>"
-        ret += u"            <td><strong>Cód</strong></td>"
-        ret += u"            <td><strong>Días de cursada</strong></td>"
-        ret += u"            <td><strong>Horario</strong></td>"
-        ret += "        </tr>"
-        for line in data['cursos']:
-            ret += "        <tr bgcolor=\"#E0ECF8\">"
-            ret += "            <td><span>" + line['inicio'] + "</span></td>"
-            ret += "            <td><span>" + line['instancia'] + "</span></td>"
-            ret += "            <td><span>" + line['dias'] + "</span></td>"
-            ret += "            <td><span>" + line['horario'] + "</span></td>"
-            ret += "        </tr>"
+        for line in data['grid']:
+            ret += "        <tr bgcolor='#E0ECF8'> "
+            ret += "            <td><span>" + line['inicio'] + "</span></td> "
+            ret += "            <td><span>" + line['instancia'] + "</span></td> "
+            ret += "            <td><span>" + line['dias'] + "</span></td> "
+            ret += "            <td><span>" + line['horario'] + "</span></td> "
+            ret += "        </tr> "
 
-        ret += "    </tbody>"
-        ret += "</table>"
-        ret += "<br>"
+        ret += u"""
+
+        </tbody>
+        </table>
+
+        <br>
+
+        """
         if data['temario']:
             ret += "<h2>Temario</h2>"
             ret += data['temario']
 
-    ret += "<hr/>"
+        ret += "<hr/>"
 
-    ret += "<h3 style=\"text-align: left;\">Aranceles</h3>"
-    for data in dict:
-        if data['cuotas'] == '1':
-            ss = data['cuotas'] + " cuota de $" + data['valor']
-        else:
-            ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
+        ret += '<h3 style="text-align: left;">Aranceles</h3>'
+        for data in dict:
+            if data['cuotas'] == '1':
+                ss = data['cuotas'] + " cuota de $" + data['valor']
+            else:
+                ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
 
-        ret += u"<p><strong>Matrícula: " + data['matricula'] + "</strong><br />"
-        ret += "<strong>Pagos: " + ss + "</strong></p>"
+            ret += u'<p><strong>Matrícula: ' + data['matricula'] + '</strong><br />'
+            ret += '<strong>Pagos: ' + ss + '</strong></p>'
 
-    ret += "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\">"
-    ret += "	<tbody>"
-    ret += "		<tr>"
-    ret += "			<td>"
-    ret += "			<h3 style=\"text-align: left;\">Se entrega certificado</h3>"
-    ret += "			<p style=\"text-align: center;\"><img alt=\"\" src=\"https://d3njjcbhbojbot.cloudfront.net/web/images/promos/cdp_cert_logo.png\" style=\"width: 110px; height: 110px;\" /></p>"
-    ret += "			<p style=\"text-align: center;\">Materiales inclu&iacute;dos en el costo del curso.</p>"
-    ret += "			</td>"
-    ret += "		</tr>"
-    ret += "</tbody>"
-    ret += "</table>"
-    ret += "<br>"
-
-    return ret
+        ret += """
+        <table border="0" cellpadding="1" cellspacing="1" style="width: 100%;">
+            <tbody>
+                <tr>
+                    <td>
+                    <h3 style="text-align: left;">Se entrega certificado</h3>
+                    <p style="text-align: center;"><img alt="" src="https://d3njjcbhbojbot.cloudfront.net/web/images/promos/cdp_cert_logo.png" style="width: 110px; height: 110px;" /></p>
+                    <p style="text-align: center;">Materiales inclu&iacute;dos en el costo del curso.</p>
+                    </td>
+                </tr>
+        </tbody>
+        </table>
+        <br>
+        """
+        return ret
 
 
 class product_product(osv.osv):
@@ -161,26 +164,33 @@ class product_product(osv.osv):
             return '---'
 
     def _get_formatted_diary(self, cr, uid, curso_id, context=None):
+        print 'get formatted diary -------------', curso_id
         formatted_diary = [
             {'dias': u'Lunes', 'horario': u'17:30 - 20:30 (3hs)'},
             {'dias': u'Martes y Miercoles', 'horario': u'07:30 - 09:30 (3hs)'},
             {'dias': u'Lunes y Viernes', 'horario': u'11:00 - 13:00 (3hs)'}
         ]
-
+        formatted_diary = []
         diary_pool = self.pool.get('curso.diary')
-        ids = diary_pool.search(cr, uid, [('curso_id', '=', curso_id)])
+        ids = diary_pool.search(cr, uid, [('curso_id', '=', curso_id)])  #
+        print 'ids', ids
         for diary_line in diary_pool.browse(cr, uid, ids, context=context):
-            print diary_line
+            formatted_diary.append({
+                'dias': 'Lunes',
+                'horario': diary_line.schedule.name
+            })
+            print 'diary id', diary_line.curso_id, diary_line.weekday, diary_line.schedule, diary_line.seq, diary_line.curso_id.name
+
         return formatted_diary
 
     def _get_wordpress_data(self, cr, uid, ids, default_code, context=None):
+        print 'get_wordpress_data -------------->> ', default_code
         prod_pool = self.pool['product.product']
         ids = prod_pool.search(cr, uid, [
             ('default_code', '=', default_code),
         ])
         for prod in prod_pool.browse(cr, uid, ids, context=context):
-            print 'producto para hacer el reporte', prod.default_code, prod.name
-
+            print 'again ', prod.default_code, prod.name
             curso_pool = self.pool.get('curso.curso')
             # traer cursos por default code, con fecha de inicio y en estado
             # draft o confirm
@@ -191,27 +201,33 @@ class product_product(osv.osv):
                 ('state', '=', 'draft'),
                 ('state', '=', 'confirm')
             ])
-
+            print 'cursos a imprimir', ids
             grid = []
             for curso in curso_pool.browse(cr, uid, ids, context=context):
+                print 'cada curso ', curso.id
                 formatted_diary = self._get_formatted_diary(cr, uid, curso.id, context=None)
 
-                grid.append(
-                    {
-                        'inicio': datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%d/%m/%Y'),
-                        'instancia': '{}/{:0>2d}'.format(prod.default_code, curso.instance),
-                        'dias': formatted_diary[0]['dias'],
-                        'horario': formatted_diary[0]['horario'],
-                    })
-
-                for diary in formatted_diary[1:]:
+                if len(formatted_diary) > 0:
                     grid.append(
-                        {
-                            'inicio': '',
-                            'instancia': '',
-                            'dias': diary['dias'],
-                            'horario': diary['horario'],
-                        })
+                        {'inicio': datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%d/%m/%Y'),
+                         'instancia': '{}/{:0>2d}'.format(prod.default_code, curso.instance),
+                         'dias': formatted_diary[0]['dias'],
+                         'horario': formatted_diary[0]['horario'],
+                         })
+
+                    for diary in formatted_diary[1:]:
+                        grid.append(
+                            {'inicio': '',
+                             'instancia': '',
+                             'dias': diary['dias'],
+                             'horario': diary['horario'],
+                             })
+                    grid.append(
+                        {'inicio': '&nbsp;',
+                         'instancia': '&nbsp;',
+                         'dias': '&nbsp;',
+                         'horario': '&nbsp;',
+                         })
             try:
                 weeks = (prod.tot_hs_lecture / prod.hs_lecture) / prod.classes_per_week
             except:
@@ -253,92 +269,21 @@ class product_product(osv.osv):
             print 'valor            ', data['valor']
             print '-------------------------------------------------'
 
-
-
-        return 'wp_data'
+        return data
 
     def button_generate_doc(self, cr, uid, ids, context=None):
-
         for prod in self.browse(cr, uid, ids, context=context):
-            self._get_wordpress_data(cr, uid, ids, prod.default_code, context=context)
+            print '-----------------', prod.name
 
-            cursos = []
-
-            instance_pool = self.pool.get('curso.curso')
-            # traer cursos por default code, con fecha de inicio y en estado
-            # draft o confirm
-            records = instance_pool.search(cr, uid, [
-                ('default_code', '=', prod.default_code),
-                ('date_begin', '<>', False),
-                '|',
-                ('state', '=', 'draft'),
-                ('state', '=', 'confirm')
-            ])
-            for inst in instance_pool.browse(cr, uid, records, context=context):
-                schedule = ''
-                print '>>>>', inst.date_begin, inst.schedule_1, inst.name
-                if inst.schedule_1:
-                    schedule = inst.schedule_1.name
-                cursos.append(
-                    {
-                        'inicio': datetime.strptime(inst.date_begin, '%Y-%m-%d').strftime(
-                            '%d/%m/%Y'),
-                        'instancia': '{}/{:0>2d}'.format(prod.default_code,
-                                                         inst.instance),
-                        'dias': self.d2day(inst.date_begin),
-                        'horario': schedule,
-                    })
-            try:
-                weeks = (prod.tot_hs_lecture / prod.hs_lecture) / prod.classes_per_week
-            except:
-                weeks = "error!"
-
-            # si está vacio trae False y da una excepcion en mark_down
-            if not prod.agenda:
-                prod.agenda = ''
-            if not prod.description:
-                prod.description = ''
-
-            data = {
-                'titulo': prod.name,
-                'codigo': prod.default_code,
-                'acerca_de': markdown.markdown(prod.description),
-                'duracion_semanas': str(weeks),
-                'horas_catedra': str(prod.tot_hs_lecture),
-                'modalidad': str(prod.classes_per_week) + ' clase de ' + str(
-                    prod.hs_lecture) + ' hs por semana',
-                'cursos': cursos,
-                'temario': markdown.markdown(prod.agenda),
-                'matricula': 'Bonificada',
-                'cuotas': str(prod.no_quotes),
-                'valor': str(prod.list_price),
-            }
-
-            print '------------------------------------------------- old'
-            print 'titulo           ', data['titulo']
-            print 'codigo           ', data['codigo']
-            print 'acerca_de        ', data['acerca_de']
-            print 'duracion_semanas ', data['duracion_semanas']
-            print 'horas_catedra    ', data['horas_catedra']
-            print 'modalidad        ', data['modalidad']
-            print 'cursos           ', data['cursos']
-            print 'temario          ', data['temario']
-            print 'matricula        ', data['matricula']
-            print 'cuotas           ', data['cuotas']
-            print 'valor            ', data['valor']
-            print '-------------------------------------------------'
-
-
+            data = self._get_wordpress_data(cr, uid, ids, prod.default_code, context=context)
             new_page = {
                 'name': prod.name,
                 'content': generate_html([data]),
             }
-
             # Borrar el documento si es que existe
             doc_pool = self.pool.get('document.page')
             records = doc_pool.search(cr, uid, [('name', '=', prod.name)])
             doc_pool.unlink(cr, uid, records)
-
             # Crear el documento
             self.pool.get('document.page').create(cr, uid, new_page, context=context)
 
