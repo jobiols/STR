@@ -27,10 +27,6 @@ from openerp import SUPERUSER_ID
 import babel.dates
 
 
-def format_instance(default_code, instance):
-    return '{}/{:0>2d}'.format(default_code, instance)
-
-
 class curso_information(osv.osv_memory):
     """ Wizard para generar documentacion de los cursos
     """
@@ -91,6 +87,11 @@ class curso_curso(osv.osv):
                 delta += 7
 
             return delta
+
+    def get_formatted_instance(self, cr, uid, curso_id, context=None):
+        for curso in self.browse(cr, uid, curso_id, context=context):
+            return '{}/{:0>2d}'.format(curso.default_code, curso.instance)
+        return False
 
     def generate_doc_curso_html(self, dict):
         ret = ""
@@ -497,24 +498,23 @@ class curso_curso(osv.osv):
                 day_n = init.strftime('%d')
                 month_n = init.strftime('%m')
                 year_n = init.strftime('%y')
-            try:
-                pool_diary = self.pool['curso.diary']
-                ids = pool_diary.search(cr, uid, [('curso_id', '=', curso.id)], context=context)
-                for diary_line in pool_diary.browse(cr, uid, ids, context=context):
-                    ss = diary_line.schedule.start_time
-                    ee = diary_line.schedule.end_time
-                    mms = ss - int(ss)
-                    hhs = int(ss - mms)
-                    mms = int(mms * 60)
-                    mme = ee - int(ee)
-                    hhe = int(ee - mme)
-                    mme = int(mme * 60)
-            except:
-                hhs = mms = hhe = mme = 0
+
+            pool_diary = self.pool['curso.diary']
+            ids = pool_diary.search(cr, uid, [('curso_id', '=', curso.id)], context=context)
+            hhs = mms = hhe = mme = 0
+            for diary_line in pool_diary.browse(cr, uid, ids, context=context):
+                ss = diary_line.schedule.start_time
+                ee = diary_line.schedule.end_time
+                mms = ss - int(ss)
+                hhs = int(ss - mms)
+                mms = int(mms * 60)
+                mme = ee - int(ee)
+                hhe = int(ee - mme)
+                mme = int(mme * 60)
 
             # https://docs.python.org/2/library/datetime.html#datetime-objects
             name = u'[{}] {} {}/{}/{} ({:0>2d}:{:0>2d} {:0>2d}:{:0>2d}) - {}'.format(
-                format_instance(curso.product.default_code, curso.instance),
+                self.curso.instance,
                 # Codigo de producto, Nro de instancia
                 weekday.capitalize(),  # dia de la semana en letras
                 day_n, month_n, year_n,  # dia , mes, anio en numeros
@@ -582,7 +582,7 @@ class curso_curso(osv.osv):
     def _get_instance(self, cr, uid, ids, fields, args, context=None):
         res = {}
         for curso in self.browse(cr, uid, ids, context=context):
-            res[curso.id] = format_instance(curso.default_code, curso.instance)
+            res[curso.id] = self.get_formatted_instance(cr, uid, curso.id)
         return res
 
     def _get_next(self, cr, uid, ids, fields, args, context=None):
