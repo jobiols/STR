@@ -41,6 +41,14 @@
     seq: 3
     schedule: curso_schedule_1
 -
+  Testing python ---
+-
+   !python {model: curso.curso}: |
+        pool = self.pool['curso.curso']
+        ids = pool.search(cr, uid, [('id','=','curso_curso_2')], context=context)
+        for curso in pool.browse(cr, uid, ids, context=context)
+            print curso.name
+-
   I modify curso 2 to add date_begin
 -
   !record {model: curso.curso, id: curso_curso_2}:
