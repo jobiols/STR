@@ -524,7 +524,7 @@ class curso_curso(osv.osv):
         return res
 
     def _check_change_begin_date(self, cr, uid, ids, context=None):
-
+        print '_check_change_begin_date'
         for curso in self.browse(cr, uid, ids, context=context):
             weekday = datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%w')
             diary_pool = self.pool['curso.diary']
@@ -543,6 +543,7 @@ class curso_curso(osv.osv):
         return True
 
     def onchange_date_begin(self, cr, uid, ids, context=None):
+        print '_check_change_begin_date'
         self._check_change_begin_date(cr, uid, ids, context=None)
         return True
 
