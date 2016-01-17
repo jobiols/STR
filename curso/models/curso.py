@@ -541,6 +541,7 @@ class curso_curso(osv.osv):
                         u"La fecha de inicio no corresponde con el primer dia de la agenda"))
 
                 return True
+        return True
 
     def onchange_diary_ids(self, cr, uid, ids, context=None):
         self._check_change_begin_date(cr, uid, ids, context=None)
