@@ -514,7 +514,7 @@ class curso_curso(osv.osv):
 
             # https://docs.python.org/2/library/datetime.html#datetime-objects
             name = u'[{}] {} {}/{}/{} ({:0>2d}:{:0>2d} {:0>2d}:{:0>2d}) - {}'.format(
-                self.curso_instance,
+                curso.curso_instance,
                 # Codigo de producto, Nro de instancia
                 weekday.capitalize(),  # dia de la semana en letras
                 day_n, month_n, year_n,  # dia , mes, anio en numeros
