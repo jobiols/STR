@@ -59,7 +59,8 @@
                                        on_change="onchange_curso_product(product,context)"/>
                             </group>
                             <group colspan="4" col="4">
-                                <field name="date_begin"/>
+                                <field name="date_begin"
+                                       on_change="onchange_date_begin(context)"/>
                                 <field name="instance"/>
                                 <field name="weekday_1"/>
                                 <field name="schedule_1"/>
@@ -68,7 +69,7 @@
                             </group>
 
                             <!-- agenda -->
-                            <field name='diary_ids' colspan="4">
+                            <field name='diary_ids' colspan="4" on_change="onchange_diary_ids(context)">
                                 <tree string="diary" editable="top">
                                     <field name="weekday"/>
                                     <field name="schedule"/>

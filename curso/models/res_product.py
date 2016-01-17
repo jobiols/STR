@@ -163,34 +163,57 @@ class product_product(osv.osv):
         else:
             return '---'
 
+    def find_schedule(self, list, data):
+        for l in list:
+            if l['horario'] == data:
+                return l
+        return False
+
     def _get_formatted_diary(self, cr, uid, curso_id, context=None):
-        print 'get formatted diary -------------', curso_id
-        formatted_diary = [
-            {'dias': u'Lunes', 'horario': u'17:30 - 20:30 (3hs)'},
-            {'dias': u'Martes y Miercoles', 'horario': u'07:30 - 09:30 (3hs)'},
-            {'dias': u'Lunes y Viernes', 'horario': u'11:00 - 13:00 (3hs)'}
-        ]
+        """
+        Devuelve una lista con las lineas del diario agrupadas por horario y ordenadas por dia.
+        Si un horario se repite en varios dias pone coma entres los dias.
+        """
         formatted_diary = []
+        diary = []
+
+        # bajar el diary completo a la lista diary
         diary_pool = self.pool.get('curso.diary')
         ids = diary_pool.search(cr, uid, [('curso_id', '=', curso_id)])  #
-        print 'ids', ids
-        for diary_line in diary_pool.browse(cr, uid, ids, context=context):
-            formatted_diary.append({
-                'dias': 'Lunes',
-                'horario': diary_line.schedule.name
+        for dl in diary_pool.browse(cr, uid, ids, context=context):
+            diary.append({
+                'weekday': dl.weekday,
+                'weekday_name': dl.weekday_name,
+                'schedule': dl.schedule.name,
+                'seq': dl.seq
             })
-            print 'diary id', diary_line.curso_id, diary_line.weekday, diary_line.schedule, diary_line.seq, diary_line.curso_id.name
+
+        # recorrer diary agrupando por schedule
+        for diary_line in diary:
+            # obtengo una referencia a la linea
+            fd_line = self.find_schedule(formatted_diary, diary_line['schedule'])
+            if fd_line:
+                # si existe el horario le agrego el día a la lista de dias
+                fd_line['list_dias'].append(diary_line['weekday_name'])
+            else:
+                # no existe el horario agrego la linea
+                formatted_diary.append(
+                    {'list_dias': [diary_line['weekday_name']],
+                     'horario': diary_line['schedule']
+                     })
+
+        # hacer la lista de dias formateada
+        for fdl in formatted_diary:
+            fdl['dias'] = ', '.join(fdl['list_dias'])
 
         return formatted_diary
 
     def _get_wordpress_data(self, cr, uid, ids, default_code, context=None):
-        print 'get_wordpress_data -------------->> ', default_code
         prod_pool = self.pool['product.product']
         ids = prod_pool.search(cr, uid, [
             ('default_code', '=', default_code),
         ])
         for prod in prod_pool.browse(cr, uid, ids, context=context):
-            print 'again ', prod.default_code, prod.name
             curso_pool = self.pool.get('curso.curso')
             # traer cursos por default code, con fecha de inicio y en estado
             # draft o confirm
@@ -201,33 +224,30 @@ class product_product(osv.osv):
                 ('state', '=', 'draft'),
                 ('state', '=', 'confirm')
             ])
-            print 'cursos a imprimir', ids
             grid = []
             for curso in curso_pool.browse(cr, uid, ids, context=context):
-                print 'cada curso ', curso.id
                 formatted_diary = self._get_formatted_diary(cr, uid, curso.id, context=None)
-
-                if len(formatted_diary) > 0:
-                    grid.append(
-                        {'inicio': datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%d/%m/%Y'),
-                         'instancia': '{}/{:0>2d}'.format(prod.default_code, curso.instance),
-                         'dias': formatted_diary[0]['dias'],
-                         'horario': formatted_diary[0]['horario'],
-                         })
-
-                    for diary in formatted_diary[1:]:
+                for idx, fdline in enumerate(formatted_diary):
+                    if idx == 0:
+                        grid.append(
+                            {'inicio': datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%d/%m/%Y'),
+                             'instancia': '{}/{:0>2d}'.format(prod.default_code, curso.instance),
+                             'dias': fdline['dias'],
+                             'horario': fdline['horario'],
+                             })
+                    else:
                         grid.append(
                             {'inicio': '',
                              'instancia': '',
-                             'dias': diary['dias'],
-                             'horario': diary['horario'],
+                             'dias': fdline['dias'],
+                             'horario': fdline['horario'],
                              })
-                    grid.append(
-                        {'inicio': '&nbsp;',
-                         'instancia': '&nbsp;',
-                         'dias': '&nbsp;',
-                         'horario': '&nbsp;',
-                         })
+                grid.append(
+                    {'inicio': '&nbsp;',
+                     'instancia': '&nbsp;',
+                     'dias': '&nbsp;',
+                     'horario': '&nbsp;',
+                     })
             try:
                 weeks = (prod.tot_hs_lecture / prod.hs_lecture) / prod.classes_per_week
             except:
@@ -273,8 +293,6 @@ class product_product(osv.osv):
 
     def button_generate_doc(self, cr, uid, ids, context=None):
         for prod in self.browse(cr, uid, ids, context=context):
-            print '-----------------', prod.name
-
             data = self._get_wordpress_data(cr, uid, ids, prod.default_code, context=context)
             new_page = {
                 'name': prod.name,

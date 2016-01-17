@@ -31,11 +31,6 @@
   !record {model: curso.curso, id: curso_curso_2}:
     date_begin: '2016-01-21'
 -
-  I modify curso 2 to add schedule 1
--
-  !record {model: curso.curso, id: curso_curso_2}:
-    schedule_1: curso_schedule_1
--
   I create a diary with tree days adding it to curso_curso_2
 -
   !record {model: curso.diary, id: curso_diary_1}:

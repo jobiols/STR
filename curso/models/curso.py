@@ -498,14 +498,17 @@ class curso_curso(osv.osv):
                 month_n = init.strftime('%m')
                 year_n = init.strftime('%y')
             try:
-                ss = curso.schedule_1.start_time
-                ee = curso.schedule_1.end_time
-                mms = ss - int(ss)
-                hhs = int(ss - mms)
-                mms = int(mms * 60)
-                mme = ee - int(ee)
-                hhe = int(ee - mme)
-                mme = int(mme * 60)
+                pool_diary = self.pool['curso.diary']
+                ids = pool_diary.search(cr, uid, [('curso_id', '=', curso.id)], context=context)
+                for diary_line in pool_diary.browse(cr, uid, ids, context=context):
+                    ss = diary_line.schedule.start_time
+                    ee = diary_line.schedule.end_time
+                    mms = ss - int(ss)
+                    hhs = int(ss - mms)
+                    mms = int(mms * 60)
+                    mme = ee - int(ee)
+                    hhe = int(ee - mme)
+                    mme = int(mme * 60)
             except:
                 hhs = mms = hhe = mme = 0
 
@@ -520,15 +523,38 @@ class curso_curso(osv.osv):
             res[curso.id] = name
         return res
 
+    def _check_change_begin_date(self, cr, uid, ids, context=None):
+
+        for curso in self.browse(cr, uid, ids, context=context):
+            weekday = datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%w')
+            diary_pool = self.pool['curso.diary']
+            ids = diary_pool.search(cr, uid, [('curso_id', '=', curso.id)], context=context)
+            for diary_line in diary_pool.browse(cr, uid, ids, context):
+                diary_weekday = diary_line.weekday
+
+                if weekday != diary_weekday:
+                    raise osv.except_osv('Error!', (
+                        u"La fecha de inicio no corresponde con el primer dia de la agenda"))
+
+                return True
+
+    def onchange_diary_ids(self, cr, uid, ids, context=None):
+        self._check_change_begin_date(cr, uid, ids, context=None)
+        return True
+
+    def onchange_date_begin(self, cr, uid, ids, context=None):
+        self._check_change_begin_date(cr, uid, ids, context=None)
+        return True
+
     def onchange_curso_product(self, cr, uid, ids, product, context=None):
         values = {}
         if product:
             type_info = self.pool.get('product.product').browse(cr, uid, product, context)
 
             r_pool = self.pool.get('curso.curso')
-            records = r_pool.search(cr, uid,
-                                    [('default_code', '=', type_info.default_code)],
-                                    context=context)
+            records = r_pool.search(
+                cr, uid, [('default_code', '=', type_info.default_code)],
+                context=context)
 
             instance = 0
             for item in r_pool.browse(cr, uid, records, context):
@@ -636,9 +662,9 @@ class curso_curso(osv.osv):
             ('done', 'Terminado')],
             'Status', readonly=True, required=True,
             track_visibility='onchange',
-            help=u'Cuando se crea el curso el estado es \'Borrador\'. Si se confirma el \
-                curso el estado es \'Cursando\'. Si el curso termina el estado \
-                es \'Terminado\'. Si el curso es cancelado el estado pasa a \'Cancelado\'.'),
+            help=u"Cuando se crea el curso el estado es 'Borrador'. Si se confirma el \
+                curso el estado es 'Cursando'. Si el curso termina el estado \
+                es 'Terminado'. Si el curso es cancelado el estado pasa a 'Cancelado'."),
         'email_registration_id': fields.many2one('email.template',
                                                  'Confirmación de inscripción',
                                                  help=u'Si definís una plantilla, la \

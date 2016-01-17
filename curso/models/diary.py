@@ -27,6 +27,22 @@ class curso_diary(osv.osv):
     _name = 'curso.diary'
     _order = 'seq'
 
+    def _get_day_name(self, cr, uid, ids, fields, args, context=None):
+        dwd = {
+            '0': u'Domingo',
+            '1': u'Lunes',
+            '2': u'Martes',
+            '3': u'Miércoles',
+            '4': u'Jueves',
+            '5': u'Viernes',
+            '6': u'Sábado'
+        }
+
+        res = {}
+        for diary in self.browse(cr, uid, ids, context=context):
+            res[diary.id] = dwd[diary.weekday]
+        return res
+
     def _get_day(self, cursor, user_id, context=None):
         return (
             ('0', u'Domingo'),
@@ -37,6 +53,7 @@ class curso_diary(osv.osv):
             ('5', u'Viernes'),
             ('6', u'Sábado')
         )
+
     _columns = {
         'curso_id': fields.many2one('curso.curso',
                                     u'Curso',
@@ -46,6 +63,12 @@ class curso_diary(osv.osv):
                                     readonly=False,
                                     required=True,
                                     track_visibility='onchange'),
+        'weekday_name': fields.function(_get_day_name, fnct_search=None,
+                                        string='Nombre del dia',
+                                        method=True, store=True,
+                                        type='char'),
+
+
         'schedule': fields.many2one('curso.schedule',
                                     u'Horario',
                                     readonly=False),
