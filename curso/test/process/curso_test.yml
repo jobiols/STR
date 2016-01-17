@@ -21,11 +21,6 @@
     - instance == 2
     - name == '[SPR/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional'
 -
-  I modify curso 1 to add date_begin
--
-  !record {model: curso.curso, id: curso_curso_1}:
-    date_begin: '2016-01-11'
--
   I modify curso 2 to add date_begin
 -
   !record {model: curso.curso, id: curso_curso_2}:
