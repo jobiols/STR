@@ -44,10 +44,7 @@
   Testing python ---
 -
    !python {model: curso.curso}: |
-        pool = self.pool['curso.curso']
-        ids = pool.search(cr, uid, [('id','=','curso_curso_2')], context=context)
-        print 'ids',ids
-        for curso in pool.browse(cr, uid, ids, context=context)
+        for curso in pool.browse(cr, uid, [ref("curso_curso_2")], context=context)
             print curso.name
 -
   I modify curso 2 to add date_begin
