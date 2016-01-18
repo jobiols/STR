@@ -43,7 +43,9 @@
 -
   Testing python ---
 -
-   !python {model: curso.curso}: |
+    !python {model: curso.curso}: |
+        pool = self.pool['curso.curso']
+        print 'pool', pool, cr, uid
         for curso in pool.browse(cr, uid, [ref("curso_curso_2")], context=context)
             print curso.name
 -
