@@ -19,8 +19,10 @@
 #
 ##############################################################################
 from openerp.osv import fields, osv
+# from openerp import models, fields, api
 
 class curso_holiday(osv.osv):
+    #class curso_holiday(models.Model):
     """ define los periodos donde estamos en vacaciones, puede ser parte de un dia """
     _name = 'curso.holiday'
     _inherit = 'curso.lapse'
