@@ -46,6 +46,7 @@
    !python {model: curso.curso}: |
         pool = self.pool['curso.curso']
         ids = pool.search(cr, uid, [('id','=','curso_curso_2')], context=context)
+        print ids
         for curso in pool.browse(cr, uid, ids, context=context)
             print curso.name
 -
