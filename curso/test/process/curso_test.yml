@@ -114,4 +114,4 @@
 -
    !python {model: product.product}: |
      data = self._get_wordpress_data(cr, uid, [ref("curso_product_1")],'SPR',context=context)
-     assert data.titulo == 'Curso de maquillaje Social Profesional', "Failed report data"
+     assert data['titulo'] == 'Curso de maquillaje Social Profesional', "Failed report data"

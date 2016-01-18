@@ -544,12 +544,12 @@ class curso_curso(osv.osv):
         return True
 
     def onchange_diary_ids(self, cr, uid, ids, context=None):
-        self._check_change_begin_date(cr, uid, ids, context=None)
+        self._check_change_begin_date(cr, uid, ids, context=context)
         return True
 
     def onchange_date_begin(self, cr, uid, ids, context=None):
         print 'onchange_date_begin', cr, uid, ids, context
-        self._check_change_begin_date(cr, uid, ids, context=None)
+        self._check_change_begin_date(cr, uid, ids, context=context)
         return self.pool
 
     def onchange_curso_product(self, cr, uid, ids, product, context=None):
