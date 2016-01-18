@@ -524,22 +524,15 @@ class curso_curso(osv.osv):
         return res
 
     def _check_change_begin_date(self, cr, uid, ids, context=None):
-        print '_check_change_begin_date', cr, uid, ids, context
         for curso in self.browse(cr, uid, ids, context=context):
-            print 'curso', curso.id, curso.name
-
-            weekday = datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%w')
             diary_pool = self.pool['curso.diary']
             ids = diary_pool.search(cr, uid, [('curso_id', '=', curso.id)], context=context)
-            print 'ids', ids
             for diary_line in diary_pool.browse(cr, uid, ids, context):
-                print 'diary line', diary_line
                 diary_weekday = diary_line.weekday
-
+                weekday = datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%w')
                 if weekday != diary_weekday:
                     raise osv.except_osv('Error!', (
                         u"La fecha de inicio no corresponde con el primer dia de la agenda"))
-
                 return True
         return True
 
@@ -548,7 +541,6 @@ class curso_curso(osv.osv):
         return True
 
     def onchange_date_begin(self, cr, uid, ids, context=None):
-        print 'onchange_date_begin', cr, uid, ids, context
         self._check_change_begin_date(cr, uid, ids, context=context)
         return self.pool
 
