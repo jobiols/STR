@@ -549,8 +549,8 @@ class curso_curso(osv.osv):
 
     def onchange_date_begin(self, cr, uid, ids, context=None):
         print 'onchange_date_begin', cr, uid, ids, context
-        self._check_change_begin_date(cr, uid, ids, context=None)
-        return True
+        #        self._check_change_begin_date(cr, uid, ids, context=None)
+        return 'hola'
 
     def onchange_curso_product(self, cr, uid, ids, product, context=None):
         values = {}
