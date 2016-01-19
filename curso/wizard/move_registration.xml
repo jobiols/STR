@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-        <!--  Mover inscripciones a otro curso -->
+        <!--  Mover / Copiar inscripciones a otro curso -->
 
         <!--
                 res_model= modelo a abrir
@@ -9,7 +9,7 @@
         -->
         <!-- con esto aparece en el boton MAS -->
 
-        <act_window name="Mover inscripciones a otro curso"
+        <act_window name="Mover / Copiar inscripciones"
                     res_model="curso.move.registration"
                     src_model="curso.registration"
                     key2="client_action_multi"
@@ -24,35 +24,31 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Facturacion de cursos" version="7.0">
+
+                    <p>Seleccioná el curso al que querés mover o copiar
+                        el conjunto de alumnas inscriptas que marcaste previamente.
+                    </p>
+                    <h3>Mover</h3>
+                    <p>Al mover las alumnas, en el historial de la alumna desaparece el curso original.</p>
+                    <h3>Copiar</h3>
+                    <p>Al copiar las alumnas el estado de la copia cambiará a Interesada sea cual sea el estado
+                        origen.
+                    </p>
+
                     <group>
-                        <label string="Seleccioná el curso al que querés mover
-                        el conjunto de alumnas inscriptas que marcaste previamente."/>
-                    </group>
-                    <group>
-                        <field name="curso_id"/>
+                        <field name="curso_id" string="Nuevo curso"
+                               domain="[('state','in',('draft','confirm'))]"/>
                     </group>
 
                     <footer>
                         <button string="Mover alumnas inscriptas" name="button_move_registration"
+                                type="object" class="oe_highlight"/>
+                        <button string="Copiar alumnas inscriptas" name="button_copy_registration"
                                 type="object" class="oe_highlight"/>
                     </footer>
                 </form>
             </field>
         </record>
 
-        <!--
-                <record id="wizard_curso_invoice" model="ir.actions.act_window">
-                    <field name="name">Facturacion de cursos</field>
-                    <field name="res_model">curso.invoice</field>
-                    <field name="view_type">form</field>
-                    <field name="view_mode">form</field>
-                    <field name="target">new</field>
-                </record>
-
-                <menuitem name="Facturacion"
-                          id="menu_action_curso_invoice" parent="base.menu_curso_main"
-                          action="wizard_curso_invoice"
-                          groups="curso.group_curso_manager,curso.group_curso_user"/>
-        -->
     </data>
 </openerp>

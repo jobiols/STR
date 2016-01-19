@@ -21,7 +21,7 @@
 
 {
     'name': 'Organización de Cursos',
-    'version': '8.0.1.0',
+    'version': '8.0.1.2',
     'category': 'Tools',
     'summary': 'Cursos, Inscripciones, Reservas etc.',
     'description': """
@@ -54,7 +54,6 @@ faltante en la ficha del alumno
                 'l10n_ar_invoice',
                 'document_page'],
     'data': [
-        # 'wizard/curso_confirm_view.xml',
         'curso_report.xml',
         'views/report_curso.xml',
         'security/curso_security.xml',
@@ -80,7 +79,6 @@ faltante en la ficha del alumno
         'test/process/schedule_test.yml',
         'test/process/holiday_test.yml',
         'test/process/curso_test.yml',
-
     ],
     'css': ['static/src/css/curso.css'],
     'js': ['static/src/js/announcement.js'],

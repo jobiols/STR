@@ -20,14 +20,30 @@
 ##############################################################################
 from openerp.osv import osv, fields
 
-
 class curso_move_registration(osv.osv_memory):
     def button_move_registration(self, cr, uid, ids, context=None):
         reg_pool = self.pool['curso.registration']
         for wiz in self.browse(cr, uid, ids, context):
+            # verificar que las inscripciones estan canceladas
+            for reg in reg_pool.browse(cr, uid, context['active_ids']):
+                if reg.state == 'done' or reg.state == 'confirm':
+                    raise osv.except_osv(('Error!'), (
+                        u"Solo se pueden mover inscripciones en estado interesada, señada y cancelada."))
             # por cada inscripcion marcada cambiarle el curso
             for reg in reg_pool.browse(cr, uid, context['active_ids']):
                 reg.curso_id = wiz.curso_id
+
+    def button_copy_registration(self, cr, uid, ids, context=None):
+        reg_pool = self.pool['curso.registration']
+        for wiz in self.browse(cr, uid, ids, context):
+            # por cada inscripcion marcada duplicarla con el nuevo curso
+            for reg in reg_pool.browse(cr, uid, context['active_ids']):
+                defaults = {
+                    'curso_id': wiz.curso_id.id,
+                    'user_id': uid,
+                    'state': 'draft'
+                }
+                reg_pool.copy(cr, uid, reg.id, defaults, context=context)
 
     _name = "curso.move.registration"
     _description = "Mover inscripciones entre cursos"
