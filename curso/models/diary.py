@@ -33,10 +33,6 @@ class curso_diary(osv.osv):
         Chequear que la fecha corresponda al dia del primer elemento de la agenda
         """
         for diary_line in self.browse(cr, uid, ids, context=context):
-            print diary_line.weekday
-            print datetime.strptime(date, '%Y-%m-%d').strftime('%w')
-            print date
-            print '----------------------------------------------------'
             return diary_line.weekday == datetime.strptime(date, '%Y-%m-%d').strftime('%w')
 
     def _get_day_name(self, cr, uid, ids, fields, args, context=None):

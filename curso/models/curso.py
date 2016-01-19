@@ -309,10 +309,10 @@ class curso_curso(osv.osv):
                         que no es el primer dia de la agenda (%s).' % (
                             curso.date_begin, diary_line.weekday_name))
 
-        if isinstance(ids, (int, long)):
-            ids = [ids]
-        self.check_registration_limits(cr, uid, ids, context=context)
-        return self.confirm_curso(cr, uid, ids, context=context)
+                if isinstance(ids, (int, long)):
+                    ids = [ids]
+                self.check_registration_limits(cr, uid, ids, context=context)
+                return self.confirm_curso(cr, uid, ids, context=context)
 
     def button_curso_done(self, cr, uid, ids, context=None):
         """
