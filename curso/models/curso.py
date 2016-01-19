@@ -677,8 +677,8 @@ class curso_curso(osv.osv):
         'state': fields.selection([
             ('draft', 'Borrador'),
             ('confirm', 'Cursando'),
-            ('done', 'Cumplido')
-            ('cancel', 'Cancelado'),
+            ('done', 'Cumplido'),
+            ('cancel', 'Cancelado')
         ],
             'Status', readonly=True, required=True,
             track_visibility='onchange',
