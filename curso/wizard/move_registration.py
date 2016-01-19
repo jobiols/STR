@@ -18,12 +18,22 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp.osv import osv, fields
 
 
-# import curso_confirm
-import daily_report
-import create_invoice
-import add_registration
-import move_registration
+class curso_move_registration(osv.osv_memory):
+    def button_move_registration(self, cr, uid, ids, context=None):
+        reg_pool = self.pool['curso.registration']
+        for wiz in self.browse(cr, uid, ids, context):
+            # por cada inscripcion marcada cambiarle el curso
+            for reg in reg_pool.browse(cr, uid, context['active_ids']):
+                reg.curso_id = wiz.curso_id
+
+    _name = "curso.move.registration"
+    _description = "Mover inscripciones entre cursos"
+
+    _columns = {
+        'curso_id': fields.many2one('curso.curso', 'Curso', required=True),
+    }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

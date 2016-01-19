@@ -18,6 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
+from datetime import datetime
 from openerp.osv import fields, osv
 
 
@@ -26,6 +27,17 @@ class curso_diary(osv.osv):
     """
     _name = 'curso.diary'
     _order = 'seq'
+
+    def check_weekday(self, cr, uid, ids, date, context=None):
+        """
+        Chequear que la fecha corresponda al dia del primer elemento de la agenda
+        """
+        for diary_line in self.browse(cr, uid, ids, context=context):
+            print diary_line.weekday
+            print datetime.strptime(date, '%Y-%m-%d').strftime('%w')
+            print date
+            print '----------------------------------------------------'
+            return diary_line.weekday == datetime.strptime(date, '%Y-%m-%d').strftime('%w')
 
     def _get_day_name(self, cr, uid, ids, fields, args, context=None):
         dwd = {
@@ -67,7 +79,6 @@ class curso_diary(osv.osv):
                                         string='Nombre del dia',
                                         method=True, store=True,
                                         type='char'),
-
 
         'schedule': fields.many2one('curso.schedule',
                                     u'Horario',

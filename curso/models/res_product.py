@@ -229,12 +229,9 @@ class product_product(osv.osv):
                 formatted_diary = self._get_formatted_diary(cr, uid, curso.id, context=None)
                 for idx, fdline in enumerate(formatted_diary):
                     if idx == 0:
-                        print 'curso -- ', curso.default_code, curso.instance
-                        print 'formated_instance ----------', curso.get_formatted_instance(curso.id)
                         grid.append(
                             {'inicio': datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%d/%m/%Y'),
                              'instancia': curso.get_formatted_instance(curso.id),
-                             #                             'instancia': '{}/{:0>2d}'.format(prod.default_code, curso.instance),
                              'dias': fdline['dias'],
                              'horario': fdline['horario'],
                              })

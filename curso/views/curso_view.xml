@@ -33,16 +33,16 @@
                 <form string="Cursos" version="7.0">
                     <header>
                         <!--- ESTADOS BTN CURSOS -->
-                        <button string="Confirmar curso" name="button_confirm"
+                        <button string="Confirmar curso" name="button_curso_confirm"
                                 states="draft" type="object"
                                 class="oe_highlight" groups="base.group_user"/>
-                        <button string="Terminó el curso" name="button_done"
+                        <button string="Terminó el curso" name="button_curso_done"
                                 states="confirm" type="object"
                                 class="oe_highlight" groups="base.group_user"/>
-                        <button string="Cambiar a borrador" name="button_draft"
+                        <button string="Cambiar a borrador" name="button_curso_draft"
                                 states="cancel,done" type="object"
                                 groups="base.group_user"/>
-                        <button string="Cancelar curso" name="button_cancel"
+                        <button string="Cancelar curso" name="button_curso_cancel"
                                 states="draft,confirm,done" type="object"
                                 groups="base.group_user"/>
 
@@ -105,7 +105,7 @@
                                         <field name="email"/>
                                         <field name="phone"/>
                                         <field name="state"/>
-                                        <!-- ESTADOS -->
+                                        <!-- ESTADOS INSCRIPCIONES -->
                                         <button name="button_reg_sign"
                                                 string="Seña el curso" states="draft"
                                                 type="object" icon="gtk-apply"/>

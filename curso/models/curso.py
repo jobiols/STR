@@ -18,7 +18,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
-
 from datetime import datetime, date, timedelta
 import operator
 
@@ -242,34 +241,8 @@ class curso_curso(osv.osv):
             'state': 'draft',
             'registration_ids': False,
         })
-        return super(curso_curso, self).copy(cr, uid, id, default=default,
-                                             context=context)
-
-    def button_draft(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
-
-    def button_cancel(self, cr, uid, ids, context=None):
-        registration = self.pool.get('curso.registration')
-        reg_ids = registration.search(cr, uid, [('curso_id', 'in', ids)], context=context)
-        for curso_reg in registration.browse(cr, uid, reg_ids, context=context):
-            if curso_reg.state != 'cancel':
-                raise osv.except_osv('Error!',
-                                     u"Para cancelar el curso debe cancelar todas \
-                                     las alumnas.")
-        registration.write(cr, uid, reg_ids, {'state': 'cancel'}, context=context)
-        return self.write(cr, uid, ids, {'state': 'cancel'}, context=context)
-
-    def button_done(self, cr, uid, ids, context=None):
-        registration = self.pool.get('curso.registration')
-        reg_ids = registration.search(cr, uid, [('curso_id', 'in', ids)], context=context)
-        for curso_reg in registration.browse(cr, uid, reg_ids, context=context):
-            if not ((curso_reg.state == 'done') or (curso_reg.state == 'cancel') or (
-                        curso_reg.state == 'draft')):
-                raise osv.except_osv(('Error!'), (
-                    u"Para terminar el curso las alumnas deben estar en estado \
-                    cumplido, cancelado o interesada."))
-                #        registration.write(cr, uid, reg_ids, {'state': 'cancel'}, context=context)
-        return self.write(cr, uid, ids, {'state': 'done'}, context=context)
+        return super(curso_curso, self).copy(
+            cr, uid, id, default=default, context=context)
 
     def check_registration_limits(self, cr, uid, ids, context=None):
         for self.curso in self.browse(cr, uid, ids, context=context):
@@ -306,8 +279,11 @@ class curso_curso(osv.osv):
         # register_pool.mail_user_confirm(cr, uid, reg_ids)
         return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
 
-    def button_confirm(self, cr, uid, ids, context=None):
-        """ Confirmar curso and send confirmation email to all register peoples
+    # Estados de los cursos
+    ###############################################################################
+
+    def button_curso_confirm(self, cr, uid, ids, context=None):
+        """ Confirmar curso chequeando antes que tenga fecha de inicio y que coincida con la agenda
         """
         # Verificar si tiene fecha de inicio.
         for curso in self.browse(cr, uid, ids, context=context):
@@ -317,29 +293,74 @@ class curso_curso(osv.osv):
                     u"No se puede confirmar el curso porque no tiene fecha de inicio."))
 
             # chequear si tiene agenda
-            register_pool = self.pool.get('curso.diary')
-            regs_id = register_pool.search(cr, uid,
-                                           [('curso_id', '=', curso.id)],
-                                           context=context)
-            if not regs_id:
+            pool_diary = self.pool.get('curso.diary')
+            diary_ids = pool_diary.search(cr, uid, [('curso_id', '=', curso.id)], context=context)
+            if not diary_ids:
                 raise osv.except_osv('Error!', (
                     u"No se puede confirmar el curso porque no tiene agenda creada."))
 
-            # chequear si el dia de la semana de la fecha de inicio coincide con la agenda
-            for reg in register_pool.browse(cr, uid, regs_id, context=context):
-                dt = datetime.strptime(curso.date_begin, "%Y-%m-%d")
-                break
-
-            print '>>>>>>>>>> date_begin', dt.strftime('%w'), 'weekday', reg.weekday
-            if dt.strftime('%w') != reg.weekday:
-                raise osv.except_osv('Error!', (
-                    u'El dia de la semana definido por la fecha de inicio no coincide\
-                    con el primer dia de la agenda.'))
+            # chequear si el dia de inicio corresponde a la agenda
+            for diary_line in pool_diary.browse(cr, uid, diary_ids, context=context):
+                if not diary_line.check_weekday(curso.date_begin):
+                    raise osv.except_osv('Error!', (
+                        u'No se puede confirmar el curso porque la fecha de inicio (%s) cae en un dia \
+                        que no es el primer dia de la agenda (%s).') % (curso.date_begin, diary_line.weekday_name))
 
         if isinstance(ids, (int, long)):
             ids = [ids]
         self.check_registration_limits(cr, uid, ids, context=context)
         return self.confirm_curso(cr, uid, ids, context=context)
+
+    def button_curso_done(self, cr, uid, ids, context=None):
+        """
+        Terminar el curso
+        """
+        # si existe al menos una en estado signed no se puede terminar el curso
+        # si existe al menos una en estado confirm no se puede terminar el curso
+        registration = self.pool.get('curso.registration')
+        reg_ids = registration.search(cr, uid,
+                                      [('curso_id', 'in', ids),
+                                       '|',
+                                       ('state', '=', 'signed'),
+                                       ('state', '=', 'confirm')
+                                       ], context=context)
+        if reg_ids:
+            raise osv.except_osv(('Error!'), (
+                u"Para terminar el curso las alumnas deben estar en estado \
+                cumplido, o cancelado."))
+
+        # si existen interesadas hay que proponer moverlas a otro curso
+
+
+        for curso_reg in registration.browse(cr, uid, reg_ids, context=context):
+            if not ((curso_reg.state == 'done') or (curso_reg.state == 'cancel') or (curso_reg.state == 'draft')
+                    ):
+                raise osv.except_osv(('Error!'), (
+                    u"Para terminar el curso las alumnas deben estar en estado \
+                    cumplido, cancelado o interesada."))
+                #        registration.write(cr, uid, reg_ids, {'state': 'cancel'}, context=context)
+        return self.write(cr, uid, ids, {'state': 'done'}, context=context)
+
+    def button_curso_draft(self, cr, uid, ids, context=None):
+        return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
+
+    def button_curso_cancel(self, cr, uid, ids, context=None):
+        """
+        Canelar el curso
+        """
+        # si existe al menos una en estado signed no se puede cancelar el curso
+        # si existe al menos una en estado confirm no se puede cancelar el curso
+        # si existe al menos una en estado cumplido no se puede cancelar el curso
+        # si existen interesadas hay que proponer moverlas a otro curso
+
+        registration = self.pool.get('curso.registration')
+        reg_ids = registration.search(cr, uid, [('curso_id', 'in', ids)], context=context)
+        for curso_reg in registration.browse(cr, uid, reg_ids, context=context):
+            if curso_reg.state != 'cancel':
+                raise osv.except_osv('Error!',
+                                     u'Para cancelar el curso todas las alumnas deben estar en estado cancelado.')
+        registration.write(cr, uid, reg_ids, {'state': 'cancel'}, context=context)
+        return self.write(cr, uid, ids, {'state': 'cancel'}, context=context)
 
     def _get_register(self, cr, uid, ids, fields, args, context=None):
         """ Get Confirm or uncofirm register value.

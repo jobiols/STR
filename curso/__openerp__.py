@@ -71,6 +71,7 @@ faltante en la ficha del alumno
         'wizard/daily_report_view.xml',
         'report/report_curso_registration_view.xml',
         'data/curso_data.xml',
+        'wizard/move_registration.xml'
     ],
     'demo': ['data/curso_demo.xml'],
 
