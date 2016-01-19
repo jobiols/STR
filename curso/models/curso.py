@@ -676,9 +676,10 @@ class curso_curso(osv.osv):
 
         'state': fields.selection([
             ('draft', 'Borrador'),
-            ('cancel', 'Cancelado'),
             ('confirm', 'Cursando'),
-            ('done', 'Cumplido')],
+            ('done', 'Cumplido')
+            ('cancel', 'Cancelado'),
+        ],
             'Status', readonly=True, required=True,
             track_visibility='onchange',
             help=u"Cuando se crea el curso el estado es 'Borrador'. Si se confirma el \
