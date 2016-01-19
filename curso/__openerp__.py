@@ -35,9 +35,9 @@ Puntos Clave
 - Definición de los cursos como Productos (servicios)
 - Definicion las instancias de los cursos, cada vez que se vuelve a dictar un\
  curso se autoincrementa en nro de instancia.
-- Estados de los cursos Borrador, Cursando, Terminado, Cancelado
+- Estados de los cursos Borrador, Cursando, Cumplido, Cancelado
 - Estados de los alumnos inscriptos en los cursos, Interesado, Señado, \
-Cursando, Terminado, Cancelado
+Cursando, Cumplido, Cancelado
 - Historia de las cursadas registradas en la ficha del alumno
 - Generación automática de la facturación
 - Reporte diario de asistentes con detalle de cuotas adeudadas e información \

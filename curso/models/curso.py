@@ -482,28 +482,28 @@ class curso_curso(osv.osv):
                 raise osv.except_osv(('Error!'), (
                     u"la cantidad de horas catedra no es divisible por las horas de clase!."))
 
-        tot_lectures = tot_hs_lecture // hs_lecture
-        weekload = []
+            tot_lectures = tot_hs_lecture // hs_lecture
+            weekload = []
 
-        if (schedule_1 != False) and (weekday_1 != False):
-            weekload = [
-                {'schedule': schedule_1,
-                 'weekday': weekday_1},
-            ]
+            if (schedule_1 != False) and (weekday_1 != False):
+                weekload = [
+                    {'schedule': schedule_1,
+                     'weekday': weekday_1},
+                ]
 
-        if (schedule_2 != False) and (weekday_2 != False):
-            weekload.append(
-                {'schedule': schedule_2,
-                 'weekday': weekday_2}
-            )
+            if (schedule_2 != False) and (weekday_2 != False):
+                weekload.append(
+                    {'schedule': schedule_2,
+                     'weekday': weekday_2}
+                )
 
-        if (weekload == []):
-            raise osv.except_osv(('Error!'), (u"No se definieron horarios!."))
+            if (weekload == []):
+                raise osv.except_osv(('Error!'), (u"No se definieron horarios!."))
 
-        lecture_data = self.compute_lecture_data(cr, uid, ids, date_begin, weekload,
-                                                 tot_lectures, context=None)
-        self.create_lectures(cr, uid, ids, lecture_data, default_code, context=None)
-        return True
+            lecture_data = self.compute_lecture_data(cr, uid, ids, date_begin, weekload,
+                                                     tot_lectures, context=None)
+            self.create_lectures(cr, uid, ids, lecture_data, default_code, context=None)
+
 
     def _get_name(self, cr, uid, ids, fields, args, context=None):
         res = {}
@@ -678,12 +678,12 @@ class curso_curso(osv.osv):
             ('draft', 'Borrador'),
             ('cancel', 'Cancelado'),
             ('confirm', 'Cursando'),
-            ('done', 'Terminado')],
+            ('done', 'Cumplido')],
             'Status', readonly=True, required=True,
             track_visibility='onchange',
             help=u"Cuando se crea el curso el estado es 'Borrador'. Si se confirma el \
                 curso el estado es 'Cursando'. Si el curso termina el estado \
-                es 'Terminado'. Si el curso es cancelado el estado pasa a 'Cancelado'."),
+                es 'Cumplido'. Si el curso es cancelado el estado pasa a 'Cancelado'."),
         'email_registration_id': fields.many2one('email.template',
                                                  'Confirmación de inscripción',
                                                  help=u'Si definís una plantilla, la \

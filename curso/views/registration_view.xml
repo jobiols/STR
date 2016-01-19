@@ -170,7 +170,7 @@
                     <filter icon="terp-camera_test" string="Cursando"
                             domain="[('state','=','confirm')]"
                             help="Alumnas que están cursando"/>
-                    <filter icon="terp-camera_test" string="Terminado"
+                    <filter icon="terp-camera_test" string="Cumplido"
                             domain="[('state','=','done')]"
                             help="Alumnas que terminaron el curso"/>
                     <filter icon="terp-camera_test" string="Cancelado"
