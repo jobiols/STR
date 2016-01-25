@@ -152,10 +152,11 @@ class curso_invoice(osv.osv_memory):
 
         return True
 
+    """
     def button_upgrade(self, cr, uid, ids, context=None):
-        """
+        " " "
         pasa del viejo sistema de schedule a diary
-        """
+        " " "
 
         def map_date(weekday_1):
             weekday = int(weekday_1)
@@ -200,3 +201,4 @@ class curso_invoice(osv.osv_memory):
             }
 
             curso_pool.write(cr, uid, curso.id, upd_rec, context=context)
+    """
