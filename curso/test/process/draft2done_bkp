@@ -79,7 +79,7 @@
     I confirm the curso
 -
   !python {model: curso.curso}: |
-    self.button_confirm(cr, uid, [ref("curso_curso")])
+    self.button_curso_confirm(cr, uid, [ref("curso_curso")])
 -
      I check that curso is in "confirmed" state.
 -
@@ -89,7 +89,7 @@
      I close the curso
 -
   !python {model: curso.curso}: |
-    self.button_done(cr, uid, [ref("curso_curso")])
+    self.button_curso_done(cr, uid, [ref("curso_curso")])
 -
     Check that curso is in "close" state.
 -
@@ -99,7 +99,7 @@
     I reset curso to draft
 -
   !python {model: curso.curso}: |
-    self.button_draft(cr, uid, [ref("curso_curso")])
+    self.button_curso_draft(cr, uid, [ref("curso_curso")])
 -
    In order to test the cancellation of the curso, I create a second curso
 -
@@ -118,7 +118,7 @@
     Now I cancel this curso
 -
   !python {model: curso.curso}: |
-    self.button_cancel(cr, uid, [ref("curso_curso1")])
+    self.button_curso_cancel(cr, uid, [ref("curso_curso1")])
 -
     I check if the curso is cancelled
 -

@@ -23,7 +23,8 @@
         <function model="mail.group" name="message_post">
             <!-- ids, subject, body, parent_id=False, type='notification', content_subtype='html' -->
             <value eval="[ref('mail.group_all_employees')]"/>
-            <value>From the top menu Cursos, you can organize cursos, manage inscripciones, automate communication
+            <value>Desde el menu cursos, podes organizar tus cursos, manage inscripciones,
+                automate communication
                 around your curso and sell cursos through your quotations.
             </value>
             <value>Module Cursos has been installed</value>

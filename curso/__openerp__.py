@@ -21,7 +21,7 @@
 
 {
     'name': 'Organización de Cursos',
-    'version': '8.0.1.0',
+    'version': '8.0.1.2',
     'category': 'Tools',
     'summary': 'Cursos, Inscripciones, Reservas etc.',
     'description': """
@@ -35,9 +35,9 @@ Puntos Clave
 - Definición de los cursos como Productos (servicios)
 - Definicion las instancias de los cursos, cada vez que se vuelve a dictar un\
  curso se autoincrementa en nro de instancia.
-- Estados de los cursos Borrador, Cursando, Terminado, Cancelado
+- Estados de los cursos Borrador, Cursando, Cumplido, Cancelado
 - Estados de los alumnos inscriptos en los cursos, Interesado, Señado, \
-Cursando, Terminado, Cancelado
+Cursando, Cumplido, Cancelado
 - Historia de las cursadas registradas en la ficha del alumno
 - Generación automática de la facturación
 - Reporte diario de asistentes con detalle de cuotas adeudadas e información \
@@ -46,16 +46,21 @@ faltante en la ficha del alumno
 
 """,
     'author': 'jeo software',
-    'depends': ['base_setup', 'board', 'email_template', 'sale', 'purchase',
-                'l10n_ar_invoice'],
+    'depends': ['base_setup',
+                'board',
+                'email_template',
+                'sale',
+                'purchase',
+                'l10n_ar_invoice',
+                'document_page'],
     'data': [
+        'curso_report.xml',
+        'views/report_curso.xml',
         'security/curso_security.xml',
         'security/ir.model.access.csv',
-        # 'wizard/curso_confirm_view.xml',
-
         'wizard/add_registration_view.xml',
-
         'views/curso_view.xml',
+        'views/registration_view.xml',
         'views/engine_view.xml',
         'views/board_association_view.xml',
         'views/res_product_view.xml',
@@ -63,15 +68,17 @@ faltante en la ficha del alumno
         'views/res_partner_view.xml',
         'wizard/create_invoice_view.xml',
         'wizard/daily_report_view.xml',
-
         'report/report_curso_registration_view.xml',
-
         'data/curso_data.xml',
+        'wizard/move_registration.xml'
     ],
-    # 'demo': ['data/curso_demo.xml'],
+    'demo': ['data/curso_demo.xml'],
 
     'test': [
-        'test/process/curso_test.yml'
+        'test/process/partner_test.yml',
+        'test/process/schedule_test.yml',
+        'test/process/holiday_test.yml',
+        'test/process/curso_test.yml',
     ],
     'css': ['static/src/css/curso.css'],
     'js': ['static/src/js/announcement.js'],
@@ -80,5 +87,5 @@ faltante en la ficha del alumno
     'auto_install': False,
     'images': [],
 }
-# TODO arreglar el curso_demo.xml
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

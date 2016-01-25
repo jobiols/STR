@@ -14,7 +14,8 @@
                         <field name="date"/>
                     </group>
                     <footer>
-                        <button name="button_generate_daily_report" string="Confirmar" type="object"
+                        <button name="button_generate_report" string="Confirmar"
+                                type="object"
                                 class="oe_highlight"/>
                         or
                         <button string="Cancel" class="oe_link" special="cancel"/>

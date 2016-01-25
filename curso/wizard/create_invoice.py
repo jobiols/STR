@@ -151,3 +151,52 @@ class curso_invoice(osv.osv_memory):
                                     context=context)
 
         return True
+
+    def button_upgrade(self, cr, uid, ids, context=None):
+        """
+        pasa del viejo sistema de schedule a diary
+        """
+
+        def map_date(weekday_1):
+            weekday = int(weekday_1)
+            weekday += 1
+            if weekday == 7:
+                weekday = 0
+            return str(weekday)
+
+        curso_pool = self.pool['curso.curso']
+        ids = curso_pool.search(cr, uid, [])
+        for curso in curso_pool.browse(cr, uid, ids, context):
+            # borrar el diary
+            diary_pool = self.pool['curso.diary']
+            ids = diary_pool.search(cr, uid, [('curso_id', '=', curso.id)])
+            diary_pool.unlink(cr, uid, ids)
+
+            if curso.weekday_1 != False:
+                # agregar unl linea de diary basada en los datos del curso
+                new_rec = {
+                    'curso_id': curso.id,
+                    'weekday': map_date(curso.weekday_1),
+                    'schedule': curso.schedule_1.id,
+                    'seq': 0
+                }
+                diary_pool.create(cr, uid, new_rec, context=context)
+
+            if curso.weekday_2 != False:
+                # agregar unl linea de diary basada en los datos del curso
+                new_rec = {
+                    'curso_id': curso.id,
+                    'weekday': map_date(curso.weekday_2),
+                    'schedule': curso.schedule_2.id,
+                    'seq': 1
+                }
+                diary_pool.create(cr, uid, new_rec, context=context)
+
+            upd_rec = {
+                'schedule_1': False,
+                'schedule_2': False,
+                'weekday_1': False,
+                'weekday_2': False,
+            }
+
+            curso_pool.write(cr, uid, curso.id, upd_rec, context=context)

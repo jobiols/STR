@@ -1,19 +1,5 @@
 -
-  Test module curso
-
-  First I create a product to define a curso
--
-  !record {model: product.product, id: curso_product_1}:
-    name: Curso de maquillaje Social Profesional
-    tot_hs_lecture: 10
-    classes_per_week: 1
-    hs_lecture: 5
-    default_code: SPR
-    list_price: 800
-    type: 'service'
-    agenda: tema uno, tema dos, tema tres
--
-  Then I create a curso based on this product
+  I create a curso based on a product ----------------------------------------------------
 -
   !record {model: curso.curso, id: curso_curso_1}:
     product: curso_product_1
@@ -29,24 +15,105 @@
   !record {model: curso.curso, id: curso_curso_2}:
     product: curso_product_1
 -
-  I check that instance is 2
+  I check that instance is 2 and name is [SPR/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional
 -
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
     - instance == 2
+    - name == '[SPR/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional'
 -
-  I create an schedule
+  I create a diary with tree days adding it to curso_curso_2
 -
-  !record {model: curso.schedule, id: curso_schedule_1}:
-    start_time: 4
-    end_time: 6
+  !record {model: curso.diary, id: curso_diary_1}:
+    curso_id: curso_curso_2
+    weekday: '1'
+    seq: 1
+    schedule: curso_schedule_1
 -
-  I check that name is ok
+  !record {model: curso.diary, id: curso_diary_2}:
+    curso_id: curso_curso_2
+    weekday: '2'
+    seq: 2
+    schedule: curso_schedule_1
 -
-  !assert {model: curso.schedule, id: curso_schedule_1, severity: error, string: 'Name should be 04:00 - 06:00 (2hs)'}:
-    - name == '04:00 - 06:00 (2hs)'
+  !record {model: curso.diary, id: curso_diary_3}:
+    curso_id: curso_curso_2
+    weekday: '3'
+    seq: 3
+    schedule: curso_schedule_1
 -
-  I modify curso 1 to add date and schedule
+  I modify curso 2 to add date_begin
 -
-  !record {model: curso.curso, id: curso_curso_1}:
-    schedule_1: curso_schedule_1
-
+  !record {model: curso.curso, id: curso_curso_2}:
+    date_begin: '2016-01-11'
+-
+  I create a diary with tree days adding it to curso_curso_1
+-
+  !record {model: curso.diary, id: curso_diary_4}:
+    curso_id: curso_curso_1
+    weekday: '4'
+    seq: 1
+    schedule: curso_schedule_1
+-
+  !record {model: curso.diary, id: curso_diary_5}:
+    curso_id: curso_curso_1
+    weekday: '5'
+    seq: 2
+    schedule: curso_schedule_2
+-
+  !record {model: curso.diary, id: curso_diary_6}:
+    curso_id: curso_curso_1
+    weekday: '6'
+    seq: 3
+    schedule: curso_schedule_3
+-
+  I check that name is [SPR/02] Lun. 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional
+-
+  !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
+    - name == '[SPR/02] Lun. 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional'
+-
+  I generate attendance sheet for the curso
+-
+   !python {model: curso.curso}: |
+     self.button_generate_doc_curso(cr, uid, [ref("curso_curso_2")],context=context)
+-
+  I generate markdown site data for the curso
+-
+   !python {model: product.product}: |
+     self.button_generate_doc(cr, uid, [ref("curso_product_1")],context=context)
+-
+  I add a lecture
+-
+  !record {model: curso.lecture, id: curso_lecture_1}:
+    date: '2016-01-11'
+    desc: Primera clase del curso
+    curso_id: curso_curso_2
+    schedule_id: curso_schedule_1
+-
+  I Register a student in the course
+-
+  !record {model: curso.registration, id: curso_registration_1}:
+    curso_id: curso_curso_2
+    partner_id: curso_student_1
+-
+  I make the student sign the course
+-
+   !python {model: curso.registration}: |
+     self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
+-
+  I Begin the course
+-
+   !python {model: curso.registration}: |
+     self.button_reg_confirm(cr, uid, [ref("curso_registration_1")],context=context)
+-
+  I confirm the curso
+-
+   !python {model: curso.registration}: |
+     self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
+-
+   I test wordpress report data -------------------------------------
+-
+   !python {model: product.product}: |
+     data = self._get_wordpress_data(cr, uid, [ref("curso_product_1")],'SPR',context=context)
+     assert data['titulo'] == 'Curso de maquillaje Social Profesional',                 'Failed report data'
+     assert data['codigo'] == 'SPR',                                                    'Failed report data'
+     assert data['description'] == '<p>este es un curso de prueba para el test</p>' ,   'Failed report data'

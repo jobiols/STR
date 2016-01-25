@@ -1,0 +1,19 @@
+-
+  I create a schedule --------------------------------------------------------------------
+-
+  !record {model: curso.schedule, id: curso_schedule_1}:
+    start_time: 12
+    end_time: 15
+-
+  !record {model: curso.schedule, id: curso_schedule_2}:
+    start_time: 11
+    end_time: 16
+-
+  !record {model: curso.schedule, id: curso_schedule_3}:
+    start_time: 4
+    end_time: 6
+-
+  I check that name is ok
+-
+  !assert {model: curso.schedule, id: curso_schedule_3, severity: error, string: 'Name should be 04:00 - 06:00 (2hs)'}:
+    - name == '04:00 - 06:00 (2hs)'

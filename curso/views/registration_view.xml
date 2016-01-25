@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+
+        <act_window
+                id="act_register_curso_partner"
+                name="Subscribe"
+                res_model="curso.registration"
+                src_model="res.partner"
+                view_mode="tree,form,calendar,graph"
+                context="{'search_default_partner_id': [active_id], 'default_partner_id': active_id}"
+                view_type="form"/>
+
+        <menuitem name="Cursos"
+                  id="menu_curso_curso" action="action_curso_view"
+                  parent="base.menu_curso_main"/>
+
+        <!-- Registration tree view  -->
+
+        <record model="ir.ui.view" id="view_curso_registration_tree">
+            <field name="name">curso.registration.tree</field>
+            <field name="model">curso.registration</field>
+            <field name="arch" type="xml">
+                <tree string="Registration">
+                    <field name="curso_begin_day"/>
+                    <field name="curso_begin_date"/>
+                    <field name="partner_id"/>
+                    <field name="curso_id"/>
+                    <field name="user_id" invisible="1"/>
+                    <field name="discount" string="Desc"/>
+                    <field name="state"/>
+                    <!--- ESTADOS -->
+                    <button name="button_reg_sign" string="Seña el curso" states="draft"
+                            type="object"
+                            icon="gtk-apply"/>
+                    <button name="button_reg_confirm" string="Empezó el curso"
+                            states="signed" type="object"
+                            icon="gtk-go-forward"/>
+                    <button name="button_reg_done" string="Terminó el curso"
+                            states="confirm" type="object"
+                            icon="terp-dialog-close"/>
+                    <button name="button_reg_cancel" string="Cancela Inscripción"
+                            states="draft,signed,confirm"
+                            type="object" icon="gtk-cancel"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Registration form view  -->
+
+        <record model="ir.ui.view" id="view_curso_registration_form">
+            <field name="name">curso.registration.form</field>
+            <field name="model">curso.registration</field>
+            <field name="arch" type="xml">
+                <form string="curso Registration" version="7.0">
+                    <header>
+                        <!--- ESTADOS BTN Inscripciones-->
+                        <button name="button_reg_sign" string="Seña el curso"
+                                states="draft" type="object"
+                                icon="gtk-apply"/>
+                        <button name="button_reg_confirm" string="Empezó el curso"
+                                states="signed" type="object"
+                                icon="gtk-go-forward"/>
+                        <button name="button_reg_done" string="Terminó el curso"
+                                states="confirm" type="object"
+                                icon="terp-dialog-close"/>
+                        <button name="button_reg_cancel" string="Cancela Inscripción"
+                                states="draft,signed,confirm"
+                                type="object" icon="gtk-cancel"/>
+                        <button name="button_reg_draft" string="Volver a Interesada"
+                                states="cancel,done" type="object"
+                                class="oe_highlight"/>
+                        <button name="button_gen_quotes" string="Generar cuotas"
+                                states="signed,confirm" type="object"
+                                class="oe_highlight"/>
+
+                        <field name="state" nolabel="1" colspan="2" widget="statusbar"
+                               statusbar_visible="draft,open,done"/>
+                    </header>
+                    <sheet string="Registration">
+                        <label for="curso_id" class="oe_edit_only"/>
+                        <h1>
+                            <field name="curso_id"
+                                   domain="[('state','in',('draft','confirm'))]"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="partner_id"
+                                       attrs="{'readonly':[('state','!=', 'draft')]}"/>
+                                <field name="phone"/>
+                                <field name="email"/>
+                            </group>
+                            <group>
+                                <field name="discount"/>
+                                <field name="disc_desc"/>
+                            </group>
+                            <group groups="base.group_no_one">
+                                <field name="create_date"/>
+                                <field name="date_closed"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="quota_id" colspan="4" nolabel="1"
+                                   groups="curso.group_curso_manager,curso.group_curso_user">
+                                <tree string="lista de cuotas"
+                                      fonts="bold:state=='Pagado'"
+                                      colors="grey:state=='Pendiente';
+                                              green:state=='Pagado';
+                                              red:state=='Abierto';
+                                              black:state=='Borrador'">
+                                    <field name="curso_inst"/>
+                                    <field name="date"/>
+                                    <field name="amount"/>
+                                    <field name="quota"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Registration Calendar view -->
+
+        <record id="view_curso_registration_calendar" model="ir.ui.view">
+            <field name="name">curso.registration.calendar</field>
+            <field name="model">curso.registration</field>
+            <field name="arch" type="xml">
+                <calendar color="curso_id" date_start="create_date"
+                          string="Inscripciones en los curs">
+                    <field name="curso_id"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Registration Graph view -->
+
+        <record model="ir.ui.view" id="view_curso_registration_graph">
+            <field name="name">Registration Graph</field>
+            <field name="model">curso.registration</field>
+            <field name="arch" type="xml">
+                <graph string="Registration" type="bar" orientation="horizontal">
+                    <field name="curso_id"/>
+                    <field name="nb_register" operator="+"/>
+                </graph>
+            </field>
+        </record>
+
+        <!--  Registration Search view-->
+
+        <record model="ir.ui.view" id="view_registration_search">
+            <field name="name">Inscripciones</field>
+            <field name="model">curso.registration</field>
+            <field name="arch" type="xml">
+                <search string="Inscripciones en cursos">
+                    <!--                    <field name="name" string="Participant" filter_domain="['|','|',('name','ilike',self),('email','ilike',self)]"/> -->
+                    <separator/>
+                    <filter icon="terp-check" string="Interesadas" name="draft"
+                            domain="[('state','=','draft')]"
+                            help="Alumnas que estan interesadas en el curso"/>
+                    <filter icon="terp-camera_test" string="Señado"
+                            domain="[('state','=','signed')]"
+                            help="Alumnas que señaron el curso"/>
+                    <filter icon="terp-camera_test" string="Cursando"
+                            domain="[('state','=','confirm')]"
+                            help="Alumnas que están cursando"/>
+                    <filter icon="terp-camera_test" string="Cumplido"
+                            domain="[('state','=','done')]"
+                            help="Alumnas que terminaron el curso"/>
+                    <filter icon="terp-camera_test" string="Cancelado"
+                            domain="[('state','=','cancel')]"
+                            help="Alumnas que cancelaron el curso"/>
+                    <separator/>
+                    <field name="curso_id"/>
+                    <field name="user_id"/>
+                    <field name="partner_id"/>
+                    <group expand="0" string="Agrupar por...">
+                        <filter string="Alumna" icon="terp-partner" domain="[]"
+                                context="{'group_by':'partner_id'}"/>
+                        <filter string="Curso" icon="terp-crm" domain="[]"
+                                context="{'group_by':'curso_id'}"/>
+                        <filter string="Status" icon="terp-stock_effects-object-colorize"
+                                domain="[]"
+                                context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Registrations -->
+
+        <record model="ir.actions.act_window" id="action_registration">
+            <field name="name">Inscripciones</field>
+            <field name="res_model">curso.registration</field>
+            <field name="view_type">form</field>
+            <field name="domain"></field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_registration_search"/>
+        </record>
+
+        <menuitem name="Inscripciones"
+                  id="menu_action_registration" parent="base.menu_curso_main"
+                  action="action_registration"
+                  groups="curso.group_curso_manager,curso.group_curso_user"/>
+
+        <menuitem name="Reporting" id="base.menu_report_association"
+                  parent="curso_main_menu" sequence="20"/>
+
+    </data>
+</openerp>

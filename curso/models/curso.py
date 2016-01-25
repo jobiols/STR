@@ -18,37 +18,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
-
 from datetime import datetime, date, timedelta
 import operator
 
 from openerp.osv import fields, osv
 from openerp import SUPERUSER_ID
 import babel.dates
-
-class curso_type(osv.osv):
-    #    """ curso Type DEPRECATED!! """
-    _name = 'curso.type'
-    _description = __doc__
-    _columns = {
-    }
-
-
-def calculate_invoice_date(curso_date):
-    dd = datetime.strptime(curso_date, '%Y-%m-%d')
-
-    year = datetime.now().year
-    month = datetime.now().month
-    day = int(dd.strftime('%d'))
-    return datetime.strftime(date(year, month, day), '%Y-%m-%d')
-
-
-def calculate_invoice_date1(sourcedate, months):
-    return sourcedate + timedelta(days=30 * (months))
-
-
-def format_instance(default_code, instance):
-    return '{}/{:0>2d}'.format(default_code, instance)
 
 
 class curso_information(osv.osv_memory):
@@ -60,7 +35,7 @@ class curso_information(osv.osv_memory):
     def button_information(self, cr, uid, ids, context=None):
         curso_pool = self.pool.get('curso.curso')
         for curso in curso_pool.browse(cr, uid, context['active_ids'], context):
-            curso.generate_doc_curso()
+            curso.button_generate_doc_curso()
         return True
 
 
@@ -88,8 +63,8 @@ class curso_curso(osv.osv):
                     self._current_ix = ix
                     break
 
-            if self._current_ix == None:
-                raise osv.except_osv(('Error!'), (
+            if self._current_ix is None:
+                raise osv.except_osv('Error!', (
                     u"La fecha de inicio no corresponde con Dia 1 ni con Dia 2"))
 
         def current_weekload(self):
@@ -99,7 +74,7 @@ class curso_curso(osv.osv):
             last_weekday = int(self._weekload[self._current_ix].get('weekday'))
 
             self._current_ix += self._current_ix
-            if (self._current_ix >= len(self._weekload)):
+            if self._current_ix >= len(self._weekload):
                 self._current_ix = 0
 
             current_weekday = int(self._weekload[self._current_ix].get('weekday'))
@@ -107,10 +82,15 @@ class curso_curso(osv.osv):
 
             if (delta == 0) and (self._current_ix == 0):
                 delta = 7
-            if (delta < 0):
-                delta = delta + 7
+            if delta < 0:
+                delta += 7
 
             return delta
+
+    def get_formatted_instance(self, cr, uid, curso_id, context=None):
+        for curso in self.browse(cr, uid, curso_id, context=context):
+            return '{}/{:0>2d}'.format(curso.default_code, curso.instance)
+        return False
 
     def generate_doc_curso_html(self, dict):
         ret = ""
@@ -157,7 +137,7 @@ class curso_curso(osv.osv):
         for alumna in dict['alumnas']:
             ret += "		<tr>"
             if alumna['state'] <> 'confirm':
-                ret += "			<td>" + alumna['name'] + ' (Sin confirmar)'+ "</td>"
+                ret += "			<td>" + alumna['name'] + ' (Sin confirmar)' + "</td>"
             else:
                 ret += "			<td>" + alumna['name'] + "</td>"
 
@@ -185,7 +165,7 @@ class curso_curso(osv.osv):
 
         return ret
 
-    def generate_doc_curso(self, cr, uid, ids, context=None):
+    def button_generate_doc_curso(self, cr, uid, ids, context=None):
         for curso in self.browse(cr, uid, ids, context=context):
             alumnas = []
             reg_pool = self.pool.get('curso.registration')
@@ -209,8 +189,10 @@ class curso_curso(osv.osv):
                                        order="date")
             for lect in lect_pool.browse(cr, uid, records, context=context):
                 d = {
-                    'fecha': datetime.strftime(
-                        datetime.strptime(lect.date, "%Y-%m-%d"), "%d/%m/%y"),
+
+                    # TODO   chequear esto!!!
+
+                    'fecha': datetime.strptime(lect.date, "%Y-%m-%d").strftime("%d/%m/%y"),
                     'desc': lect.desc,
                 }
                 clases.append(d)
@@ -226,13 +208,13 @@ class curso_curso(osv.osv):
                 'content': self.generate_doc_curso_html(data),
             }
 
-        # Borrar el documento si es que existe
-        doc_pool = self.pool.get('document.page')
-        records = doc_pool.search(cr, uid, [('name', '=', curso.name)])
-        doc_pool.unlink(cr, uid, records)
+            # Borrar el documento si es que existe
+            doc_pool = self.pool.get('document.page')
+            records = doc_pool.search(cr, uid, [('name', '=', curso.name)])
+            doc_pool.unlink(cr, uid, records)
 
-        # Generar el documento
-        self.pool.get('document.page').create(cr, uid, new_page, context=context)
+            # Generar el documento
+            self.pool.get('document.page').create(cr, uid, new_page, context=context)
 
         return True
 
@@ -259,34 +241,8 @@ class curso_curso(osv.osv):
             'state': 'draft',
             'registration_ids': False,
         })
-        return super(curso_curso, self).copy(cr, uid, id, default=default,
-                                             context=context)
-
-    def button_draft(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
-
-    def button_cancel(self, cr, uid, ids, context=None):
-        registration = self.pool.get('curso.registration')
-        reg_ids = registration.search(cr, uid, [('curso_id', 'in', ids)], context=context)
-        for curso_reg in registration.browse(cr, uid, reg_ids, context=context):
-            if curso_reg.state != 'cancel':
-                raise osv.except_osv('Error!',
-                                     u"Para cancelar el curso debe cancelar todas \
-                                     las alumnas.")
-        registration.write(cr, uid, reg_ids, {'state': 'cancel'}, context=context)
-        return self.write(cr, uid, ids, {'state': 'cancel'}, context=context)
-
-    def button_done(self, cr, uid, ids, context=None):
-        registration = self.pool.get('curso.registration')
-        reg_ids = registration.search(cr, uid, [('curso_id', 'in', ids)], context=context)
-        for curso_reg in registration.browse(cr, uid, reg_ids, context=context):
-            if not ((curso_reg.state == 'done') or (curso_reg.state == 'cancel') or (
-                        curso_reg.state == 'draft')):
-                raise osv.except_osv(('Error!'), (
-                    u"Para terminar el curso las alumnas deben estar en estado \
-                    cumplido, cancelado o interesada."))
-                #        registration.write(cr, uid, reg_ids, {'state': 'cancel'}, context=context)
-        return self.write(cr, uid, ids, {'state': 'done'}, context=context)
+        return super(curso_curso, self).copy(
+            cr, uid, id, default=default, context=context)
 
     def check_registration_limits(self, cr, uid, ids, context=None):
         for self.curso in self.browse(cr, uid, ids, context=context):
@@ -305,12 +261,12 @@ class curso_curso(osv.osv):
         for curso in self.browse(cr, uid, ids, context=context):
             available_seats = curso.register_avail
             if available_seats and no_of_registration > available_seats:
-                raise osv.except_osv(('Cuidado!'),
-                                     (u"Solo hay %d vacantes disponnibles!") % (
-                                         available_seats))
+                raise osv.except_osv('Cuidado!',
+                                     u"Solo hay %d vacantes disponnibles!" %
+                                     available_seats)
             elif available_seats == 0:
-                raise osv.except_osv(('Cuidado!'),
-                                     (u"No Hay mas vacantes en este curso!"))
+                raise osv.except_osv('Cuidado!',
+                                     u"No Hay mas vacantes en este curso!")
 
     def confirm_curso(self, cr, uid, ids, context=None):
         register_pool = self.pool.get('curso.registration')
@@ -323,23 +279,97 @@ class curso_curso(osv.osv):
         # register_pool.mail_user_confirm(cr, uid, reg_ids)
         return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
 
-    def button_confirm(self, cr, uid, ids, context=None):
-        """ Confirmar curso and send confirmation email to all register peoples
+    # Estados de los cursos
+    ###############################################################################
+
+    def button_curso_confirm(self, cr, uid, ids, context=None):
+        """ Confirmar curso chequeando antes que tenga fecha de inicio y que coincida con la agenda
         """
         # Verificar si tiene fecha de inicio.
         for curso in self.browse(cr, uid, ids, context=context):
+            # chequear si tiene fecha de inicio
             if not (curso.date_begin):
                 raise osv.except_osv(('Error!'), (
                     u"No se puede confirmar el curso porque no tiene fecha de inicio."))
 
-            if not ((curso.schedule_1) and (curso.weekday_1)):
-                raise osv.except_osv('Error!', (
-                    u"No se puede confirmar el curso porque no horario y día asignados."))
+            # chequear si tiene agenda
+            diary_obj = self.pool.get('curso.diary')
+            diary_ids = diary_obj.search(cr, uid, [('curso_id', '=', curso.id)], context=context)
+            if not diary_ids:
+                raise osv.except_osv(
+                    'Error!',
+                    u"No se puede confirmar el curso porque no tiene agenda creada.")
 
-        if isinstance(ids, (int, long)):
-            ids = [ids]
-        self.check_registration_limits(cr, uid, ids, context=context)
-        return self.confirm_curso(cr, uid, ids, context=context)
+            # chequear si el dia de inicio corresponde a la agenda
+            for diary_line in diary_obj.browse(cr, uid, diary_ids, context=context):
+                if not diary_line.check_weekday(curso.date_begin):
+                    raise osv.except_osv(
+                        'Error!',
+                        u'No se puede confirmar el curso porque la fecha de inicio (%s) cae en un dia \
+                        que no es el primer dia de la agenda (%s).' % (
+                            curso.date_begin, diary_line.weekday_name))
+
+                if isinstance(ids, (int, long)):
+                    ids = [ids]
+                self.check_registration_limits(cr, uid, ids, context=context)
+                return self.confirm_curso(cr, uid, ids, context=context)
+
+    def button_curso_done(self, cr, uid, ids, context=None):
+        """
+        Terminar el curso
+        """
+        # si existe al menos una en estado signed no se puede terminar el curso
+        # si existe al menos una en estado confirm no se puede terminar el curso
+        reg_obj = self.pool.get('curso.registration')
+        reg_ids = reg_obj.search(cr, uid,
+                                 [('curso_id', 'in', ids),
+                                  '|',
+                                  ('state', '=', 'signed'),
+                                  ('state', '=', 'confirm')
+                                  ], context=context)
+        if reg_ids:
+            raise osv.except_osv(
+                'Error!',
+                u"Para terminar el curso las alumnas deben estar en estado \
+                cumplido, o cancelado.")
+
+        # si existen interesadas hay que proponer moverlas a otro curso
+        for curso_reg in reg_obj.browse(cr, uid, reg_ids, context=context):
+            if not (
+                            (curso_reg.state == 'done') or
+                            (curso_reg.state == 'cancel') or
+                        (curso_reg.state == 'draft')
+            ):
+                raise osv.except_osv(
+                    'Error!',
+                    u"Para terminar el curso las alumnas deben estar en estado cumplido, \
+                    cancelado o interesada. Usá el menú Mover / Copiar para pasarlas a otro \
+                    curso")
+
+        return self.write(cr, uid, ids, {'state': 'done'}, context=context)
+
+    def button_curso_draft(self, cr, uid, ids, context=None):
+        return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
+
+    def button_curso_cancel(self, cr, uid, ids, context=None):
+        """
+        Canelar el curso
+        """
+        # si existe al menos una en estado signed no se puede cancelar el curso
+        # si existe al menos una en estado confirm no se puede cancelar el curso
+        # si existe al menos una en estado cumplido no se puede cancelar el curso
+        # si existen interesadas hay que proponer moverlas a otro curso
+
+        reg_obj = self.pool.get('curso.registration')
+        reg_ids = reg_obj.search(cr, uid, [('curso_id', 'in', ids)], context=context)
+        for curso_reg in reg_obj.browse(cr, uid, reg_ids, context=context):
+            if not (curso_reg.state == 'cancel'):
+                raise osv.except_osv(
+                    'Error!',
+                    u'Para cancelar el curso todas las alumnas deben estar en estado Cancelado. \
+                      Usá el menú Mover / Copiar para pasarlas a otro curso')
+
+        return self.write(cr, uid, ids, {'state': 'cancel'}, context=context)
 
     def _get_register(self, cr, uid, ids, fields, args, context=None):
         """ Get Confirm or uncofirm register value.
@@ -436,12 +466,13 @@ class curso_curso(osv.osv):
         lectures_pool = self.pool.get('curso.lecture')
         for reg in self.browse(cr, uid, ids, context=context):
             curso_id = reg.id
-        for data in lecture_data:
-            lectures_pool.create(cr, uid, {
-                'date': data.get('date'),
-                'schedule_id': data.get('schedule'),
-                'curso_id': curso_id
-            })
+
+            for data in lecture_data:
+                lectures_pool.create(cr, uid, {
+                    'date': data.get('date'),
+                    'schedule_id': data.get('schedule'),
+                    'curso_id': curso_id
+                })
 
     def generate_lectures(self, cr, uid, ids, context=None):
         """ Generar las clases que correspondan a este curso
@@ -456,32 +487,31 @@ class curso_curso(osv.osv):
             weekday_2 = reg.weekday_2
             default_code = reg.default_code
 
-        if (operator.mod(tot_hs_lecture, hs_lecture) != 0):
-            raise osv.except_osv(('Error!'), (
-                u"la cantidad de horas catedra no es divisible por las horas de clase!."))
+            if (operator.mod(tot_hs_lecture, hs_lecture) != 0):
+                raise osv.except_osv(('Error!'), (
+                    u"la cantidad de horas catedra no es divisible por las horas de clase!."))
 
-        tot_lectures = tot_hs_lecture // hs_lecture
-        weekload = []
+            tot_lectures = tot_hs_lecture // hs_lecture
+            weekload = []
 
-        if (schedule_1 != False) and (weekday_1 != False):
-            weekload = [
-                {'schedule': schedule_1,
-                 'weekday': weekday_1},
-            ]
+            if (schedule_1 != False) and (weekday_1 != False):
+                weekload = [
+                    {'schedule': schedule_1,
+                     'weekday': weekday_1},
+                ]
 
-        if (schedule_2 != False) and (weekday_2 != False):
-            weekload.append(
-                {'schedule': schedule_2,
-                 'weekday': weekday_2}
-            )
+            if (schedule_2 != False) and (weekday_2 != False):
+                weekload.append(
+                    {'schedule': schedule_2,
+                     'weekday': weekday_2}
+                )
 
-        if (weekload == []):
-            raise osv.except_osv(('Error!'), (u"No se definieron horarios!."))
+            if (weekload == []):
+                raise osv.except_osv(('Error!'), (u"No se definieron horarios!."))
 
-        lecture_data = self.compute_lecture_data(cr, uid, ids, date_begin, weekload,
-                                                 tot_lectures, context=None)
-        self.create_lectures(cr, uid, ids, lecture_data, default_code, context=None)
-        return 0
+            lecture_data = self.compute_lecture_data(cr, uid, ids, date_begin, weekload,
+                                                     tot_lectures, context=None)
+            self.create_lectures(cr, uid, ids, lecture_data, default_code, context=None)
 
     def _get_name(self, cr, uid, ids, fields, args, context=None):
         res = {}
@@ -491,25 +521,29 @@ class curso_curso(osv.osv):
             except:
                 weekday = day_n = month_n = year_n = '?'
             else:
-                weekday = babel.dates.format_datetime(init, format='EEE', locale=context['lang'])
+                lang = self.pool.get('res.users').browse(cr, uid, uid).lang
+                lang = 'es_AR'
+                weekday = babel.dates.format_datetime(init, format='EEE', locale=lang)
                 day_n = init.strftime('%d')
                 month_n = init.strftime('%m')
                 year_n = init.strftime('%y')
-            try:
-                ss = curso.schedule_1.start_time
-                ee = curso.schedule_1.end_time
+
+            pool_diary = self.pool['curso.diary']
+            ids = pool_diary.search(cr, uid, [('curso_id', '=', curso.id)], context=context)
+            hhs = mms = hhe = mme = 0
+            for diary_line in pool_diary.browse(cr, uid, ids, context=context):
+                ss = diary_line.schedule.start_time
+                ee = diary_line.schedule.end_time
                 mms = ss - int(ss)
                 hhs = int(ss - mms)
                 mms = int(mms * 60)
                 mme = ee - int(ee)
                 hhe = int(ee - mme)
                 mme = int(mme * 60)
-            except:
-                hhs = mms = hhe = mme = 0
 
             # https://docs.python.org/2/library/datetime.html#datetime-objects
             name = u'[{}] {} {}/{}/{} ({:0>2d}:{:0>2d} {:0>2d}:{:0>2d}) - {}'.format(
-                format_instance(curso.product.default_code, curso.instance),
+                curso.curso_instance,
                 # Codigo de producto, Nro de instancia
                 weekday.capitalize(),  # dia de la semana en letras
                 day_n, month_n, year_n,  # dia , mes, anio en numeros
@@ -518,15 +552,36 @@ class curso_curso(osv.osv):
             res[curso.id] = name
         return res
 
+    def _check_change_begin_date(self, cr, uid, ids, context=None):
+        for curso in self.browse(cr, uid, ids, context=context):
+            diary_pool = self.pool['curso.diary']
+            ids = diary_pool.search(cr, uid, [('curso_id', '=', curso.id)], context=context)
+            for diary_line in diary_pool.browse(cr, uid, ids, context):
+                diary_weekday = diary_line.weekday
+                weekday = datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%w')
+                if weekday != diary_weekday:
+                    raise osv.except_osv('Error!', (
+                        u"La fecha de inicio no corresponde con el primer dia de la agenda"))
+                return True
+        return True
+
+    def onchange_diary_ids(self, cr, uid, ids, context=None):
+        self._check_change_begin_date(cr, uid, ids, context=context)
+        return True
+
+    def onchange_date_begin(self, cr, uid, ids, context=None):
+        self._check_change_begin_date(cr, uid, ids, context=context)
+        return self.pool
+
     def onchange_curso_product(self, cr, uid, ids, product, context=None):
         values = {}
         if product:
             type_info = self.pool.get('product.product').browse(cr, uid, product, context)
 
             r_pool = self.pool.get('curso.curso')
-            records = r_pool.search(cr, uid,
-                                    [('default_code', '=', type_info.default_code)],
-                                    context=context)
+            records = r_pool.search(
+                cr, uid, [('default_code', '=', type_info.default_code)],
+                context=context)
 
             instance = 0
             for item in r_pool.browse(cr, uid, records, context):
@@ -554,7 +609,7 @@ class curso_curso(osv.osv):
     def _get_instance(self, cr, uid, ids, fields, args, context=None):
         res = {}
         for curso in self.browse(cr, uid, ids, context=context):
-            res[curso.id] = format_instance(curso.default_code, curso.instance)
+            res[curso.id] = self.get_formatted_instance(cr, uid, curso.id)
         return res
 
     def _get_next(self, cr, uid, ids, fields, args, context=None):
@@ -583,8 +638,8 @@ class curso_curso(osv.osv):
                                    states={'draft': [('readonly', False)]}),
         'register_max': fields.integer('Vacantes max',
                                        help=u"La cantidd máxima de vacantes del curso. \
-                                       Si la cantidad de inscripciones es mayor, no se \
-                                       puede arrancar el curso. \
+                                       Si la cantidad de inscripciones es mayor, \
+                                       no se puede arrancar el curso. \
                                        (poner 0 para ignorar la regla)",
                                        readonly=True,
                                        states={'draft': [('readonly', False)]}),
@@ -594,18 +649,25 @@ class curso_curso(osv.osv):
                                        puede arrancar el curso. \
                                        (poner 0 para ignorar la regla)",
                                        states={'draft': [('readonly', False)]}),
-        'registration_ids': fields.one2many('curso.registration', 'curso_id',
-                                            'Inscripciones',
+
+        'registration_ids': fields.one2many('curso.registration', 'curso_id', 'Inscripciones',
                                             readonly=False,
                                             states={'done': [('readonly', True)],
                                                     'cancel': [('readonly', True)]}),
         'lecture_ids': fields.one2many('curso.lecture', 'curso_id', 'Clases',
                                        readonly=False),
+
+        'diary_ids': fields.one2many('curso.diary', 'curso_id', 'Agenda',
+                                     readonly=True,
+                                     states={'draft': [('readonly', False)]}),
+
         'date_begin': fields.date('Inicio', required=False,
                                   help=u"La fecha en la que inicia el curso, se puede \
                                   dejar en blanco si no está definida todavia pero se \
                                   debe ingresar para confirmar el curso",
                                   readonly=True, states={'draft': [('readonly', False)]}),
+
+        ### borrar esto
         'schedule_1': fields.many2one('curso.schedule', 'Horario 1',
                                       readonly=True,
                                       states={'draft': [('readonly', False)]}),
@@ -618,30 +680,33 @@ class curso_curso(osv.osv):
         'weekday_2': fields.selection(_get_day, 'Dia 2',
                                       readonly=True,
                                       states={'draft': [('readonly', False)]}),
+        ### borrar esto
+
         'state': fields.selection([
             ('draft', 'Borrador'),
-            ('cancel', 'Cancelado'),
             ('confirm', 'Cursando'),
-            ('done', 'Terminado')],
+            ('done', 'Cumplido'),
+            ('cancel', 'Cancelado')
+        ],
             'Status', readonly=True, required=True,
             track_visibility='onchange',
-            help=u'Cuando se crea el curso el estado es \'Borrador\'. Si se confirma el \
-            curso el estado es \'Cursando\'. Si el curso termina el estado \
-            es \'Terminado\'. Si el curso es cancelado el estado pasa a \'Cancelado\'.'),
+            help=u"Cuando se crea el curso el estado es 'Borrador'. Si se confirma el \
+                curso el estado es 'Cursando'. Si el curso termina el estado \
+                es 'Cumplido'. Si el curso es cancelado el estado pasa a 'Cancelado'."),
         'email_registration_id': fields.many2one('email.template',
                                                  'Confirmación de inscripción',
                                                  help=u'Si definís una plantilla, la \
-                                                 misma se enviará cada vez que se \
-                                                 confirme una inscripción a este curso.'),
+                                                     misma se enviará cada vez que se \
+                                                     confirme una inscripción a este curso.'),
         'email_confirmation_id': fields.many2one('email.template', 'Confirmación curso',
                                                  help=u"Si definis una plantilla de mail, \
-                                                 cada participante recibirá este mail \
-                                                 anunciando la confirmación del curso."),
+                                                     cada participante recibirá este mail \
+                                                     anunciando la confirmación del curso."),
         'reply_to': fields.char('Mail de respuesta', size=64, readonly=False,
                                 states={'done': [('readonly', True)]},
                                 help=u"La dirección de mail del que organiza los cursos, \
-                                cuando el alumno responde el mail que se le envia en \
-                                automático responderá a esta dirección."),
+                                    cuando el alumno responde el mail que se le envia en \
+                                    automático responderá a esta dirección."),
         'main_speaker_id': fields.many2one('res.partner', 'Profesora', readonly=False,
                                            states={'done': [('readonly', True)]},
                                            help=u"La profesora que va a dar el curso."),
@@ -674,18 +739,18 @@ class curso_curso(osv.osv):
                                        help=u"La cantidad de clases que tiene el curso"),
         'register_current': fields.function(_get_register, string='Alumnas',
                                             help=u"La cantidad de alumnas que \
-                                            confirmaron pagando (al menos una seña)",
+                                                confirmaron pagando (al menos una seña)",
                                             multi='register_numbers'),
         'register_avail': fields.function(_get_register, string='Vacantes',
                                           multi='register_numbers', type='integer'),
         'register_prospect': fields.function(_get_register, string='Interesadas',
                                              help=u"La cantidad de alumnas interesadas \
-                                             que todavía no concretaron",
+                                                 que todavía no concretaron",
                                              multi='register_numbers'),
         'register_attended': fields.function(_get_register, string='Egresadas',
                                              multi='register_numbers',
                                              help=u"Cantidad de alumnas que termino el \
-                                             curso con exito."),
+                                                 curso con exito."),
 
         # Related fields
         'tot_hs_lecture': fields.related('product', 'tot_hs_lecture', type='float',
@@ -699,9 +764,6 @@ class curso_curso(osv.osv):
         'no_quotes': fields.related('product', 'no_quotes', type='integer',
                                     string='#cuotas', readonly=True),
 
-        # Deprecated fields
-        'type': fields.many2one('curso.type', 'Type of curso', readonly=False,
-                                states={'done': [('readonly', True)]}),
     }
     _defaults = {
         'state': 'draft',
@@ -711,246 +773,37 @@ class curso_curso(osv.osv):
         'user_id': lambda obj, cr, uid, context: uid,
     }
 
-    def subscribe_to_curso(self, cr, uid, ids, context=None):
-        register_pool = self.pool.get('curso.registration')
-        user_pool = self.pool.get('res.users')
-        num_of_seats = int(context.get('ticket', 1))
-        self.check_registration_limits_before(cr, uid, ids, num_of_seats, context=context)
-        user = user_pool.browse(cr, uid, uid, context=context)
-        curr_reg_ids = register_pool.search(cr, uid, [('user_id', '=', user.id),
-                                                      ('curso_id', '=', ids[0])])
-        # the subscription is done with SUPERUSER_ID because in case we share the
-        # kanban view, we want anyone to be able to subscribe
-        if not curr_reg_ids:
-            curr_reg_ids = [register_pool.create(cr, SUPERUSER_ID,
-                                                 {'curso_id': ids[0], 'email': user.email,
-                                                  'name': user.name,
-                                                  'user_id': user.id,
-                                                  'nb_register': num_of_seats})]
-        else:
-            register_pool.write(cr, uid, curr_reg_ids, {'nb_register': num_of_seats},
-                                context=context)
-        return register_pool.confirm_registration(cr, SUPERUSER_ID, curr_reg_ids,
-                                                  context=context)
 
-    def unsubscribe_to_curso(self, cr, uid, ids, context=None):
-        register_pool = self.pool.get('curso.registration')
-        # the unsubscription is done with SUPERUSER_ID because in case we share the
-        # kanban view, we want anyone to be able to unsubscribe
-        curr_reg_ids = register_pool.search(cr, SUPERUSER_ID, [('user_id', '=', uid),
-                                                               ('curso_id', '=', ids[0])])
-        return register_pool.button_reg_cancel(cr, SUPERUSER_ID, curr_reg_ids,
-                                               context=context)
+def subscribe_to_curso(self, cr, uid, ids, context=None):
+    register_pool = self.pool.get('curso.registration')
+    user_pool = self.pool.get('res.users')
+    num_of_seats = int(context.get('ticket', 1))
+    self.check_registration_limits_before(cr, uid, ids, num_of_seats, context=context)
+    user = user_pool.browse(cr, uid, uid, context=context)
+    curr_reg_ids = register_pool.search(cr, uid, [('user_id', '=', user.id),
+                                                  ('curso_id', '=', ids[0])])
+    # the subscription is done with SUPERUSER_ID because in case we share the
+    # kanban view, we want anyone to be able to subscribe
+    if not curr_reg_ids:
+        curr_reg_ids = [register_pool.create(cr, SUPERUSER_ID,
+                                             {'curso_id': ids[0], 'email': user.email,
+                                              'name': user.name,
+                                              'user_id': user.id,
+                                              'nb_register': num_of_seats})]
+    else:
+        register_pool.write(cr, uid, curr_reg_ids, {'nb_register': num_of_seats},
+                            context=context)
+    return register_pool.confirm_registration(cr, SUPERUSER_ID, curr_reg_ids,
+                                              context=context)
 
 
-class curso_registration(osv.osv):
-    def _get_weekday(self, cr, uid, ids, fields, args, context=None):
-        res = {}
-        for registration in self.browse(cr, uid, ids, context=context):
-            try:
-                init = datetime.strptime(registration.curso_begin_date, "%Y-%m-%d")
-            except:
-                weekday = '???'
-            else:
-                weekday = babel.dates.format_datetime(init, format='EEE', locale=context['lang'])
-            res[registration.id] = weekday.capitalize()
-        return res
-
-    _name = 'curso.registration'
-    _description = __doc__
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
-
-    # curso registration model
-    _columns = {
-        'id': fields.integer('ID'),
-        'quota_id': fields.one2many('curso.quota', 'registration_id', 'Cuotas'),
-        'curso_id': fields.many2one('curso.curso', 'Curso', required=True, readonly=True,
-                                    states={'draft': [('readonly', False)]}),
-        'partner_id': fields.many2one('res.partner', 'Alumna', required=True,
-                                      states={'done': [('readonly', True)]}),
-        'create_date': fields.date(u'Creación', readonly=True),
-        'date_closed': fields.date('Fecha de cierre', readonly=True),
-        'date_open': fields.date(u'Fecha de inscripción', readonly=True),
-        'reply_to': fields.related('curso_id', 'reply_to', string='Reply-to Email',
-                                   type='char', size=128,
-                                   readonly=True, ),
-        'log_ids': fields.one2many('mail.message', 'res_id', 'Logs',
-                                   domain=[('model', '=', _name)]),
-        'curso_begin_date': fields.related('curso_id', 'date_begin', type='date',
-                                           string="Inicio", readonly=True),
-        'curso_begin_day': fields.function(_get_weekday, string='Dia', method=True,
-                                           store=False, type='char'),
-        'user_id': fields.many2one('res.users', 'User',
-                                   states={'done': [('readonly', True)]}),
-        'company_id': fields.related('curso_id', 'company_id', type='many2one',
-                                     relation='res.company',
-                                     string='Company', store=True, readonly=True,
-                                     states={'draft': [('readonly', False)]}),
-        'state': fields.selection([('draft', u'Interesada'),
-                                   ('cancel', u'Cancelado'),
-                                   ('confirm', u'Cursando'),
-                                   ('done', u'Cumplido'),
-                                   ('signed', u'Señado')], 'Estado',
-                                  track_visibility='onchange',
-                                  size=16, readonly=True),
-        'email': fields.related('partner_id', 'email', string='Email', type='char',
-                                size=128, readonly=True),
-        'phone': fields.related('partner_id', 'mobile', string='Telefono', type='char',
-                                size=128, readonly=True),
-        'discount': fields.float('Descuento (%)', digits=(2, 2)),
-        'disc_desc': fields.char('Razon del descuento', size=128, select=True),
-
-        # Related fields
-        'curso_state': fields.related('curso_id', 'state', type='char',
-                                      string='Estado del curso', readonly=True),
-
-        # Deprecated fields
-        'nb_register': fields.integer('Number of Participants', required=True,
-                                      readonly=True,
-                                      states={'draft': [('readonly', False)]}),
-    }
-    _defaults = {
-        'nb_register': 1,
-        'state': 'draft',
-    }
-    _order = 'create_date desc'
-
-    def confirm_registration(self, cr, uid, ids, context=None):
-        for reg in self.browse(cr, uid, ids, context=context or {}):
-            self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
-                                                      body=(
-                                                               u'Nuevo inicio de curso: %s.') % (
-                                                               reg.partner_id.name or '',),
-                                                      subtype="curso.mt_curso_registration",
-                                                      context=context)
-        return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
-
-    def sign_registration(self, cr, uid, ids, context=None):
-        for reg in self.browse(cr, uid, ids, context=context or {}):
-            self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
-                                                      body=(
-                                                               u'Nueva seña para el curso: %s.') % (
-                                                               reg.partner_id.name or '',),
-                                                      subtype="curso.mt_curso_registration",
-                                                      context=context)
-        return self.write(cr, uid, ids, {'state': 'signed'}, context=context)
-
-    def button_reg_sign(self, cr, uid, ids, context=None):
-        """ Boton senio el curso
-        """
-        curso_obj = self.pool.get('curso.curso')
-        for register in self.browse(cr, uid, ids, context=context):
-            curso_id = register.curso_id.id
-            no_of_registration = register.nb_register
-            curso_obj.check_registration_limits_before(cr, uid, [curso_id],
-                                                       no_of_registration,
-                                                       context=context)
-        res = self.sign_registration(cr, uid, ids, context=context)
-
-        self.button_gen_quotes(cr, uid, ids, context=None)
-        #        self.mail_user(cr, uid, ids, context=context)
-        return res
-
-    def button_reg_confirm(self, cr, uid, ids, context=None):
-        """ Boton empezo el curso
-        """
-        for reg in self.browse(cr, uid, ids, context=context or {}):
-            self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
-                                                      body=(
-                                                               u'Nueva inscripción en el curso: %s.') % (
-                                                               reg.partner_id.name or '',),
-                                                      subtype="curso.mt_curso_registration",
-                                                      context=context)
-        return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
-
-    def button_reg_draft(self, cr, uid, ids, context=None):
-        """ Boton volver a interesada
-        """
-        for reg in self.browse(cr, uid, ids, context=context or {}):
-            self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
-                                                      body=(
-                                                               u'Vuelve a interesarse: %s.') % (
-                                                               reg.partner_id.name or '',),
-                                                      subtype="curso.mt_curso_registration",
-                                                      context=context)
-        return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
-
-    def button_reg_done(self, cr, uid, ids, context=None):
-        """ Boton Termino el curso
-        """
-        if context is None:
-            context = {}
-        today = fields.datetime.now()
-        for registration in self.browse(cr, uid, ids, context=context):
-            register_pool = self.pool.get('curso.quota')
-            records = register_pool.search(cr, uid,
-                                           [('registration_id', '=', registration.id),
-                                            ('list_price', '=', 0)])
-            if len(records) != 0:
-                raise osv.except_osv(('Error!'), (
-                    u"No puede terminar el curso porque tiene cuotas pendientes. \
-                    Se debería cancelar, o cobrarle las cuotas"))
-
-            if today >= registration.curso_id.date_begin:
-                values = {'state': 'done', 'date_closed': today}
-                self.write(cr, uid, ids, values)
-            else:
-                raise osv.except_osv(('Error!'),
-                                     (u"Hay que esperar al dia de inicio del curso para \
-                                     decir que lo terminó."))
-
-        return True
-
-    def button_reg_cancel(self, cr, uid, ids, context=None, *args):
-        # Eliminar todas las cuotas pendientes para no seguir cobrandole
-        for registration in self.browse(cr, uid, ids, context=context):
-            id = registration.id
-            register_pool = self.pool.get('curso.quota')
-            records = register_pool.search(cr, uid, [('invoice_id', '=', None),
-                                                     ('registration_id', '=', id)])
-        register_pool.unlink(cr, uid, records, context=None)
-        return self.write(cr, uid, ids, {'state': 'cancel'})
-
-    def button_gen_quotes(self, cr, uid, ids, context=None, *args):
-        for registration in self.browse(cr, uid, ids, context=context):
-            registration_id = registration.id
-            date = datetime.strptime(registration.curso_begin_date, '%Y-%m-%d')
-
-        for quota in range(1, registration.curso_id.product.no_quotes + 1):
-            quota_data = {
-                'registration_id': registration_id,
-                'date': calculate_invoice_date1(date, quota - 1),
-                'quota': quota,
-                'list_price': registration.curso_id.product.list_price
-            }
-            self.pool.get('curso.quota').create(cr, uid, quota_data, context=context)
-        return True
-
-    def mail_user(self, cr, uid, ids, context=None):
-        """
-        Send email to user with email_template when registration is done
-        """
-        for registration in self.browse(cr, uid, ids, context=context):
-            if registration.curso_id.state == 'confirm' and registration.curso_id.email_confirmation_id.id:
-                self.mail_user_confirm(cr, uid, ids, context=context)
-            else:
-                template_id = registration.curso_id.email_registration_id.id
-                if template_id:
-                    mail_message = self.pool.get('email.template').send_mail(cr, uid,
-                                                                             template_id,
-                                                                             registration.id)
-        return True
-
-    def mail_user_confirm(self, cr, uid, ids, context=None):
-        """
-        Send email to user when the curso is confirmed
-        """
-        for registration in self.browse(cr, uid, ids, context=context):
-            template_id = registration.curso_id.email_confirmation_id.id
-            if template_id:
-                mail_message = self.pool.get('email.template').send_mail(cr, uid,
-                                                                         template_id,
-                                                                         registration.id)
-        return True
+def unsubscribe_to_curso(self, cr, uid, ids, context=None):
+    register_pool = self.pool.get('curso.registration')
+    # the unsubscription is done with SUPERUSER_ID because in case we share the
+    # kanban view, we want anyone to be able to unsubscribe
+    curr_reg_ids = register_pool.search(cr, SUPERUSER_ID, [('user_id', '=', uid),
+                                                           ('curso_id', '=', ids[0])])
+    return register_pool.button_reg_cancel(cr, SUPERUSER_ID, curr_reg_ids,
+                                           context=context)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

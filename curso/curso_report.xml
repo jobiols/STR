@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report
+                id="custom_report_curso"
+                model="curso.curso"
+                string="Reporte demo para curso"
+                report_type="qweb-html"
+                attachment_use="False"
+                file="curso.report_curso"
+                name="curso.report_curso"
+                />
+    </data>
+</openerp>

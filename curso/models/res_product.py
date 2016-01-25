@@ -1,86 +1,105 @@
 # -*- coding: utf-8 -*-
-#################################################################################
+##############################################################################
+#
+#    OpenERP, Open Source Management Solution.
+#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>...
+#
+##############################################################################
 
 from datetime import datetime
 
 from openerp.osv import fields, osv
 import markdown
 
+
 def generate_html(dict):
-    ret = ""
     for data in dict:
-        ret += u"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
-        ret += u"	<tbody>"
-        ret += u"		<tr>"
-        ret += u"			<td>"
-        ret += u"			<h2>" + data['titulo'] + "</h2>"
-        ret += u"			</td>"
-        ret += u"			<td>"
-        ret += u"			<h5><sub>&nbsp;cod " + data['codigo'] + "</sub></h5>"
-        ret += u"			</td>"
-        ret += u"		</tr>"
-        ret += u"   </tbody>"
-        ret += u"</table>"
+        ret = u"""
+        <table border='0' cellpadding='0' cellspacing='0'>
+            <tbody>
+                <tr>
+                    <td><h2>%s</h2>
+                    </td>
+                    <td><h5><sub>&nbsp;cod %s</sub></h5>
+                    </td>
+                </tr>
+           </tbody>
+        </table>
+        %s
+        <p>Duración %s semanas, (%s hs)<br/> Modalidad %s</p>
 
-        # viene del markdown ya con los <p>
-        ret += data['acerca_de']
+        <table  border='0' cellpadding='0' cellspacing='0' style='width: 500px;'>
+        <tbody>
+            <tr>
+                <td><strong>Inicio</strong></td>
+                <td><strong>Cód</strong></td>
+                <td><strong>Días de cursada</strong></td>
+                <td><strong>Horario</strong></td>
+            </tr>
 
-        ret += u"<p>Duración " + data['duracion_semanas'] + u" semanas, (" + data[
-            'horas_catedra'] + u"hs)<br/>"
-        ret += u"Modalidad " + data['modalidad'] + "</p>"
+            """ % (data['titulo'], data['codigo'], data['description'], data['duracion_semanas'], data['horas_catedra'],
+                   data['modalidad'])
 
-        ret += "<table  border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 500px;\">"
-        ret += "    <tbody>"
-        ret += "        <tr>"
-        ret += u"            <td><strong>Inicio</strong></td>"
-        ret += u"            <td><strong>Cód</strong></td>"
-        ret += u"            <td><strong>Días de cursada</strong></td>"
-        ret += u"            <td><strong>Horario</strong></td>"
-        ret += "        </tr>"
-        for line in data['cursos']:
-            ret += "        <tr bgcolor=\"#E0ECF8\">"
-            ret += "            <td><span>" + line['inicio'] + "</span></td>"
-            ret += "            <td><span>" + line['instancia'] + "</span></td>"
-            ret += "            <td><span>" + line['dias'] + "</span></td>"
-            ret += "            <td><span>" + line['horario'] + "</span></td>"
-            ret += "        </tr>"
+        for line in data['grid']:
+            ret += "        <tr bgcolor='#E0ECF8'> "
+            ret += "            <td><span>" + line['inicio'] + "</span></td> "
+            ret += "            <td><span>" + line['instancia'] + "</span></td> "
+            ret += "            <td><span>" + line['dias'] + "</span></td> "
+            ret += "            <td><span>" + line['horario'] + "</span></td> "
+            ret += "        </tr> "
 
-        ret += "    </tbody>"
-        ret += "</table>"
-        ret += "<br>"
+        ret += u"""
+
+        </tbody>
+        </table>
+
+        <br>
+
+        """
         if data['temario']:
             ret += "<h2>Temario</h2>"
             ret += data['temario']
 
-    ret += "<hr/>"
+        ret += "<hr/>"
 
-    ret += "<h3 style=\"text-align: left;\">Aranceles</h3>"
-    for data in dict:
-        if data['cuotas'] == '1':
-            ss = data['cuotas'] + " cuota de $" + data['valor']
-        else:
-            ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
+        ret += '<h3 style="text-align: left;">Aranceles</h3>'
+        for data in dict:
+            if data['cuotas'] == '1':
+                ss = data['cuotas'] + " cuota de $" + data['valor']
+            else:
+                ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
 
-        ret += u"<p><strong>Matrícula: " + data['matricula'] + "</strong><br />"
-        ret += "<strong>Pagos: " + ss + "</strong></p>"
+            ret += u'<p><strong>Matrícula: ' + data['matricula'] + '</strong><br />'
+            ret += '<strong>Pagos: ' + ss + '</strong></p>'
 
-
-    ret += "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\">"
-    ret += "	<tbody>"
-    ret += "		<tr>"
-    ret += "			<td>"
-    ret += "			<h3 style=\"text-align: left;\">Se entrega certificado</h3>"
-    ret += "			<p style=\"text-align: center;\"><img alt=\"\" src=\"https://d3njjcbhbojbot.cloudfront.net/web/images/promos/cdp_cert_logo.png\" style=\"width: 110px; height: 110px;\" /></p>"
-    ret += "			<p style=\"text-align: center;\">Materiales inclu&iacute;dos en el costo del curso.</p>"
-    ret += "			</td>"
-    ret += "		</tr>"
-    ret += "</tbody>"
-    ret += "</table>"
-    ret += "<br>"
-
-
-
-    return ret
+        ret += """
+        <table border="0" cellpadding="1" cellspacing="1" style="width: 100%;">
+            <tbody>
+                <tr>
+                    <td>
+                    <h3 style="text-align: left;">Se entrega certificado</h3>
+                    <p style="text-align: center;"><img alt="" src="https://d3njjcbhbojbot.cloudfront.net/web/images/promos/cdp_cert_logo.png" style="width: 110px; height: 110px;" /></p>
+                    <p style="text-align: center;">Materiales inclu&iacute;dos en el costo del curso.</p>
+                    </td>
+                </tr>
+        </tbody>
+        </table>
+        <br>
+        """
+        return ret
 
 
 class product_product(osv.osv):
@@ -130,7 +149,7 @@ class product_product(osv.osv):
     #    _sql_constraints = [('default_code_unique', 'unique (default_code)', 'ya hay un producto con esta referencia.')]
 
     def d2day(self, date):
-        wd = datetime.strftime(datetime.strptime(date, '%Y-%m-%d'), '%w')
+        wd = datetime.strptime(date, '%Y-%m-%d').strftime('%w')
         if wd:
             dict = {
                 '0': u'Domingo',
@@ -144,66 +163,148 @@ class product_product(osv.osv):
         else:
             return '---'
 
-    def button_generate_doc(self, cr, uid, ids, context=None):
-        for prod in self.browse(cr, uid, ids, context=context):
+    def find_schedule(self, list, data):
+        for l in list:
+            if l['horario'] == data:
+                return l
+        return False
 
-            cursos = []
-            if not prod.description:
-                prod.description = ""
+    def _get_formatted_diary(self, cr, uid, curso_id, context=None):
+        """
+        Devuelve una lista con las lineas del diario agrupadas por horario y ordenadas por dia.
+        Si un horario se repite en varios dias pone coma entres los dias.
+        """
+        formatted_diary = []
+        diary = []
 
-            instance_pool = self.pool.get('curso.curso')
-            records = instance_pool.search(cr, uid,
-                                           [('default_code', '=', prod.default_code),
-                                            '|',
-                                            ('state', '=', 'draft'),
-                                            ('state', '=', 'confirm')])
-            for inst in instance_pool.browse(cr, uid, records, context=context):
-                schedule = ""
-                if inst.schedule_1:
-                    schedule = inst.schedule_1.name
-                cursos.append({'inicio': datetime.strftime(
-                    datetime.strptime(inst.date_begin, '%Y-%m-%d'), '%d/%m/%Y'),
-                    'instancia': '{}/{:0>2d}'.format(prod.default_code,
-                                                     inst.instance),
-                    'dias': self.d2day(inst.date_begin),
-                    'horario': schedule,
-                })
+        # bajar el diary completo a la lista diary
+        diary_pool = self.pool.get('curso.diary')
+        ids = diary_pool.search(cr, uid, [('curso_id', '=', curso_id)])  #
+        for dl in diary_pool.browse(cr, uid, ids, context=context):
+            diary.append({
+                'weekday': dl.weekday,
+                'weekday_name': dl.weekday_name,
+                'schedule': dl.schedule.name,
+                'seq': dl.seq
+            })
+
+        # recorrer diary agrupando por schedule
+        for diary_line in diary:
+            # obtengo una referencia a la linea
+            fd_line = self.find_schedule(formatted_diary, diary_line['schedule'])
+            if fd_line:
+                # si existe el horario le agrego el día a la lista de dias
+                fd_line['list_dias'].append(diary_line['weekday_name'])
+            else:
+                # no existe el horario agrego la linea
+                formatted_diary.append(
+                    {'list_dias': [diary_line['weekday_name']],
+                     'horario': diary_line['schedule']
+                     })
+
+        # hacer la lista de dias formateada
+        for fdl in formatted_diary:
+            fdl['dias'] = ', '.join(fdl['list_dias'])
+
+        return formatted_diary
+
+    def _get_wordpress_data(self, cr, uid, ids, default_code, context=None):
+        prod_pool = self.pool['product.product']
+        ids = prod_pool.search(cr, uid, [
+            ('default_code', '=', default_code),
+        ])
+        for prod in prod_pool.browse(cr, uid, ids, context=context):
+            curso_pool = self.pool.get('curso.curso')
+            # traer cursos por default code, con fecha de inicio y en estado
+            # draft o confirm
+            ids = curso_pool.search(cr, uid, [
+                ('default_code', '=', prod.default_code),
+                ('date_begin', '<>', False),
+                '|',
+                ('state', '=', 'draft'),
+                ('state', '=', 'confirm')
+            ])
+            grid = []
+            for curso in curso_pool.browse(cr, uid, ids, context=context):
+                formatted_diary = self._get_formatted_diary(cr, uid, curso.id, context=None)
+                for idx, fdline in enumerate(formatted_diary):
+                    if idx == 0:
+                        grid.append(
+                            {'inicio': datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%d/%m/%Y'),
+                             'instancia': curso.get_formatted_instance(curso.id),
+                             'dias': fdline['dias'],
+                             'horario': fdline['horario'],
+                             })
+                    else:
+                        grid.append(
+                            {'inicio': '',
+                             'instancia': '',
+                             'dias': fdline['dias'],
+                             'horario': fdline['horario'],
+                             })
+                grid.append(
+                    {'inicio': '&nbsp;',
+                     'instancia': '&nbsp;',
+                     'dias': '&nbsp;',
+                     'horario': '&nbsp;',
+                     })
             try:
-                weeks = str(
-                    (prod.tot_hs_lecture / prod.hs_lecture) / prod.classes_per_week)
+                weeks = (prod.tot_hs_lecture / prod.hs_lecture) / prod.classes_per_week
             except:
                 weeks = "error!"
 
             # si está vacio trae False y da una excepcion en mark_down
             if not prod.agenda:
-                prod.agenda = ""
+                prod.agenda = ''
+            if not prod.description:
+                prod.description = ''
 
             data = {
                 'titulo': prod.name,
                 'codigo': prod.default_code,
-                'acerca_de': markdown.markdown(prod.description),
-                'duracion_semanas': weeks,
+                'description': markdown.markdown(prod.description),
+                'duracion_semanas': str(weeks),
                 'horas_catedra': str(prod.tot_hs_lecture),
                 'modalidad': str(prod.classes_per_week) + ' clase de ' + str(
                     prod.hs_lecture) + ' hs por semana',
-                'cursos': cursos,
+                'grid': grid,
                 'temario': markdown.markdown(prod.agenda),
                 'matricula': 'Bonificada',
                 'cuotas': str(prod.no_quotes),
                 'valor': str(prod.list_price),
             }
 
+            print '------------------------------------------------- new'
+            print 'titulo           ', data['titulo']
+            print 'codigo           ', data['codigo']
+            print 'description      ', data['description']
+            print 'duracion_semanas ', data['duracion_semanas']
+            print 'horas_catedra    ', data['horas_catedra']
+            print 'modalidad        ', data['modalidad']
+            for dd in data['grid']:
+                print 'grid-data    ', dd
+            print 'temario          ', data['temario']
+            print 'matricula        ', data['matricula']
+            print 'cuotas           ', data['cuotas']
+            print 'valor            ', data['valor']
+            print '-------------------------------------------------'
+
+        return data
+
+    def button_generate_doc(self, cr, uid, ids, context=None):
+        for prod in self.browse(cr, uid, ids, context=context):
+            data = self._get_wordpress_data(cr, uid, ids, prod.default_code, context=context)
             new_page = {
                 'name': prod.name,
                 'content': generate_html([data]),
             }
-
-        # Borrar el documento si es que existe
-        doc_pool = self.pool.get('document.page')
-        records = doc_pool.search(cr, uid, [('name', '=', prod.name)])
-        doc_pool.unlink(cr, uid, records)
-
-        # Crear el documento
-        self.pool.get('document.page').create(cr, uid, new_page, context=context)
+            # Borrar el documento si es que existe
+            doc_pool = self.pool.get('document.page')
+            records = doc_pool.search(cr, uid, [('name', '=', prod.name)])
+            doc_pool.unlink(cr, uid, records)
+            # Crear el documento
+            self.pool.get('document.page').create(cr, uid, new_page, context=context)
 
         return True
+
+        # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

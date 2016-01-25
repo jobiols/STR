@@ -43,6 +43,8 @@
                     <footer>
                         <button string="Generar facturas" name="button_gen_invoice"
                                 type="object" class="oe_highlight"/>
+                        <button string="Upgrade" name="button_upgrade"
+                                type="object" class="oe_highlight"/>
                     </footer>
                 </form>
             </field>

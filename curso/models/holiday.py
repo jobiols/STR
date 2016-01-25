@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
+#    OpenERP, Open Source Management Solution.
 #    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -15,25 +15,26 @@
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
+# from openerp import models, fields, api
 
-
-class res_partner(osv.osv):
-    _inherit = 'res.partner'
+class curso_holiday(osv.osv):
+    #class curso_holiday(models.Model):
+    """ define los periodos donde estamos en vacaciones, puede ser parte de un dia """
+    _name = 'curso.holiday'
+    _inherit = 'curso.lapse'
 
     _columns = {
-        'teacher': fields.boolean('Profesora',
-                                  help="Poner el tilde si el contacto es una profesora."),
-        'curso_ids': fields.one2many('curso.curso',
-                                     'main_speaker_id',
-                                     readonly=True),
-        'curso_registration_ids': fields.one2many('curso.registration',
-                                                  'partner_id',
-                                                  readonly=False),
+        'name': fields.char('Nombre', size=64, required=False, readonly=False),
+        'date': fields.date('Fecha'),
+    }
+
+    _defaults = {
+        'start_time': 8,
+        'end_time': 22,
     }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
