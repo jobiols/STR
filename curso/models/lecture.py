@@ -18,8 +18,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
-from openerp.osv import fields, osv
 from datetime import datetime
+
+from openerp.osv import fields, osv
 
 class curso_lecture(osv.osv):
     """ Representa las clases del curso """
@@ -66,7 +67,11 @@ class curso_lecture(osv.osv):
         'date': fields.date('Fecha'),
         'desc': fields.text('Descripcion'),
         'curso_id': fields.many2one('curso.curso', 'Curso', readonly=False,
-                                    required=True),
+                                    required=True,
+                                    help='Curso al que pertenece esta clase'),
+        'curso_child_id': fields.many2one('curso.curso', 'Hijo', readonly=False,
+                                          domain="[('child','=',True)]",
+                                          help='Curso hijo que se inserta en este'),
         'schedule_id': fields.many2one('curso.schedule', 'Horario', readonly=False,
                                        required=True),
         'weekday': fields.function(_weekday, string="Dia", type="char", method=True),
@@ -76,4 +81,4 @@ class curso_lecture(osv.osv):
                                      method=True),
     }
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -123,6 +123,7 @@
             <field name="arch" type="xml">
                 <form string="Planilla de clases">
                     <group col="2">
+                        <field name="curso_child_id" string="Curso hijo"/>
                         <field name="date"/>
                         <field name="curso_id"/>
                         <field name="schedule_id"/>

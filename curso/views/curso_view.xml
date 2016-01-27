@@ -58,10 +58,15 @@
                                 <field name="product"
                                        on_change="onchange_curso_product(product,context)"/>
                             </group>
-                            <group colspan="4" col="4">
+                            <group colspan="6" col="6">
                                 <field name="date_begin"
-                                       on_change="onchange_date_begin(context)"/>
-                                <field name="instance"/>
+                                       on_change="onchange_date_begin(context)"
+                                       attrs="{'readonly':[('child', '==', True)]}"
+                                        />
+                                <field name="instance"
+                                       attrs="{'readonly':[('child', '==', True)]}"
+                                        />
+                                <field name="child"/>
                                 <!--
                                                                                                 <field name="weekday_1"/>
                                                                                                 <field name="schedule_1"/>
@@ -70,7 +75,10 @@
                                 -->
                             </group>
                                                             <!-- agenda -->
-                            <field name='diary_ids' colspan="4" on_change="onchange_diary_ids(context)">
+                            <field name='diary_ids' colspan="4"
+                                   on_change="onchange_diary_ids(context)"
+                                   attrs="{'readonly':[('child', '==', True)]}">
+
                                 <tree string="diary" editable="top">
                                     <field name="weekday"/>
                                     <field name="schedule"/>
@@ -80,6 +88,11 @@
                             <button name="button_generate_doc_curso"
                                     string="Generar documentación" type="object"
                                     class="oe_highlight"/>
+
+                            <button string="Actualizar los chicos" name="update_childs"
+                                    type="object"
+                                    class="oe_highlight"/>
+
                         </group>
                         <notebook>
                             <page string="Inscripciones">
@@ -181,12 +194,13 @@
                                 <field name="lecture_ids" colspan="4" nolabel="1"
                                        groups="curso.group_curso_manager,curso.group_curso_user">
                                     <tree string="Clases">
+                                        <field name="curso_child_id"/>
                                         <field name="date"/>
                                         <field name="weekday" type="string"/>
-                                        <!--                                        <field name="start_time" widget="float_time"/>
-                                                                                <field name="end_time" widget="float_time"/> -->
+                                        <!--     <field name="start_time" widget="float_time"/>
+                                                 <field name="end_time" widget="float_time"/> -->
                                         <field name="schedule_id"/>
-                                        <!--                                        <field name="elapsed_time" widget="float_time"/> -->
+                                        <!--     <field name="elapsed_time" widget="float_time"/> -->
                                         <field name="desc"/>
                                     </tree>
                                 </field>

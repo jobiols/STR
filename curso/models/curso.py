@@ -192,7 +192,8 @@ class curso_curso(osv.osv):
 
                     # TODO   chequear esto!!!
 
-                    'fecha': datetime.strptime(lect.date, "%Y-%m-%d").strftime("%d/%m/%y"),
+                    'fecha': datetime.strptime(
+                        lect.date, "%Y-%m-%d").strftime("%d/%m/%y"),
                     'desc': lect.desc,
                 }
                 clases.append(d)
@@ -294,7 +295,8 @@ class curso_curso(osv.osv):
 
             # chequear si tiene agenda
             diary_obj = self.pool.get('curso.diary')
-            diary_ids = diary_obj.search(cr, uid, [('curso_id', '=', curso.id)], context=context)
+            diary_ids = diary_obj.search(
+                cr, uid, [('curso_id', '=', curso.id)], context=context)
             if not diary_ids:
                 raise osv.except_osv(
                     'Error!',
@@ -529,7 +531,8 @@ class curso_curso(osv.osv):
                 year_n = init.strftime('%y')
 
             pool_diary = self.pool['curso.diary']
-            ids = pool_diary.search(cr, uid, [('curso_id', '=', curso.id)], context=context)
+            ids = pool_diary.search(
+                cr, uid, [('curso_id', '=', curso.id)], context=context)
             hhs = mms = hhe = mme = 0
             for diary_line in pool_diary.browse(cr, uid, ids, context=context):
                 ss = diary_line.schedule.start_time
@@ -555,7 +558,8 @@ class curso_curso(osv.osv):
     def _check_change_begin_date(self, cr, uid, ids, context=None):
         for curso in self.browse(cr, uid, ids, context=context):
             diary_pool = self.pool['curso.diary']
-            ids = diary_pool.search(cr, uid, [('curso_id', '=', curso.id)], context=context)
+            ids = diary_pool.search(
+                cr, uid, [('curso_id', '=', curso.id)], context=context)
             for diary_line in diary_pool.browse(cr, uid, ids, context):
                 diary_weekday = diary_line.weekday
                 weekday = datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%w')
@@ -625,8 +629,51 @@ class curso_curso(osv.osv):
 
         return res
 
-    # curso model
+    def clone_diary(self, cr, uid, ids, curso_from, curso_to, context=None):
+        print 'clone diary from to', curso_from, curso_to
+        diary_obj = self.pool['curso.diary']
+        ids = diary_obj.search(cr, uid, [('curso_id', '=', curso_from)])
+        print '-------------', ids
+        for diary in diary_obj.browse(cr, uid, ids, context=context):
+            print diary.id
+            diary_obj.create(cr, uid, {
+                'curso_id': curso_to,
+                'weekday': diary.weekday,
+                'schedule': diary.schedule.id,
+                'seq': diary.seq
+            })
+
+    def update_childs(self, cr, uid, ids, context=None):
+        """
+        Update all child cursos with this information
+            date_begin: the date of the lecture the child is inserted on
+            diary_id: create the same diary as parent
+            child: True
+        """
+        print 'update childs'
+
+        for curso in self.browse(cr, uid, ids, context=context):
+            print 'curso = ', curso.name
+            # walk all childs
+            lecture_obj = self.pool['curso.lecture']
+            ids = lecture_obj.search(
+                cr, uid, [('curso_id', '=', curso.id)], context=context)
+            for lecture in lecture_obj.browse(cr, uid, ids):
+                if lecture.curso_child_id:
+                    print 'lecture ', lecture.desc
+
+                    lecture.curso_child_id.date_begin = lecture.date
+                    self.clone_diary(cr, uid, ids, curso.id, lecture.curso_child_id.id)
+                    lecture.curso_child_id.child = True
+
+                    # curso model
+
     _columns = {
+        'child': fields.boolean('Curso Hijo',
+                                readonly=True,
+                                states={'draft': [('readonly', False)]},
+                                help="Tildar si el curso es hijo, es decir debe estar \
+                                insertado en un curso mas grande"),
         'instance': fields.integer('Instancia',
                                    readonly=True,
                                    states={'draft': [('readonly', False)]}),
@@ -650,7 +697,8 @@ class curso_curso(osv.osv):
                                        (poner 0 para ignorar la regla)",
                                        states={'draft': [('readonly', False)]}),
 
-        'registration_ids': fields.one2many('curso.registration', 'curso_id', 'Inscripciones',
+        'registration_ids': fields.one2many('curso.registration', 'curso_id',
+                                            'Inscripciones',
                                             readonly=False,
                                             states={'done': [('readonly', True)],
                                                     'cancel': [('readonly', True)]}),
@@ -688,7 +736,7 @@ class curso_curso(osv.osv):
             ('done', 'Cumplido'),
             ('cancel', 'Cancelado')
         ],
-            'Status', readonly=True, required=True,
+            'Estado', readonly=True, required=True,
             track_visibility='onchange',
             help=u"Cuando se crea el curso el estado es 'Borrador'. Si se confirma el \
                 curso el estado es 'Cursando'. Si el curso termina el estado \
