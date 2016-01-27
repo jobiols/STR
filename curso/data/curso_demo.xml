@@ -15,8 +15,8 @@
             <field name="default_code">SPR</field>
             <field name="list_price">800</field>
             <field name="type">service</field>
-            <field name="agenda">tema uno, tema dos, tema tres</field>
-            <field name="description">este es un curso de prueba para el test</field>
+            <field name="agenda">tema uno, tema dos, tema tres **feliz año**</field>
+            <field name="description">este es un cursó de prueba para el test</field>
         </record>
 
         <record id="curso_student_1" model="res.partner">

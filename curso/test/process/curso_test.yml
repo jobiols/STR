@@ -15,11 +15,11 @@
   !record {model: curso.curso, id: curso_curso_2}:
     product: curso_product_1
 -
-  I check that instance is 2 and name is [SPR/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional
+  I check that instance is 2 and name is [SPR/02] ? ?/?/? (00:00 00:00) - Cursó de maquillaje Social Profesional
 -
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
     - instance == 2
-    - name == '[SPR/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional'
+    - name == '[SPR/02] ? ?/?/? (00:00 00:00) - Cursó de maquillaje Social Profesional'
 -
   I create a diary with tree days adding it to curso_curso_2
 -
@@ -66,10 +66,10 @@
     seq: 3
     schedule: curso_schedule_3
 -
-  I check that name is [SPR/02] Lun. 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional
+  I check that name is [SPR/02] Lun. 11/01/16 (12:00 15:00) - Cursó de maquillaje Social Profesional
 -
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
-    - name == '[SPR/02] Lun. 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional'
+    - name == '[SPR/02] Lun. 11/01/16 (12:00 15:00) - Cursó de maquillaje Social Profesional'
 -
   I generate attendance sheet for the curso
 -
@@ -114,6 +114,6 @@
 -
    !python {model: product.product}: |
      data = self._get_wordpress_data(cr, uid, [ref("curso_product_1")],'SPR',context=context)
-     assert data['titulo'] == 'Curso de maquillaje Social Profesional',                 'Failed report data'
+     assert data['titulo'] == 'Cursó de maquillaje Social Profesional',                 'Failed report data'
      assert data['codigo'] == 'SPR',                                                    'Failed report data'
-     assert data['description'] == '<p>este es un curso de prueba para el test</p>' ,   'Failed report data'
+     assert data['description'] == '<p>este es un cursó de prueba para el test</p>' ,   'Failed report data'
