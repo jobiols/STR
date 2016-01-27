@@ -544,16 +544,17 @@ class curso_curso(osv.osv):
                 hhe = int(ee - mme)
                 mme = int(mme * 60)
 
-            # https://docs.python.org/2/library/datetime.html#datetime-objects
-            name = u'[{}] {} {}/{}/{} ({:0>2d}:{:0>2d} {:0>2d}:{:0>2d}) - {}'.format(
-                curso.curso_instance,
-                # Codigo de producto, Nro de instancia
-                weekday.capitalize(),  # dia de la semana en letras
-                day_n, month_n, year_n,  # dia , mes, anio en numeros
-                hhs, mms, hhe, mme,  # hora de inicio hora de fin
-                curso.product.name)  # nombre del producto
-            res[curso.id] = name
-        return res
+                # https://docs.python.org/2/library/datetime.html#datetime-objects
+                name = u'[{}] {} {}/{}/{} ({:0>2d}:{:0>2d} {:0>2d}:{:0>2d}) - {}'.format(
+                    curso.curso_instance,
+                    # Codigo de producto, Nro de instancia
+                    weekday.capitalize(),  # dia de la semana en letras
+                    day_n, month_n, year_n,  # dia , mes, anio en numeros
+                    hhs, mms, hhe, mme,  # hora de inicio hora de fin
+                    curso.product.name)  # nombre del producto
+                res[curso.id] = name
+
+                return res
 
     def _check_change_begin_date(self, cr, uid, ids, context=None):
         for curso in self.browse(cr, uid, ids, context=context):
