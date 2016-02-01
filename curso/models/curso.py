@@ -671,11 +671,11 @@ class curso_curso(osv.osv):
                     # curso model
 
     _columns = {
-        'child': fields.boolean('Curso Hijo',
-                                readonly=True,
-                                states={'draft': [('readonly', False)]},
-                                help="Tildar si el curso es hijo, es decir debe estar \
-                                insertado en un curso mas grande"),
+        #        'child': fields.boolean('Curso Hijo',
+        #                                readonly=True,
+        #                                states={'draft': [('readonly', False)]},
+        #                                help="Tildar si el curso es hijo, es decir debe estar \
+        #                                insertado en un curso mas grande"),
         'instance': fields.integer('Instancia',
                                    readonly=True,
                                    states={'draft': [('readonly', False)]}),
