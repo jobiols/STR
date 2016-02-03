@@ -19,7 +19,6 @@
 #
 ##############################################################################
 from datetime import datetime
-
 from openerp.osv import fields, osv
 
 class curso_lecture(osv.osv):
@@ -69,9 +68,9 @@ class curso_lecture(osv.osv):
         'curso_id': fields.many2one('curso.curso', 'Curso', readonly=False,
                                     required=True,
                                     help='Curso al que pertenece esta clase'),
-        #        'curso_child_id': fields.many2one('curso.curso', 'Hijo', readonly=False,
-        #                                          domain="[('child','=',True)]",
-        #                                          help='Curso hijo que se inserta en este'),
+        'curso_child_id': fields.many2one('curso.curso', 'Hijo', readonly=False,
+                                          domain="[('child','=',True)]",
+                                          help='Curso hijo que se inserta en este'),
         'schedule_id': fields.many2one('curso.schedule', 'Horario', readonly=False,
                                        required=True),
         'weekday': fields.function(_weekday, string="Dia", type="char", method=True),

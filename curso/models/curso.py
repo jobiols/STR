@@ -434,6 +434,7 @@ class curso_curso(osv.osv):
             hd.append(datetime.strptime(holiday.date, '%Y-%m-%d'))
         return hd
 
+    ### borrar esto
     def _get_day(self, cursor, user_id, context=None):
         return (
             ('0', u'Lunes'),
@@ -443,6 +444,8 @@ class curso_curso(osv.osv):
             ('4', u'Viernes'),
             ('5', u'Sábado'),
             ('6', u'Domingo'))
+
+    ### borrar esto
 
     def compute_lecture_data(self, cr, uid, ids, date_begin, weekload, tot_lectures,
                              context=None):
@@ -671,11 +674,11 @@ class curso_curso(osv.osv):
                     # curso model
 
     _columns = {
-        #        'child': fields.boolean('Curso Hijo',
-        #                                readonly=True,
-        #                                states={'draft': [('readonly', False)]},
-        #                                help="Tildar si el curso es hijo, es decir debe estar \
-        #                                insertado en un curso mas grande"),
+        'child': fields.boolean('Curso Hijo',
+                                readonly=True,
+                                states={'draft': [('readonly', False)]},
+                                help="Tildar si el curso es hijo, es decir debe estar \
+                                        insertado en un curso mas grande"),
         'instance': fields.integer('Instancia',
                                    readonly=True,
                                    states={'draft': [('readonly', False)]}),

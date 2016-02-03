@@ -52,6 +52,9 @@ class curso_diary(osv.osv):
         return res
 
     def _get_day(self, cursor, user_id, context=None):
+        """
+        Dias para el drop down box
+        """
         return (
             ('0', u'Domingo'),
             ('1', u'Lunes'),

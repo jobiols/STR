@@ -148,20 +148,20 @@ class product_product(osv.osv):
 
     #    _sql_constraints = [('default_code_unique', 'unique (default_code)', 'ya hay un producto con esta referencia.')]
 
-    def d2day(self, date):
-        wd = datetime.strptime(date, '%Y-%m-%d').strftime('%w')
-        if wd:
-            dict = {
-                '0': u'Domingo',
-                '1': u'Lunes',
-                '2': u'Martes',
-                '3': u'Miércoles',
-                '4': u'Jueves',
-                '5': u'Viernes',
-                '6': u'Sábado'}
-            return dict[wd]
-        else:
-            return '---'
+    #    def d2day(self, date):
+    #        wd = datetime.strptime(date, '%Y-%m-%d').strftime('%w')
+    #        if wd:
+    #            dict = {
+    #                '0': u'Domingo',
+    #                '1': u'Lunes',
+    #                '2': u'Martes',
+    #                '3': u'Miércoles',
+    #                '4': u'Jueves',
+    #                '5': u'Viernes',
+    #                '6': u'Sábado'}
+    #            return dict[wd]
+    #        else:
+    #            return '---'
 
     def find_schedule(self, list, data):
         for l in list:
@@ -213,6 +213,7 @@ class product_product(osv.osv):
         ids = prod_pool.search(cr, uid, [
             ('default_code', '=', default_code),
         ])
+        data = {}
         for prod in prod_pool.browse(cr, uid, ids, context=context):
             curso_pool = self.pool.get('curso.curso')
             # traer cursos por default code, con fecha de inicio y en estado

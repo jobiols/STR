@@ -110,12 +110,12 @@ class curso_registration(osv.osv):
 
     def sign_registration(self, cr, uid, ids, context=None):
         for reg in self.browse(cr, uid, ids, context=context or {}):
-            self.pool.get('curso.curso'). \
-                message_post(cr, uid, [reg.curso_id.id],
-                             body=(u'Nueva seña para el curso: %s.') % (
-                                 reg.partner_id.name or '',),
-                             subtype="curso.mt_curso_registration",
-                             context=context)
+            self.pool.get('curso.curso').message_post(
+                cr, uid, [reg.curso_id.id],
+                body=(u'Nueva seña para el curso: %s.') % (
+                    reg.partner_id.name or '',),
+                subtype="curso.mt_curso_registration",
+                context=context)
         return self.write(cr, uid, ids, {'state': 'signed'}, context=context)
 
     def button_reg_sign(self, cr, uid, ids, context=None):
@@ -128,9 +128,8 @@ class curso_registration(osv.osv):
             curso_obj.check_registration_limits_before(cr, uid, [curso_id],
                                                        no_of_registration,
                                                        context=context)
-        res = self.sign_registration(cr, uid, ids, context=context)
-
         self.button_gen_quotes(cr, uid, ids, context=None)
+        res = self.sign_registration(cr, uid, ids, context=context)
         #        self.mail_user(cr, uid, ids, context=context)
         return res
 
@@ -150,12 +149,13 @@ class curso_registration(osv.osv):
         """ Boton volver a interesada
         """
         for reg in self.browse(cr, uid, ids, context=context or {}):
-            self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
-                                                      body=(
-                                                               u'Vuelve a interesarse: %s.') % (
-                                                               reg.partner_id.name or '',),
-                                                      subtype="curso.mt_curso_registration",
-                                                      context=context)
+            self.pool.get('curso.curso').message_post(
+                cr, uid, [reg.curso_id.id],
+                body=(
+                         u'Vuelve a interesarse: %s.') % (
+                         reg.partner_id.name or '',),
+                subtype="curso.mt_curso_registration",
+                context=context)
         return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
 
     def button_reg_done(self, cr, uid, ids, context=None):
@@ -164,23 +164,25 @@ class curso_registration(osv.osv):
         if context is None:
             context = {}
         today = fields.datetime.now()
+        # verificar si tiene cuotas impagas
         for registration in self.browse(cr, uid, ids, context=context):
             register_pool = self.pool.get('curso.quota')
-            records = register_pool.search(cr, uid,
-                                           [('registration_id', '=', registration.id),
-                                            ('list_price', '=', 0)])
+            records = register_pool.search(
+                cr, uid, [('registration_id', '=', registration.id),
+                          ('list_price', '=', 0)])
             if len(records) != 0:
-                raise osv.except_osv(('Error!'), (
+                raise osv.except_osv(('Error!'),
                     u"No puede terminar el curso porque tiene cuotas pendientes. \
-                    Se debería cancelar, o cobrarle las cuotas"))
+                    Se debería cancelar la inscripción, o cobrarle las cuotas")
 
             if today >= registration.curso_id.date_begin:
                 values = {'state': 'done', 'date_closed': today}
                 self.write(cr, uid, ids, values)
             else:
-                raise osv.except_osv(('Error!'),
-                                     (u"Hay que esperar al dia de inicio del curso para \
-                                     decir que lo terminó."))
+                raise osv.except_osv(
+                    'Error!',
+                    u"Hay que esperar al dia de inicio del curso para decir que lo \
+                    terminó.")
 
         return True
 
