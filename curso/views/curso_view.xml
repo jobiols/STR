@@ -85,14 +85,20 @@
                                     <field name="seq"/>
                                 </tree>
                             </field>
-                            <button name="button_generate_doc_curso"
-                                    string="Generar documentación" type="object"
-                                    class="oe_highlight"/>
+                            <group col="4">
+                                <button name="button_generate_doc_curso"
+                                        string="Generar documentación" type="object"
+                                        class="oe_highlight"/>
 
-                            <button string="Actualizar los chicos" name="update_childs"
-                                    type="object"
-                                    class="oe_highlight"/>
+                                <button name="button_generate_lectures"
+                                        string="Generar clases" type="object"
+                                        class="oe_highlight"/>
 
+                                <button string="Actualizar los chicos"
+                                        name="update_childs"
+                                        type="object"
+                                        class="oe_highlight"/>
+                            </group>
                         </group>
                         <notebook>
                             <page string="Inscripciones">

@@ -64,8 +64,8 @@ class curso_curso(osv.osv):
                     break
 
             if self._current_ix is None:
-                raise osv.except_osv('Error!', (
-                    u"La fecha de inicio no corresponde con Dia 1 ni con Dia 2"))
+                raise osv.except_osv('Error!',
+                                     u"La fecha de inicio no corresponde con Dia 1 ni con Dia 2")
 
         def current_weekload(self):
             return self._weekload[self._current_ix]
@@ -269,6 +269,20 @@ class curso_curso(osv.osv):
                 raise osv.except_osv('Cuidado!',
                                      u"No Hay mas vacantes en este curso!")
 
+    def get_weekload(self, cr, uid, ids, context=None):
+        ret = []
+        for curso in self.browse(cr, uid, ids, context=context):
+            diary_obj = self.pool.get('curso.diary')
+            diary_ids = diary_obj.search(
+                cr, uid, [('curso_id', '=', curso.id)], context=context)
+            for day in diary_obj.browse(cr, uid, diary_ids):
+                ret.append({
+                    'weekday': day.weekday,
+                    'schedule': day.schedule
+                })
+
+        return ret
+
     def confirm_curso(self, cr, uid, ids, context=None):
         register_pool = self.pool.get('curso.registration')
         if self.curso.email_confirmation_id:
@@ -449,7 +463,7 @@ class curso_curso(osv.osv):
 
     def compute_lecture_data(self, cr, uid, ids, date_begin, weekload, tot_lectures,
                              context=None):
-
+        print 'compute lecture data ------------------'
         date = datetime.strptime(date_begin, '%Y-%m-%d')
         weekdays = self.weekdays(weekload, date)
         lecture_data = []
@@ -479,43 +493,36 @@ class curso_curso(osv.osv):
                     'curso_id': curso_id
                 })
 
-    def generate_lectures(self, cr, uid, ids, context=None):
+    def button_generate_lectures(self, cr, uid, ids, context=None):
         """ Generar las clases que correspondan a este curso
         """
-        for reg in self.browse(cr, uid, ids, context=context):
-            date_begin = reg.date_begin
-            tot_hs_lecture = reg.product.tot_hs_lecture
-            hs_lecture = reg.product.hs_lecture
-            schedule_1 = reg.schedule_1.id
-            weekday_1 = reg.weekday_1
-            schedule_2 = reg.schedule_2.id
-            weekday_2 = reg.weekday_2
-            default_code = reg.default_code
+
+        for curso in self.browse(cr, uid, ids, context=context):
+            date_begin = curso.date_begin
+            tot_hs_lecture = curso.tot_hs_lecture
+            hs_lecture = curso.hs_lecture
+            default_code = curso.default_code
 
             if (operator.mod(tot_hs_lecture, hs_lecture) != 0):
-                raise osv.except_osv(('Error!'), (
-                    u"la cantidad de horas catedra no es divisible por las horas de clase!."))
+                raise osv.except_osv('Error!',
+                                     u"la cantidad de horas catedra no es divisible por las horas de clase!.")
 
-            tot_lectures = tot_hs_lecture // hs_lecture
-            weekload = []
-
-            if (schedule_1 != False) and (weekday_1 != False):
-                weekload = [
-                    {'schedule': schedule_1,
-                     'weekday': weekday_1},
-                ]
-
-            if (schedule_2 != False) and (weekday_2 != False):
-                weekload.append(
-                    {'schedule': schedule_2,
-                     'weekday': weekday_2}
-                )
-
+            no_lectures = tot_hs_lecture // hs_lecture
+            weekload = self.get_weekload(cr, uid, ids)
+            print 'weekload >>>>>>>>>>>', weekload
             if (weekload == []):
-                raise osv.except_osv(('Error!'), (u"No se definieron horarios!."))
+                raise osv.except_osv('Error!', u"No se definió la agenda!.")
 
-            lecture_data = self.compute_lecture_data(cr, uid, ids, date_begin, weekload,
-                                                     tot_lectures, context=None)
+            print '-------------------------------------------------------------'
+            #            for date, schedule, room in lecture_planning(date_begin, weekload):
+            #                if lecture_overlaps(date, schedule, room):
+            #                    raise orm.exception('La clase del %s se superpone', date)
+            print '-------------------------------------------------------------'
+
+            lecture_data = self.compute_lecture_data(
+                cr, uid, ids, date_begin, weekload, no_lectures, context=None)
+            print lecture_data
+
             self.create_lectures(cr, uid, ids, lecture_data, default_code, context=None)
 
     def _get_name(self, cr, uid, ids, fields, args, context=None):

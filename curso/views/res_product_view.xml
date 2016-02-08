@@ -27,11 +27,22 @@
                                 <field name="no_quotes"/>
                                 <button name="button_generate_doc" string="Generar documentación" type="object"
                                         class="oe_highlight"/>
+                                <button name="button_generate_lecture_templates"
+                                        string="Generar plantilla de clases" type="object"
+                                        class="oe_highlight"/>
                             </group>
                             <div>   <!-- este div le saca los nombres a los campos -->
                                 <!--   <field name="observ" placeholder="Detalles del curso, Por ejemplo no se requieren conocimientos previos. NO PONER ACA LAS PROMOCIONES!!" /> -->
                                 <field name="agenda" placeholder="Temario del curso" widget="text_html"/>
                             </div>
+                        </group>
+                        <group>
+                            <field name="lecture_template_ids" colspan="4" nolabel="1">
+                                <tree string="Clases" editable="top">
+                                    <field name="seq"/>
+                                    <field name="text"/>
+                                </tree>
+                            </field>
                         </group>
                     </page>
                 </notebook>

@@ -50,8 +50,10 @@ def generate_html(dict):
                 <td><strong>Horario</strong></td>
             </tr>
 
-            """ % (data['titulo'], data['codigo'], data['description'], data['duracion_semanas'], data['horas_catedra'],
-                   data['modalidad'])
+            """ % (
+            data['titulo'], data['codigo'], data['description'], data['duracion_semanas'],
+            data['horas_catedra'],
+            data['modalidad'])
 
         for line in data['grid']:
             ret += "        <tr bgcolor='#E0ECF8'> "
@@ -137,6 +139,9 @@ class product_product(osv.osv):
                                                    alumnas que puede tener el curso. \
                                                    (Pone cero para no tener en cuenta \
                                                    la regla)"),
+        'lecture_template_ids': fields.one2many('curso.lecture_template', 'product_id',
+                                                'Clases'),
+
     }
     _defaults = {
         'default_registration_min': 0,
@@ -147,21 +152,6 @@ class product_product(osv.osv):
     }
 
     #    _sql_constraints = [('default_code_unique', 'unique (default_code)', 'ya hay un producto con esta referencia.')]
-
-    #    def d2day(self, date):
-    #        wd = datetime.strptime(date, '%Y-%m-%d').strftime('%w')
-    #        if wd:
-    #            dict = {
-    #                '0': u'Domingo',
-    #                '1': u'Lunes',
-    #                '2': u'Martes',
-    #                '3': u'Miércoles',
-    #                '4': u'Jueves',
-    #                '5': u'Viernes',
-    #                '6': u'Sábado'}
-    #            return dict[wd]
-    #        else:
-    #            return '---'
 
     def find_schedule(self, list, data):
         for l in list:
@@ -227,11 +217,13 @@ class product_product(osv.osv):
             ])
             grid = []
             for curso in curso_pool.browse(cr, uid, ids, context=context):
-                formatted_diary = self._get_formatted_diary(cr, uid, curso.id, context=None)
+                formatted_diary = self._get_formatted_diary(cr, uid, curso.id,
+                                                            context=None)
                 for idx, fdline in enumerate(formatted_diary):
                     if idx == 0:
                         grid.append(
-                            {'inicio': datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%d/%m/%Y'),
+                            {'inicio': datetime.strptime(curso.date_begin,
+                                                         '%Y-%m-%d').strftime('%d/%m/%Y'),
                              'instancia': curso.get_formatted_instance(curso.id),
                              'dias': fdline['dias'],
                              'horario': fdline['horario'],
@@ -294,7 +286,8 @@ class product_product(osv.osv):
 
     def button_generate_doc(self, cr, uid, ids, context=None):
         for prod in self.browse(cr, uid, ids, context=context):
-            data = self._get_wordpress_data(cr, uid, ids, prod.default_code, context=context)
+            data = self._get_wordpress_data(cr, uid, ids, prod.default_code,
+                                            context=context)
             new_page = {
                 'name': prod.name,
                 'content': generate_html([data]),
@@ -305,6 +298,14 @@ class product_product(osv.osv):
             doc_pool.unlink(cr, uid, records)
             # Crear el documento
             self.pool.get('document.page').create(cr, uid, new_page, context=context)
+
+        return True
+
+    def button_generate_lecture_templates(self, cr, uid, ids, context=None):
+        for product in self.browse(cr, uid, ids):
+            no_clases = product.tot_hs_lecture / product.hs_lecture
+            temp_obj = self.pool['curso.lecture_template']
+            temp_obj.create_template(cr, uid, ids, no_clases)
 
         return True
 
