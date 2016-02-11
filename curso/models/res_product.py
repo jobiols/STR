@@ -257,15 +257,20 @@ class product_product(osv.osv):
 
             if weeks > 1:
                 duracion = u'Duración %s semanas, (%s hs)' % (weeks, prod.tot_hs_lecture)
+                if prod.classes_per_week > 1:
+                    modalidad = u'Modalidad: %s clases de %s hs por semana' % (
+                        prod.classes_per_week, prod.hs_lecture)
+                else:
+                    modalidad = u'Modalidad: una clase de %s horas por semana' % (
+                        prod.hs_lecture)
             else:
                 duracion = ''
-
-            if prod.classes_per_week > 1:
-                modalidad = u'Modalidad %s clases de %s hs por semana' % (
-                str(prod.classes_per_week), str(prod.hs_lecture))
-            else:
-                modalidad = u'Modalidad una clase de %s horas por semana' % (
-                str(prod.hs_lecture))
+                if prod.classes_per_week > 1:
+                    modalidad = u'Modalidad: %s clases de %s hs' % (
+                        prod.classes_per_week, prod.hs_lecture)
+                else:
+                    modalidad = u'Modalidad: una clase de %s horas' % (
+                        prod.hs_lecture)
 
             data = {
                 'titulo': prod.name,
