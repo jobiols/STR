@@ -18,7 +18,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
+# from datetime import datetime, date
 import operator
 
 from openerp.osv import fields, osv
@@ -48,44 +49,53 @@ class curso_curso(osv.osv):
 
     class weekdays():
         _weekload = []
+        _ix = 0
 
         def __init__(self, wl, date):
+            print 'weekdays constructor --------------'
+
+            # ordering the weekload by weekday
+            wl.sort(key=lambda b: b['weekday'])
+
+            for a in wl: print a
+            print 'start date', date
+
             self._weekload = wl
-            self._start_day = date
+            self._start_date = self._current_date = date
 
-            # Obtener el dia de la semana que empieza el curso
-            self._start_weekday = self._start_day.weekday()
+            # adjust ix to point the right weekday
+            start_weekday = int(self._start_date.strftime('%w'))
+            for ix in range(len(wl)):
+                print ix, start_weekday, wl[ix]['weekday']
+                if start_weekday == wl[ix]['weekday']:
+                    self._ix = ix
 
-            # chequear con cada horario para ver si coincide con alguno
-            self._current_ix = None
-            for ix, rec in enumerate(self._weekload):
-                if int(rec.get('weekday')) == self._start_weekday:
-                    self._current_ix = ix
-                    break
+        def get_date(self):
+            return self._current_date
 
-            if self._current_ix is None:
-                raise osv.except_osv('Error!',
-                                     u"La fecha de inicio no corresponde con Dia 1 ni con Dia 2")
+        def get_schedule(self):
+            return self._weekload[self._ix]['schedule']
 
-        def current_weekload(self):
-            return self._weekload[self._current_ix]
+        def get_room(self):
+            return 'A'
 
-        def next_delta(self):
-            last_weekday = int(self._weekload[self._current_ix].get('weekday'))
+        def _gwd(self, ix):
+            return self._weekload[ix]['weekday']
 
-            self._current_ix += self._current_ix
-            if self._current_ix >= len(self._weekload):
-                self._current_ix = 0
+        def next(self):
+            # move ix one ahead
+            ix_1 = self._ix
+            self._ix += 1
+            if self._ix >= len(self._weekload):
+                self._ix = 0
+            ix = self._ix
 
-            current_weekday = int(self._weekload[self._current_ix].get('weekday'))
-            delta = current_weekday - last_weekday
+            # calculate current date
+            if self._gwd(ix) > self._gwd(ix_1):
+                self._current_date += timedelta(days=self._gwd(ix) - self._gwd(ix_1))
+            else:
+                self._current_date += timedelta(days=7 - self._gwd(ix_1) - self._gwd(ix))
 
-            if (delta == 0) and (self._current_ix == 0):
-                delta = 7
-            if delta < 0:
-                delta += 7
-
-            return delta
 
     def get_formatted_instance(self, cr, uid, curso_id, context=None):
         for curso in self.browse(cr, uid, curso_id, context=context):
@@ -277,7 +287,7 @@ class curso_curso(osv.osv):
                 cr, uid, [('curso_id', '=', curso.id)], context=context)
             for day in diary_obj.browse(cr, uid, diary_ids):
                 ret.append({
-                    'weekday': day.weekday,
+                    'weekday': int(day.weekday),
                     'schedule': day.schedule
                 })
 
@@ -461,69 +471,107 @@ class curso_curso(osv.osv):
 
     ### borrar esto
 
-    def compute_lecture_data(self, cr, uid, ids, date_begin, weekload, tot_lectures,
-                             context=None):
-        print 'compute lecture data ------------------'
-        date = datetime.strptime(date_begin, '%Y-%m-%d')
-        weekdays = self.weekdays(weekload, date)
-        lecture_data = []
-        holliday_dates = self.get_holiday_dates(cr, uid, ids, context=None)
-        while (len(lecture_data) < tot_lectures):
-            if (date in holliday_dates):
-                date = date + timedelta(days=weekdays.next_delta())
-            else:
-                aa = weekdays.current_weekload()
-                lecture_data.append({
-                    'date': date,
-                    'schedule': aa.get('schedule'),
-                    'weekday': aa.get('weekday')
-                })
-                date = date + timedelta(days=weekdays.next_delta())
-        return lecture_data
 
-    def create_lectures(self, cr, uid, ids, lecture_data, default_code, context=None):
-        lectures_pool = self.pool.get('curso.lecture')
-        for reg in self.browse(cr, uid, ids, context=context):
-            curso_id = reg.id
+    def lectures_list(self, weekdays, no_lectures):
+        print 'lectures_list >>>>>>>>>>>>>', weekdays, no_lectures
 
-            for data in lecture_data:
-                lectures_pool.create(cr, uid, {
-                    'date': data.get('date'),
-                    'schedule_id': data.get('schedule'),
-                    'curso_id': curso_id
-                })
+        ret = []
+        if False:
+            weekday_1 = weekload[0]['weekday']
+            dt = date_begin
+            ret.append((date_begin, weekload[0]['schedule'], 'A'))
+
+            for dayload in weekload[1:]:
+                weekday = dayload['weekday']
+                if weekday > weekday_1:
+                    dt += timedelta(days=weekday - weekday_1)
+                else:
+                    dt += timedelta(days=7 - weekday_1 - weekday)
+                ret.append((dt, dayload['schedule'], 'A'))
+                weekday_1 = weekday
+
+        for ix in range(no_lectures):
+            ret.append(
+                (weekdays.get_date(), weekdays.get_schedule(), weekdays.get_room()))
+            weekdays.next
+
+        print '------------------------------------------------------------------'
+        for a in ret:
+            print a
+        print '------------------------------------------------------------------'
+        return ret
+
+    def lecture_overlaps(self, date, schedule, room):
+        return False
+
+    def get_lectures_desc(self, cr, uid, ids, product_id, context=None):
+        template_obj = self.pool['curso.lecture_template']
+        ids = template_obj.search(
+            cr, uid, [('product_id', '=', product_id)], context=context)
+        ret = []
+        for rec in template_obj.browse(cr, uid, ids):
+            ret.append(rec.text)
+
+        return ret
 
     def button_generate_lectures(self, cr, uid, ids, context=None):
         """ Generar las clases que correspondan a este curso
         """
 
         for curso in self.browse(cr, uid, ids, context=context):
-            date_begin = curso.date_begin
+            date_begin = datetime.strptime(curso.date_begin, '%Y-%m-%d')
             tot_hs_lecture = curso.tot_hs_lecture
             hs_lecture = curso.hs_lecture
             default_code = curso.default_code
 
             if (operator.mod(tot_hs_lecture, hs_lecture) != 0):
-                raise osv.except_osv('Error!',
-                                     u"la cantidad de horas catedra no es divisible por las horas de clase!.")
+                raise osv.except_osv(
+                    'Error!',
+                    u"la cantidad de horas catedra no es divisible por las horas de clase!.")
 
-            no_lectures = tot_hs_lecture // hs_lecture
+            no_lectures = int(tot_hs_lecture // hs_lecture)
             weekload = self.get_weekload(cr, uid, ids)
-            print 'weekload >>>>>>>>>>>', weekload
+
             if (weekload == []):
                 raise osv.except_osv('Error!', u"No se definió la agenda!.")
 
-            print '-------------------------------------------------------------'
-            #            for date, schedule, room in lecture_planning(date_begin, weekload):
-            #                if lecture_overlaps(date, schedule, room):
-            #                    raise orm.exception('La clase del %s se superpone', date)
-            print '-------------------------------------------------------------'
+            # get lecture description list
+            lectures_desc = self.get_lectures_desc(
+                cr, uid, ids, curso.product.id, context=context)
 
-            lecture_data = self.compute_lecture_data(
-                cr, uid, ids, date_begin, weekload, no_lectures, context=None)
-            print lecture_data
+            # get a lectures list or an exception if overlaps.
+            lectures = []
 
-            self.create_lectures(cr, uid, ids, lecture_data, default_code, context=None)
+            for date, schedule, room in self.lectures_list(
+                    self.weekdays(weekload, date_begin), no_lectures):
+                if not self.lecture_overlaps(date, schedule, room):
+                    lectures.append(
+                        {'date': date,
+                         'schedule_id': schedule,
+                         'room': room,
+                         'curso_id': curso.id})
+                else:
+                    raise osv.except_osv(
+                        'Error!',
+                        u'La clase del %s en el horario %s y en el aula %s se superpone con una ya existente',
+                        date, schedule.name, room)
+
+            if len(lectures) != len(lectures_desc):
+                raise osv.except_osv(
+                    'Error!',
+                    u'La cantidad de clases no coincide con la cantidad de contenidos')
+
+            lecs = []
+            for ix, lec in enumerate(lectures):
+                lec['desc'] = lectures_desc[ix]
+                lecs.append(lec)
+
+
+            # Add lectures
+            lectures_pool = self.pool.get('curso.lecture')
+            for lec in lecs:
+                print 'add lecture', lec
+                #                lectures_pool.create(cr,uid,lec)
 
     def _get_name(self, cr, uid, ids, fields, args, context=None):
         res = {}

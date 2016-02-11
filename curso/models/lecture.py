@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
-from datetime import datetime
+from datetime import datetime, timedelta
 from openerp.osv import fields, osv
 
 class curso_lecture(osv.osv):
