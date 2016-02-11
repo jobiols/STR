@@ -39,7 +39,7 @@ def generate_html(dict):
            </tbody>
         </table>
         <div style="text-align: justify;">%s</div>
-        <p>Duración %s semanas, (%s hs)<br/> Modalidad %s</p>
+        <p>%s<br/>%s</p>
 
         <table  border='0' cellpadding='0' cellspacing='0' style='width: 500px;'>
         <tbody>
@@ -51,9 +51,9 @@ def generate_html(dict):
             </tr>
 
             """ % (
-            data['titulo'], data['codigo'], data['description'], data['duracion_semanas'],
-            data['horas_catedra'],
-            data['modalidad'])
+            data['titulo'], data['codigo'],
+            data['description'],
+            data['duracion'], data['modalidad'])
 
         for line in data['grid']:
             ret += "        <tr bgcolor='#E0ECF8'> "
@@ -255,14 +255,24 @@ class product_product(osv.osv):
             if not prod.description:
                 prod.description = ''
 
+            if weeks > 1:
+                duracion = u'Duración %s semanas, (%s hs)' % (weeks, prod.tot_hs_lecture)
+            else:
+                duracion = ''
+
+            if prod.classes_per_week > 1:
+                modalidad = u'Modalidad %s clases de %s hs por semana' % (
+                str(prod.classes_per_week), str(prod.hs_lecture))
+            else:
+                modalidad = u'Modalidad una clase de %s horas por semana' % (
+                str(prod.hs_lecture))
+
             data = {
                 'titulo': prod.name,
                 'codigo': prod.default_code,
                 'description': markdown.markdown(prod.description),
-                'duracion_semanas': str(weeks),
-                'horas_catedra': str(prod.tot_hs_lecture),
-                'modalidad': str(prod.classes_per_week) + ' clase de ' + str(
-                    prod.hs_lecture) + ' hs por semana',
+                'duracion': duracion,
+                'modalidad': modalidad,
                 'grid': grid,
                 'temario': markdown.markdown(prod.agenda),
                 'matricula': 'Bonificada',
@@ -275,8 +285,7 @@ class product_product(osv.osv):
                 print 'titulo           ', data['titulo']
                 print 'codigo           ', data['codigo']
                 print 'description      ', data['description']
-                print 'duracion_semanas ', data['duracion_semanas']
-                print 'horas_catedra    ', data['horas_catedra']
+                print 'duracion         ', data['duracion']
                 print 'modalidad        ', data['modalidad']
                 for dd in data['grid']:
                     print 'grid-data    ', dd
