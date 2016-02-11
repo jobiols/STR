@@ -267,20 +267,21 @@ class product_product(osv.osv):
                 'valor': str(prod.list_price),
             }
 
-            print '------------------------------------------------- new'
-            print 'titulo           ', data['titulo']
-            print 'codigo           ', data['codigo']
-            print 'description      ', data['description']
-            print 'duracion_semanas ', data['duracion_semanas']
-            print 'horas_catedra    ', data['horas_catedra']
-            print 'modalidad        ', data['modalidad']
-            for dd in data['grid']:
-                print 'grid-data    ', dd
-            print 'temario          ', data['temario']
-            print 'matricula        ', data['matricula']
-            print 'cuotas           ', data['cuotas']
-            print 'valor            ', data['valor']
-            print '-------------------------------------------------'
+            if False:
+                print '------------------------------------------------- new'
+                print 'titulo           ', data['titulo']
+                print 'codigo           ', data['codigo']
+                print 'description      ', data['description']
+                print 'duracion_semanas ', data['duracion_semanas']
+                print 'horas_catedra    ', data['horas_catedra']
+                print 'modalidad        ', data['modalidad']
+                for dd in data['grid']:
+                    print 'grid-data    ', dd
+                print 'temario          ', data['temario']
+                print 'matricula        ', data['matricula']
+                print 'cuotas           ', data['cuotas']
+                print 'valor            ', data['valor']
+                print '-------------------------------------------------'
 
         return data
 
