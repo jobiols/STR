@@ -38,7 +38,7 @@ def generate_html(dict):
                 </tr>
            </tbody>
         </table>
-        %s
+        <div style="text-align: justify;">%s</div>
         <p>Duración %s semanas, (%s hs)<br/> Modalidad %s</p>
 
         <table  border='0' cellpadding='0' cellspacing='0' style='width: 500px;'>
@@ -77,15 +77,18 @@ def generate_html(dict):
 
         ret += "<hr/>"
 
-        ret += '<h3 style="text-align: left;">Aranceles</h3>'
-        for data in dict:
-            if data['cuotas'] == '1':
-                ss = data['cuotas'] + " cuota de $" + data['valor']
-            else:
-                ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
+        ret += '\n\n\n\n'
 
-            ret += u'<p><strong>Matrícula: ' + data['matricula'] + '</strong><br />'
-            ret += '<strong>Pagos: ' + ss + '</strong></p>'
+        if False:
+            ret += '<h3 style="text-align: left;">Aranceles</h3>'
+            for data in dict:
+                if data['cuotas'] == '1':
+                    ss = data['cuotas'] + " cuota de $" + data['valor']
+                else:
+                    ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
+
+                ret += u'<p><strong>Matrícula: ' + data['matricula'] + '</strong><br />'
+                ret += '<strong>Pagos: ' + ss + '</strong></p>'
 
         ret += """
         <table border="0" cellpadding="1" cellspacing="1" style="width: 100%;">
