@@ -53,7 +53,7 @@ def generate_html(dict):
             """ % (
             data['titulo'], data['codigo'],
             data['description'],
-            data['duracion'], data['modalidad'])
+            data['modalidad'], data['duracion'])
 
         for line in data['grid']:
             ret += "        <tr bgcolor='#E0ECF8'> "
