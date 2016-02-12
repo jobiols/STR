@@ -45,6 +45,8 @@
                                 type="object" class="oe_highlight"/>
                         <button string="Copiar alumnas inscriptas" name="button_copy_registration"
                                 type="object" class="oe_highlight"/>
+                        <button string="Reporte grilla" name="button_grid_report"
+                                type="object" class="oe_highlight"/>
                     </footer>
                 </form>
             </field>

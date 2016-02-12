@@ -19,18 +19,20 @@
                                 <field name="hs_lecture"/>
                                 <field name="default_registration_min"/>
                                 <field name="default_registration_max"/>
-<!--
-                                <field name="default_reply_to"/>
-                                <field name="default_email_registration"/>
-                                <field name="default_email_curso"/>
--->
+                                <field name="product_url" widget="url"/>
                                 <field name="no_quotes"/>
+                            </group>
+                            <!--
+                            <field name="default_reply_to"/>
+                            <field name="default_email_registration"/>
+                            <field name="default_email_curso"/>
+-->
                                 <button name="button_generate_doc" string="Generar documentación" type="object"
                                         class="oe_highlight"/>
                                 <button name="button_generate_lecture_templates"
                                         string="Generar plantilla de clases" type="object"
                                         class="oe_highlight"/>
-                            </group>
+
                             <div>   <!-- este div le saca los nombres a los campos -->
                                 <!--   <field name="observ" placeholder="Detalles del curso, Por ejemplo no se requieren conocimientos previos. NO PONER ACA LAS PROMOCIONES!!" /> -->
                                 <field name="agenda" placeholder="Temario del curso" widget="text_html"/>

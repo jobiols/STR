@@ -45,6 +45,71 @@ class curso_move_registration(osv.osv_memory):
                 }
                 reg_pool.copy(cr, uid, reg.id, defaults, context=context)
 
+    def create_grid_report(self, cr, uid, ids, cursos, context=None):
+        html = u"""
+        <table style="width:100%%;">
+            <tbody>
+            """
+        for curso in cursos:
+            html += u"""
+                <tr>
+                    <td width="10%%"><div style="text-align: center;">
+                         Inicio<br />%s</div>
+                    </td>
+                    <td width="72%%" valign="top">
+                        <h3><a href="%s">
+                        %s<span style="font-size: small;"><sup>&nbsp;Cód %s</sup></span>
+                        </a></h3>
+                    </td>
+                    <td width="8%%">
+                        <p>%s hs</p>
+                    </td>
+                    <td width="10%%">
+                        <a href="%s">Más datos</a>
+                    </td>
+                </tr>
+                """ % (curso['date_begin'],
+                       curso['product_url'],
+                       curso['name'],
+                       curso['code'],
+                       curso['product_url'],
+                       curso['tot_hs_lecture'])
+
+        html += u"""
+            </tbody>
+        </table>
+        """
+        rep_name = 'reporte grilla para wordpress'
+        # Borrar el documento si es que existe
+        doc_pool = self.pool.get('document.page')
+        records = doc_pool.search(cr, uid, [('name', '=', rep_name)])
+        doc_pool.unlink(cr, uid, records)
+
+        new_page = {
+            'name': rep_name,
+            'content': html,
+        }
+        # Generar el documento
+        self.pool.get('document.page').create(cr, uid, new_page, context=context)
+
+        print curso
+
+    def button_grid_report(self, cr, uid, ids, context=None):
+        curso_obj = self.pool['curso.curso']
+        for wiz in self.browse(cr, uid, ids, context):
+            # armar una lista con los cursos a reportar
+            cursos = []
+            for reg in curso_obj.browse(cr, uid, context['active_ids']):
+                cursos.append({'name': reg.product.name,
+                               'code': reg.default_code,
+                               'date_begin': reg.date_begin,
+                               'product_url': reg.product.product_url,
+                               'tot_hs_lecture': int(reg.tot_hs_lecture)
+                               })
+            self.create_grid_report(cr, uid, ids, cursos, context)
+
+
+
     _name = "curso.move.registration"
     _description = "Mover inscripciones entre cursos"
 
