@@ -72,8 +72,8 @@ class curso_move_registration(osv.osv_memory):
                        curso['product_url'],
                        curso['name'],
                        curso['code'],
-                       curso['product_url'],
-                       curso['tot_hs_lecture'])
+                       curso['tot_hs_lecture'],
+                       curso['product_url'])
 
         html += u"""
             </tbody>
