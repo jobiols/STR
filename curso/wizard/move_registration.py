@@ -47,7 +47,7 @@ class curso_move_registration(osv.osv_memory):
 
     def create_grid_report(self, cr, uid, ids, cursos, context=None):
         html = u"""
-        <table style="width:100%%;">
+        <table style="width:100%;">
             <tbody>
             """
         for curso in cursos:
