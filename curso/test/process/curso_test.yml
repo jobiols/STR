@@ -1,25 +1,40 @@
 -
-  I create a curso based on a product ----------------------------------------------------
+    I create a product
+    !record {model: product.product, id: curso_product_1}
+        name: u'Curso de maquillaje Social Profesional rafañuso'
+        tot_hs_lecture: 10
+        hs_lecture: 5
+        classes_per_week: 1
+        no_quotes: 10
+        default_code: SPR
+        list_price: 800
+        type: service
+        agenda: u'##Titulo \n###Subtitulo\nCuerpo del texto **negrita** Año 2016'
+        description: u'este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño'
 -
-  !record {model: curso.curso, id: curso_curso_1}:
-    product: curso_product_1
+    I create a curso based on this product
 -
-  I check that state is draft and instance is 1
+    !record {model: curso.curso, id: curso_curso_1}:
+        product: curso_product_1
+-
+  I check that state instance and name
 -
   !assert {model: curso.curso, id: curso_curso_1, severity: error, string: State should be draft.}:
     - state == 'draft'
     - instance == 1
+    - name == u'[SPR/01] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
 -
   Then I create another curso based on this product
 -
   !record {model: curso.curso, id: curso_curso_2}:
     product: curso_product_1
+    date_begin: '2016-01-11'
 -
-  I check that instance is 2 and name is [SPR/02] ? ?/?/? (00:00 00:00) - Cursó de maquillaje Social Profesional
+  I check instance and name
 -
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
     - instance == 2
-    - name == u'[SPR/02] ? ?/?/? (00:00 00:00) - Cursó de maquillaje Social Profesional'
+    - name == u'[SPR/02] Lun. 11/01/16 (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
 -
   I create a diary with tree days adding it to curso_curso_2
 -
@@ -41,35 +56,16 @@
     seq: 3
     schedule: curso_schedule_1
 -
-  I modify curso 2 to add date_begin
--
-  !record {model: curso.curso, id: curso_curso_2}:
-    date_begin: '2016-01-11'
--
-  I create a diary with tree days adding it to curso_curso_1
--
-  !record {model: curso.diary, id: curso_diary_4}:
-    curso_id: curso_curso_1
-    weekday: '4'
-    seq: 1
-    schedule: curso_schedule_1
--
-  !record {model: curso.diary, id: curso_diary_5}:
-    curso_id: curso_curso_1
-    weekday: '5'
-    seq: 2
-    schedule: curso_schedule_2
--
-  !record {model: curso.diary, id: curso_diary_6}:
-    curso_id: curso_curso_1
-    weekday: '6'
-    seq: 3
-    schedule: curso_schedule_3
--
-  I check that name is [SPR/02] Lun. 11/01/16 (12:00 15:00) - Cursó de maquillaje Social Profesional
+  I check curso name
 -
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
-    - name == u'[SPR/02] Lun. 11/01/16 (12:00 15:00) - Cursó de maquillaje Social Profesional'
+    - name == u'[SPR/02] Lun. 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso'
+-
+-
+-
+-
+-
+-
 -
   I generate attendance sheet for the curso
 -

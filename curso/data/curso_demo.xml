@@ -7,7 +7,7 @@
 
         <!-- Demo data for curso -->
         <record id="curso_product_1" model="product.product">
-            <field name="name">Curso de maquillaje Social Profesional</field>
+            <field name="name">Cursó de maquillaje Social Profesional</field>
             <field name="tot_hs_lecture">10</field>
             <field name="classes_per_week">1</field>
             <field name="hs_lecture">5</field>

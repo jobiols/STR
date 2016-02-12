@@ -72,7 +72,7 @@ faltante en la ficha del alumno
         'data/curso_data.xml',
         'wizard/move_registration.xml'
     ],
-    'demo': ['data/curso_demo.xml'],
+    #    'demo': ['data/curso_demo.xml'],
 
     'test': [
         'test/process/partner_test.yml',
