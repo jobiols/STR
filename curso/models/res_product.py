@@ -110,7 +110,7 @@ def generate_html(dict):
 class product_product(osv.osv):
     _inherit = 'product.product'  # Permite la herencia propiamente dicho del modulo product
     _columns = {
-        'product_url': fields.char('URL del producto', size=64),
+        'product_url': fields.char('URL del producto', size=200),
         'tot_hs_lecture': fields.integer('Horas catedra',
                                          help="Cantidad de horas que tiene el curso en total."),
         'classes_per_week': fields.integer('Clases por semana',
