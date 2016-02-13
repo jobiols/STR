@@ -52,8 +52,7 @@ class curso_curso(osv.osv):
         _ix = 0
 
         def __init__(self, wl, date):
-            print 'weekdays constructor --------------'
-
+            print 'weekday constructor ----'
             # ordering the weekload by weekday
             wl.sort(key=lambda b: b['weekday'])
 
@@ -83,7 +82,9 @@ class curso_curso(osv.osv):
             return self._weekload[ix]['weekday']
 
         def next(self):
+            print 'weekday.next '
             # move ix one ahead
+            print 'ix', self._ix
             ix_1 = self._ix
             self._ix += 1
             if self._ix >= len(self._weekload):
@@ -471,8 +472,8 @@ class curso_curso(osv.osv):
             weekdays.next
 
         print '------------------------------------------------------------------'
-        for a in ret:
-            print a
+        for date, schedule, room in ret:
+            print date, schedule.name, room
         print '------------------------------------------------------------------'
         return ret
 
@@ -533,11 +534,12 @@ class curso_curso(osv.osv):
                         date, schedule.name, room)
             print '>>>>>>>>>>>>>>>>>>>>>>>>>------------------- lect temp', len(
                 lectures), len(lecture_templates)
+
             if len(lectures) != len(lecture_templates):
                 raise osv.except_osv(
                     'Error!',
                     u'La cantidad de clases no coincide con la cantidad de contenidos')
-
+            print '4444444444444444444444444'
             lecs = []
             for ix, lec in enumerate(lectures):
                 lec['desc'] = lecture_templates[ix]
@@ -546,9 +548,11 @@ class curso_curso(osv.osv):
 
             # Add lectures
             lectures_pool = self.pool.get('curso.lecture')
-            for lec in lecs:
-                print 'add lecture', lec
-                #                lectures_pool.create(cr,uid,lec)
+            ids = lectures_pool.search(cr, uid, [('curso_id', '=', curso.id)])
+            lectures_pool.unlink(cr, uid, ids)
+
+            for lecs in lecs:
+                lectures_pool.create(cr, uid, lecs)
 
     def _get_name(self, cr, uid, ids, fields, args, context=None):
         res = {}
