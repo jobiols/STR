@@ -90,6 +90,11 @@
     !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
         - name == u'[SPR/02] Lun. 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso'
 -
+    I check curso classes per weeek
+-
+    !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
+        - classes_per_week == 3
+-
     I generate attendance sheet for the curso
 -
     !python {model: curso.curso}: |

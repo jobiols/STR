@@ -676,7 +676,7 @@ class curso_curso(osv.osv):
         """
         Calcula la cantidad de clases por semana basado en el diary
         """
-        print '----------------------------------- _get_classes_per_week'
+        res = {}
         classes_per_week = 0
         for curso in self.browse(cr, uid, ids, context=context):
             curso.id
@@ -685,8 +685,8 @@ class curso_curso(osv.osv):
             for reg in diary_obj.browse(cr, uid, ids):
                 classes_per_week += 1
 
-        print 'calculated clases =', classes_per_week
-        return classes_per_week
+            res[curso.id] = classes_per_week
+        return res
 
     def _get_instance(self, cr, uid, ids, fields, args, context=None):
         res = {}

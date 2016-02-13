@@ -204,7 +204,6 @@ class product_product(osv.osv):
         Genera el html para pegar en wordpress, trae todas las instancias de cursos
         basadas en este producto.
         """
-
         prod_pool = self.pool['product.product']
         ids = prod_pool.search(cr, uid, [
             ('default_code', '=', default_code),
@@ -247,9 +246,10 @@ class product_product(osv.osv):
                      'dias': '&nbsp;',
                      'horario': '&nbsp;',
                      })
+                print 'clases x week >>>>>>>>>>>>', curso.classes_per_week
                 try:
-                    weeks = (
-                            prod.tot_hs_lecture / prod.hs_lecture) / curso.classes_per_week
+                    weeks = \
+                        (prod.tot_hs_lecture / prod.hs_lecture) / curso.classes_per_week
                 except:
                     weeks = "error!"
 
@@ -261,7 +261,7 @@ class product_product(osv.osv):
 
                 if weeks > 1:
                     duracion = u'Duración %s semanas, (%s hs)' % (
-                    weeks, prod.tot_hs_lecture)
+                        weeks, prod.tot_hs_lecture)
                     if curso.classes_per_week > 1:
                         modalidad = u'Modalidad: %s clases de %s hs por semana' % (
                             curso.classes_per_week, prod.hs_lecture)
