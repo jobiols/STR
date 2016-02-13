@@ -31,20 +31,18 @@ class lecture_template(osv.osv):
     }
 
     def create_template(self, cr, uid, ids, no_lectures):
-        print 'create template -------------->>>', cr, uid, ids, no_lectures
         prod_ids = self.search(cr, uid, [('product_id', '=', ids[0])])
         if prod_ids:
-            raise osv.except_osv('Error!',
-                                 u"ya existe una plantilla de clases hay que borrarla primero")
+            raise osv.except_osv(
+                'Error!', u"ya existe una plantilla de clases hay que borrarla primero")
 
         for seq in range(no_lectures):
             print ids[0], seq
             new_rec = {
                 'product_id': ids[0],
-                'seq': seq
+                'seq': seq,
+                'text': 'Clase nro %s' % (seq + 1)
             }
-            print '--------------------------', new_rec
             self.create(cr, uid, new_rec)
 
-
-            # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

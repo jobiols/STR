@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 # from datetime import datetime, date
 import operator
 
