@@ -1,5 +1,6 @@
 -
     I create a product
+-
     !record {model: product.product, id: curso_product_1}
         name: u'Curso de maquillaje Social Profesional rafañuso'
         tot_hs_lecture: 10
@@ -61,12 +62,6 @@
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
     - name == u'[SPR/02] Lun. 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso'
 -
--
--
--
--
--
--
   I generate attendance sheet for the curso
 -
    !python {model: curso.curso}: |
@@ -77,10 +72,15 @@
    !python {model: product.product}: |
      self.button_generate_doc(cr, uid, [ref("curso_product_1")],context=context)
 -
-
-
-
-
+    I Generate lectures automatically
+-
+   !python {model: curso.curso}: |
+     self.button_generate_lectures(cr, uid, [ref("curso_product_1")],context=context)
+-
+-
+-
+-
+-
 
   I add a lecture
 -
