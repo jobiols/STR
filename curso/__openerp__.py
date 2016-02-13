@@ -49,9 +49,9 @@ faltante en la ficha del alumno
     'depends': ['base_setup',
                 'board',
                 'email_template',
-                'sale',
-                'purchase',
-
+                #                'sale',
+                #                'purchase',
+                'l10n_ar_invoice',
                 'document_page'],
     'data': [
         'curso_report.xml',
