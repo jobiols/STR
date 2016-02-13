@@ -39,59 +39,63 @@
     !record {model: curso.curso, id: curso_curso_1}:
         product: curso_product_1
 -
-  I check that state instance and name
+    I check that state instance and name
 -
-  !assert {model: curso.curso, id: curso_curso_1, severity: error, string: State should be draft.}:
-    - state == 'draft'
-    - instance == 1
-    - name == u'[SPR/01] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
+    !assert {model: curso.curso, id: curso_curso_1, severity: error, string: State should be draft.}:
+        - state == 'draft'
+        - instance == 1
+        - name == u'[SPR/01] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
 -
   Then I create another curso based on this product
 -
-  !record {model: curso.curso, id: curso_curso_2}:
-    product: curso_product_1
-    date_begin: '2016-01-11'
+    !record {model: curso.curso, id: curso_curso_2}:
+        product: curso_product_1
 -
   I check instance and name
 -
-  !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
-    - instance == 2
-    - name == u'[SPR/02] Lun. 11/01/16 (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
+    !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
+        - instance == 2
+        - name == u'[SPR/02] Lun. 11/01/16 (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
 -
-  I create a diary with tree days adding it to curso_curso_2
+    I create a diary with tree days adding it to curso_curso_2
 -
-  !record {model: curso.diary, id: curso_diary_1}:
-    curso_id: curso_curso_2
-    weekday: '1'
-    seq: 1
-    schedule: curso_schedule_1
+    !record {model: curso.diary, id: curso_diary_1}:
+        curso_id: curso_curso_2
+        weekday: '1'
+        seq: 1
+        schedule: curso_schedule_1
 -
-  !record {model: curso.diary, id: curso_diary_2}:
-    curso_id: curso_curso_2
-    weekday: '2'
-    seq: 2
-    schedule: curso_schedule_2
+    !record {model: curso.diary, id: curso_diary_2}:
+        curso_id: curso_curso_2
+        weekday: '2'
+        seq: 2
+        schedule: curso_schedule_2
 -
-  !record {model: curso.diary, id: curso_diary_3}:
-    curso_id: curso_curso_2
-    weekday: '3'
-    seq: 3
-    schedule: curso_schedule_3
+    !record {model: curso.diary, id: curso_diary_3}:
+        curso_id: curso_curso_2
+        weekday: '3'
+        seq: 3
+        schedule: curso_schedule_3
 -
-  I check curso name
+    I add begin date
 -
-  !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
-    - name == u'[SPR/02] Lun. 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso'
+    !record {model: curso.curso, id: curso_curso_2}:
+        date_begin: '2016-01-11'
 -
-  I generate attendance sheet for the curso
+    I check curso name
 -
-   !python {model: curso.curso}: |
-     self.button_generate_doc_curso(cr, uid, [ref("curso_curso_2")],context=context)
+    !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
+        - name == u'[SPR/02] Lun. 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso'
 -
-  I generate wordpress (html) data for curso
+    I generate attendance sheet for the curso
 -
-   !python {model: product.product}: |
-     self.button_generate_doc(cr, uid, [ref("curso_product_1")],context=context)
+    !python {model: curso.curso}: |
+        self.button_generate_doc_curso(cr, uid, [ref("curso_curso_2")],context=context)
+-
+    I generate wordpress (html) data for curso
+-
+    !python {model: product.product}: |
+        self.button_generate_doc(cr, uid, [ref("curso_product_1")],context=context)
 -
 -
 -
