@@ -176,6 +176,9 @@ class curso_curso(osv.osv):
         return ret
 
     def button_generate_doc_curso(self, cr, uid, ids, context=None):
+        """
+        Genera planilla de asistencia para el curso
+        """
         for curso in self.browse(cr, uid, ids, context=context):
             alumnas = []
             reg_pool = self.pool.get('curso.registration')
@@ -199,7 +202,6 @@ class curso_curso(osv.osv):
                                        order="date")
             for lect in lect_pool.browse(cr, uid, records, context=context):
                 d = {
-
                     # TODO   chequear esto!!!
 
                     'fecha': datetime.strptime(

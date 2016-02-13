@@ -304,6 +304,9 @@ class product_product(osv.osv):
         return data
 
     def button_generate_doc(self, cr, uid, ids, context=None):
+        """
+        Generate wordpress (html) data for curso
+        """
         for prod in self.browse(cr, uid, ids, context=context):
             data = self._get_wordpress_data(cr, uid, ids, prod.default_code,
                                             context=context)

@@ -72,11 +72,16 @@
    !python {model: curso.curso}: |
      self.button_generate_doc_curso(cr, uid, [ref("curso_curso_2")],context=context)
 -
-  I generate markdown site data for the curso
+  I generate wordpress (html) data for curso
 -
    !python {model: product.product}: |
      self.button_generate_doc(cr, uid, [ref("curso_product_1")],context=context)
 -
+
+
+
+
+
   I add a lecture
 -
   !record {model: curso.lecture, id: curso_lecture_1}:

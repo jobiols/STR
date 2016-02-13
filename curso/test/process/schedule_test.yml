@@ -15,5 +15,5 @@
 -
   I check that name is ok
 -
-  !assert {model: curso.schedule, id: curso_schedule_3, severity: error, string: u'Name should be 04:00 - 06:00 (2hs)'}:
+  !assert {model: curso.schedule, id: curso_schedule_3, severity: error, string: 'ill formed name'}:
     - name == u'04:00 - 06:00 (2hs)'
