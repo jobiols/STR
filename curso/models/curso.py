@@ -510,9 +510,12 @@ class curso_curso(osv.osv):
         ids = template_obj.search(
             cr, uid, [('product_id', '=', product_id)], context=context)
         ret = []
+        ii = 0
         for rec in template_obj.browse(cr, uid, ids):
             ret.append(rec.text)
+            print ii
 
+        print 'lecture templates >>> ', ii
         return ret
 
     def button_generate_lectures(self, cr, uid, ids, context=None):

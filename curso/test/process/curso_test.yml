@@ -104,12 +104,16 @@
 -
     !python {model: product.product}: |
         self.button_generate_doc(cr, uid, [ref("curso_product_1")],context=context)
--
--
--
--
--
--
+
+
+
+
+
+
+
+
+
+
 -
     I Generate lectures automatically
 -
