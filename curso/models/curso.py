@@ -506,7 +506,7 @@ class curso_curso(osv.osv):
     def lecture_overlaps(self, date, schedule, room):
         return False
 
-    def get_lectures_desc(self, cr, uid, ids, product_id, context=None):
+    def get_lecture_templates(self, cr, uid, ids, product_id, context=None):
         template_obj = self.pool['curso.lecture_template']
         ids = template_obj.search(
             cr, uid, [('product_id', '=', product_id)], context=context)
@@ -537,8 +537,8 @@ class curso_curso(osv.osv):
             if (weekload == []):
                 raise osv.except_osv('Error!', u"No se definió la agenda!.")
 
-            # get lecture description list
-            lectures_desc = self.get_lectures_desc(
+            # get lecture templates
+            lecture_templates = self.get_lecture_templates(
                 cr, uid, ids, curso.product.id, context=context)
 
             # get a lectures list or an exception if overlaps.
@@ -557,15 +557,15 @@ class curso_curso(osv.osv):
                         'Error!',
                         u'La clase del %s en el horario %s y en el aula %s se superpone con una ya existente',
                         date, schedule.name, room)
-
-            if len(lectures) != len(lectures_desc):
+            print '------------------- lect temp', lectures, lecture_templates
+            if len(lectures) != len(lecture_templates):
                 raise osv.except_osv(
                     'Error!',
                     u'La cantidad de clases no coincide con la cantidad de contenidos')
 
             lecs = []
             for ix, lec in enumerate(lectures):
-                lec['desc'] = lectures_desc[ix]
+                lec['desc'] = lecture_templates[ix]
                 lecs.append(lec)
 
 
@@ -576,7 +576,6 @@ class curso_curso(osv.osv):
                 #                lectures_pool.create(cr,uid,lec)
 
     def _get_name(self, cr, uid, ids, fields, args, context=None):
-        print 'curso._get_name -- '
         res = {}
         for curso in self.browse(cr, uid, ids, context=context):
             try:
@@ -585,18 +584,14 @@ class curso_curso(osv.osv):
                 weekday = day_n = month_n = year_n = '?'
             else:
                 lang = self.pool.get('res.users').browse(cr, uid, uid).lang
-                print 'lang calculado ', lang
                 lang = 'es_AR'
-                print 'lang harcodeado', lang
                 weekday = babel.dates.format_datetime(init, format='EEE', locale=lang)
                 day_n = init.strftime('%d')
                 month_n = init.strftime('%m')
                 year_n = init.strftime('%y')
-                print weekday, day_n, month_n, year_n
             pool_diary = self.pool['curso.diary']
             ids = pool_diary.search(
                 cr, uid, [('curso_id', '=', curso.id)], context=context)
-            print 'diary ids', ids
             hhs = mms = hhe = mme = 0
             for diary_line in pool_diary.browse(cr, uid, ids, context=context):
                 ss = diary_line.schedule.start_time
@@ -607,7 +602,6 @@ class curso_curso(osv.osv):
                 mme = ee - int(ee)
                 hhe = int(ee - mme)
                 mme = int(mme * 60)
-                print 'start end', ss, ee
                 break
 
             # https://docs.python.org/2/library/datetime.html#datetime-objects

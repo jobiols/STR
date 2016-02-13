@@ -203,6 +203,11 @@ class product_product(osv.osv):
         return formatted_diary
 
     def _get_wordpress_data(self, cr, uid, ids, default_code, context=None):
+        """
+        Genera el html para pegar en wordpress, trae todas las instancias de cursos
+        basadas en este producto.
+        """
+
         prod_pool = self.pool['product.product']
         ids = prod_pool.search(cr, uid, [
             ('default_code', '=', default_code),
@@ -221,8 +226,8 @@ class product_product(osv.osv):
             ])
             grid = []
             for curso in curso_pool.browse(cr, uid, ids, context=context):
-                formatted_diary = self._get_formatted_diary(cr, uid, curso.id,
-                                                            context=None)
+                formatted_diary = self._get_formatted_diary(
+                    cr, uid, curso.id, context=None)
                 for idx, fdline in enumerate(formatted_diary):
                     if idx == 0:
                         grid.append(
