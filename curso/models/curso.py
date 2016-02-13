@@ -688,7 +688,6 @@ class curso_curso(osv.osv):
         print 'calculated clases =', classes_per_week
         return classes_per_week
 
-
     def _get_instance(self, cr, uid, ids, fields, args, context=None):
         res = {}
         for curso in self.browse(cr, uid, ids, context=context):
@@ -746,65 +745,91 @@ class curso_curso(osv.osv):
                     # curso model
 
     _columns = {
-        'child': fields.boolean('Curso Hijo',
-                                readonly=True,
-                                states={'draft': [('readonly', False)]},
-                                help="Tildar si el curso es hijo, es decir debe estar \
-                                        insertado en un curso mas grande"),
-        'instance': fields.integer('Instancia',
-                                   readonly=True,
-                                   states={'draft': [('readonly', False)]}),
-        'user_id': fields.many2one('res.users', 'Responsable',
-                                   readonly=True, states={'done': [('readonly', True)]}),
-        'product': fields.many2one('product.product', 'Producto', required=True,
-                                   domain="[('tot_hs_lecture','!=','0')]",
-                                   readonly=True,
-                                   states={'draft': [('readonly', False)]}),
-        'register_max': fields.integer('Vacantes max',
-                                       help=u"La cantidd máxima de vacantes del curso. \
-                                       Si la cantidad de inscripciones es mayor, \
-                                       no se puede arrancar el curso. \
-                                       (poner 0 para ignorar la regla)",
-                                       readonly=True,
-                                       states={'draft': [('readonly', False)]}),
-        'register_min': fields.integer('Vacantes min', readonly=True,
-                                       help=u"La cantidad mínima de inscripciones en el \
-                                       curso. Si no hay suficientes inscripcones no se \
-                                       puede arrancar el curso. \
-                                       (poner 0 para ignorar la regla)",
-                                       states={'draft': [('readonly', False)]}),
+        'child': fields.boolean(
+            'Curso Hijo',
+            readonly=True,
+            states={'draft': [('readonly', False)]},
+            help="Tildar si el curso es hijo, es decir debe estar insertado en un \
+            curso mas grande"),
 
-        'registration_ids': fields.one2many('curso.registration', 'curso_id',
-                                            'Inscripciones',
-                                            readonly=False,
-                                            states={'done': [('readonly', True)],
-                                                    'cancel': [('readonly', True)]}),
-        'lecture_ids': fields.one2many('curso.lecture', 'curso_id', 'Clases',
-                                       readonly=False),
+        'parent_curso_id': fields.many2one(
+            'curso.curso',
+            'Curso padre'),
 
-        'diary_ids': fields.one2many('curso.diary', 'curso_id', 'Agenda',
-                                     readonly=True,
-                                     states={'draft': [('readonly', False)]}),
+        'first_lecture_id': fields.many2one(
+            'curso.lecture',
+            'Clase inicial'),
 
-        'date_begin': fields.date('Inicio', required=False,
-                                  help=u"La fecha en la que inicia el curso, se puede \
-                                  dejar en blanco si no está definida todavia pero se \
-                                  debe ingresar para confirmar el curso",
-                                  readonly=True, states={'draft': [('readonly', False)]}),
+        'instance': fields.integer(
+            'Instancia',
+            readonly=True,
+            states={'draft': [('readonly', False)]}),
+
+        'user_id': fields.many2one(
+            'res.users',
+            'Responsable',
+            readonly=True, states={'done': [('readonly', True)]}),
+
+        'product': fields.many2one(
+            'product.product',
+            'Producto', required=True,
+            domain="[('tot_hs_lecture','!=','0')]",
+            readonly=True,
+            states={'draft': [('readonly', False)]}),
+
+        'register_max': fields.integer(
+            'Vacantes max',
+            help=u"La cantidd máxima de vacantes del curso. Si la cantidad de \
+            inscripciones es mayor, no se puede arrancar el curso. (poner 0 para \
+            ignorar la regla)",
+            readonly=True,
+            states={'draft': [('readonly', False)]}),
+
+        'register_min': fields.integer(
+            'Vacantes min', readonly=True,
+            help=u"La cantidad mínima de inscripciones en el curso. Si no hay \
+            suficientes inscripcones no se puede arrancar el curso. (poner 0 para \
+            ignorar la regla)",
+            states={'draft': [('readonly', False)]}),
+
+        'registration_ids': fields.one2many(
+            'curso.registration', 'curso_id',
+            'Inscripciones',
+            readonly=False,
+            states={'done': [('readonly', True)],
+                    'cancel': [('readonly', True)]}),
+
+        'lecture_ids': fields.one2many(
+            'curso.lecture', 'curso_id', 'Clases',
+            readonly=False),
+
+        'diary_ids': fields.one2many(
+            'curso.diary', 'curso_id', 'Agenda',
+            readonly=True,
+            states={'draft': [('readonly', False)]}),
+
+        'date_begin': fields.date(
+            'Inicio', required=False,
+            help=u"La fecha en la que inicia el curso, se puede dejar en blanco si no \
+            está definida todavia pero se debe ingresar para confirmar el curso",
+            readonly=True,
+            states={'draft': [('readonly', False)]}),
 
         ### borrar esto
-        'schedule_1': fields.many2one('curso.schedule', 'Horario 1',
-                                      readonly=True,
-                                      states={'draft': [('readonly', False)]}),
-        'schedule_2': fields.many2one('curso.schedule', 'Horario 2',
-                                      readonly=True,
-                                      states={'draft': [('readonly', False)]}),
-        'weekday_1': fields.selection(_get_day, 'Dia 1',
-                                      readonly=True,
-                                      states={'draft': [('readonly', False)]}),
-        'weekday_2': fields.selection(_get_day, 'Dia 2',
-                                      readonly=True,
-                                      states={'draft': [('readonly', False)]}),
+
+        #        'schedule_1': fields.many2one('curso.schedule', 'Horario 1',
+        #                                      readonly=True,
+        #                                      states={'draft': [('readonly', False)]}),
+        #        'schedule_2': fields.many2one('curso.schedule', 'Horario 2',
+        #                                      readonly=True,
+        #                                      states={'draft': [('readonly', False)]}),
+        #        'weekday_1': fields.selection(_get_day, 'Dia 1',
+        #                                      readonly=True,
+        #                                      states={'draft': [('readonly', False)]}),
+        #        'weekday_2': fields.selection(_get_day, 'Dia 2',
+        #                                      readonly=True,
+        #                                      states={'draft': [('readonly', False)]}),
+
         ### borrar esto
 
         'state': fields.selection([
@@ -818,6 +843,7 @@ class curso_curso(osv.osv):
             help=u"Cuando se crea el curso el estado es 'Borrador'. Si se confirma el \
                 curso el estado es 'Cursando'. Si el curso termina el estado \
                 es 'Cumplido'. Si el curso es cancelado el estado pasa a 'Cancelado'."),
+
         'email_registration_id': fields.many2one('email.template',
                                                  'Confirmación de inscripción',
                                                  help=u'Si definís una plantilla, la \
