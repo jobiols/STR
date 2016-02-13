@@ -459,41 +459,15 @@ class curso_curso(osv.osv):
             hd.append(datetime.strptime(holiday.date, '%Y-%m-%d'))
         return hd
 
-    ### borrar esto
-    def _get_day(self, cursor, user_id, context=None):
-        return (
-            ('0', u'Lunes'),
-            ('1', u'Martes'),
-            ('2', u'Miércoles'),
-            ('3', u'Jueves'),
-            ('4', u'Viernes'),
-            ('5', u'Sábado'),
-            ('6', u'Domingo'))
-
-    ### borrar esto
-
-
     def lectures_list(self, weekdays, no_lectures):
-        print 'lectures_list >>>>>>>>>>>>>', weekdays, no_lectures
+        print 'lectures_list >>>>>>>>>>>>>>>>>>>>>>>>>>>>>', no_lectures
 
         ret = []
-        if False:
-            weekday_1 = weekload[0]['weekday']
-            dt = date_begin
-            ret.append((date_begin, weekload[0]['schedule'], 'A'))
-
-            for dayload in weekload[1:]:
-                weekday = dayload['weekday']
-                if weekday > weekday_1:
-                    dt += timedelta(days=weekday - weekday_1)
-                else:
-                    dt += timedelta(days=7 - weekday_1 - weekday)
-                ret.append((dt, dayload['schedule'], 'A'))
-                weekday_1 = weekday
-
         for ix in range(no_lectures):
-            ret.append(
-                (weekdays.get_date(), weekdays.get_schedule(), weekdays.get_room()))
+            ret.append((
+                weekdays.get_date(),
+                weekdays.get_schedule(),
+                weekdays.get_room()))
             weekdays.next
 
         print '------------------------------------------------------------------'
@@ -513,9 +487,7 @@ class curso_curso(osv.osv):
         ii = 0
         for rec in template_obj.browse(cr, uid, ids):
             ret.append(rec.text)
-            print ii
 
-        print 'lecture templates >>> ', ii
         return ret
 
     def button_generate_lectures(self, cr, uid, ids, context=None):
