@@ -67,12 +67,6 @@
                                        attrs="{'readonly':[('child', '==', True)]}"
                                         />
                                 <field name="child"/>
-                                <!--
-                                                                                                <field name="weekday_1"/>
-                                                                                                <field name="schedule_1"/>
-                                                                                                <field name="weekday_2"/>
-                                                                                                <field name="schedule_2"/>
-                                -->
                             </group>
                                                             <!-- agenda -->
                             <field name='diary_ids' colspan="4"
