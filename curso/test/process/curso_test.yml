@@ -51,11 +51,15 @@
     !record {model: curso.curso, id: curso_curso_2}:
         product: curso_product_1
 -
-  I check instance and name
+  I check instance on second curso
 -
     !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
         - instance == 2
-        - name == u'[SPR/02] Lun. 11/01/16 (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
+-
+  I check name on second curso
+-
+    !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
+        - name == u'[SPR/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
 -
     I create a diary with tree days adding it to curso_curso_2
 -
@@ -82,7 +86,7 @@
     !record {model: curso.curso, id: curso_curso_2}:
         date_begin: '2016-01-11'
 -
-    I check curso name
+    I check curso name the last time
 -
     !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
         - name == u'[SPR/02] Lun. 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso'
