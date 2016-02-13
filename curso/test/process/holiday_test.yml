@@ -1,5 +1,5 @@
 -
-  I create a holiday ---------------------------------------------------------------------
+  I create a holiday
 -
   !record {model: curso.holiday, id: curso_holiday_1}:
     name: Anio nuevo
