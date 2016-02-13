@@ -15,7 +15,6 @@
                         <group name="Cursos" string="Características del curso">
                             <group colspan="4" col="4">
                                 <field name="tot_hs_lecture"/>
-                                <!--                                <field name="classes_per_week"/> -->
                                 <field name="hs_lecture"/>
                                 <field name="default_registration_min"/>
                                 <field name="default_registration_max"/>

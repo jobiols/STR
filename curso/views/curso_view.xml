@@ -200,7 +200,6 @@
                                 <field name="lecture_ids" colspan="4" nolabel="1"
                                        groups="curso.group_curso_manager,curso.group_curso_user">
                                     <tree string="Clases">
-                                        <field name="curso_child_id"/>
                                         <field name="date"/>
                                         <field name="weekday" type="string"/>
                                         <!--     <field name="start_time" widget="float_time"/>

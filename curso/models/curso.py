@@ -676,11 +676,11 @@ class curso_curso(osv.osv):
         """
         Calcula la cantidad de clases por semana basado en el diary
         """
+        classes_per_week = 0
         for curso in self.browse(cr, uid, ids, context=context):
             curso.id
             diary_obj = self.pool['curso.diary']
             ids = diary_obj.search(cr, uid, [('curso_id', '=', curso.id)])
-            classes_per_week = 0
             for reg in diary_obj.browse(cr, uid, ids):
                 classes_per_week += 1
 
@@ -710,7 +710,6 @@ class curso_curso(osv.osv):
         print 'clone diary from to', curso_from, curso_to
         diary_obj = self.pool['curso.diary']
         ids = diary_obj.search(cr, uid, [('curso_id', '=', curso_from)])
-        print '-------------', ids
         for diary in diary_obj.browse(cr, uid, ids, context=context):
             print diary.id
             diary_obj.create(cr, uid, {
@@ -727,10 +726,9 @@ class curso_curso(osv.osv):
             diary_id: create the same diary as parent
             child: True
         """
-        print 'update childs'
+        raise osv.except_osv('Error!', u"Esta funcionalidad está en desarrollo")
 
         for curso in self.browse(cr, uid, ids, context=context):
-            print 'curso = ', curso.name
             # walk all childs
             lecture_obj = self.pool['curso.lecture']
             ids = lecture_obj.search(
