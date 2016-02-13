@@ -113,8 +113,6 @@ class product_product(osv.osv):
         'product_url': fields.char('URL del producto', size=200),
         'tot_hs_lecture': fields.integer('Horas catedra',
                                          help="Cantidad de horas que tiene el curso en total."),
-        'classes_per_week': fields.integer('Clases por semana',
-                                           help="Cantidad de clases en la semana."),
         'hs_lecture': fields.integer('Horas de clase',
                                      help="Duración de cada una de las clases."),
         'agenda': fields.text('Tema'),
@@ -150,7 +148,6 @@ class product_product(osv.osv):
     _defaults = {
         'default_registration_min': 0,
         'default_registration_max': 0,
-        'classes_per_week': 1,
         'no_quotes': 1,
         'default_reply_to': "makeoverlabinfo@gmail.com"
     }
@@ -250,61 +247,63 @@ class product_product(osv.osv):
                      'dias': '&nbsp;',
                      'horario': '&nbsp;',
                      })
-            try:
-                weeks = (prod.tot_hs_lecture / prod.hs_lecture) / prod.classes_per_week
-            except:
-                weeks = "error!"
+                try:
+                    weeks = (
+                            prod.tot_hs_lecture / prod.hs_lecture) / curso.classes_per_week
+                except:
+                    weeks = "error!"
 
-            # si está vacio trae False y da una excepcion en mark_down
-            if not prod.agenda:
-                prod.agenda = ''
-            if not prod.description:
-                prod.description = ''
+                # si está vacio trae False y da una excepcion en mark_down
+                if not prod.agenda:
+                    prod.agenda = ''
+                if not prod.description:
+                    prod.description = ''
 
-            if weeks > 1:
-                duracion = u'Duración %s semanas, (%s hs)' % (weeks, prod.tot_hs_lecture)
-                if prod.classes_per_week > 1:
-                    modalidad = u'Modalidad: %s clases de %s hs por semana' % (
-                        prod.classes_per_week, prod.hs_lecture)
+                if weeks > 1:
+                    duracion = u'Duración %s semanas, (%s hs)' % (
+                    weeks, prod.tot_hs_lecture)
+                    if curso.classes_per_week > 1:
+                        modalidad = u'Modalidad: %s clases de %s hs por semana' % (
+                            curso.classes_per_week, prod.hs_lecture)
+                    else:
+                        modalidad = u'Modalidad: una clase de %s horas por semana' % (
+                            prod.hs_lecture)
                 else:
-                    modalidad = u'Modalidad: una clase de %s horas por semana' % (
-                        prod.hs_lecture)
-            else:
-                duracion = ''
-                if prod.classes_per_week > 1:
-                    modalidad = u'Modalidad: %s clases de %s hs' % (
-                        prod.classes_per_week, prod.hs_lecture)
-                else:
-                    modalidad = u'Modalidad: una clase de %s horas' % (
-                        prod.hs_lecture)
+                    duracion = ''
+                    if curso.classes_per_week > 1:
+                        modalidad = u'Modalidad: %s clases de %s hs' % (
+                            curso.classes_per_week, prod.hs_lecture)
+                    else:
+                        modalidad = u'Modalidad: una clase de %s horas' % (
+                            prod.hs_lecture)
 
-            data = {
-                'titulo': prod.name,
-                'codigo': prod.default_code,
-                'description': markdown.markdown(prod.description),
-                'duracion': duracion,
-                'modalidad': modalidad,
-                'grid': grid,
-                'temario': markdown.markdown(prod.agenda),
-                'matricula': 'Bonificada',
-                'cuotas': str(prod.no_quotes),
-                'valor': str(prod.list_price),
-            }
+                data = {
+                    'titulo': prod.name,
+                    'codigo': prod.default_code,
+                    'description': markdown.markdown(prod.description),
+                    'duracion': duracion,
+                    'modalidad': modalidad,
+                    'grid': grid,
+                    'temario': markdown.markdown(prod.agenda),
+                    'matricula': 'Bonificada',
+                    'cuotas': str(prod.no_quotes),
+                    'valor': str(prod.list_price),
+                }
 
-            if False:
-                print '------------------------------------------------- new'
-                print 'titulo           ', data['titulo']
-                print 'codigo           ', data['codigo']
-                print 'description      ', data['description']
-                print 'duracion         ', data['duracion']
-                print 'modalidad        ', data['modalidad']
-                for dd in data['grid']:
-                    print 'grid-data    ', dd
-                print 'temario          ', data['temario']
-                print 'matricula        ', data['matricula']
-                print 'cuotas           ', data['cuotas']
-                print 'valor            ', data['valor']
-                print '-------------------------------------------------'
+                if False:
+                    print '------------------------------------------------- new'
+                    print 'titulo           ', data['titulo']
+                    print 'codigo           ', data['codigo']
+                    print 'description      ', data['description']
+                    print 'duracion         ', data['duracion']
+                    print 'modalidad        ', data['modalidad']
+                    for dd in data['grid']:
+                        print 'grid-data    ', dd
+                    print 'temario          ', data['temario']
+                    print 'matricula        ', data['matricula']
+                    print 'cuotas           ', data['cuotas']
+                    print 'valor            ', data['valor']
+                    print '-------------------------------------------------'
 
         return data
 
