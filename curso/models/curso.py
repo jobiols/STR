@@ -96,7 +96,6 @@ class curso_curso(osv.osv):
             else:
                 self._current_date += timedelta(days=7 - self._gwd(ix_1) - self._gwd(ix))
 
-
     def get_formatted_instance(self, cr, uid, curso_id, context=None):
         for curso in self.browse(cr, uid, curso_id, context=context):
             return '{}/{:0>2d}'.format(curso.default_code, curso.instance)
@@ -557,7 +556,8 @@ class curso_curso(osv.osv):
                         'Error!',
                         u'La clase del %s en el horario %s y en el aula %s se superpone con una ya existente',
                         date, schedule.name, room)
-            print '------------------- lect temp', lectures, lecture_templates
+            print '>>>>>>>>>>>>>>>>>>>>>>>>>------------------- lect temp', len(
+                lectures), len(lecture_templates)
             if len(lectures) != len(lecture_templates):
                 raise osv.except_osv(
                     'Error!',
@@ -671,6 +671,21 @@ class curso_curso(osv.osv):
             except:
                 res[curso.id] = 'Error!'
         return res
+
+    def _get_classes_per_week(self, cr, uid, ids, fields, args, context=None):
+        """
+        Calcula la cantidad de clases por semana basado en el diary
+        """
+        for curso in self.browse(cr, uid, ids, context=context):
+            curso.id
+            diary_obj = self.pool['curso.diary']
+            ids = diary_obj.search(cr, uid, [('curso_id', '=', curso.id)])
+            classes_per_week = 0
+            for reg in diary_obj.browse(cr, uid, ids):
+                classes_per_week += 1
+
+        return classes_per_week
+
 
     def _get_instance(self, cr, uid, ids, fields, args, context=None):
         res = {}
@@ -835,32 +850,34 @@ class curso_curso(osv.osv):
                                          string='Subscribed'),
 
         # Calculated fields
-        'next': fields.function(_get_next, fnct_search=None,
-                                string='Curso por venir', method=True,
-                                store=True, type='boolean'),
-        'curso_instance': fields.function(_get_instance, fnct_search=None,
-                                          string='Instancia del curso', method=True,
-                                          store=False, type='char'),
-        'name': fields.function(_get_name, fnct_search=None, string='Nombre del curso',
-                                method=True, store=True,
-                                type='char'),
-        'no_lectures': fields.function(_get_no_lectures, string='Clases', method=True,
-                                       type='char',
-                                       help=u"La cantidad de clases que tiene el curso"),
-        'register_current': fields.function(_get_register, string='Alumnas',
-                                            help=u"La cantidad de alumnas que \
-                                                confirmaron pagando (al menos una seña)",
-                                            multi='register_numbers'),
-        'register_avail': fields.function(_get_register, string='Vacantes',
-                                          multi='register_numbers', type='integer'),
-        'register_prospect': fields.function(_get_register, string='Interesadas',
-                                             help=u"La cantidad de alumnas interesadas \
-                                                 que todavía no concretaron",
-                                             multi='register_numbers'),
-        'register_attended': fields.function(_get_register, string='Egresadas',
-                                             multi='register_numbers',
-                                             help=u"Cantidad de alumnas que termino el \
-                                                 curso con exito."),
+        'next': fields.function(
+            _get_next, fnct_search=None, string='Curso por venir', method=True,
+            store=True, type='boolean'),
+        'classes_per_week': fields.function(
+            _get_classes_per_week, string='Clases por semana', method=True,
+            type='int', help=u"La cantidad de clases por semana"),
+        'curso_instance': fields.function(
+            _get_instance, fnct_search=None, string='Instancia del curso', method=True,
+            store=False, type='char'),
+        'name': fields.function(
+            _get_name, fnct_search=None, string='Nombre del curso', method=True,
+            store=True, type='char'),
+        'no_lectures': fields.function(
+            _get_no_lectures, string='Clases', method=True, type='char',
+            help=u"La cantidad de clases que tiene el curso"),
+        'register_current': fields.function(
+            _get_register, string='Alumnas',
+            help=u"La cantidad de alumnas que confirmaron pagando (al menos una seña)",
+            multi='register_numbers'),
+        'register_avail': fields.function(
+            _get_register, string='Vacantes', multi='register_numbers', type='integer'),
+        'register_prospect': fields.function(
+            _get_register, string='Interesadas',
+            help=u"La cantidad de alumnas interesadas que todavía no concretaron",
+            multi='register_numbers'),
+        'register_attended': fields.function(
+            _get_register, string='Egresadas', multi='register_numbers',
+            help=u"Cantidad de alumnas que termino el curso con exito."),
 
         # Related fields
         'tot_hs_lecture': fields.related('product', 'tot_hs_lecture', type='float',
