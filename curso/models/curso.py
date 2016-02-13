@@ -576,6 +576,7 @@ class curso_curso(osv.osv):
                 #                lectures_pool.create(cr,uid,lec)
 
     def _get_name(self, cr, uid, ids, fields, args, context=None):
+        print 'curso._get_name -- '
         res = {}
         for curso in self.browse(cr, uid, ids, context=context):
             try:
@@ -584,15 +585,18 @@ class curso_curso(osv.osv):
                 weekday = day_n = month_n = year_n = '?'
             else:
                 lang = self.pool.get('res.users').browse(cr, uid, uid).lang
+                print 'lang calculado ', lang
                 lang = 'es_AR'
+                print 'lang harcodeado', lang
                 weekday = babel.dates.format_datetime(init, format='EEE', locale=lang)
                 day_n = init.strftime('%d')
                 month_n = init.strftime('%m')
                 year_n = init.strftime('%y')
-
+                print weekday, day_n, month_n, year_n
             pool_diary = self.pool['curso.diary']
             ids = pool_diary.search(
                 cr, uid, [('curso_id', '=', curso.id)], context=context)
+            print 'diary ids', ids
             hhs = mms = hhe = mme = 0
             for diary_line in pool_diary.browse(cr, uid, ids, context=context):
                 ss = diary_line.schedule.start_time
@@ -603,6 +607,7 @@ class curso_curso(osv.osv):
                 mme = ee - int(ee)
                 hhe = int(ee - mme)
                 mme = int(mme * 60)
+                print 'start end', ss, ee
                 break
 
             # https://docs.python.org/2/library/datetime.html#datetime-objects
@@ -613,6 +618,7 @@ class curso_curso(osv.osv):
                 day_n, month_n, year_n,  # dia , mes, anio en numeros
                 hhs, mms, hhe, mme,  # hora de inicio hora de fin
                 curso.product.name)  # nombre del producto
+            print name
             res[curso.id] = name
 
             return res
