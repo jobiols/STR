@@ -96,7 +96,7 @@
     I Generate lectures automatically
 -
    !python {model: curso.curso}: |
-     self.button_generate_lectures(cr, uid, [ref("curso_product_1")],context=context)
+     self.button_generate_lectures(cr, uid, ids,context=context)
 -
 -
 -
