@@ -2,7 +2,6 @@
     I create a product
 -
     !record {model: product.product, id: curso_product_1}
-        'name': Curso de maquillaje Social Profesional rafañuso
         'tot_hs_lecture': 15
         'hs_lecture': 5
         'classes_per_week': 1
@@ -10,6 +9,7 @@
         'default_code': SPR
         'list_price': 800
         'type': service
+        'name': Curso de maquillaje Social Profesional rafañuso
         'agenda': Titulo Cuerpo del texto **negrita** Año 2016
         'description': este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño
 -
