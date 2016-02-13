@@ -2,7 +2,7 @@
     I create a product
 -
     !record {model: product.product, id: curso_product_1}
-        'name': u'Curso de maquillaje Social Profesional rafañuso'
+        'name': Curso de maquillaje Social Profesional rafañuso
         'tot_hs_lecture': 15
         'hs_lecture': 5
         'classes_per_week': 1
@@ -10,28 +10,28 @@
         'default_code': SPR
         'list_price': 800
         'type': service
-        'agenda': u'##Titulo \n###Subtitulo\nCuerpo del texto **negrita** Año 2016'
-        'description': u'este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño'
+        'agenda': Titulo Cuerpo del texto **negrita** Año 2016
+        'description': este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño
 -
     I add lecture template 1 for this product
 -
     !record {model: curso.lecture_template, id: curso.lecture_template_1}
         'product_id': curso_product_1
-        'text': u'clase uno ñ'
+        'text': clase uno ñ
         'seq': 1
 -
     I add lecture template 2 for this product
 -
     !record {model: curso.lecture_template, id: curso.lecture_template_1}
         'product_id': curso_product_1
-        'text': u'clase dos ñ'
+        'text': clase dos ñ
         'seq': 2
 -
     I add lecture template 3 for this product
 -
     !record {model: curso.lecture_template, id: curso.lecture_template_1}
         'product_id': curso_product_1
-        'text': u'clase tres ñ'
+        'text': clase tres ñ
         'seq': 3
 -
     I create a curso based on this product
