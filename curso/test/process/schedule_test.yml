@@ -1,5 +1,5 @@
 -
-  I create a schedule --------------------------------------------------------------------
+  I create a schedule
 -
   !record {model: curso.schedule, id: curso_schedule_1}:
     start_time: 12

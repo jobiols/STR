@@ -665,7 +665,7 @@ class curso_curso(osv.osv):
         res = {}
         for curso in self.browse(cr, uid, ids, context=context):
             try:
-                res[curso.id] = curso.tot_hs_lecture / curso.hs_lecture
+                res[curso.id] = int(curso.tot_hs_lecture / curso.hs_lecture)
                 if curso.tot_hs_lecture % curso.hs_lecture != 0:
                     raise
             except:
