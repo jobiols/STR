@@ -12,11 +12,6 @@
         agenda: Titulo Cuerpo del texto **negrita** Año 2016
         description: este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño
 -
-    I add a lecture template for this product
--
-    !python {model: product.product}: |
-        self.button_generate_lecture_templates(cr, uid, [ref("curso_product_1")], context=None):
--
     I create a curso based on this product
 -
     !record {model: curso.curso, id: curso_curso_1}:
