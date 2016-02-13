@@ -70,13 +70,13 @@
     curso_id: curso_curso_2
     weekday: '2'
     seq: 2
-    schedule: curso_schedule_1
+    schedule: curso_schedule_2
 -
   !record {model: curso.diary, id: curso_diary_3}:
     curso_id: curso_curso_2
     weekday: '3'
     seq: 3
-    schedule: curso_schedule_1
+    schedule: curso_schedule_3
 -
   I check curso name
 -
