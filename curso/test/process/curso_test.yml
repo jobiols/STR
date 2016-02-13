@@ -81,7 +81,7 @@
   I check curso name
 -
   !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
-    - name == u'[SPR/02] Lun. 11/01/16 (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
+    - name == u'[SPR/02] Lun. 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso'
 -
   I generate attendance sheet for the curso
 -
@@ -96,7 +96,7 @@
     I Generate lectures automatically
 -
    !python {model: curso.curso}: |
-     self.button_generate_lectures(cr, uid, ids,context=context)
+     self.button_generate_lectures(cr, uid, [ref("curso_curso_2")], context=context)
 -
 -
 -
