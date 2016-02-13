@@ -881,7 +881,7 @@ class curso_curso(osv.osv):
             store=True, type='boolean'),
         'classes_per_week': fields.function(
             _get_classes_per_week, string='Clases por semana', method=True,
-            type='char', help=u"La cantidad de clases por semana"),
+            type='integer', help=u"La cantidad de clases por semana"),
         'curso_instance': fields.function(
             _get_instance, fnct_search=None, string='Instancia del curso', method=True,
             store=False, type='char'),

@@ -67,15 +67,18 @@
                             <group col='2'> <!-- inicio y botones -->
                                 <field name="date_begin"
                                        on_change="onchange_date_begin(context)"/>
+                                <group col='1'>
+                                    <button string="Actualizar datos para los cursos hijos"
+                                            name="update_childs"
+                                            type="object"
+                                            class="oe_highlight"/>
 
-                                <button name="button_generate_doc_curso"
-                                        string="Generar documentación" type="object"
-                                        class="oe_highlight"/>
+                                    <button name="button_generate_lectures"
+                                            string="Generar clases basado en las plantillas"
+                                            type="object"
+                                            class="oe_highlight"/>
 
-                                <button string="Actualizar los chicos"
-                                        name="update_childs"
-                                        type="object"
-                                        class="oe_highlight"/>
+                                </group>
                             </group>
                             <group> <!-- agenda -->
                                 <field name='diary_ids' colspan="4"
@@ -130,7 +133,7 @@
                             <group col="4">
 
                                 <button name="button_generate_doc_curso"
-                                        string="Generar documentación" type="object"
+                                        string="Generar hoja de asistencia" type="object"
                                         class="oe_highlight"/>
                                 <!--
                                                                 <button name="button_generate_lectures"

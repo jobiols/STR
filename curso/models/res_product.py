@@ -246,7 +246,6 @@ class product_product(osv.osv):
                      'dias': '&nbsp;',
                      'horario': '&nbsp;',
                      })
-                print 'clases x week >>>>>>>>>>>>', curso.classes_per_week
                 try:
                     weeks = \
                         (prod.tot_hs_lecture / prod.hs_lecture) / curso.classes_per_week
