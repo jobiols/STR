@@ -754,11 +754,11 @@ class curso_curso(osv.osv):
 
         'parent_curso_id': fields.many2one(
             'curso.curso',
-            'Curso padre'),
+            'Curso padre donde se inserta este'),
 
         'first_lecture_id': fields.many2one(
             'curso.lecture',
-            'Clase inicial'),
+            'Clase inicial de este curso'),
 
         'instance': fields.integer(
             'Instancia',
