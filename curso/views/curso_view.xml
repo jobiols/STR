@@ -65,8 +65,12 @@
                         <!-- esto se ve solo en cursos padres -->
                         <group col='2' attrs="{'invisible':[('child', '==', True)]}">
                             <group col='2'> <!-- inicio y botones -->
+
+
                                 <field name="date_begin"
                                        on_change="onchange_date_begin(context)"/>
+
+
                                 <group col='1'>
                                     <button string="Actualizar datos para los cursos hijos"
                                             name="update_childs"

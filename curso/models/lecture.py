@@ -20,6 +20,7 @@
 ##############################################################################
 from datetime import datetime, timedelta
 from openerp.osv import fields, osv
+import locale
 
 class curso_lecture(osv.osv):
     """ Representa las clases del curso """
@@ -30,7 +31,7 @@ class curso_lecture(osv.osv):
         res = {}
         for rec in self.browse(cr, uid, ids):
             ans = datetime.strptime(rec.date, '%Y-%m-%d')
-            res[rec.id] = ans.strftime("%A")
+            res[rec.id] = ans.strftime("%A").capitalize()
         return res
 
     def _calc_datetime(self, _date, _time):
@@ -64,7 +65,7 @@ class curso_lecture(osv.osv):
 
     _columns = {
         'date': fields.date('Fecha'),
-        'desc': fields.text('Descripcion'),
+        'desc': fields.text('Descripción'),
         'curso_id': fields.many2one('curso.curso', 'Curso', readonly=False,
                                     required=True,
                                     help='Curso al que pertenece esta clase'),

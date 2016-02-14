@@ -24,8 +24,10 @@ import operator
 
 from openerp.osv import fields, osv
 from openerp import SUPERUSER_ID
-import babel.dates
+# import babel.dates
+import locale
 
+locale.setlocale(locale.LC_ALL, 'es_AR.utf8')
 
 class curso_information(osv.osv_memory):
     """ Wizard para generar documentacion de los cursos
@@ -52,7 +54,7 @@ class curso_curso(osv.osv):
         _ix = 0
 
         def __init__(self, wl, date):
-            print 'weekday constructor ----'
+            print 'weekday constructor ---------------------------------------------------'
             # ordering the weekload by weekday
             wl.sort(key=lambda b: b['weekday'])
 
@@ -81,10 +83,9 @@ class curso_curso(osv.osv):
         def _gwd(self, ix):
             return self._weekload[ix]['weekday']
 
-        def next(self):
-            print 'weekday.next '
+        def next_class(self):
+
             # move ix one ahead
-            print 'ix', self._ix
             ix_1 = self._ix
             self._ix += 1
             if self._ix >= len(self._weekload):
@@ -95,7 +96,7 @@ class curso_curso(osv.osv):
             if self._gwd(ix) > self._gwd(ix_1):
                 self._current_date += timedelta(days=self._gwd(ix) - self._gwd(ix_1))
             else:
-                self._current_date += timedelta(days=7 - self._gwd(ix_1) - self._gwd(ix))
+                self._current_date += timedelta(days=7 - (self._gwd(ix_1) - self._gwd(ix)))
 
     def get_formatted_instance(self, cr, uid, curso_id, context=None):
         for curso in self.browse(cr, uid, curso_id, context=context):
@@ -469,7 +470,7 @@ class curso_curso(osv.osv):
                 weekdays.get_date(),
                 weekdays.get_schedule(),
                 weekdays.get_room()))
-            weekdays.next
+            weekdays.next_class()
 
         print '------------------------------------------------------------------'
         for date, schedule, room in ret:
@@ -487,7 +488,7 @@ class curso_curso(osv.osv):
         ret = []
         ii = 0
         for rec in template_obj.browse(cr, uid, ids):
-            ret.append(rec.text)
+            ret.append({'desc': rec.text})
 
         return ret
 
@@ -518,13 +519,12 @@ class curso_curso(osv.osv):
 
             # get a lectures list or an exception if overlaps.
             lectures = []
-
             for date, schedule, room in self.lectures_list(
                     self.weekdays(weekload, date_begin), no_lectures):
                 if not self.lecture_overlaps(date, schedule, room):
                     lectures.append(
                         {'date': date,
-                         'schedule_id': schedule,
+                         'schedule_id': schedule.id,
                          'room': room,
                          'curso_id': curso.id})
                 else:
@@ -532,27 +532,27 @@ class curso_curso(osv.osv):
                         'Error!',
                         u'La clase del %s en el horario %s y en el aula %s se superpone con una ya existente',
                         date, schedule.name, room)
-            print '>>>>>>>>>>>>>>>>>>>>>>>>>------------------- lect temp', len(
-                lectures), len(lecture_templates)
 
             if len(lectures) != len(lecture_templates):
                 raise osv.except_osv(
                     'Error!',
                     u'La cantidad de clases no coincide con la cantidad de contenidos')
-            print '4444444444444444444444444'
+
             lecs = []
             for ix, lec in enumerate(lectures):
-                lec['desc'] = lecture_templates[ix]
+                lec['date'] = lectures[ix]['date']
+                lec['desc'] = lecture_templates[ix]['desc']
+                lec['curso_id'] = lectures[ix]['curso_id']
+                lec['schedule_id'] = lectures[ix]['schedule_id']
                 lecs.append(lec)
-
 
             # Add lectures
             lectures_pool = self.pool.get('curso.lecture')
             ids = lectures_pool.search(cr, uid, [('curso_id', '=', curso.id)])
             lectures_pool.unlink(cr, uid, ids)
 
-            for lecs in lecs:
-                lectures_pool.create(cr, uid, lecs)
+            for lec in lecs:
+                lectures_pool.create(cr, uid, lec)
 
     def _get_name(self, cr, uid, ids, fields, args, context=None):
         res = {}
@@ -562,9 +562,7 @@ class curso_curso(osv.osv):
             except:
                 weekday = day_n = month_n = year_n = '?'
             else:
-                lang = self.pool.get('res.users').browse(cr, uid, uid).lang
-                lang = 'es_AR'
-                weekday = babel.dates.format_datetime(init, format='EEE', locale=lang)
+                weekday = init.strftime("%a").capitalize()
                 day_n = init.strftime('%d')
                 month_n = init.strftime('%m')
                 year_n = init.strftime('%y')
