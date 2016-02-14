@@ -19,8 +19,9 @@
 #
 ##############################################################################
 from datetime import datetime, timedelta
+
 from openerp.osv import fields, osv
-import locale
+
 
 class curso_lecture(osv.osv):
     """ Representa las clases del curso """
@@ -44,7 +45,7 @@ class curso_lecture(osv.osv):
 
         tt = datetime(dt.year, dt.month, dt.day, hh, mm, tzinfo=None)
 
-        # TODO aca sumamos tres horas porque inexplicablemente al mostrar
+        # TODO aca sumamos tres horas porque es UTC
         # el campo le resta tres horas.
         tt = tt + timedelta(hours=3)
         b = tt.strftime("%Y-%m-%d %H:%M:%S")
@@ -64,18 +65,33 @@ class curso_lecture(osv.osv):
         return res
 
     _columns = {
-        'date': fields.date('Fecha'),
-        'desc': fields.text('Descripción'),
-        'curso_id': fields.many2one('curso.curso', 'Curso', readonly=False,
-                                    required=True,
-                                    help='Curso al que pertenece esta clase'),
-        'schedule_id': fields.many2one('curso.schedule', 'Horario', readonly=False,
-                                       required=True),
-        'weekday': fields.function(_weekday, string="Dia", type="char", method=True),
-        'date_start': fields.function(_get_start, string="Inicio de clase",
-                                      type="datetime", method=True),
-        'date_stop': fields.function(_get_stop, string="Fin de clase", type="datetime",
-                                     method=True),
+        'name': fields.text(
+            'Contenido de la clase'),
+
+        'date': fields.date(
+            'Fecha'),
+
+        'curso_id': fields.many2one(
+            'curso.curso', 'Curso',
+            readonly=False,
+            required=True,
+            help='Curso al que pertenece esta clase'),
+
+        'schedule_id': fields.many2one(
+            'curso.schedule', 'Horario',
+            readonly=False,
+            required=True),
+
+        'weekday': fields.function(
+            _weekday, string="Dia", type="char", method=True),
+
+        'date_start': fields.function(
+            _get_start, string="Inicio de clase",
+            type="datetime", method=True),
+
+        'date_stop': fields.function(
+            _get_stop, string="Fin de clase",
+            type="datetime", method=True),
     }
 
-    # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

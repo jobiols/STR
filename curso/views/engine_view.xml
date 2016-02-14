@@ -128,7 +128,7 @@
                         <field name="schedule_id"/>
                     </group>
                     <group>
-                        <field name="desc" nolabel="1"/>
+                        <field name="name" nolabel="1"/>
                     </group>
                 </form>
             </field>
@@ -145,7 +145,7 @@
                     <field name="weekday" type="string"/>
                     <field name="schedule_id"/>
                     <field name="curso_id"/>
-                    <field name="desc"/>
+                    <field name="name"/>
                 </tree>
             </field>
         </record>
@@ -180,7 +180,7 @@
                 <calendar color="curso_id" date_start="date_start" date_stop="date_stop"
                           string="Inscripciones en los curs">
                     <field name="curso_id"/>
-                    <field name="desc"/>
+                    <field name="name"/>
                 </calendar>
             </field>
         </record>

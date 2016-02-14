@@ -165,8 +165,8 @@ class curso_curso(osv.osv):
         for clase in dict['clases']:
             ret += "		<tr>"
             ret += "			<td>" + clase['fecha'] + "&nbsp;</td>"
-            if clase['desc']:
-                dd = clase['desc']
+            if clase['name']:
+                dd = clase['name']
             else:
                 dd = "no hay tema"
             ret += "			<td>" + dd + "</td>"
@@ -199,15 +199,14 @@ class curso_curso(osv.osv):
 
             clases = []
             lect_pool = self.pool.get('curso.lecture')
-            records = lect_pool.search(cr, uid, [('curso_id', '=', curso.id)],
-                                       order="date")
+            records = lect_pool.search(
+                cr, uid, [('curso_id', '=', curso.id)], order="date")
             for lect in lect_pool.browse(cr, uid, records, context=context):
+                # TODO   chequear esto!!!
                 d = {
-                    # TODO   chequear esto!!!
-
                     'fecha': datetime.strptime(
                         lect.date, "%Y-%m-%d").strftime("%d/%m/%y"),
-                    'desc': lect.desc,
+                    'name': lect.name,
                 }
                 clases.append(d)
 
@@ -488,7 +487,7 @@ class curso_curso(osv.osv):
         ret = []
         ii = 0
         for rec in template_obj.browse(cr, uid, ids):
-            ret.append({'desc': rec.text})
+            ret.append({'name': rec.text})
 
         return ret
 
@@ -541,7 +540,7 @@ class curso_curso(osv.osv):
             lecs = []
             for ix, lec in enumerate(lectures):
                 lec['date'] = lectures[ix]['date']
-                lec['desc'] = lecture_templates[ix]['desc']
+                lec['name'] = lecture_templates[ix]['name']
                 lec['curso_id'] = lectures[ix]['curso_id']
                 lec['schedule_id'] = lectures[ix]['schedule_id']
                 lecs.append(lec)
@@ -713,7 +712,7 @@ class curso_curso(osv.osv):
                 cr, uid, [('curso_id', '=', curso.id)], context=context)
             for lecture in lecture_obj.browse(cr, uid, ids):
                 if lecture.curso_child_id:
-                    print 'lecture ', lecture.desc
+                    print 'lecture ', lecture.name
 
                     lecture.curso_child_id.date_begin = lecture.date
                     self.clone_diary(cr, uid, ids, curso.id, lecture.curso_child_id.id)
