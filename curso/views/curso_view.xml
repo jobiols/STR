@@ -49,43 +49,38 @@
                         <field name="state" widget="statusbar"
                                statusbar_visible="draft,cancel,confirm,done"/>
                     </header>
+
                     <sheet>
                         <h1>
                             <field name="name"/>
                         </h1>
+
                         <group col='2'>
                             <field name="product"
                                    on_change="onchange_curso_product(product,context)"/>
                         </group>
-                        <group col='4'>
-                            <field name="instance"/>
-                            <field name="child"/>
+
+
+                        <group attrs="{'invisible':[('child', '==', False)]}">
+                            <field name="parent_curso_id"/>
+                            <field name="first_lecture_id"
+                                   domain="[('curso_id','=',parent_curso_id)]"/>
                         </group>
-                        <hr/>
-                        <!-- esto se ve solo en cursos padres -->
-                        <group col='2' attrs="{'invisible':[('child', '==', True)]}">
-                            <group col='2'> <!-- inicio y botones -->
 
 
+                        <group>
+                            <group>
                                 <field name="date_begin"
-                                       on_change="onchange_date_begin(context)"/>
+                                       on_change="onchange_date_begin(context)"
+                                       attrs="{'readonly':[('child', '==', True)]}"/>
+                                <field name="instance"/>
+                                <field name="child"/>
+                                <field name="allow_overclass"
+                                       attrs="{'invisible':[('child', '==', True)]}"/>
 
-
-                                <group col='1'>
-                                    <button string="Actualizar datos para los cursos hijos"
-                                            name="update_childs"
-                                            type="object"
-                                            class="oe_highlight"/>
-
-                                    <button name="button_generate_lectures"
-                                            string="Generar clases basado en las plantillas"
-                                            type="object"
-                                            class="oe_highlight"/>
-
-                                </group>
                             </group>
-                            <group> <!-- agenda -->
-                                <field name='diary_ids' colspan="4"
+                            <group>
+                                <field name='diary_ids' colspan="4" nolabel="1"
                                        on_change="onchange_diary_ids(context)"
                                        attrs="{'readonly':[('child', '==', True)]}">
 
@@ -95,62 +90,31 @@
                                         <field name="seq"/>
                                     </tree>
                                 </field>
+
                             </group>
                         </group>
 
-                        <!-- esto se ve solo en cursos hijos -->
-                        <group col='2' attrs="{'invisible':[('child', '==', False)]}">
-                            <field name="parent_curso_id"/>
-                            <field name="first_lecture_id"/>
+                        <!-- todos los botones -->
+
+                        <group col='4'>
+                            <button name="button_generate_lectures"
+                                    string="Generar clases"
+                                    type="object"
+                                    class="oe_highlight"
+                                    attrs="{'invisible':[('child', '==', True)]}"/>
+
+                            <button name="button_generate_doc_curso"
+                                    string="Generar hoja de asistencia" type="object"
+                                    class="oe_highlight"/>
+
+                            <button name="button_update_child_from_parent"
+                                    string="Actualizar datos"
+                                    type="object"
+                                    class="oe_highlight"
+                                    attrs="{'invisible':[('child', '==', False)]}"/>
                         </group>
 
-                        <group>
-                            <!--
-                                                        <group col="2">
-                                                            <field name="product"
-                                                                   on_change="onchange_curso_product(product,context)"/>
-                                                        </group>
-                                                        <group colspan="6" col="6">
-                                                            <field name="date_begin"
-                                                                   on_change="onchange_date_begin(context)"
-                                                                   attrs="{'readonly':[('child', '==', True)]}"
-                                                                    />
-                                                            <field name="instance"
-                                                                   attrs="{'readonly':[('child', '==', True)]}"
-                                                                    />
-                                                            <field name="child"/>
-                                                        </group>
-                            -->
-                            <!-- agenda -->
-                            <!--
-                                                        <field name='diary_ids' colspan="4"
-                                                               on_change="onchange_diary_ids(context)"
-                                                               attrs="{'readonly':[('child', '==', True)]}">
 
-                                                            <tree string="diary" editable="top">
-                                                                <field name="weekday"/>
-                                                                <field name="schedule"/>
-                                                                <field name="seq"/>
-                                                            </tree>
-                                                        </field>
-                            -->
-                            <group col="4">
-
-                                <button name="button_generate_doc_curso"
-                                        string="Generar hoja de asistencia" type="object"
-                                        class="oe_highlight"/>
-                                <!--
-                                                                <button name="button_generate_lectures"
-                                                                        string="Generar clases" type="object"
-                                                                        class="oe_highlight"/>
-
-                                                                <button string="Actualizar los chicos"
-                                                                        name="update_childs"
-                                                                        type="object"
-                                                                        class="oe_highlight"/>
-                                -->
-                            </group>
-                        </group>
                         <notebook>
                             <page string="Inscripciones">
                                 <group>
@@ -242,13 +206,9 @@
                                     </group>
                                 </group>
                             </page>
-                            <!--
-                                                        <page string="Descripción">
-                                                            <field name="note" widget="text_html"/>
-                                                        </page>
-                            -->
                             <page string="Clases">
                                 <field name="lecture_ids" colspan="4" nolabel="1"
+                                       attrs="{'readonly':[('child', '==', True)]}"
                                        groups="curso.group_curso_manager,curso.group_curso_user">
                                     <tree string="Clases">
                                         <field name="date"/>

@@ -27,7 +27,8 @@ from openerp import SUPERUSER_ID
 # import babel.dates
 import locale
 
-locale.setlocale(locale.LC_ALL, 'es_AR.utf8')
+# locale.setlocale(locale.LC_ALL, 'es_AR.utf8')
+
 
 class curso_information(osv.osv_memory):
     """ Wizard para generar documentacion de los cursos
@@ -96,7 +97,8 @@ class curso_curso(osv.osv):
             if self._gwd(ix) > self._gwd(ix_1):
                 self._current_date += timedelta(days=self._gwd(ix) - self._gwd(ix_1))
             else:
-                self._current_date += timedelta(days=7 - (self._gwd(ix_1) - self._gwd(ix)))
+                self._current_date += timedelta(
+                    days=7 - (self._gwd(ix_1) - self._gwd(ix)))
 
     def get_formatted_instance(self, cr, uid, curso_id, context=None):
         for curso in self.browse(cr, uid, curso_id, context=context):
@@ -696,17 +698,27 @@ class curso_curso(osv.osv):
                 'seq': diary.seq
             })
 
-    def update_childs(self, cr, uid, ids, context=None):
+    def button_update_child_from_parent(self, cr, uid, ids, parent_id, class_id,
+                                        context=None):
         """
-        Update all child cursos with this information
+        Update child with parent information
             date_begin: the date of the lecture the child is inserted on
             diary_id: create the same diary as parent
             child: True
         """
-        raise osv.except_osv('Error!', u"Esta funcionalidad está en desarrollo")
-
+        res = {}
         for curso in self.browse(cr, uid, ids, context=context):
-            # walk all childs
+            lecture_obj = self.pool['curso.lecture']
+            ids = lecture_obj.search(cr, uid, [('id', '=', class_id)])
+            for lecture in lecture_obj.browse(cr, uid, ids):
+                res['date_begin'] = lecture.date
+                res['a'] = lecture.curso_id
+
+            for parent in self.browse(cr, uid, [curso.parent_curso_id]):
+                res = {}
+                res['date_begin']
+
+
             lecture_obj = self.pool['curso.lecture']
             ids = lecture_obj.search(
                 cr, uid, [('curso_id', '=', curso.id)], context=context)
@@ -727,6 +739,14 @@ class curso_curso(osv.osv):
             states={'draft': [('readonly', False)]},
             help="Tildar si el curso es hijo, es decir debe estar insertado en un \
             curso mas grande"),
+
+        'allow_overclass': fields.boolean(
+            'Permitir sobreclases',
+            readonly=True,
+            states={'draft': [('readonly', False)]},
+            help="Tildar si cuando se generan clases se puede permitir que la clase \
+            comparta el aula con otra en el mismo horario tener en cuenta que pasará \
+            lo mismo con los feriados"),
 
         'parent_curso_id': fields.many2one(
             'curso.curso',
@@ -791,23 +811,6 @@ class curso_curso(osv.osv):
             readonly=True,
             states={'draft': [('readonly', False)]}),
 
-        ### borrar esto
-
-        #        'schedule_1': fields.many2one('curso.schedule', 'Horario 1',
-        #                                      readonly=True,
-        #                                      states={'draft': [('readonly', False)]}),
-        #        'schedule_2': fields.many2one('curso.schedule', 'Horario 2',
-        #                                      readonly=True,
-        #                                      states={'draft': [('readonly', False)]}),
-        #        'weekday_1': fields.selection(_get_day, 'Dia 1',
-        #                                      readonly=True,
-        #                                      states={'draft': [('readonly', False)]}),
-        #        'weekday_2': fields.selection(_get_day, 'Dia 2',
-        #                                      readonly=True,
-        #                                      states={'draft': [('readonly', False)]}),
-
-        ### borrar esto
-
         'state': fields.selection([
             ('draft', 'Borrador'),
             ('confirm', 'Cursando'),
@@ -820,82 +823,111 @@ class curso_curso(osv.osv):
                 curso el estado es 'Cursando'. Si el curso termina el estado \
                 es 'Cumplido'. Si el curso es cancelado el estado pasa a 'Cancelado'."),
 
-        'email_registration_id': fields.many2one('email.template',
-                                                 'Confirmación de inscripción',
-                                                 help=u'Si definís una plantilla, la \
-                                                     misma se enviará cada vez que se \
-                                                     confirme una inscripción a este curso.'),
-        'email_confirmation_id': fields.many2one('email.template', 'Confirmación curso',
-                                                 help=u"Si definis una plantilla de mail, \
-                                                     cada participante recibirá este mail \
-                                                     anunciando la confirmación del curso."),
-        'reply_to': fields.char('Mail de respuesta', size=64, readonly=False,
-                                states={'done': [('readonly', True)]},
-                                help=u"La dirección de mail del que organiza los cursos, \
-                                    cuando el alumno responde el mail que se le envia en \
-                                    automático responderá a esta dirección."),
-        'main_speaker_id': fields.many2one('res.partner', 'Profesora', readonly=False,
-                                           states={'done': [('readonly', True)]},
-                                           help=u"La profesora que va a dar el curso."),
-        'country_id': fields.related('address_id', 'country_id', type='many2one',
-                                     relation='res.country',
-                                     string='Country',
-                                     readonly=False,
-                                     states={'done': [('readonly', True)]}),
-        'note': fields.text('Description',
-                            readonly=False, states={'done': [('readonly', True)]}),
-        'company_id': fields.many2one('res.company', 'Company', required=False,
-                                      change_default=True,
-                                      readonly=False,
-                                      states={'done': [('readonly', True)]}),
-        'is_subscribed': fields.function(_subscribe_fnc, type="boolean",
-                                         string='Subscribed'),
+        'email_registration_id': fields.many2one(
+            'email.template', 'Confirmación de inscripción',
+            help=u'Si definís una plantilla, la misma se enviará cada vez que se \
+            confirme una inscripción a este curso.'),
+
+        'email_confirmation_id': fields.many2one(
+            'email.template', 'Confirmación curso',
+            help=u"Si definis una plantilla de mail, cada participante recibirá este \
+            mail anunciando la confirmación del curso."),
+
+        'reply_to': fields.char(
+            'Mail de respuesta', size=64, readonly=False,
+            states={'done': [('readonly', True)]},
+            help=u"La dirección de mail del que organiza los cursos, cuando el alumno \
+            responde el mail que se le envia en automático responderá a esta dirección."),
+
+        'main_speaker_id': fields.many2one(
+            'res.partner', 'Profesora', readonly=False,
+            states={'done': [('readonly', True)]},
+            help=u"La profesora que va a dar el curso."),
+
+        'country_id': fields.related(
+            'address_id', 'country_id', type='many2one',
+            relation='res.country',
+            string='Country',
+            readonly=False,
+            states={'done': [('readonly', True)]}),
+
+        'note': fields.text(
+            'Description',
+            readonly=False, states={'done': [('readonly', True)]}),
+
+        'company_id': fields.many2one(
+            'res.company', 'Company', required=False,
+            change_default=True,
+            readonly=False,
+            states={'done': [('readonly', True)]}),
+
+        'is_subscribed': fields.function(
+            _subscribe_fnc, type="boolean",
+            string='Subscribed'),
 
         # Calculated fields
         'next': fields.function(
             _get_next, fnct_search=None, string='Curso por venir', method=True,
             store=True, type='boolean'),
+
         'classes_per_week': fields.function(
             _get_classes_per_week, string='Clases por semana', method=True,
             type='integer', help=u"La cantidad de clases por semana"),
+
         'curso_instance': fields.function(
             _get_instance, fnct_search=None, string='Instancia del curso', method=True,
             store=False, type='char'),
+
         'name': fields.function(
             _get_name, fnct_search=None, string='Nombre del curso', method=True,
             store=True, type='char'),
+
         'no_lectures': fields.function(
             _get_no_lectures, string='Clases', method=True, type='char',
             help=u"La cantidad de clases que tiene el curso"),
+
         'register_current': fields.function(
             _get_register, string='Alumnas',
             help=u"La cantidad de alumnas que confirmaron pagando (al menos una seña)",
             multi='register_numbers'),
+
         'register_avail': fields.function(
-            _get_register, string='Vacantes', multi='register_numbers', type='integer'),
+            _get_register, string='Vacantes',
+            multi='register_numbers', type='integer'),
+
         'register_prospect': fields.function(
             _get_register, string='Interesadas',
             help=u"La cantidad de alumnas interesadas que todavía no concretaron",
             multi='register_numbers'),
+
         'register_attended': fields.function(
             _get_register, string='Egresadas', multi='register_numbers',
             help=u"Cantidad de alumnas que termino el curso con exito."),
 
         # Related fields
-        'tot_hs_lecture': fields.related('product', 'tot_hs_lecture', type='float',
-                                         string='Tot Hs', readonly=True),
-        'list_price': fields.related('product', 'list_price', type='float',
-                                     string='Cuota', readonly=True),
-        'hs_lecture': fields.related('product', 'hs_lecture', type='float', string='Hs',
-                                     readonly=True),
-        'default_code': fields.related('product', 'default_code', type='char',
-                                       string=u'Código', readonly=True),
-        'no_quotes': fields.related('product', 'no_quotes', type='integer',
-                                    string='#cuotas', readonly=True),
+        'tot_hs_lecture': fields.related(
+            'product', 'tot_hs_lecture', type='float',
+            string='Tot Hs', readonly=True),
 
+        'list_price': fields.related(
+            'product', 'list_price', type='float',
+            string='Cuota', readonly=True),
+
+        'hs_lecture': fields.related(
+            'product', 'hs_lecture', type='float', string='Hs',
+            readonly=True),
+
+        'default_code': fields.related(
+            'product', 'default_code', type='char',
+            string=u'Código', readonly=True),
+
+        'no_quotes': fields.related(
+            'product', 'no_quotes', type='integer',
+            string='#cuotas', readonly=True),
     }
     _defaults = {
         'state': 'draft',
+
         'company_id': lambda self, cr, uid, c: self.pool.get(
             'res.company')._company_default_get(cr, uid, 'curso.curso',
                                                 context=c),
