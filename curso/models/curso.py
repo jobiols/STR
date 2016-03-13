@@ -24,11 +24,12 @@ import operator
 
 from openerp.osv import fields, osv
 from openerp import SUPERUSER_ID
-# import babel.dates
 import locale
 
-# locale.setlocale(locale.LC_ALL, 'es_AR.utf8')
-
+try:
+    locale.setlocale(locale.LC_ALL, 'es_AR.utf8')
+except:
+    a = 1
 
 class curso_information(osv.osv_memory):
     """ Wizard para generar documentacion de los cursos
@@ -698,39 +699,30 @@ class curso_curso(osv.osv):
                 'seq': diary.seq
             })
 
-    def button_update_child_from_parent(self, cr, uid, ids, parent_id, class_id,
-                                        context=None):
+    def button_update_child_from_parent(
+            self, cr, uid, ids, parent_id, class_id, context=None):
         """
         Update child with parent information
             date_begin: the date of the lecture the child is inserted on
             diary_id: create the same diary as parent
             child: True
         """
+        print 'button_update_child_from_parent ', parent_id, class_id
         res = {}
         for curso in self.browse(cr, uid, ids, context=context):
+            print curso.name
+
+            self.clone_diary(cr, uid, ids, parent_id, curso.id, context=context)
+
             lecture_obj = self.pool['curso.lecture']
             ids = lecture_obj.search(cr, uid, [('id', '=', class_id)])
             for lecture in lecture_obj.browse(cr, uid, ids):
+                print lecture.name
                 res['date_begin'] = lecture.date
-                res['a'] = lecture.curso_id
-
-            for parent in self.browse(cr, uid, [curso.parent_curso_id]):
-                res = {}
-                res['date_begin']
+                print res
 
 
-            lecture_obj = self.pool['curso.lecture']
-            ids = lecture_obj.search(
-                cr, uid, [('curso_id', '=', curso.id)], context=context)
-            for lecture in lecture_obj.browse(cr, uid, ids):
-                if lecture.curso_child_id:
-                    print 'lecture ', lecture.name
 
-                    lecture.curso_child_id.date_begin = lecture.date
-                    self.clone_diary(cr, uid, ids, curso.id, lecture.curso_child_id.id)
-                    lecture.curso_child_id.child = True
-
-                    # curso model
 
     _columns = {
         'child': fields.boolean(
