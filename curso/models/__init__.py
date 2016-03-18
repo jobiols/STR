@@ -27,7 +27,6 @@ import lecture
 import quota
 import curso
 import registration
-import account_invoice
 import res_partner
 import res_product
 import lecture_template
