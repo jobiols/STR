@@ -500,11 +500,12 @@ class curso_curso(osv.osv):
         print 'button_generate_lectures',cr,uid,ids
 
         for curso in self.browse(cr, uid, ids, context=context):
+            print '>>', curso
             date_begin = datetime.strptime(curso.date_begin, '%Y-%m-%d')
             tot_hs_lecture = curso.tot_hs_lecture
             hs_lecture = curso.hs_lecture
             default_code = curso.default_code
-
+            print 'date_begin, tot_hs, hs', date_begin,tot_hs_lecture,hs_lecture
             if (operator.mod(tot_hs_lecture, hs_lecture) != 0):
                 raise osv.except_osv(
                     'Error!',
@@ -549,12 +550,17 @@ class curso_curso(osv.osv):
                 lec['schedule_id'] = lectures[ix]['schedule_id']
                 lecs.append(lec)
 
+            print '---------------------------------------------------'
+            print lecs
+
             # Add lectures
             lectures_pool = self.pool.get('curso.lecture')
             ids = lectures_pool.search(cr, uid, [('curso_id', '=', curso.id)])
+            print 'delete ids',ids
             lectures_pool.unlink(cr, uid, ids)
-
+            print 'add lectures '
             for lec in lecs:
+                print 'add',lec
                 lectures_pool.create(cr, uid, lec)
 
     def _get_name(self, cr, uid, ids, fields, args, context=None):
