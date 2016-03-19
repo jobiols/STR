@@ -88,40 +88,32 @@
 -
     !python {model: product.product}: |
         self.button_generate_doc(cr, uid, [ref("curso_product_1")],context=context)
-
-
-
-
-
-
-
-
-
-
 -
     I Generate lectures automatically
 -
    !python {model: curso.curso}: |
      self.button_generate_lectures(cr, uid, [ref("curso_curso_2")], context=context)
 -
+
+
+
+
+
     I check generated lectures 1
 -
   !assert {model: curso.lecture, id: 0, severity: error, string: error}:
-    - id == 0
     - product_id = curso_product_1
     - text == clase uno ñ
 -
     I check generated lectures 2
 -
   !assert {model: curso.lecture, id: 1, severity: error, string: error}:
-    - id == 1
     - product_id = curso_product_1
     - text == clase dos ñ
 -
     I check generated lectures 3
 -
   !assert {model: curso.lecture, id: 2, severity: error, string: error}:
-    - id == 2
     - product_id = curso_product_1
     - text == clase tres ñ
 -
