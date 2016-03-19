@@ -101,19 +101,19 @@
 
     I check generated lectures 1
 -
-    !assert {model: curso.lecture, id: 0, severity: error, string: error in lecture 0}:
+    !assert {model: curso.lecture, id: lecture_0, severity: error, string: error in lecture 0}:
         - curso_id = curso_product_1
         - name == Clase nro 1
 -
     I check generated lectures 2
 -
-    !assert {model: curso.lecture, id: 1, severity: error, string: error}:
+    !assert {model: curso.lecture, id: lecture_1, severity: error, string: error}:
         - curso_id = curso_product_1
         - name == Clase nro 2
 -
     I check generated lectures 3
 -
-    !assert {model: curso.lecture, id: 2, severity: error, string: error}:
+    !assert {model: curso.lecture, id: lecture_2, severity: error, string: error}:
         - curso_id = curso_product_1
         - name == Clase nro 3
 -
