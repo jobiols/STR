@@ -82,17 +82,17 @@
     I generate attendance sheet for the curso
 -
     !python {model: curso.curso}: |
-        self.button_generate_doc_curso(cr, uid, [ref("curso_curso_2")],context=context)
+        self.button_generate_doc_curso(cr, uid, [ref("curso_curso_2")], context=context)
 -
     I generate wordpress (html) data for curso
 -
     !python {model: product.product}: |
-        self.button_generate_doc(cr, uid, [ref("curso_product_1")],context=context)
+        self.button_generate_doc(cr, uid, [ref("curso_product_1")], context=context)
 -
     I Generate lectures automatically
 -
-   !python {model: curso.curso}: |
-     self.button_generate_lectures(cr, uid, [ref("curso_curso_2")], context=context)
+    !python {model: curso.curso}: |
+        self.button_generate_lectures(cr, uid, [ref("curso_curso_2")], context=context)
 -
 
 
@@ -101,21 +101,21 @@
 
     I check generated lectures 1
 -
-  !assert {model: curso.lecture, id: 0, severity: error, string: error in lecture 0}:
-    - curso_id = curso_product_1
-    - name == clase uno ñ
+    !assert {model: curso.lecture, id: 0, severity: error, string: error in lecture 0}:
+        - curso_id = curso_product_1
+        - name == Clase nro 1
 -
     I check generated lectures 2
 -
-  !assert {model: curso.lecture, id: 1, severity: error, string: error}:
-    - curso_id = curso_product_1
-    - name == clase dos ñ
+    !assert {model: curso.lecture, id: 1, severity: error, string: error}:
+        - curso_id = curso_product_1
+        - name == Clase nro 2
 -
     I check generated lectures 3
 -
-  !assert {model: curso.lecture, id: 2, severity: error, string: error}:
-    - curso_id = curso_product_1
-    - name == clase tres ñ
+    !assert {model: curso.lecture, id: 2, severity: error, string: error}:
+        - curso_id = curso_product_1
+        - name == Clase nro 3
 -
 -
 -
@@ -125,31 +125,31 @@
 -
 -
 -
-  I Register a student in the course
+    I Register a student in the course
 -
-  !record {model: curso.registration, id: curso_registration_1}:
-    curso_id: curso_curso_2
-    partner_id: curso_student_1
+    !record {model: curso.registration, id: curso_registration_1}:
+        curso_id: curso_curso_2
+        partner_id: curso_student_1
 -
-  I make the student sign the course
+    I make the student sign the course
 -
-   !python {model: curso.registration}: |
-     self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
+    !python {model: curso.registration}: |
+        self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
 -
-  I Begin the course
+    I Begin the course
 -
-   !python {model: curso.registration}: |
-     self.button_reg_confirm(cr, uid, [ref("curso_registration_1")],context=context)
+    !python {model: curso.registration}: |
+        self.button_reg_confirm(cr, uid, [ref("curso_registration_1")],context=context)
 -
-  I confirm the curso
+    I confirm the curso
 -
-   !python {model: curso.registration}: |
-     self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
+    !python {model: curso.registration}: |
+        self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
 -
-   I test wordpress report data -------------------------------------
+    I test wordpress report data -------------------------------------
 -
-   !python {model: product.product}: |
-     data = self._get_wordpress_data(cr, uid, [ref("curso_product_1")],'SPR',context=context)
-     assert data['titulo'] == u'Curso de maquillaje Social Profesional rafañuso',        'Failed report data'
-     assert data['codigo'] == u'SPR',                                                    'Failed report data'
-     assert data['description'] == u'<p>este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño</p>' ,   'Failed report data'
+    !python {model: product.product}: |
+        data = self._get_wordpress_data(cr, uid, [ref("curso_product_1")],'SPR',context=context)
+        assert data['titulo'] == u'Curso de maquillaje Social Profesional rafañuso',        'Failed report data'
+        assert data['codigo'] == u'SPR',                                                    'Failed report data'
+        assert data['description'] == u'<p>este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño</p>' ,   'Failed report data'
