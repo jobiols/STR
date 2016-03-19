@@ -94,35 +94,28 @@
     !python {model: curso.curso}: |
         self.button_generate_lectures(cr, uid, [ref("curso_curso_2")], context=context)
 -
-
-
-
     !python {model: curso.lecture}: |
         curso_lecture = self.pool.get('curso.lecture')
         records = curso_lecture.search(cr, uid, [], context=context)
         print '>>>>>>>>>>>>>>', records
-
-
 -
-
-
 
     I check generated lectures 1
 -
     !assert {model: curso.lecture, id: 1, severity: error, string: error in lecture 0}:
-        - curso_id = curso_product_1
+        - curso_id == curso_product_1
         - name == Clase nro 1
 -
     I check generated lectures 2
 -
     !assert {model: curso.lecture, id: 2, severity: error, string: error}:
-        - curso_id = curso_product_1
+        - curso_id == curso_product_1
         - name == Clase nro 2
 -
     I check generated lectures 3
 -
     !assert {model: curso.lecture, id: 3, severity: error, string: error}:
-        - curso_id = curso_product_1
+        - curso_id == curso_product_1
         - name == Clase nro 3
 -
 -
