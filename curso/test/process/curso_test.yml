@@ -15,7 +15,7 @@
     I add a lecture template for this product
 -
     !python {model: product.product}: |
-        self.button_generate_lecture_templates(cr, uid, [ref("curso_product_1")], context=None):
+        self.button_generate_lecture_templates(cr, uid, [ref("curso_product_1")], context=None)
 -
     I create a curso based on this product
 -
