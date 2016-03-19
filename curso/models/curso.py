@@ -587,7 +587,7 @@ class curso_curso(osv.osv):
             name = u'[{}] {} {}/{}/{} ({:0>2d}:{:0>2d} {:0>2d}:{:0>2d}) - {}'.format(
                 curso.curso_instance,
                 # Codigo de producto, Nro de instancia
-                weekday.capitalize(),  # dia de la semana en letras
+                unicode(weekday.capitalize(),'utf-8'),  # dia de la semana en letras
                 day_n, month_n, year_n,  # dia , mes, anio en numeros
                 hhs, mms, hhe, mme,  # hora de inicio hora de fin
                 curso.product.name)  # nombre del producto
