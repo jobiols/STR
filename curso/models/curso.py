@@ -497,6 +497,7 @@ class curso_curso(osv.osv):
     def button_generate_lectures(self, cr, uid, ids, context=None):
         """ Generar las clases que correspondan a este curso
         """
+        print 'button_generate_lectures',cr,uid,ids
 
         for curso in self.browse(cr, uid, ids, context=context):
             date_begin = datetime.strptime(curso.date_begin, '%Y-%m-%d')

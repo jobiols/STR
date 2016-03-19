@@ -101,7 +101,7 @@
 
     I check generated lectures 1
 -
-  !assert {model: curso.lecture, id: 0, severity: error, string: error}:
+  !assert {model: curso.lecture, id: 0, severity: error, string: error in lecture 0}:
     - curso_id = curso_product_1
     - name == clase uno ñ
 -
