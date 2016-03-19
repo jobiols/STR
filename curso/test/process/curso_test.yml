@@ -102,20 +102,20 @@
     I check generated lectures 1
 -
   !assert {model: curso.lecture, id: 0, severity: error, string: error}:
-    - product_id = curso_product_1
-    - text == clase uno ñ
+    - curso_id = curso_product_1
+    - name == clase uno ñ
 -
     I check generated lectures 2
 -
   !assert {model: curso.lecture, id: 1, severity: error, string: error}:
-    - product_id = curso_product_1
-    - text == clase dos ñ
+    - curso_id = curso_product_1
+    - name == clase dos ñ
 -
     I check generated lectures 3
 -
   !assert {model: curso.lecture, id: 2, severity: error, string: error}:
-    - product_id = curso_product_1
-    - text == clase tres ñ
+    - curso_id = curso_product_1
+    - name == clase tres ñ
 -
 -
 -
