@@ -148,6 +148,4 @@
         print data['titulo']
         print data['codigo']
         print data['description']
-        assert data['titulo'] == u'Curso de maquillaje Social Profesional rafañuso',        'Failed report data'
-        assert data['codigo'] == u'SPR',                                                    'Failed report data'
-        assert data['description'] == u'<p>este es un curso <strong>de prueba</strong> para el test en UTF8 ajá tomá ñoño</p></p>' ,   'Failed report data'
+        assert data['titulo'] == u'Curso de maquillaje Social Profesional rafañuso',    'Failed report data'
