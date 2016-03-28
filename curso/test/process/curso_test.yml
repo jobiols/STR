@@ -103,17 +103,17 @@
     I check generated lectures 1
 -
     !assert {model: curso.lecture, id: 1, severity: error, string: error in lecture 0}:
-        - name == Clase nro 1
+        - name == 'Clase nro 1'
 -
     I check generated lectures 2
 -
     !assert {model: curso.lecture, id: 2, severity: error, string: error}:
-        - name == Clase nro 2
+        - name == 'Clase nro 2'
 -
     I check generated lectures 3
 -
     !assert {model: curso.lecture, id: 3, severity: error, string: error}:
-        - name == Clase nro 3
+        - name == 'Clase nro 3'
 -
 -
 -
