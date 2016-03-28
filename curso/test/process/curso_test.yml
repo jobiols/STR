@@ -1,4 +1,9 @@
 -
+    I create a Student
+-
+    !record {model: res.partner, id: curso_student_1}:
+        name: Juana Perez Alumna
+-
     I create a product / 3 classes
 -
     !record {model: product.product, id: curso_product_1}:
@@ -114,14 +119,6 @@
 -
     !assert {model: curso.lecture, id: 3, severity: error, string: error}:
         - name == 'Clase nro 3'
--
--
--
--
--
--
--
--
 -
     I Register a student in the course
 -
