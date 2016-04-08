@@ -28,25 +28,25 @@ class curso_invoice(osv.osv_memory):
 
     def create_invoice(self, cr, uid, ids, invoice_data, context):
 
-#        print('creando la factura -------->>>>>>>>>>>>>>>>>> ')
-#        print('fecha', invoice_data.get('date_invoice'))
-#        print('instancia', invoice_data.get('instance_code'))
-#        print('alumna', invoice_data.get('partner_id').name)
-#        print('cuota', invoice_data.get('quota'))
-#        print('curso', invoice_data.get('curso_id').name)
-#        print('company', invoice_data.get('company_id').name)
+        if False:
+            print('creando la factura -------->>>>>>>>>>>>>>>>>> ')
+            print('fecha', invoice_data.get('date_invoice'))
+            print('instancia', invoice_data.get('instance_code'))
+            print('alumna', invoice_data.get('partner_id').name)
+            print('cuota', invoice_data.get('quota'))
+            print('curso', invoice_data.get('curso_id').name)
+            print('company', invoice_data.get('company_id').name)
 
-#        print('precio', invoice_data.get('curso_id').list_price)
-#        print('producto', invoice_data.get('curso_id').product.name)
-#        print('instancia', invoice_data.get('curso_id').curso_instance)
-#        print('a facturar', '[{}] {}'.format(invoice_data.get('instance_code'),
-#                                             invoice_data.get(
-#                                                 'curso_id').product.name.encode(
-#                                                 'utf-8')))
+            print('precio', invoice_data.get('curso_id').list_price)
+            print('producto', invoice_data.get('curso_id').product.name)
+            print('instancia', invoice_data.get('curso_id').curso_instance)
+#            print('a facturar', '[{}] {}'.format(invoice_data.get('instance_code')),1)
+            print invoice_data.get('instance_code')
 
         product_id = invoice_data.get('curso_id').product
         date_invoice = datetime.strptime(invoice_data.get('date_invoice'), '%Y-%m-%d')
         date_due = (date_invoice + timedelta(days=10))
+
 
         # tomar el mayor precio
         actual_price = invoice_data.get('historic_price')
@@ -60,13 +60,13 @@ class curso_invoice(osv.osv_memory):
             'sequence': 5,
             'invoice_id': False,
             'account_id': 88,  # venta de cursos
-#            'account_analytic_id': 4,
+            #            'account_analytic_id': 4,
             'price_unit': actual_price,
             'quantity': 1.0,
         }
-        invoice_line_id = self.pool.get('account.invoice.line').create(cr, uid,
-                                                                       invoice_line,
-                                                                       context=context)
+        invoice_line_id = self.pool.get(
+            'account.invoice.line').create(cr, uid, invoice_line, context=context)
+
         invoice_lines.append(invoice_line_id)
 
         if invoice_data.get('discount') != 0:
@@ -76,7 +76,7 @@ class curso_invoice(osv.osv_memory):
                 'sequence': 5,
                 'invoice_id': False,
                 'account_id': 88,  # venta de cursos
-#                'account_analytic_id': 4,
+                #                'account_analytic_id': 4,
                 'price_unit': product_id.list_price * invoice_data.get('discount'),
                 'quantity': -1.0,
             }
@@ -132,7 +132,7 @@ class curso_invoice(osv.osv_memory):
                                                  ('date', '<=', datetime.utcnow())])
 
         for quote in register_pool.browse(cr, uid, records, context):
-            if (quote):
+            if quote:
                 invoice_data = {
                     'date_invoice': quote.date,
                     'instance_code': quote.curso_inst,
@@ -147,58 +147,6 @@ class curso_invoice(osv.osv_memory):
 
                 invoice_id = self.create_invoice(cr, uid, ids, invoice_data, context=None)
                 r = register_pool.search(cr, uid, [('id', '=', quote.id)])
-                register_pool.write(cr, uid, r, {'invoice_id': invoice_id},
-                                    context=context)
+                register_pool.write(cr, uid, r, {'invoice_id': invoice_id}, context=context)
 
         return True
-
-    """
-    def button_upgrade(self, cr, uid, ids, context=None):
-        " " "
-        pasa del viejo sistema de schedule a diary
-        " " "
-
-        def map_date(weekday_1):
-            weekday = int(weekday_1)
-            weekday += 1
-            if weekday == 7:
-                weekday = 0
-            return str(weekday)
-
-        curso_pool = self.pool['curso.curso']
-        ids = curso_pool.search(cr, uid, [])
-        for curso in curso_pool.browse(cr, uid, ids, context):
-            # borrar el diary
-            diary_pool = self.pool['curso.diary']
-            ids = diary_pool.search(cr, uid, [('curso_id', '=', curso.id)])
-            diary_pool.unlink(cr, uid, ids)
-
-            if curso.weekday_1 != False:
-                # agregar unl linea de diary basada en los datos del curso
-                new_rec = {
-                    'curso_id': curso.id,
-                    'weekday': map_date(curso.weekday_1),
-                    'schedule': curso.schedule_1.id,
-                    'seq': 0
-                }
-                diary_pool.create(cr, uid, new_rec, context=context)
-
-            if curso.weekday_2 != False:
-                # agregar unl linea de diary basada en los datos del curso
-                new_rec = {
-                    'curso_id': curso.id,
-                    'weekday': map_date(curso.weekday_2),
-                    'schedule': curso.schedule_2.id,
-                    'seq': 1
-                }
-                diary_pool.create(cr, uid, new_rec, context=context)
-
-            upd_rec = {
-                'schedule_1': False,
-                'schedule_2': False,
-                'weekday_1': False,
-                'weekday_2': False,
-            }
-
-            curso_pool.write(cr, uid, curso.id, upd_rec, context=context)
-    """
