@@ -116,7 +116,7 @@ class curso_daily_report(osv.osv_memory):
 
             data.append(
                 {'curso': lecture.curso_id.name,
-                 'tema': lecture.name,
+                 'tema': lecture.name or 'Clase no definida',
                  'alumnas': alumnas
                  }
             )
