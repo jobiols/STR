@@ -497,15 +497,11 @@ class curso_curso(osv.osv):
     def button_generate_lectures(self, cr, uid, ids, context=None):
         """ Generar las clases que correspondan a este curso
         """
-        print 'button_generate_lectures',cr,uid,ids
-
         for curso in self.browse(cr, uid, ids, context=context):
-            print '>>', curso
             date_begin = datetime.strptime(curso.date_begin, '%Y-%m-%d')
             tot_hs_lecture = curso.tot_hs_lecture
             hs_lecture = curso.hs_lecture
             default_code = curso.default_code
-            print 'date_begin, tot_hs, hs', date_begin,tot_hs_lecture,hs_lecture
             if (operator.mod(tot_hs_lecture, hs_lecture) != 0):
                 raise osv.except_osv(
                     'Error!',
@@ -689,7 +685,6 @@ class curso_curso(osv.osv):
         return res
 
     def clone_diary(self, cr, uid, ids, curso_from, curso_to, context=None):
-        #        print 'clone diary from to', curso_from, curso_to
         diary_obj = self.pool['curso.diary']
         ids = diary_obj.search(cr, uid, [('curso_id', '=', curso_from)])
         for diary in diary_obj.browse(cr, uid, ids, context=context):
@@ -722,9 +717,6 @@ class curso_curso(osv.osv):
                 #                print lecture.name
                 res['date_begin'] = lecture.date
             #                print res
-
-
-
 
     _columns = {
         'child': fields.boolean(
