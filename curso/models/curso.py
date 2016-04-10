@@ -545,6 +545,7 @@ class curso_curso(osv.osv):
                 lec['curso_id'] = lectures[ix]['curso_id']
                 lec['schedule_id'] = lectures[ix]['schedule_id']
                 lecs.append(lec)
+                lecs.noexiste
 
             # Add lectures
             lectures_pool = self.pool.get('curso.lecture')
