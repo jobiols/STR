@@ -544,8 +544,6 @@ class curso_curso(osv.osv):
                 lec['name'] = lecture_templates[ix]['name']
                 lec['curso_id'] = lectures[ix]['curso_id']
                 lec['schedule_id'] = lectures[ix]['schedule_id']
-                lec['room'] = 'A'
-                lec['']
                 lecs.append(lec)
 
             # Add lectures
