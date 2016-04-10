@@ -536,7 +536,7 @@ class curso_curso(osv.osv):
             if len(lectures) != len(lecture_templates):
                 raise osv.except_osv(
                     'Error!',
-                    u'La cantidad de clases no coincide con la cantidad de contenidos')
+                    u'La cantidad de clases no coincide con la cantidad de contenidos.')
 
             lecs = []
             for ix, lec in enumerate(lectures):
