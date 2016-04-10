@@ -102,9 +102,7 @@
     !python {model: curso.lecture}: |
         curso_lecture = self.pool.get('curso.lecture')
         records = curso_lecture.search(cr, uid, [], context=context)
-        print '>>>>>>>>>>>>>>', records
 -
-
     I check generated lectures 1
 -
     !assert {model: curso.lecture, id: 1, severity: error, string: error in lecture 0}:
@@ -145,9 +143,6 @@
 -
     !python {model: product.product}: |
         data = self._get_wordpress_data(cr, uid, [ref("curso_product_1")],'SPR',context=context)
-        print data['titulo']
-        print data['codigo']
-        print data['description']
         assert data['titulo'] == u'Curso de maquillaje Social Profesional rafañuso',    'Failed report data 1'
         assert data['codigo'] == u'SPR',                                                'Failed report data 2'
         assert data['description'] == u'<p>este es un curso <strong>de prueba</strong> para el test en UTF8 ajá tomá ñoño</p>' ,  'Failed report data 3'

@@ -529,7 +529,7 @@ class curso_curso(osv.osv):
                     lectures.append(
                         {'date': date,
                          'schedule_id': schedule.id,
-                         'room': room,
+#                         'room': room,
                          'curso_id': curso.id})
                 else:
                     raise osv.except_osv(
@@ -548,19 +548,15 @@ class curso_curso(osv.osv):
                 lec['name'] = lecture_templates[ix]['name']
                 lec['curso_id'] = lectures[ix]['curso_id']
                 lec['schedule_id'] = lectures[ix]['schedule_id']
+                lec['room'] = 'A'
+                lec['']
                 lecs.append(lec)
-
-            print '---------------------------------------------------'
-            print lecs
 
             # Add lectures
             lectures_pool = self.pool.get('curso.lecture')
             ids = lectures_pool.search(cr, uid, [('curso_id', '=', curso.id)])
-            print 'delete ids',ids
             lectures_pool.unlink(cr, uid, ids)
-            print 'add lectures '
             for lec in lecs:
-                print 'add',lec
                 lectures_pool.create(cr, uid, lec)
 
     def _get_name(self, cr, uid, ids, fields, args, context=None):

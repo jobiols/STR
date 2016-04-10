@@ -28,6 +28,36 @@ class curso_lecture(osv.osv):
     _description = __doc__
     _name = 'curso.lecture'
 
+    _columns = {
+        'name': fields.text(
+            'Contenido de la clase'),
+
+        'date': fields.date(
+            'Fecha'),
+
+        'curso_id': fields.many2one(
+            'curso.curso', 'Curso',
+            readonly=False,
+            required=True,
+            help='Curso al que pertenece esta clase'),
+
+        'schedule_id': fields.many2one(
+            'curso.schedule', 'Horario',
+            readonly=False,
+            required=True),
+
+        'weekday': fields.function(
+            _weekday, string="Dia", type="char", method=True),
+
+        'date_start': fields.function(
+            _get_start, string="Inicio de clase",
+            type="datetime", method=True),
+
+        'date_stop': fields.function(
+            _get_stop, string="Fin de clase",
+            type="datetime", method=True),
+    }
+
     def _weekday(self, cr, uid, ids, field_name, arg, context):
         res = {}
         for rec in self.browse(cr, uid, ids):
@@ -63,35 +93,5 @@ class curso_lecture(osv.osv):
         for rec in self.browse(cr, uid, ids):
             res[rec.id] = self._calc_datetime(rec.date, rec.schedule_id.end_time)
         return res
-
-    _columns = {
-        'name': fields.text(
-            'Contenido de la clase'),
-
-        'date': fields.date(
-            'Fecha'),
-
-        'curso_id': fields.many2one(
-            'curso.curso', 'Curso',
-            readonly=False,
-            required=True,
-            help='Curso al que pertenece esta clase'),
-
-        'schedule_id': fields.many2one(
-            'curso.schedule', 'Horario',
-            readonly=False,
-            required=True),
-
-        'weekday': fields.function(
-            _weekday, string="Dia", type="char", method=True),
-
-        'date_start': fields.function(
-            _get_start, string="Inicio de clase",
-            type="datetime", method=True),
-
-        'date_stop': fields.function(
-            _get_stop, string="Fin de clase",
-            type="datetime", method=True),
-    }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
