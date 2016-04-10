@@ -31,14 +31,12 @@ class lecture_template(osv.osv):
     }
 
     def create_template(self, cr, uid, ids, no_lectures):
-        print 'create template >>>>', no_lectures
         prod_ids = self.search(cr, uid, [('product_id', '=', ids[0])])
         if prod_ids:
             raise osv.except_osv(
                 'Error!', u"ya existe una plantilla de clases hay que borrarla primero")
 
         for seq in range(no_lectures):
-            print ids[0], seq
             new_rec = {
                 'product_id': ids[0],
                 'seq': seq,
