@@ -28,6 +28,25 @@ class curso_lecture(osv.osv):
     _description = __doc__
     _name = 'curso.lecture'
 
+    def _weekday(self, cr, uid, ids, field_name, arg, context):
+        res = {}
+        for rec in self.browse(cr, uid, ids):
+            ans = datetime.strptime(rec.date, '%Y-%m-%d')
+            res[rec.id] = ans.strftime("%A").capitalize()
+        return res
+
+    def _get_start(self, cr, uid, ids, field_name, arg, context):
+        res = {}
+        for rec in self.browse(cr, uid, ids):
+            res[rec.id] = self._calc_datetime(rec.date, rec.schedule_id.start_time)
+        return res
+
+    def _get_stop(self, cr, uid, ids, field_name, arg, context):
+        res = {}
+        for rec in self.browse(cr, uid, ids):
+            res[rec.id] = self._calc_datetime(rec.date, rec.schedule_id.end_time)
+        return res
+
     _columns = {
         'name': fields.text(
             'Contenido de la clase'),
@@ -58,12 +77,6 @@ class curso_lecture(osv.osv):
             type="datetime", method=True),
     }
 
-    def _weekday(self, cr, uid, ids, field_name, arg, context):
-        res = {}
-        for rec in self.browse(cr, uid, ids):
-            ans = datetime.strptime(rec.date, '%Y-%m-%d')
-            res[rec.id] = ans.strftime("%A").capitalize()
-        return res
 
     def _calc_datetime(self, _date, _time):
 
@@ -82,16 +95,6 @@ class curso_lecture(osv.osv):
 
         return b
 
-    def _get_start(self, cr, uid, ids, field_name, arg, context):
-        res = {}
-        for rec in self.browse(cr, uid, ids):
-            res[rec.id] = self._calc_datetime(rec.date, rec.schedule_id.start_time)
-        return res
 
-    def _get_stop(self, cr, uid, ids, field_name, arg, context):
-        res = {}
-        for rec in self.browse(cr, uid, ids):
-            res[rec.id] = self._calc_datetime(rec.date, rec.schedule_id.end_time)
-        return res
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
