@@ -92,8 +92,6 @@ class curso_move_registration(osv.osv_memory):
         # Generar el documento
         self.pool.get('document.page').create(cr, uid, new_page, context=context)
 
-        print curso
-
     def button_grid_report(self, cr, uid, ids, context=None):
         curso_obj = self.pool['curso.curso']
         for wiz in self.browse(cr, uid, ids, context):
