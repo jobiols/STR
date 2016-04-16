@@ -266,10 +266,10 @@ class curso_curso(osv.osv):
             if total_confirmed < self.curso.register_min or \
                                     total_confirmed > self.curso.register_max and \
                                     self.curso.register_max != 0:
-                raise osv.except_osv('Error!', (
+                raise osv.except_osv('Error!',
                     u"El total de inscripciones confirmadas para el curso '%s' no \
                     cumple con los requerimientos esperados de minimo/maximo. \
-                    Reconsidere estos limites antes de continuar.") % (
+                    Reconsidere estos limites antes de continuar." % (
                                          self.curso.name))
 
     def check_registration_limits_before(self, cr, uid, ids, no_of_registration,

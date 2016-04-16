@@ -221,6 +221,7 @@ class product_product(osv.osv):
                 ('state', '=', 'confirm')
             ])
             grid = []
+            data = False
             for curso in curso_pool.browse(cr, uid, ids, context=context):
                 formatted_diary = self._get_formatted_diary(
                     cr, uid, curso.id, context=None)
@@ -313,6 +314,9 @@ class product_product(osv.osv):
         for prod in self.browse(cr, uid, ids, context=context):
             data = self._get_wordpress_data(cr, uid, ids, prod.default_code,
                                             context=context)
+            if not data:
+                raise osv.except_osv('Error!','No hay datos!')
+
             new_page = {
                 'name': prod.name,
                 'content': generate_html([data]),
@@ -322,7 +326,7 @@ class product_product(osv.osv):
             records = doc_pool.search(cr, uid, [('name', '=', prod.name)])
             doc_pool.unlink(cr, uid, records)
             # Crear el documento
-            self.pool.get('document.page').create(cr, uid, new_page, context=context)
+            doc_pool.create(cr, uid, new_page, context=context)
 
         return True
 
