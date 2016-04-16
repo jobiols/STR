@@ -19,65 +19,36 @@
 #
 ##############################################################################
 from datetime import datetime, timedelta
+from openerp import models, fields, api
 
-from openerp.osv import fields, osv
-
-
-class curso_lecture(osv.osv):
+class curso_lecture(models.Model):
     """ Representa las clases del curso """
-    _description = __doc__
     _name = 'curso.lecture'
 
-    def _weekday(self, cr, uid, ids, field_name, arg, context):
-        res = {}
-        for rec in self.browse(cr, uid, ids):
-            ans = datetime.strptime(rec.date, '%Y-%m-%d')
-            res[rec.id] = ans.strftime("%A").capitalize()
-        return res
+    @api.one
+    def _weekday(self):
+        ans = datetime.strptime(self.date, '%Y-%m-%d')
+        self.weekday = ans.strftime("%A").capitalize()
 
-    def _get_start(self, cr, uid, ids, field_name, arg, context):
-        res = {}
-        for rec in self.browse(cr, uid, ids):
-            res[rec.id] = self._calc_datetime(rec.date, rec.schedule_id.start_time)
-        return res
+    @api.one
+    def _get_start(self):
+        self.date_start = self._calc_datetime(self.date, self.schedule_id.start_time)
 
-    def _get_stop(self, cr, uid, ids, field_name, arg, context):
-        res = {}
-        for rec in self.browse(cr, uid, ids):
-            res[rec.id] = self._calc_datetime(rec.date, rec.schedule_id.end_time)
-        return res
+    @api.one
+    def _get_stop(self):
+        self.date_stop = self._calc_datetime(self.date, self.schedule_id.end_time)
 
-    _columns = {
-        'name': fields.text(
-            'Contenido de la clase'),
+    name = fields.Text('Contenido de la clase')
+    date = fields.Date('Fecha')
+    curso_id = fields.Many2one('curso.curso', string='Curso', required=True,
+                               help='Curso al que pertenece esta clase')
+    schedule_id = fields.Many2one('curso.schedule', string='Horario', required=True,
+                                  help='Horario de la clase')
+    weekday = fields.Char(compute=_weekday, string="Dia")
+    date_start = fields.Datetime(compute=_get_start, string="Inicio de clase")
+    date_stop = fields.Datetime(compute=_get_stop, string="Fin de clase")
 
-        'date': fields.date(
-            'Fecha'),
-
-        'curso_id': fields.many2one(
-            'curso.curso', 'Curso',
-            readonly=False,
-            required=True,
-            help='Curso al que pertenece esta clase'),
-
-        'schedule_id': fields.many2one(
-            'curso.schedule', 'Horario',
-            readonly=False,
-            required=True),
-
-        'weekday': fields.function(
-            _weekday, string="Dia", type="char", method=True),
-
-        'date_start': fields.function(
-            _get_start, string="Inicio de clase",
-            type="datetime", method=True),
-
-        'date_stop': fields.function(
-            _get_stop, string="Fin de clase",
-            type="datetime", method=True),
-    }
-
-
+    @api.one
     def _calc_datetime(self, _date, _time):
 
         dt = datetime.strptime(_date, "%Y-%m-%d")
@@ -94,7 +65,5 @@ class curso_lecture(osv.osv):
         b = tt.strftime("%Y-%m-%d %H:%M:%S")
 
         return b
-
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
