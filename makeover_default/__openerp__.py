@@ -32,7 +32,11 @@ Customización Makeover Lab
     'depends': [
         'sale_order_recalculate_prices'
     ],
-    'data': [],
+    'data': [
+        'views/partner_view.xml',
+        'views/hide_fields.xml',
+        'security/security_groups.xml',
+    ],
     'test': [],
     'installable': True,
     'application': True,

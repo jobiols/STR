@@ -2,5 +2,45 @@
 <openerp>
         <data noupdate="0">
 
+            <!-- crea un grupo usuarios para aplicacion makeover -->
+
+            <record id="group_makeover_user" model="res.groups">
+                <field name="name">Makeover - Usuario</field>
+                <field name="category_id" ref="base.module_category_hidden"/>
+                <!-- aplicacion -->
+                <field name="implied_ids"
+                       eval="[  (4, ref('base.group_partner_manager')),
+                                (4, ref('base.group_mono_salesteams')),
+                                (4, ref('account.group_account_invoice')),
+                                (4, ref('base.group_sale_salesman')),
+                                (4, ref('product.group_sale_pricelist')),
+                                (4, ref('curso.group_curso_user'))
+                                ]"/>
+                <!-- Recursos humanos/Empleado group_partner_manager -->
+            </record>
+
+            <!-- crea un grupo administrador para aplicacion makeover -->
+
+            <record id="group_makeover_admin" model="res.groups">
+                <field name="name">Makeover - Administración</field>
+                <field name="category_id" ref="base.module_category_hidden"/>
+                <!-- aplicacion -->
+                <field name="implied_ids"
+                       eval="[  (4, ref('group_makeover_user')),
+                                (4, ref('stock.group_locations')),
+                                (4, ref('purchase.group_purchase_manager')),
+                                (4, ref('purchase.group_purchase_user')),
+                                (4, ref('stock.group_stock_user')),
+                                (4, ref('curso.group_curso_manager'))
+                                ]"/>
+                        <!-- group_account_invoice muestra nro de documento y tipo de documento -->
+            </record>
+
+            <!-- hace aparecer el menu de categorias -->
+            <menuitem id="prod_config_main1"
+                      parent="base.menu_product"
+                      action="product.product_category_action_form"
+                      name="Categorias de productos"
+                      sequence="770"/>
         </data>
 </openerp>

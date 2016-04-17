@@ -2,11 +2,11 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_curso_curso,curso.curso,model_curso_curso,curso.group_curso_user,1,1,1,1
 access_curso_registration,curso.registration,model_curso_registration,curso.group_curso_user,1,1,1,1
 access_report_curso_registration,report.curso.registration,model_report_curso_registration,curso.group_curso_user,1,1,1,1
-access_curso_registration_portal,curso.registration,model_curso_registration,,1,0,0,0
+access_curso_registration_portal,curso.registration,model_curso_registration,curso.group_curso_user,1,0,0,0
 access_curso_schedule,curso.schedule,model_curso_schedule,curso.group_curso_user,1,1,1,1
 access_curso_holiday,curso.holiday,model_curso_holiday,curso.group_curso_user,1,1,1,1
 access_curso_lecture,curso.lecture,model_curso_lecture,curso.group_curso_user,1,1,1,1
 access_curso_quota,curso.quota,model_curso_quota,curso.group_curso_manager,1,1,1,1
-access_curso_lapse,curso.lapse,model_curso_lapse,,1,1,1,1
-access_curso_diary,access_curso_diary,model_curso_diary,,1,1,1,1
-access_curso_lecture_template,access_curso_lecture_template,model_curso_lecture_template,,1,1,1,1
+access_curso_lapse,curso.lapse,model_curso_lapse,curso.group_curso_user,1,1,1,1
+access_curso_diary,access_curso_diary,model_curso_diary,curso.group_curso_user,1,1,1,1
+access_curso_lecture_template,access_curso_lecture_template,model_curso_lecture_template,curso.group_curso_user,1,1,1,1

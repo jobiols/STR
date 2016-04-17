@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- eliminar campo limite de crédito -->
+
+        <record id="view_partner_property_form_makeover" model="ir.ui.view">
+            <field name="name">res.partner.stock.property.form.inherit.makeover</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="credit_limit" position="replace"/>
+            </field>
+        </record>
+
+        <!-- eliminar campo Otros documentos de AFIP -->
+
+        <record id="view_res_partner_form_makeover" model="ir.ui.view">
+            <field name="name">res.partner.form.makeover</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="l10n_ar_invoice.view_res_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="other_afip_document_class_ids" position="replace"/>
+            </field>
+        </record>
+
+
+
+
+
+
+
+    </data>
+</openerp>

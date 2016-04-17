@@ -11,7 +11,7 @@
             <field name='arch' type='xml'>
 
                 <notebook position="inside">
-                    <page string="Cursos" groups="base.group_user">
+                    <page string="Cursos">
                         <group name="Cursos" string="Características del curso">
                             <group colspan="4" col="4">
                                 <field name="tot_hs_lecture"/>
