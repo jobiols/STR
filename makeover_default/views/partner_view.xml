@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <!-- eliminar ubicaciones de stock en cliente y proveedor -->
+        <!-- eliminar ubicaciones de stock en cliente y proveedor
 
         <record id="view_partner_property_form_makeover" model="ir.ui.view">
             <field name="name">res.partner.stock.property.form.inherit.makeover</field>
@@ -15,7 +15,7 @@
                 </group>
             </field>
         </record>
-
+-->
         <!-- eliminar lang -->
 
         <record id="view_partner_form_makeover" model="ir.ui.view">
