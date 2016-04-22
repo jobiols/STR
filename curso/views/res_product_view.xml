@@ -9,9 +9,8 @@
             <field name='inherit_id' ref='product.product_normal_form_view'/>
             <field name='type'>form</field>
             <field name='arch' type='xml'>
-
                 <notebook position="inside">
-                    <page string="Cursos">
+                    <page string="Cursos" attrs="{'invisible': [('type', '!=', 'service')]}">
                         <group name="Cursos" string="Características del curso">
                             <group colspan="4" col="4">
                                 <field name="tot_hs_lecture"/>
@@ -21,27 +20,16 @@
                                 <field name="product_url" widget="url"/>
                                 <field name="no_quotes"/>
                             </group>
-                            <!--
-                            <field name="default_reply_to"/>
-                            <field name="default_email_registration"/>
-                            <field name="default_email_curso"/>
--->
                                 <button name="button_generate_doc" string="Generar documentación" type="object"
                                         class="oe_highlight"/>
                                 <button name="button_generate_lecture_templates"
                                         string="Generar plantilla de clases" type="object"
                                         class="oe_highlight"/>
-
-                            <div>   <!-- este div le saca los nombres a los campos -->
-                                <!--   <field name="observ" placeholder="Detalles del curso, Por ejemplo no se requieren conocimientos previos. NO PONER ACA LAS PROMOCIONES!!" /> -->
-
-                            </div>
                         </group>
                         <group col='1'>
                             <field name="agenda" placeholder="Temario del curso"
                                    widget="text_html" nolabel="1"/>
                         </group>
-
                         <group>
                             <field name="lecture_template_ids" colspan="4" nolabel="1">
                                 <tree string="Clases" editable="top">
@@ -50,10 +38,8 @@
                                 </tree>
                             </field>
                         </group>
-
                     </page>
                 </notebook>
-
             </field>
         </record>
     </data>

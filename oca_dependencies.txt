@@ -1,6 +1,13 @@
 odoo-argentina https://github.com/jobiols/odoo-argentina.git  8.0
+adhoc-account-payment https://github.com/jobiols/adhoc-account-payment.git  8.0
+adhoc-reporting-engine https://github.com/jobiols/adhoc-reporting-engine.git  8.0
+adhoc-account-financial-tools https://github.com/jobiols/adhoc-account-financial-tools.git  8.0
+adhoc-product https://github.com/jobiols/adhoc-product.git  8.0
+adhoc-stock https://github.com/jobiols/adhoc-stock.git  8.0
 aeroo_reports https://github.com/aeroo/aeroo_reports.git  8.0
-bank-statement-import https://github.com/OCA/bank-statement-import.git 8.0
+jeo https://github.com/jobiols/jeo.git  8.0
 knowledge https://github.com/jobiols/knowledge.git 8.0
+server-tools https://github.com/jobiols/server-tools.git 8.0
+bank-statement-import https://github.com/jobiols/bank-statement-import.git 8.0
 odoomrp-wip https://github.com/jobiols/odoomrp-wip.git 8.0
-
+web https://github.com/jobiols/web.git 8.0
