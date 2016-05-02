@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-        <data noupdate="0">
+        <data>
 
             <!-- crea un grupo usuarios para aplicacion makeover -->
 
@@ -37,6 +37,7 @@
             </record>
 
             <!-- hace aparecer el menu de categorias -->
+
             <menuitem id="prod_config_main1"
                       parent="base.menu_product"
                       action="product.product_category_action_form"

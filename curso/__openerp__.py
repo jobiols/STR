@@ -28,6 +28,7 @@
 .. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
+
 Manejo de Cursos en una Academia
 ================================
 El módulo curso le ayuda a manejar y organizar en forma eficiente los cursos \
@@ -76,10 +77,11 @@ faltante en la ficha del alumno
     #    'demo': ['data/curso_demo.xml'],
 
     'test': [
-        'test/process/partner_test.yml',
-        'test/process/schedule_test.yml',
-        'test/process/holiday_test.yml',
-        'test/process/curso_test.yml',
+#        'tests/process/partner_test.yml',
+#        'tests/process/schedule_test.yml',
+#        'tests/process/holiday_test.yml',
+#        'tests/process/curso_test.yml',
+#        'tests/curso_test.py'
     ],
     'css': ['static/src/css/curso.css'],
     'js': ['static/src/js/announcement.js'],
