@@ -18,12 +18,13 @@
 #
 #####################################################################################
 
-from openerp.tests.common import TransactionCase
+from openerp.tests.common import SingleTransactionCase
 
-class TestCurso(TransactionCase):
+class TestCurso(SingleTransactionCase):
 
     def setUp(self):
-        super(TestDiary, self).setUp()
+        super(TestCurso, self).setUp()
+        print 'test curso setup --------------------------------------------------------------------'
         # creo todos los objetos
         self.partner_obj = self.env['res.partner']
         self.product_obj = self.env['product.product']
@@ -36,6 +37,7 @@ class TestCurso(TransactionCase):
             'name': 'Juana Perez Alumna'})
 
     def CreateSchedules(self):
+        print 'test curso create schedules'
         # creo tres horarios
         self.schedule1 = self.schedule_obj.create({
             'start_time':12,

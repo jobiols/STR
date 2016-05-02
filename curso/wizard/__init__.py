@@ -19,7 +19,6 @@
 #
 ##############################################################################
 
-
 # import curso_confirm
 import daily_report
 import create_invoice
