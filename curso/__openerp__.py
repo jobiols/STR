@@ -77,10 +77,10 @@ faltante en la ficha del alumno
     #    'demo': ['data/curso_demo.xml'],
 
     'test': [
-#        'tests/process/partner_test.yml',
-#        'tests/process/schedule_test.yml',
-#        'tests/process/holiday_test.yml',
-#        'tests/process/curso_test.yml',
+        'tests/process/partner_test.yml',
+        'tests/process/schedule_test.yml',
+        'tests/process/holiday_test.yml',
+        'tests/process/curso_test.yml',
 #        'tests/curso_test.py'
     ],
     'css': ['static/src/css/curso.css'],
