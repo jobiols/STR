@@ -31,7 +31,11 @@ Customización Makeover Lab
     'author': 'jeo software',
     'depends': [
         'sale_order_recalculate_prices',
-        'stock'
+        'stock',
+        'purchase',
+        'curso',
+        'product',
+        'base'
     ],
     'data': [
         'views/partner_view.xml',
