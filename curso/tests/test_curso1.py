@@ -17,9 +17,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #####################################################################################
-from openerp.tests.common import TransactionCase
+from openerp.tests.common import SingleTransactionCase
 
-class TestCurso(TransactionCase):
+class TestCurso(SingleTransactionCase):
 
     def setUp(self):
         super(TestCurso, self).setUp()
@@ -35,7 +35,7 @@ class TestCurso(TransactionCase):
         self.partner = self.partner_obj.create({
             'name': 'Juana Perez Alumna'})
 
-    def CreateSchedules(self):
+    def CreateSchedules_01(self):
         print 'test curso create schedules'
         # creo tres horarios
         self.schedule1 = self.schedule_obj.create({
@@ -51,12 +51,12 @@ class TestCurso(TransactionCase):
             'end_time':6
         })
 
-    def TestSchedules(self):
+    def TestSchedules_02(self):
         self.assertEqual(self.schedule1.name,u'12:00 - 15:00 (3hs)','El nombre está mal')
         self.assertEqual(self.schedule2.name,u'11:00 - 16:00 (5hs)','El nombre está mal')
         self.assertEqual(self.schedule3.name,u'04:00 - 06:00 (2hs)','El nombre está mal')
 
-    def CreateProduct(self):
+    def CreateProduct_03(self):
         # creo un producto con tres clases
         self.product = self.product_obj.create({
             'tot_hs_lecture': 15,
@@ -74,7 +74,7 @@ class TestCurso(TransactionCase):
         self.ids = [self.product.id]
         self.product.button_generate_lecture_templates()
 
-    def CreateCurso1(self):
+    def CreateCurso1_04(self):
         # creo un curso basado en este producto
         self.curso1 = self.curso_obj.create({
             'product':self.product.id
@@ -87,7 +87,7 @@ class TestCurso(TransactionCase):
                          u'[SPR/01] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso',
                          'El nombre está mal')
 
-    def CreateCurso2(self):
+    def CreateCurso2_05(self):
         # creo otro curso basado en este producto
         self.curso2 = self.curso_obj.create({
             'product':self.product.id
@@ -100,7 +100,7 @@ class TestCurso(TransactionCase):
                          u'[SPR/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso',
                          'El nombre está mal')
 
-    def CreateDiary(self):
+    def CreateDiary_06(self):
         # creo un diario con tres dias agregandolo al curso 2, 3 clases en la semana
         self.diary = self.diary_obj.create({
             'curso_id': self.curso2.id,
