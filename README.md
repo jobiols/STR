@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/jobiols/cursos.svg?branch=8.0)](https://travis-ci.org/jobiols/cursos)
 [![Coverage Status](https://coveralls.io/repos/jobiols/cursos/badge.svg?branch=8.0&service=github)](https://coveralls.io/github/jobiols/cursos?branch=8.0)
 [![Code Climate](https://codeclimate.com/github/jobiols/cursos/badges/gpa.svg)](https://codeclimate.com/github/jobiols/cursos)
+[![Issue Count](https://codeclimate.com/github/jobiols/cursos/badges/issue_count.svg)](https://codeclimate.com/github/jobiols/cursos)
+[![Test Coverage](https://codeclimate.com/github/jobiols/cursos/badges/coverage.svg)](https://codeclimate.com/github/jobiols/cursos/coverage)
 
 Manejo de Cursos en una Academia
 ================================
