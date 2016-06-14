@@ -101,7 +101,7 @@
                     <field name="email"/>
                     <field name="street"/>
                     <field name="comment"/>
-                    <field name="document_number"/>
+                    <field name="document_number" string="DNI/CUIT"/>
                 </xpath>
             </field>
         </record>
