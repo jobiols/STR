@@ -102,8 +102,8 @@ class curso_registration(osv.osv):
         for reg in self.browse(cr, uid, ids, context=context or {}):
             self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
                                                       body=(
-                                                               u'Nuevo inicio de curso: %s.') % (
-                                                               reg.partner_id.name or '',),
+                                                            u'Nuevo inicio de curso: %s.') % (
+                                                            reg.partner_id.name or '',),
                                                       subtype="curso.mt_curso_registration",
                                                       context=context)
         return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
@@ -119,15 +119,16 @@ class curso_registration(osv.osv):
         return self.write(cr, uid, ids, {'state': 'signed'}, context=context)
 
     def button_reg_sign(self, cr, uid, ids, context=None):
-        """ Boton senio el curso
+        """ Boton seña el curso
         """
         curso_obj = self.pool.get('curso.curso')
         for register in self.browse(cr, uid, ids, context=context):
+            partner = register.partner_id
+#            partner.write({'customer': True})
             curso_id = register.curso_id.id
             no_of_registration = register.nb_register
-            curso_obj.check_registration_limits_before(cr, uid, [curso_id],
-                                                       no_of_registration,
-                                                       context=context)
+            curso_obj.check_registration_limits_before(
+                cr, uid, [curso_id], no_of_registration, context=context)
         self.button_gen_quotes(cr, uid, ids, context=None)
         res = self.sign_registration(cr, uid, ids, context=context)
         #        self.mail_user(cr, uid, ids, context=context)
@@ -172,8 +173,8 @@ class curso_registration(osv.osv):
                           ('list_price', '=', 0)])
             if len(records) != 0:
                 raise osv.except_osv(('Error!'),
-                    u"No puede terminar el curso porque tiene cuotas pendientes. \
-                    Se debería cancelar la inscripción, o cobrarle las cuotas")
+                                     u"No puede terminar el curso porque tiene cuotas pendientes. \
+                                     Se debería cancelar la inscripción, o cobrarle las cuotas")
 
             if today >= registration.curso_id.date_begin:
                 values = {'state': 'done', 'date_closed': today}

@@ -129,6 +129,11 @@
     !python {model: curso.registration}: |
         self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
 -
+    Student must be now a client
+-
+    !assert {model: res.partner, id: curso_student_1, severity: error, string: Must be a client}:
+        - customer == True
+-
     I Begin the course
 -
     !python {model: curso.registration}: |
