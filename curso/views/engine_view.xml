@@ -125,6 +125,8 @@
                     <group col="2">
                         <field name="date"/>
                         <field name="curso_id"/>
+                        <field name="date_start"/>
+                        <field name="date_stop"/>
                         <field name="schedule_id"/>
                     </group>
                     <group>
@@ -142,10 +144,11 @@
             <field name="arch" type="xml">
                 <tree string="lista de clases">
                     <field name="date"/>
+                    <field name="date_start"/>
+                    <field name="date_stop"/>
                     <field name="weekday" type="string"/>
                     <field name="schedule_id"/>
                     <field name="curso_id"/>
-                    <field name="name"/>
                 </tree>
             </field>
         </record>
