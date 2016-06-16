@@ -132,7 +132,7 @@
     Student must be now a client
 -
     !assert {model: res.partner, id: curso_student_1, severity: error, string: Must be a client}:
-        - customer == True
+        - customer == False
 -
     I Begin the course
 -
