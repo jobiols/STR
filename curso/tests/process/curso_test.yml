@@ -3,6 +3,7 @@
 -
     !record {model: res.partner, id: curso_student_1}:
         name: Juana Perez Alumna
+        customer: False
 -
     I create a product / 3 classes
 -
@@ -132,7 +133,7 @@
     Student must be now a client
 -
     !assert {model: res.partner, id: curso_student_1, severity: error, string: Must be a client}:
-        - customer == False
+        - customer == True
 -
     I Begin the course
 -
