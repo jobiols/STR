@@ -50,7 +50,8 @@ faltante en la ficha del alumno
 
 """,
     'author': 'jeo software',
-    'depends': ['base_setup',
+    'depends': ['base',
+                'base_setup',
                 'board',
                 'email_template',
                 'l10n_ar_invoice',

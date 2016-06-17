@@ -10,12 +10,14 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
 
+                <field name="user_id" position="replace"></field>
+                <field name="date" position="replace"/>
+                <field name="fax" position="replace"/>
+
                 <field name="function" position="replace">
                     <field name="function" placeholder="Ej. Esteticista"
                            attrs="{'invisible': [('is_company','=', True)]}"/>
                 </field>
-
-                <field name="user_id" position="replace"></field>
 
                 <field name="title" position="replace">
                     <field name="teacher" options='{"no_open": True}'
@@ -27,10 +29,7 @@
                            placeholder="Ej: www.facebook.com/makeoverlabs"/>
                 </field>
 
-                <field name="date" position="replace">
-                </field>
-
-                <field name="website" position="after">
+                <field name="email" position="after">
                     <field name="date" string="Fecha de nacimiento"
                            attrs="{'invisible': [('is_company','=', True)]}"/>
                 </field>
@@ -70,19 +69,15 @@
             </field>
         </record>
 
-        <!--  Partners inherited view -->
+        <!--  Partners inherited tree view -->
 
         <record id="view_partner_tree_curso" model="ir.ui.view">
             <field name="name">res.partner.tree</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="l10n_ar_invoice.view_res_partner_tree"/>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
             <field name="arch" type="xml">
-
                 <field name="phone" position="after">
                     <field name="mobile"/>
-                </field>
-                <field name="document_number" position="after">
-                    <field name="fax"/>
                 </field>
             </field>
         </record>
@@ -101,7 +96,7 @@
                     <field name="email"/>
                     <field name="street"/>
                     <field name="comment"/>
-                    <field name="document_number"/>
+                    <field name="document_number" string="DNI/CUIT"/>
                 </xpath>
             </field>
         </record>

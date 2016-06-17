@@ -21,6 +21,7 @@
 from datetime import datetime, timedelta, date
 # from datetime import datetime, date
 import operator
+from openerp import api
 
 from openerp.osv import fields, osv
 from openerp import SUPERUSER_ID
@@ -489,6 +490,7 @@ class curso_curso(osv.osv):
     def lecture_overlaps(self, date, schedule, room):
         return False
 
+    @api.v7
     def get_lecture_templates(self, cr, uid, ids, product_id, context=None):
         template_obj = self.pool['curso.lecture_template']
         ids = template_obj.search(
@@ -496,6 +498,16 @@ class curso_curso(osv.osv):
         ret = []
         ii = 0
         for rec in template_obj.browse(cr, uid, ids):
+            ret.append({'name': rec.text})
+
+        return ret
+
+    @api.v8
+    def get_lecture_templates(self, product_id):
+        template_obj = self.env['curso.lecture_template']
+
+        ret = []
+        for rec in template_obj.search([('product_id', '=', product_id)]):
             ret.append({'name': rec.text})
 
         return ret
@@ -530,9 +542,9 @@ class curso_curso(osv.osv):
                 if not self.lecture_overlaps(date, schedule, room):
                     lectures.append(
                         {'date': date,
-                         'schedule_id': schedule.id,
+                         'schedule': schedule,
 #                         'room': room,
-                         'curso_id': curso.id})
+                         'curso': curso})
                 else:
                     raise osv.except_osv(
                         'Error!',
@@ -548,8 +560,10 @@ class curso_curso(osv.osv):
             for ix, lec in enumerate(lectures):
                 lec['date'] = lectures[ix]['date']
                 lec['name'] = lecture_templates[ix]['name']
-                lec['curso_id'] = lectures[ix]['curso_id']
-                lec['schedule_id'] = lectures[ix]['schedule_id']
+                lec['curso_id'] = lectures[ix]['curso'].id
+                lec['schedule_id'] = lectures[ix]['schedule'].id
+                lec['date_start'] = lectures[ix]['schedule'].start_datetime(lec['date'])
+                lec['date_stop'] = lectures[ix]['schedule'].stop_datetime(lec['date'])
                 lecs.append(lec)
 
             # Add lectures

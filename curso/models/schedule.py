@@ -18,12 +18,35 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
-from openerp.osv import fields, osv
+from openerp import models, fields, api
+from datetime import datetime, timedelta
 
-class curso_schedule(osv.osv):
+class curso_schedule(models.Model):
     """ horarios que puede tener un curso """
     _name = 'curso.schedule'
     _inherit = 'curso.lapse'
+
+    @api.one
+    def _calc_datetime(self, _date, _time):
+
+        mm = _time - int(_time)
+        hh = int(_time - mm)
+        mm = int(mm * 60)
+
+        tt = datetime(_date.year, _date.month, _date.day, hh, mm, tzinfo=None)
+
+        # aca sumamos tres horas porque es UTC
+        # el campo le resta tres horas.
+        tt = tt + timedelta(hours=3)
+        b = tt.strftime("%Y-%m-%d %H:%M:%S")
+
+        return b
+
+    def start_datetime(self,date):
+        return self._calc_datetime(date, self.start_time)
+
+    def stop_datetime(self,date):
+        return self._calc_datetime(date, self.end_time)
 
     def _f2h(self, t):
         mm = t - int(t)
@@ -40,22 +63,15 @@ class curso_schedule(osv.osv):
             res = "{}hs {}min".format(int(hh), int(mm))
         return res
 
-    def _get_name(self, cr, uid, ids, fields, args, context=None):
-        res = {}
-        for shedule in self.browse(cr, uid, ids, context=context):
-            aa = self._f2h(shedule.start_time)
-            bb = self._f2h(shedule.end_time)
-            cc = self._f2hh_mm(shedule.end_time - shedule.start_time)
-            name = "{} - {} ({})".format(aa, bb, cc)
-            res[shedule.id] = name
-        return res
+    @api.one
+    @api.depends('start_time','end_time')
+    def _get_name(self):
+        aa = self._f2h(self.start_time)
+        bb = self._f2h(self.end_time)
+        cc = self._f2hh_mm(self.end_time - self.start_time)
+        self.name = "{} - {} ({})".format(aa, bb, cc)
 
-    _columns = {
-        'name': fields.function(_get_name, fnct_search=None, string='Nombre del horario',
-                                method=True, store=True,
-                                type='char',
-                                help='Nombre del horario'),
-    }
+    name = fields.Char(compute=_get_name, store=True)
 
     _sql_constraints = [
         ('default_code_unique', 'unique (name)', 'Este horario ya existe.')]
