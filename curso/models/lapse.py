@@ -31,6 +31,6 @@ class curso_lapse(models.Model):
 
     start_time = fields.Float(string='Desde', required=True)
     end_time = fields.Float(string='Hasta', required=True)
-    elapsed_time = fields.Float(string='Duración', compute=_elapsed_time)
+    elapsed_time = fields.Float(compute=_elapsed_time, string='Duración')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

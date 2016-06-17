@@ -19,7 +19,6 @@
 #
 ##############################################################################
 from datetime import datetime, timedelta, date
-# from datetime import datetime, date
 import operator
 from openerp import api
 

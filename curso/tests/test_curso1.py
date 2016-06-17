@@ -19,6 +19,8 @@
 #####################################################################################
 from openerp.tests.common import SingleTransactionCase
 
+import unittest2
+
 class TestCurso(SingleTransactionCase):
 
     def setUp(self):
@@ -129,5 +131,8 @@ class TestCurso(SingleTransactionCase):
                          u'[SPR/02] Mon 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso',
                          'El nombre está mal formado')
 
+
+if __name__ == '__main__':
+    unittest2.main()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
