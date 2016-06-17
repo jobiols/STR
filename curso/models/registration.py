@@ -124,7 +124,7 @@ class curso_registration(osv.osv):
         curso_obj = self.pool.get('curso.curso')
         for register in self.browse(cr, uid, ids, context=context):
             partner = register.partner_id
-#            partner.write({'customer': True})
+            partner.write({'customer': True})
             curso_id = register.curso_id.id
             no_of_registration = register.nb_register
             curso_obj.check_registration_limits_before(
