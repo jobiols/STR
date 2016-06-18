@@ -315,7 +315,7 @@ class product_product(osv.osv):
             data = self._get_wordpress_data(cr, uid, ids, prod.default_code,
                                             context=context)
             if not data:
-                raise osv.except_osv('Error!','No hay datos!')
+                raise osv.except_osv('Error!','No hay instancias de cursos para este producto!')
 
             new_page = {
                 'name': prod.name,

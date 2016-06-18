@@ -19,13 +19,15 @@
 #####################################################################################
 from openerp.tests.common import SingleTransactionCase
 
-import unittest2
+# testear con
+# ./odooenv.py -T cursos test_curso1.py -c makeover -d makeover_test -m curso
+#
 
 class TestCurso(SingleTransactionCase):
 
     def setUp(self):
         super(TestCurso, self).setUp()
-        print 'test curso setup --------------------------------------------------------------------'
+        print 'test curso setup ---------------------------------------------------------'
         # creo todos los objetos
         self.partner_obj = self.env['res.partner']
         self.product_obj = self.env['product.product']
@@ -38,7 +40,7 @@ class TestCurso(SingleTransactionCase):
             'name': 'Juana Perez Alumna'})
 
     def test_CreateSchedules_01(self):
-        print 'test curso create schedules'
+        print 'test curso create schedules ----------------------------------'
         # creo tres horarios
         self.schedule1 = self.schedule_obj.create({
             'start_time':12,
@@ -53,13 +55,13 @@ class TestCurso(SingleTransactionCase):
             'end_time':6
         })
 
-    def test_TestSchedules_02(self):
+        print 'test schedules'
         self.assertEqual(self.schedule1.name,u'12:00 - 15:00 (3hs)','El nombre está mal')
         self.assertEqual(self.schedule2.name,u'11:00 - 16:00 (5hs)','El nombre está mal')
         self.assertEqual(self.schedule3.name,u'04:00 - 06:00 (2hs)','El nombre está mal')
 
-    def test_CreateProduct_03(self):
         # creo un producto con tres clases
+        print 'create product'
         self.product = self.product_obj.create({
             'tot_hs_lecture': 15,
             'hs_lecture': 5,
@@ -76,20 +78,17 @@ class TestCurso(SingleTransactionCase):
         self.ids = [self.product.id]
         self.product.button_generate_lecture_templates()
 
-    def test_CreateCurso1_04(self):
         # creo un curso basado en este producto
         self.curso1 = self.curso_obj.create({
-            'product':self.product.id
+            'product':self.product.id,
         })
 
         # chequeo state instance y name
         self.assertEqual(self.curso1.state,'draft','El estado debe ser draft')
-        self.assertEqual(self.curso1.instance,1,'La instancia debe ser uno')
         self.assertEqual(self.curso1.name,
-                         u'[SPR/01] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso',
+                         u'[SPR/00] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso',
                          'El nombre está mal')
 
-    def test_CreateCurso2_05(self):
         # creo otro curso basado en este producto
         self.curso2 = self.curso_obj.create({
             'product':self.product.id
@@ -97,12 +96,10 @@ class TestCurso(SingleTransactionCase):
 
         # chequeo state instance y name
         self.assertEqual(self.curso1.state,'draft','El estado debe ser draft')
-        self.assertEqual(self.curso1.instance,2,'La instancia debe ser uno')
         self.assertEqual(self.curso1.name,
-                         u'[SPR/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso',
+                         u'[SPR/00] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso',
                          'El nombre está mal')
 
-    def test_CreateDiary_06(self):
         # creo un diario con tres dias agregandolo al curso 2, 3 clases en la semana
         self.diary = self.diary_obj.create({
             'curso_id': self.curso2.id,
@@ -126,13 +123,6 @@ class TestCurso(SingleTransactionCase):
         # le agrego la fecha al curso 2
         self.curso2.date_begin = '2016-01-11'
 
-        # chequeo de nuevo el nombre
-        self.assertEqual(self.name,
-                         u'[SPR/02] Mon 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso',
-                         'El nombre está mal formado')
 
-
-if __name__ == '__main__':
-    unittest2.main()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

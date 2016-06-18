@@ -18,22 +18,21 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields
 
-from openerp.osv import fields, osv
-
-
-class res_partner(osv.osv):
+class res_partner(models.Model):
     _inherit = 'res.partner'
 
-    _columns = {
-        'teacher': fields.boolean('Profesora',
-                                  help="Poner el tilde si el contacto es una profesora."),
-        'curso_ids': fields.one2many('curso.curso',
-                                     'main_speaker_id',
-                                     readonly=True),
-        'curso_registration_ids': fields.one2many('curso.registration',
-                                                  'partner_id',
-                                                  readonly=False),
-    }
+    teacher = fields.Boolean(
+        'Profesora',
+        help="Poner el tilde si el contacto es una profesora.")
+    curso_ids = fields.One2many(
+        'curso.curso',
+        'main_speaker_id',
+        readonly=True)
+    curso_registration_ids = fields.One2many(
+        'curso.registration',
+        'partner_id',
+        readonly=False)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
