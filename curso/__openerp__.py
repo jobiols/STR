@@ -82,7 +82,7 @@ faltante en la ficha del alumno
 #        'tests/process/schedule_test.yml',
 #        'tests/process/holiday_test.yml',
 #        'tests/process/curso_test.yml',
-        'tests/test_curso11.py'
+        'tests/test_curso1.py'
     ],
     'css': ['static/src/css/curso.css'],
     'js': ['static/src/js/announcement.js'],
