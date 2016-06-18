@@ -37,7 +37,7 @@ class TestCurso(SingleTransactionCase):
         self.partner = self.partner_obj.create({
             'name': 'Juana Perez Alumna'})
 
-    def CreateSchedules_01(self):
+    def test_CreateSchedules_01(self):
         print 'test curso create schedules'
         # creo tres horarios
         self.schedule1 = self.schedule_obj.create({
@@ -53,12 +53,12 @@ class TestCurso(SingleTransactionCase):
             'end_time':6
         })
 
-    def TestSchedules_02(self):
+    def test_TestSchedules_02(self):
         self.assertEqual(self.schedule1.name,u'12:00 - 15:00 (3hs)','El nombre está mal')
         self.assertEqual(self.schedule2.name,u'11:00 - 16:00 (5hs)','El nombre está mal')
         self.assertEqual(self.schedule3.name,u'04:00 - 06:00 (2hs)','El nombre está mal')
 
-    def CreateProduct_03(self):
+    def test_CreateProduct_03(self):
         # creo un producto con tres clases
         self.product = self.product_obj.create({
             'tot_hs_lecture': 15,
@@ -76,7 +76,7 @@ class TestCurso(SingleTransactionCase):
         self.ids = [self.product.id]
         self.product.button_generate_lecture_templates()
 
-    def CreateCurso1_04(self):
+    def test_CreateCurso1_04(self):
         # creo un curso basado en este producto
         self.curso1 = self.curso_obj.create({
             'product':self.product.id
@@ -89,7 +89,7 @@ class TestCurso(SingleTransactionCase):
                          u'[SPR/01] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso',
                          'El nombre está mal')
 
-    def CreateCurso2_05(self):
+    def test_CreateCurso2_05(self):
         # creo otro curso basado en este producto
         self.curso2 = self.curso_obj.create({
             'product':self.product.id
@@ -102,7 +102,7 @@ class TestCurso(SingleTransactionCase):
                          u'[SPR/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso',
                          'El nombre está mal')
 
-    def CreateDiary_06(self):
+    def test_CreateDiary_06(self):
         # creo un diario con tres dias agregandolo al curso 2, 3 clases en la semana
         self.diary = self.diary_obj.create({
             'curso_id': self.curso2.id,
