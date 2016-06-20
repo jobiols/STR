@@ -18,66 +18,46 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
-from openerp.osv import fields, osv
+from openerp import models, fields, api
 
-class curso_quota(osv.osv):
 
-    def _get_state(self, cr, uid, ids, fields, args, context=None):
-        res = {}
-        for quota in self.browse(cr, uid, ids, context=context):
-            res[quota.id] = 'Pendiente'
-            register_pool = self.pool.get('account.invoice')
-            if quota.invoice_id:
-                records = register_pool.search(cr, uid,
-                                               [('id', '=', quota.invoice_id.id)])
-                for reg in register_pool.browse(cr, uid, records, context):
-                    if reg.state == 'draft':
-                        res[quota.id] = 'Borrador'
-                    if reg.state == 'paid':
-                        res[quota.id] = 'Pagado'
-                    if reg.state == 'open':
-                        res[quota.id] = 'Abierto'
-                    if reg.state == 'cancel':
-                        res[quota.id] = 'Cancelado'
-        return res
-
-    def _get_amount_paid(self, cr, uid, ids, fields, args, context=None):
-        res = {}
-        for quota in self.browse(cr, uid, ids, context=context):
-            res[quota.id] = 0
-            register_pool = self.pool.get('account.invoice')
-            if quota.invoice_id:
-                records = register_pool.search(cr, uid,
-                                               [('id', '=', quota.invoice_id.id)])
-                for reg in register_pool.browse(cr, uid, records, context):
-                    res[quota.id] = reg.amount_total
-        return res
-
-#   Curso Quota
+class curso_quota(models.Model):
     _name = 'curso.quota'
-    _description = __doc__
-    _columns = {
-        'registration_id': fields.many2one('curso.registration', 'Inscripcion'),
-        'date': fields.date('Fecha factura'),
-        'list_price': fields.float('Precio'),
-        'quota': fields.integer('#cuota', readonly=False),
-        'invoice_id': fields.many2one('account.invoice', 'Factura', required=False),
-
-        # function
-        'amount': fields.function(_get_amount_paid, fnct_search=None, string='Facturado',
-                                  method=True, store=False,
-                                  type='char'),
-        'state': fields.function(_get_state, fnct_search=None, string='Estado Factura',
-                                 method=True, store=False,
-                                 type='char'),
-        # related
-        'curso_inst': fields.related('registration_id', 'curso_id', 'curso_instance',
-                                     string='Instancia', type='char',
-                                     size=128, readonly=True),
-        'partner_id': fields.related('registration_id', 'partner_id', 'name',
-                                     string='Alumna', type='char', size=128,
-                                     readonly=True),
-    }
     _order = 'date desc'
+
+    registration_id = fields.Many2one('curso.registration', 'Inscripcion')
+    date = fields.Date('Fecha factura')
+    list_price = fields.Float('Precio')
+    quota = fields.Integer('#cuota', readonly=False)
+    invoice_id = fields.Many2one('account.invoice', 'Factura', required=False)
+    amount = fields.Char(compute="_get_amount_paid", string='Facturado')
+    state = fields.Char(compute="_get_state", string='Estado Factura')
+    curso_inst = fields.Char(related='registration_id.curso_id.curso_instance',
+                             string='Instancia', readonly=True)
+    partner_id = fields.Char(related='registration_id.partner_id.name',
+                             string='Alumna', readonly=True)
+
+    @api.one
+    def _get_state(self):
+        self.state = 'Pendiente'
+        if self.invoice_id:
+            account_invoice_obj = self.env['account.invoice']
+            for invoice in account_invoice_obj.search([('id', '=', self.invoice_id.id)]):
+                if invoice.state == 'draft':
+                    self.state = 'Borrador'
+                if invoice.state == 'paid':
+                    self.state = 'Pagado'
+                if invoice.state == 'open':
+                    self.state = 'Abierto'
+                if invoice.state == 'cancel':
+                    self.state = 'Cancelado'
+
+    @api.one
+    def _get_amount_paid(self):
+        self.amount = 0
+        if self.invoice_id:
+            account_invoice_obj = self.env['account.invoice']
+            for invoice in account_invoice_obj.search([('id', '=', self.invoice_id.id)]):
+                self.amount = invoice.amount_total
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
