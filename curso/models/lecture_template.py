@@ -16,19 +16,18 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ########################################################################################
-from openerp.osv import fields, osv
+from openerp import models, fields, api
+from openerp.osv import osv
 
 
-class lecture_template(osv.osv):
+class lecture_template(models.Model):
     """ define los contenidos de las clases de cada producto curso """
     _name = 'curso.lecture_template'
     _order = 'seq'
 
-    _columns = {
-        'product_id': fields.many2one('product.product', 'Producto'),
-        'text': fields.text('Contenido de la clase'),
-        'seq': fields.integer('Sec')
-    }
+    product_id = fields.Many2one('product.product', 'Producto')
+    text = fields.Text('Contenido de la clase')
+    seq = fields.Integer('Sec')
 
     def create_template(self, cr, uid, ids, no_lectures):
         prod_ids = self.search(cr, uid, [('product_id', '=', ids[0])])
