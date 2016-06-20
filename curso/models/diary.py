@@ -19,39 +19,23 @@
 #
 ##############################################################################
 from datetime import datetime
-from openerp.osv import fields, osv
+
+from openerp import models, fields, api
 
 
-class curso_diary(osv.osv):
+class curso_diary(models.Model):
     """ relaciona un horario con un dia de la semana
     """
     _name = 'curso.diary'
     _order = 'seq'
 
-    def check_weekday(self, cr, uid, ids, date, context=None):
-        """
-        Chequear que la fecha corresponda al dia del primer elemento de la agenda
-        """
-        for diary_line in self.browse(cr, uid, ids, context=context):
-            return diary_line.weekday == datetime.strptime(date, '%Y-%m-%d').strftime('%w')
+    curso_id = fields.Many2one('curso.curso', 'Curso')
+    weekday = fields.Selection(selection="_get_day", required=True)
+    weekday_name = fields.Char(compute="_get_day_name", string='Nombre del dia')
+    schedule = fields.Many2one('curso.schedule', 'Horario')
+    seq = fields.Integer('Secuencia')
 
-    def _get_day_name(self, cr, uid, ids, fields, args, context=None):
-        dwd = {
-            '0': u'Domingo',
-            '1': u'Lunes',
-            '2': u'Martes',
-            '3': u'Miércoles',
-            '4': u'Jueves',
-            '5': u'Viernes',
-            '6': u'Sábado'
-        }
-
-        res = {}
-        for diary in self.browse(cr, uid, ids, context=context):
-            res[diary.id] = dwd[diary.weekday]
-        return res
-
-    def _get_day(self, cursor, user_id, context=None):
+    def _get_day(self):
         """
         Dias para el drop down box
         """
@@ -65,24 +49,23 @@ class curso_diary(osv.osv):
             ('6', u'Sábado')
         )
 
-    _columns = {
-        'curso_id': fields.many2one('curso.curso',
-                                    u'Curso',
-                                    readonly=False),
-        'weekday': fields.selection(_get_day,
-                                    u'Día',
-                                    readonly=False,
-                                    required=True,
-                                    track_visibility='onchange'),
-        'weekday_name': fields.function(_get_day_name, fnct_search=None,
-                                        string='Nombre del dia',
-                                        method=True, store=True,
-                                        type='char'),
+    def check_weekday(self, date):
+        """ Chequear que la fecha corresponda al dia del primer elemento de la agenda
+            devolver false si no es cierto
+        """
+        return self.weekday == datetime.strptime(date, '%Y-%m-%d').strftime('%w')
 
-        'schedule': fields.many2one('curso.schedule',
-                                    u'Horario',
-                                    readonly=False),
-        'seq': fields.integer('Secuencia')
-    }
+    @api.one
+    def _get_day_name(self):
+        dwd = {
+            '0': u'Domingo',
+            '1': u'Lunes',
+            '2': u'Martes',
+            '3': u'Miércoles',
+            '4': u'Jueves',
+            '5': u'Viernes',
+            '6': u'Sábado'
+        }
+        self.weekday_name = dwd[self.weekday]
 
-    # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+        # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
