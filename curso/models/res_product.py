@@ -108,7 +108,7 @@ def generate_html(dict):
 
 
 class product_product(osv.osv):
-    _inherit = 'product.product'  # Permite la herencia propiamente dicho del modulo product
+    _inherit = 'product.product'
     _columns = {
         'product_url': fields.char('URL del producto', size=200),
         'tot_hs_lecture': fields.integer('Horas catedra',
@@ -149,7 +149,7 @@ class product_product(osv.osv):
         'default_registration_min': 0,
         'default_registration_max': 0,
         'no_quotes': 1,
-        'default_reply_to': "makeoverlabinfo@gmail.com"
+        'default_reply_to': "info@makeoverlab.com.ar"
     }
 
     #    _sql_constraints = [('default_code_unique', 'unique (default_code)', 'ya hay un producto con esta referencia.')]

@@ -25,6 +25,10 @@ class curso_schedule(models.Model):
     """ horarios que puede tener un curso """
     _name = 'curso.schedule'
     _inherit = 'curso.lapse'
+    _sql_constraints = [
+        ('default_code_unique', 'unique (name)', 'Este horario ya existe.')]
+
+    name = fields.Char(compute="_get_name", store=True)
 
     @api.one
     def _calc_datetime(self, _date, _time):
@@ -71,9 +75,5 @@ class curso_schedule(models.Model):
         cc = self._f2hh_mm(self.end_time - self.start_time)
         self.name = "{} - {} ({})".format(aa, bb, cc)
 
-    name = fields.Char(compute=_get_name, store=True)
-
-    _sql_constraints = [
-        ('default_code_unique', 'unique (name)', 'Este horario ya existe.')]
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

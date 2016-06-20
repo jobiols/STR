@@ -27,12 +27,8 @@ class res_partner(models.Model):
         'Profesora',
         help="Poner el tilde si el contacto es una profesora.")
     curso_ids = fields.One2many(
-        'curso.curso',
-        'main_speaker_id',
-        readonly=True)
+        'curso.curso', 'main_speaker_id', readonly=True)
     curso_registration_ids = fields.One2many(
-        'curso.registration',
-        'partner_id',
-        readonly=False)
+        'curso.registration', 'partner_id')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
