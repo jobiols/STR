@@ -2,13 +2,23 @@
 <openerp>
     <data>
         <report
-                id="custom_report_curso"
-                model="curso.curso"
-                string="Reporte demo para curso"
-                report_type="qweb-html"
-                attachment_use="False"
-                file="curso.report_curso"
-                name="curso.report_curso"
+            id="custom_report_curso"
+            model="curso.curso"
+            string="Reporte demo para curso"
+            report_type="qweb-html"
+            attachment_use="False"
+            file="curso.report_curso"
+            name="curso.report_curso"
+                />
+
+        <report
+            id="attendance_report_id"
+            model="curso.curso"
+            string="Chequeo de datos"
+            report_type="qweb-html"
+            attachment_use="False"
+            name="curso.attendance_report"
+            file="curso.attendance_report"
                 />
     </data>
 </openerp>

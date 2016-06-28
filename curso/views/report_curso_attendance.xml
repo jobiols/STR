@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <template id="attendance_report">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+<!--                    <t t-call="report.external_layout"> -->
+                        <div class="page">
+                            <h2>Chequeo de datos</h2>
+                            <p><span t-field="o.name"/></p>
+                            <table class="table table-condensed">
+                                <tr>
+                                    <td>
+                                        Nombre
+                                    </td>
+                                    <td>
+                                        Dirección
+                                    </td>
+                                    <td>
+                                        Documento
+                                    </td>
+                                    <td>
+                                        Teléfono
+                                    </td>
+                                    <td>
+                                        Celular
+                                    </td>
+                                    <td>
+                                        Nacimiento
+                                    </td>
+                                    <td>
+                                        Mail
+                                    </td>
+                                </tr>
+                                <t t-foreach="o.registration_ids" t-as="r">
+                                    <tr>
+                                        <td>
+                                            <p><span t-field="r.partner_id.name"/></p>
+                                        </td>
+                                        <td>
+                                            <p><span t-field="r.partner_id.street"/></p>
+                                        </td>
+                                        <td>
+                                            <p><span t-field="r.partner_id.document_number"/></p>
+                                        </td>
+                                        <td>
+                                            <p><span t-field="r.partner_id.phone"/></p>
+                                        </td>
+                                        <td>
+                                            <p><span t-field="r.partner_id.mobile"/></p>
+                                        </td>
+                                        <td>
+                                            <p><span t-field="r.partner_id.date"/></p>
+                                        </td>
+                                        <td>
+                                            <p><span t-field="r.partner_id.email"/></p>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                        </div>
+                    </t>
+<!--                </t> -->
+            </t>
+        </template>
+    </data>
+</openerp>
+
+
