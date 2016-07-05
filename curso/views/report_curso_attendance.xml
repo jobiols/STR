@@ -4,11 +4,11 @@
         <template id="attendance_report">
             <t t-call="report.html_container">
                 <t t-foreach="docs" t-as="o">
-<!--                    <t t-call="report.external_layout"> -->
+                    <t t-call="report.external_layout">
                         <div class="page">
                             <h2>Chequeo de datos</h2>
                             <p><span t-field="o.name"/></p>
-                            <table class="table table-condensed">
+                            <table class="table table-condensed"  style="font-size:12px">
                                 <tr>
                                     <td>
                                         Nombre
@@ -60,7 +60,7 @@
                             </table>
                         </div>
                     </t>
-<!--                </t> -->
+                </t>
             </t>
         </template>
     </data>
