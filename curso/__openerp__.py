@@ -29,6 +29,8 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
+This proyect support [semver](http://semver.org/)
+
 Manejo de Cursos en una Academia
 ================================
 El módulo curso le ayuda a manejar y organizar en forma eficiente los cursos \

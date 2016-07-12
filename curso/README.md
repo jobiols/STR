@@ -1,3 +1,5 @@
+This proyect support [semver](http://semver.org/)
+
 Manejo de Cursos en una Academia
 ================================
 El módulo curso le ayuda a manejar y organizar en forma eficiente los cursos de 

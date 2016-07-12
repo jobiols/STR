@@ -4,6 +4,8 @@
 [![Issue Count](https://codeclimate.com/github/jobiols/cursos/badges/issue_count.svg)](https://codeclimate.com/github/jobiols/cursos)
 [![Test Coverage](https://codeclimate.com/github/jobiols/cursos/badges/coverage.svg)](https://codeclimate.com/github/jobiols/cursos/coverage)
 
+This proyect support [semver](http://semver.org/)
+
 Manejo de Cursos en una Academia
 ================================
 El módulo curso le ayuda a manejar y organizar en forma eficiente los cursos de 
