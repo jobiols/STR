@@ -25,7 +25,7 @@ class curso_quota(models.Model):
     _name = 'curso.quota'
     _order = 'date desc'
 
-    registration_id = fields.Many2one('curso.registration', 'Inscripcion')
+    registration_id = fields.Many2one('curso.registration', 'Inscripcion', required= True)
     date = fields.Date('Fecha factura')
     list_price = fields.Float('Precio')
     quota = fields.Integer('#cuota', readonly=False)
