@@ -20,9 +20,7 @@
         <menuitem name="Organización de cursos"
                   id="base.menu_curso_main" parent="curso_main_menu"/>
 
-        <!--
-        ================================================================================================================
-        Cursos  -->
+        <!-- Cursos  -->
 
         <!-- Cursos Form View -->
 
