@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#-----------------------------------------------------------------------------------
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2016  jeo Software  (http://www.jeo-soft.com.ar)
+#    All Rights Reserved.
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -17,20 +17,18 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#-----------------------------------------------------------------------------------
+from openerp import models, fields, api
 
-from . import lapse
-from . import schedule
-from . import diary
-from . import holiday
-from . import lecture
-from . import quota
-from . import curso
-from . import registration
-from . import res_partner
-from . import res_product
-from . import lecture_template
-from . import mail_template
-from . import curso_translated
+
+class mail_template(models.Model):
+    """ define los templates de mail para enviar después de cada clase
+    """
+    _name = 'mail.template'
+    _order = 'class_no'
+
+    curso_id = fields.Many2one('curso.curso', 'Curso')
+    class_no = fields.Integer('Nro clase')
+    template_id = fields.Many2one('email.template','Plantilla de mail')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

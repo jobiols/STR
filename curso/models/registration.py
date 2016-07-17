@@ -131,7 +131,7 @@ class curso_registration(osv.osv):
                 cr, uid, [curso_id], no_of_registration, context=context)
         self.button_gen_quotes(cr, uid, ids, context=None)
         res = self.sign_registration(cr, uid, ids, context=context)
-        #        self.mail_user(cr, uid, ids, context=context)
+        self.mail_user(cr, uid, ids, context=context)
         return res
 
     def button_reg_confirm(self, cr, uid, ids, context=None):

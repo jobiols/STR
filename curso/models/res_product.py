@@ -146,8 +146,8 @@ class product_product(osv.osv):
 
     }
     _defaults = {
-        'default_registration_min': 0,
-        'default_registration_max': 0,
+        'default_registration_min': 1,
+        'default_registration_max': 10,
         'no_quotes': 1,
         'default_reply_to': "info@makeoverlab.com.ar"
     }
