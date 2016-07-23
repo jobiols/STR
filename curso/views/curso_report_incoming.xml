@@ -33,9 +33,9 @@
                                             <td><span t-esc="cal.get('begin','')"/></td>
                                             <td><span t-esc="cal.get('avail','')"/></td>
                                         </tr>
-                                    </t>
+<!--                                    </t> -->
                                 </t>
-<!--                            </t> -->
+                            </t>
                         </tbody>
                     </table>
                 </t>

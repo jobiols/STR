@@ -335,4 +335,5 @@ class curso_curso(models.Model):
             if len(new) > 0:
                 new['avail'] = avail
             res.append(new)
+            print res
         return res
