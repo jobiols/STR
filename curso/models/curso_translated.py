@@ -27,24 +27,24 @@ class curso_curso(models.Model):
     _inherit = 'curso.curso'
 
     child = fields.Boolean(
-        'Curso Hijo',        readonly=True,
+        'Curso Hijo', readonly=True,
         states={'draft': [('readonly', False)]},
         help=u"Tildar si el curso es hijo, es decir debe estar insertado en un curso "
              u"mas grande")
 
     allow_overclass = fields.Boolean(
-        'Permitir sobreclases',        readonly=True,
+        'Permitir sobreclases', readonly=True,
         states={'draft': [('readonly', False)]},
         help=u"Tildar si cuando se generan clases se puede permitir que la clase "
              u"comparta el aula con otra en el mismo horario tener en cuenta que pasará "
              u"lo mismo con los feriados")
 
     instance = fields.Integer(
-        'Instancia',        readonly=True,
+        'Instancia', readonly=True,
         states={'draft': [('readonly', False)]})
 
     register_max = fields.Integer(
-        'Vacantes max',readonly=True,
+        'Vacantes max', readonly=True,
         help=u"La cantidd máxima de vacantes del curso. Si la cantidad de "
              u"inscripciones es mayor, no se puede arrancar el curso. (poner 0 para "
              u"ignorar la regla)",
@@ -83,12 +83,12 @@ class curso_curso(models.Model):
         'Clase inicial de este curso')
 
     user_id = fields.Many2one('res.users', string='Responsable',
-        default=lambda self: self.env.user,
-        readonly=False, states={'done': [('readonly', True)]})
+                              default=lambda self: self.env.user,
+                              readonly=False, states={'done': [('readonly', True)]})
 
     product = fields.Many2one(
-        'product.product',        'Producto',
-        required=True,readonly=True,
+        'product.product', 'Producto',
+        required=True, readonly=True,
         domain="[('tot_hs_lecture','!=','0')]",
         states={'draft': [('readonly', False)]})
 
@@ -107,12 +107,13 @@ class curso_curso(models.Model):
         states={'done': [('readonly', True)]},
         help=u"La profesora que va a dar el curso.")
 
-    company_id = fields.Many2one('res.company', string='Company', change_default=True,
+    company_id = fields.Many2one(
+        'res.company', string='Company', change_default=True,
         default=lambda self: self.env['res.company']._company_default_get('curso.curso'),
         required=False, readonly=False, states={'done': [('readonly', True)]})
 
     registration_ids = fields.One2many(
-        'curso.registration', 'curso_id',         'Inscripciones',
+        'curso.registration', 'curso_id', 'Inscripciones',
         states={'done': [('readonly', True)],
                 'cancel': [('readonly', True)]})
 
@@ -120,7 +121,7 @@ class curso_curso(models.Model):
         'curso.lecture', 'curso_id', 'Clases')
 
     diary_ids = fields.One2many(
-        'curso.diary', 'curso_id', 'Agenda',         readonly=True,
+        'curso.diary', 'curso_id', 'Agenda', readonly=True,
         states={'draft': [('readonly', False)]})
 
     email_classes_ids = fields.One2many(
@@ -137,7 +138,7 @@ class curso_curso(models.Model):
         help=u"Cuando se crea el curso el estado es 'Borrador'. Si se confirma el "
              u"curso el estado es 'Cursando'. Si el curso termina el estado "
              u"es 'Cumplido'. Si el curso es cancelado el estado pasa a 'Cancelado'.",
-    default='draft')
+        default='draft')
 
     tot_hs_lecture = fields.Integer(
         related='product.tot_hs_lecture', readonly=True,
@@ -160,7 +161,7 @@ class curso_curso(models.Model):
         string='#cuotas')
 
     country_id = fields.Many2one('res.country', string='Country',
-        store=True, compute='_compute_country')
+                                 store=True, compute='_compute_country')
 
     register_attended = fields.Integer(
         compute='_get_register_',
@@ -207,8 +208,8 @@ class curso_curso(models.Model):
         help=u"La cantidad de clases que tiene el curso")
 
     address_id = fields.Many2one('res.partner', string='Location',
-        default=lambda self: self.env.user.company_id.partner_id,
-        readonly=False, states={'done': [('readonly', True)]})
+                                 default=lambda self: self.env.user.company_id.partner_id,
+                                 readonly=False, states={'done': [('readonly', True)]})
 
     @api.one
     @api.depends('registration_ids.user_id', 'registration_ids.state')
@@ -259,12 +260,12 @@ class curso_curso(models.Model):
         self.classes_per_week = len(ids)
 
     @api.one
-    @api.depends('default_code','instance')
+    @api.depends('default_code', 'instance')
     def _get_instance_(self):
         self.curso_instance = self.get_formatted_instance(self.id)
 
     @api.one
-    @api.depends('date_begin','curso_instance','product.name')
+    @api.depends('date_begin', 'curso_instance', 'product.name')
     def _get_name_(self):
         try:
             init = datetime.strptime(self.date_begin, "%Y-%m-%d")
@@ -298,7 +299,7 @@ class curso_curso(models.Model):
             self.product.name)  # nombre del producto
 
     @api.one
-    @api.depends('tot_hs_lecture','hs_lecture')
+    @api.depends('tot_hs_lecture', 'hs_lecture')
     def _get_no_lectures_(self):
         try:
             self.no_lectures = int(self.tot_hs_lecture / self.hs_lecture)
@@ -314,26 +315,86 @@ class curso_curso(models.Model):
 
     @api.one
     def get_calendar(self):
+        # extrae los datos de calendario de la data, ahi estań todas las instancias
+        # se trae la linea que coincide con la instancia del curso. si el curso tiene
+        # mas de una linea esto no va a funcionar ie distintos horarios en una semana.
+        def extract(data, curso_instance):
+            res = []
+            for dic in data:
+                if dic.get('instancia', 'nada') == curso_instance:
+                    res.append(dic)
+            return res
+
         data = self.product._get_wordpress_data(self.default_code)
-        calendar = data['grid']
+        calendar = extract(data['grid'], self.curso_instance)
         avail = data['vacantes']
 
         res = []
         for dict in calendar:
             new = {}
-            if dict.get('horario','&nbsp;') != '&nbsp;':
+            if dict.get('horario', '&nbsp;') != '&nbsp;':
                 new['schedule'] = dict.get('horario')
 
-            if dict.get('instancia','&nbsp;') != '&nbsp;':
+            if dict.get('instancia', '&nbsp;') != '&nbsp;':
                 new['code'] = dict.get('instancia')
 
-            if dict.get('dias','&nbsp;') != '&nbsp;':
+            if dict.get('dias', '&nbsp;') != '&nbsp;':
                 new['days'] = dict.get('dias')
 
-            if dict.get('inicio','&nbsp;') != '&nbsp;':
+            if dict.get('inicio', '&nbsp;') != '&nbsp;':
                 new['begin'] = dict.get('inicio')
             if len(new) > 0:
                 new['avail'] = avail
             res.append(new)
-            print res
+
         return res
+
+
+"""
+{'description': u'<blockquote>\n<p>Regalate o regal\xe1 un curso de automaquillaje. </p>\n</blockquote>\n<p>Ven\xed a disfrutar del d\xeda y aprend\xe9 a maquillarte!\n Animate a pasar una tarde distinta aprendiendo tips y consejos para verte m\xe1s linda, maquillada como una profesional</p>',
+ 'temario': u'<ul>\n<li>Preparaci\xf3n y cuidados de la piel (t\xe9cnicas y productos de higiene)</li>\n<li>Mofolog\xeda del rostro correcciones y bases</li>\n<li>Belleza: Rubor y ojos (sombras y delineados)</li>\n<li>Labios y paleta de colores (maquillaje d\xeda / noche)</li>\n</ul>',
+ 'grid':
+     [
+         {'horario': u'16:00 - 18:00 (2hs)', 'instancia': 'G01/09', 'dias': u'Mi\xe9rcoles', 'inicio': '01/06/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'11:30 - 13:30 (2hs)', 'instancia': 'G01/12', 'dias': u'S\xe1bado', 'inicio': '25/06/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'09:30 - 11:30 (2hs)', 'instancia': 'G01/16', 'dias': u'S\xe1bado', 'inicio': '25/06/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'18:30 - 20:30 (2hs)', 'instancia': 'G01/15', 'dias': u'Lunes', 'inicio': '27/06/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'15:00 - 17:00 (2hs)', 'instancia': 'G01/14', 'dias': u'Martes', 'inicio': '28/06/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'16:00 - 18:00 (2hs)', 'instancia': 'G01/17', 'dias': u'Viernes', 'inicio': '15/07/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'18:30 - 20:30 (2hs)', 'instancia': 'G01/18', 'dias': u'Viernes', 'inicio': '22/07/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'09:30 - 11:30 (2hs)', 'instancia': 'G01/19', 'dias': u'S\xe1bado', 'inicio': '23/07/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'18:30 - 20:30 (2hs)', 'instancia': 'G01/20', 'dias': u'Lunes', 'inicio': '25/07/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'11:30 - 13:30 (2hs)', 'instancia': 'G01/21', 'dias': u'S\xe1bado', 'inicio': '30/07/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'16:00 - 18:00 (2hs)', 'instancia': 'G01/22', 'dias': u'Lunes', 'inicio': '01/08/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'18:30 - 20:30 (2hs)', 'instancia': 'G01/23', 'dias': u'Mi\xe9rcoles', 'inicio': '03/08/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'14:00 - 16:00 (2hs)', 'instancia': 'G01/24', 'dias': u'Jueves', 'inicio': '04/08/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'16:00 - 18:00 (2hs)', 'instancia': 'G01/25', 'dias': u'Martes', 'inicio': '09/08/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'14:00 - 16:00 (2hs)', 'instancia': 'G01/26', 'dias': u'Viernes', 'inicio': '19/08/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
+         {'horario': u'18:30 - 20:30 (2hs)', 'instancia': 'G01/27', 'dias': u'Viernes', 'inicio': '26/08/2016'},
+         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'}
+     ],
+     'titulo': u'Curso de Automaquillaje',
+     'matricula': 'Bonificada',
+     'modalidad': u'Modalidad: una clase de 2 horas por semana',
+     'vacantes': 3,
+     'valor': '299.0',
+     'duracion': u'Duraci\xf3n 4 semanas, (8 hs)',
+     'codigo': u'G01',
+     'cuotas': '1'
+ }
+"""

@@ -36,7 +36,6 @@ class CursoReportIncoming(models.AbstractModel):
 
     @api.one
     def _get_products(self):
-        print 'get products ---------------------------------'
         prod = self.env['product.product'].search([('type','=','curso')])
 #        print 'cantidad de cursos', len(prod.curso_instances)
 #        for curs in prod.curso_instances:
