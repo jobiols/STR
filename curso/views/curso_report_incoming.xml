@@ -23,10 +23,8 @@
                                 <th>Fecha de Inicio</th>
                                 <th>Vacantes</th>
                             </tr>
-                            <t t-foreach="get_incoming_cursos()" t-as="curso">
-<!--                                <t t-if="curso.next==True" > -->
-                                    <span t-esc="curso.get_calendar()"/>
-<!--
+                            <t t-foreach="product.curso_instances" t-as="curso">
+<!--                                <t t-if="curso.next" > -->
                                     <t t-foreach="curso.get_calendar()[0]" t-as="cal">
                                         <tr>
                                             <td><span t-esc="cal.get('code','')"/></td>
@@ -36,9 +34,8 @@
                                             <td><span t-esc="cal.get('avail','')"/></td>
                                         </tr>
                                     </t>
--->
-<!--                                </t> -->
-                            </t>
+                                </t>
+<!--                            </t> -->
                         </tbody>
                     </table>
                 </t>

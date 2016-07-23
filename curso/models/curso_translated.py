@@ -198,7 +198,9 @@ class curso_curso(models.Model):
         compute='_get_instance_', string='Instancia del curso')
 
     name = fields.Char(
-        compute='_get_name_', string='Nombre del curso')
+        compute='_get_name_',
+        store=True,
+        string='Nombre del curso')
 
     no_lectures = fields.Char(
         compute='_get_no_lectures_', string='Clases',
@@ -310,3 +312,27 @@ class curso_curso(models.Model):
     def _compute_country(self):
         self.country_id = self.address_id.country_id
 
+    @api.one
+    def get_calendar(self):
+        data = self.product._get_wordpress_data(self.default_code)
+        calendar = data['grid']
+        avail = data['vacantes']
+
+        res = []
+        for dict in calendar:
+            new = {}
+            if dict.get('horario','&nbsp;') != '&nbsp;':
+                new['schedule'] = dict.get('horario')
+
+            if dict.get('instancia','&nbsp;') != '&nbsp;':
+                new['code'] = dict.get('instancia')
+
+            if dict.get('dias','&nbsp;') != '&nbsp;':
+                new['days'] = dict.get('dias')
+
+            if dict.get('inicio','&nbsp;') != '&nbsp;':
+                new['begin'] = dict.get('inicio')
+            if len(new) > 0:
+                new['avail'] = avail
+            res.append(new)
+        return res

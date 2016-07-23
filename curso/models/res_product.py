@@ -245,6 +245,7 @@ class product_product(osv.osv):
                     'matricula': 'Bonificada',
                     'cuotas': str(prod.no_quotes),
                     'valor': str(prod.list_price),
+                    'vacantes': 3
                 }
 
                 if False:
