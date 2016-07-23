@@ -53,7 +53,7 @@
             <field name="name">curso.registration.form</field>
             <field name="model">curso.registration</field>
             <field name="arch" type="xml">
-                <form string="curso Registration" version="7.0">
+                <form string="Inscripción en Cursos">
                     <header>
                         <!--- ESTADOS BTN Inscripciones-->
                         <button name="button_reg_sign" string="Seña el curso"

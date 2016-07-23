@@ -1,0 +1,78 @@
+<table cellspacing="0" cellpadding="0" border="0"
+       style="margin-top: 15px; margin-left: 10px;font-size: 16px;">
+    <tbody>
+    <tr>
+        <td style="vertical-align:top;">
+            % if object.event_id.location:
+            <div style="width: 120px; background : #CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;">
+                Where
+            </div>
+            % endif
+        </td>
+        <td style="vertical-align:top;">
+            % if object.event_id.location:
+            <div style="font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;   font-size: 14px">
+                : ${object.event_id.location}
+                                                <span style="color:#A9A9A9; ">(<a
+                                                        href="http://maps.google.com/maps?oi=map&amp;q=${object.event_id.location}">View
+                                                    Map</a>)
+                                                    </span>
+            </div>
+            % endif
+        </td>
+    </tr>
+
+    <tr>
+        <td style="vertical-align:top;">
+            % if object.event_id.description :
+            <div style="width: 120px; background : #CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;">
+                What
+            </div>
+            % endif
+        </td>
+        <td style="vertical-align:text-top;">
+            % if object.event_id.description :
+            <div style="font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;">
+                : ${object.event_id.description}
+            </div>
+            % endif
+        </td>
+    </tr>
+
+    <tr>
+        <td style="vertical-align:top;">
+            % if not object.event_id.allday and object.event_id.duration:
+            <div style="height:auto; width: 120px; background : #CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;">
+                Duration
+            </div>
+            % endif
+        </td>
+        <td colspan="3" style="vertical-align:text-top;">
+            % if not object.event_id.allday and object.event_id.duration:
+            <div style="font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;">
+                : ${('%dH%02d' %
+                (object.event_id.duration,(object.event_id.duration*60)%60))}
+            </div>
+            % endif
+        </td>
+    </tr>
+    <tr style=" height: 30px;">
+        <td style="height: 25px;width: 120px; background : # CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;">
+            <div>
+                Attendees
+            </div>
+        </td>
+        <td colspan="3">
+            :
+            % for attendee in object.event_id.attendee_ids:
+            <div style="display:inline-block; border-radius: 50%; width:10px; height:10px;background:${'color' in ctx and ctx['color'][attendee.state] or 'white'};"></div>
+            % if attendee.cn != object.cn:
+            <span style="margin-left:5px">${attendee.cn}</span>
+            % else:
+            <span style="margin-left:5px">You</span>
+            % endif
+            % endfor
+        </td>
+    </tr>
+    </tbody>
+</table>

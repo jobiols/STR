@@ -10,7 +10,7 @@
             <field name='type'>form</field>
             <field name='arch' type='xml'>
                 <notebook position="inside">
-                    <page string="Cursos" attrs="{'invisible': [('type', '!=', 'service')]}">
+                    <page string="Cursos" attrs="{'invisible': [('type', '!=', 'curso')]}">
                         <group name="Cursos" string="Características del curso">
                             <group colspan="4" col="4">
                                 <field name="tot_hs_lecture"/>

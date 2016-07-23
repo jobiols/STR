@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Custom report.-->
+<openerp>
+<data>
+
+<template id="curso_report_incoming">
+    <t t-call="report.html_container">
+        <t t-call="report.external_layout">
+            <div class="page">
+                <h2>Cursos próximos a iniciar</h2>
+                <p align="right">Vacantes disponibles al día
+                   <span t-esc="time.strftime('%A %d de %B de %Y %H:%M')"/>
+                </p>
+
+                <t t-foreach="get_products()" t-as="product">
+                   <h3><span t-esc="product.name"/></h3>
+                    <table class="table table-condensed">
+                        <tbody>
+                            <tr>
+                                <th>Código</th>
+                                <th>Dias de cursada</th>
+                                <th>Horario</th>
+                                <th>Fecha de Inicio</th>
+                                <th>Vacantes</th>
+                            </tr>
+                            <t t-foreach="get_incoming_cursos()" t-as="curso">
+<!--                                <t t-if="curso.next==True" > -->
+                                    <span t-esc="curso.get_calendar()"/>
+<!--
+                                    <t t-foreach="curso.get_calendar()[0]" t-as="cal">
+                                        <tr>
+                                            <td><span t-esc="cal.get('code','')"/></td>
+                                            <td><span t-esc="cal.get('days','')"/></td>
+                                            <td><span t-esc="cal.get('schedule','')"/></td>
+                                            <td><span t-esc="cal.get('begin','')"/></td>
+                                            <td><span t-esc="cal.get('avail','')"/></td>
+                                        </tr>
+                                    </t>
+-->
+<!--                                </t> -->
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+            </div>
+        </t>
+    </t>
+</template>
+
+</data>
+</openerp>

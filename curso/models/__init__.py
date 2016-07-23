@@ -32,5 +32,7 @@ from . import res_product
 from . import lecture_template
 from . import mail_template
 from . import curso_translated
+from . import registration_translated
+from . import res_product_translated
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

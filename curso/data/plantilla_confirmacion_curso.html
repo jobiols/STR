@@ -1,0 +1,52 @@
+<!--
+    Plantilla para enviar confirmación de inscripción a un curso.
+
+-->
+
+
+<p>Hola ${object.partner_id.first_name},</p>
+<p>Te confirmamos tu inscripción en el curso "${object.curso_id.name}".</p>
+<p>El primer día del curso debés traer los elementos que usas para higiene y maquillaje,
+   pinceles y todo lo que tengas para que te asesoren en el correcto uso de los mismos,
+   durante el curso usarás los productos provistos por la escuela y no olvides traer
+   lapiz y papel para tomar notas.</p>
+<p>Estos son los datos que tenemos registrados, por favor verificá que sean correctos:</p>
+
+<p style="border-left: 1px solid #8e0000; margin-left: 30px;">&nbsp;&nbsp;<strong>TUS DATOS PERSONALES</strong><br>
+&nbsp;&nbsp; Nombre: ${object.partner_id.name}<br>
+&nbsp;&nbsp; Teléfono de contacto: ${object.partner_id.mobile or '''No lo tenemos'''}<br>
+&nbsp;&nbsp; Fecha de nacimiento: ${object.partner_id.birthdate or '''No la tenemos'''}<br>
+&nbsp;&nbsp; Documento: ${object.partner_id.document_type}&nbsp;${object.partner_id.document_number or "No lo tenemos"}</p>
+
+<p>Reseña del curso:</p>
+
+<p>horas catedra ${object.curso_id.hs_lecture}</p>
+<p>La clase estará a cargo de la profesora ${object.curso_id.main_speaker_id.name}</p>
+
+% if object.curso_id.product.description:
+    <p> Descripción del curso: ${object.curso_id.product.description}</p>
+% endif
+
+<p> Este es tu calendario de clases</p>
+<table>
+    <tbody>
+        <tr>
+            <th>Fecha</th>
+            <th>Dia</th>
+            <th>Horario programado</th>
+            <th>Contenido de la clase</th>
+        </tr>
+        <tr>
+            % for lecture in object.curso_id.lecture_ids:
+                <td>${lecture.date}</td>
+                <td>${lecture.weekday}</td>
+                <td>${lecture.schedule_id.name}</td>
+                <td>${lecture.name}</td>
+            % endfor
+        </tr>
+    </tbody>
+</table>
+
+<p>Te esperamos el día ${object.curso_id.date_begin_located}</p>
+
+<p>Gracias por elegirnos!</p>

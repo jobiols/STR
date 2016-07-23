@@ -408,59 +408,6 @@ class curso_curso(osv.osv):
 
         return self.write(cr, uid, ids, {'state': 'cancel'}, context=context)
 
-    def _get_register(self, cr, uid, ids, fields, args, context=None):
-        """ Get Confirm or uncofirm register value.
-        @param ids: List of curso registration type's id
-        @param fields: List of function fields(register_current and register_prospect).
-        @param context: A standard dictionary for contextual values
-        @return: Dictionary of function fields value.
-        """
-        res = {}
-        for curso in self.browse(cr, uid, ids, context=context):
-            res[curso.id] = {}
-            reg_open = reg_done = reg_draft = 0
-            for registration in curso.registration_ids:
-                if registration.state == 'confirm':
-                    reg_open += registration.nb_register
-                elif registration.state == 'done':
-                    reg_done += registration.nb_register
-                elif registration.state == 'draft':
-                    reg_draft += registration.nb_register
-            for field in fields:
-                number = 0
-                if field == 'register_current':
-                    number = reg_open
-                elif field == 'register_attended':
-                    number = reg_done
-                elif field == 'register_prospect':
-                    number = reg_draft
-                elif field == 'register_avail':
-                    # the number of ticket is unlimited if the curso.register_max
-                    # field is not set.
-                    # In that cas we arbitrary set it to 9999, it is used in the
-                    # kanban view to special case the display of the 'subscribe' button
-                    number = curso.register_max - reg_open if curso.register_max != 0 else 9999
-                res[curso.id][field] = number
-        return res
-
-    def _subscribe_fnc(self, cr, uid, ids, fields, args, context=None):
-        """
-        This functional fields compute if the current user (uid) is already
-        subscribed or not to the curso passed in parameter (ids)
-        """
-        register_pool = self.pool.get('curso.registration')
-        res = {}
-        for curso in self.browse(cr, uid, ids, context=context):
-            res[curso.id] = False
-            curr_reg_id = register_pool.search(cr, uid, [('user_id', '=', uid),
-                                                         ('curso_id', '=', curso.id)])
-            if curr_reg_id:
-                for reg in register_pool.browse(cr, uid, curr_reg_id, context=context):
-                    if reg.state in ('confirm', 'done'):
-                        res[curso.id] = True
-                        continue
-        return res
-
     def get_holiday_dates(self, cr, uid, ids, context=None):
         hd = []
         holidays = self.pool.get('curso.holiday')
@@ -572,45 +519,6 @@ class curso_curso(osv.osv):
             for lec in lecs:
                 lectures_pool.create(cr, uid, lec)
 
-    def _get_name(self, cr, uid, ids, fields, args, context=None):
-        res = {}
-        for curso in self.browse(cr, uid, ids, context=context):
-            try:
-                init = datetime.strptime(curso.date_begin, "%Y-%m-%d")
-            except:
-                weekday = day_n = month_n = year_n = '?'
-            else:
-                weekday = init.strftime("%a").capitalize()
-                day_n = init.strftime('%d')
-                month_n = init.strftime('%m')
-                year_n = init.strftime('%y')
-            pool_diary = self.pool['curso.diary']
-            ids = pool_diary.search(
-                cr, uid, [('curso_id', '=', curso.id)], context=context)
-            hhs = mms = hhe = mme = 0
-            for diary_line in pool_diary.browse(cr, uid, ids, context=context):
-                ss = diary_line.schedule.start_time
-                ee = diary_line.schedule.end_time
-                mms = ss - int(ss)
-                hhs = int(ss - mms)
-                mms = int(mms * 60)
-                mme = ee - int(ee)
-                hhe = int(ee - mme)
-                mme = int(mme * 60)
-                break
-
-            # https://docs.python.org/2/library/datetime.html#datetime-objects
-            name = u'[{}] {} {}/{}/{} ({:0>2d}:{:0>2d} {:0>2d}:{:0>2d}) - {}'.format(
-                curso.curso_instance,
-                # Codigo de producto, Nro de instancia
-                unicode(weekday.capitalize(),'utf-8'),  # dia de la semana en letras
-                day_n, month_n, year_n,  # dia , mes, anio en numeros
-                hhs, mms, hhe, mme,  # hora de inicio hora de fin
-                curso.product.name)  # nombre del producto
-            res[curso.id] = name
-
-            return res
-
     def _check_change_begin_date(self, cr, uid, ids, context=None):
         for curso in self.browse(cr, uid, ids, context=context):
             diary_pool = self.pool['curso.diary']
@@ -654,52 +562,6 @@ class curso_curso(osv.osv):
                 'instance': instance,
             })
         return {'value': values}
-
-    def _get_no_lectures(self, cr, uid, ids, fields, args, context=None):
-        res = {}
-        for curso in self.browse(cr, uid, ids, context=context):
-            try:
-                res[curso.id] = int(curso.tot_hs_lecture / curso.hs_lecture)
-                if curso.tot_hs_lecture % curso.hs_lecture != 0:
-                    raise
-            except:
-                res[curso.id] = 'Error!'
-        return res
-
-    def _get_classes_per_week(self, cr, uid, ids, fields, args, context=None):
-        """
-        Calcula la cantidad de clases por semana basado en el diary
-        """
-        res = {}
-        classes_per_week = 0
-        for curso in self.browse(cr, uid, ids, context=context):
-            curso.id
-            diary_obj = self.pool['curso.diary']
-            ids = diary_obj.search(cr, uid, [('curso_id', '=', curso.id)])
-            for reg in diary_obj.browse(cr, uid, ids):
-                classes_per_week += 1
-
-            res[curso.id] = classes_per_week
-        return res
-
-    def _get_instance(self, cr, uid, ids, fields, args, context=None):
-        res = {}
-        for curso in self.browse(cr, uid, ids, context=context):
-            res[curso.id] = self.get_formatted_instance(cr, uid, curso.id)
-        return res
-
-    def _get_next(self, cr, uid, ids, fields, args, context=None):
-        res = {}
-        for curso in self.browse(cr, uid, ids, context=context):
-            res[curso.id] = True
-
-            # me traigo los que estan en borrador de prepo porque no tienen fecha
-            res[curso.id] = True
-            if curso.state <> 'draft':
-                if curso.date_begin < str(date.today()):
-                    res[curso.id] = False
-
-        return res
 
     def clone_diary(self, cr, uid, ids, curso_from, curso_to, context=None):
         diary_obj = self.pool['curso.diary']
