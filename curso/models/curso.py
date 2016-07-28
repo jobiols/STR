@@ -389,17 +389,16 @@ class curso_curso(osv.osv):
         # si existe al menos una en estado signed no se puede cancelar el curso
         # si existe al menos una en estado confirm no se puede cancelar el curso
         # si existe al menos una en estado cumplido no se puede cancelar el curso
-        # si existen interesadas hay que proponer moverlas a otro curso
 
         # chequear que todas las alumnas estan canceladas
         reg_obj = self.pool.get('curso.registration')
         reg_ids = reg_obj.search(cr, uid, [('curso_id', 'in', ids)], context=context)
         for curso_reg in reg_obj.browse(cr, uid, reg_ids, context=context):
-            if not (curso_reg.state == 'cancel'):
+            if (curso_reg.state in ['confirm','done','signed']):
                 raise osv.except_osv(
                     'Error!',
-                    u'Para cancelar el curso todas las alumnas deben estar en estado Cancelado. \
-                      Podes usar el menú Mover / Copiar para pasarlas a otro curso')
+                    u'No se puede cancelar el curso si hay alumnas en estado Señado, '
+                    u'cumplido o cursando')
 
         # borrar todas las clases
         lecture_obj = self.pool['curso.lecture']
