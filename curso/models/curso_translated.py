@@ -207,9 +207,10 @@ class curso_curso(models.Model):
         compute='_get_no_lectures_', string='Clases',
         help=u"La cantidad de clases que tiene el curso")
 
-    address_id = fields.Many2one('res.partner', string='Location',
-                                 default=lambda self: self.env.user.company_id.partner_id,
-                                 readonly=False, states={'done': [('readonly', True)]})
+    address_id = fields.Many2one(
+        'res.partner', string='Location',
+        default=lambda self: self.env.user.company_id.partner_id,
+        readonly=False, states={'done': [('readonly', True)]})
 
     @api.one
     @api.depends('registration_ids.user_id', 'registration_ids.state')
@@ -349,52 +350,3 @@ class curso_curso(models.Model):
 
         return res
 
-
-"""
-{'description': u'<blockquote>\n<p>Regalate o regal\xe1 un curso de automaquillaje. </p>\n</blockquote>\n<p>Ven\xed a disfrutar del d\xeda y aprend\xe9 a maquillarte!\n Animate a pasar una tarde distinta aprendiendo tips y consejos para verte m\xe1s linda, maquillada como una profesional</p>',
- 'temario': u'<ul>\n<li>Preparaci\xf3n y cuidados de la piel (t\xe9cnicas y productos de higiene)</li>\n<li>Mofolog\xeda del rostro correcciones y bases</li>\n<li>Belleza: Rubor y ojos (sombras y delineados)</li>\n<li>Labios y paleta de colores (maquillaje d\xeda / noche)</li>\n</ul>',
- 'grid':
-     [
-         {'horario': u'16:00 - 18:00 (2hs)', 'instancia': 'G01/09', 'dias': u'Mi\xe9rcoles', 'inicio': '01/06/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'11:30 - 13:30 (2hs)', 'instancia': 'G01/12', 'dias': u'S\xe1bado', 'inicio': '25/06/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'09:30 - 11:30 (2hs)', 'instancia': 'G01/16', 'dias': u'S\xe1bado', 'inicio': '25/06/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'18:30 - 20:30 (2hs)', 'instancia': 'G01/15', 'dias': u'Lunes', 'inicio': '27/06/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'15:00 - 17:00 (2hs)', 'instancia': 'G01/14', 'dias': u'Martes', 'inicio': '28/06/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'16:00 - 18:00 (2hs)', 'instancia': 'G01/17', 'dias': u'Viernes', 'inicio': '15/07/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'18:30 - 20:30 (2hs)', 'instancia': 'G01/18', 'dias': u'Viernes', 'inicio': '22/07/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'09:30 - 11:30 (2hs)', 'instancia': 'G01/19', 'dias': u'S\xe1bado', 'inicio': '23/07/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'18:30 - 20:30 (2hs)', 'instancia': 'G01/20', 'dias': u'Lunes', 'inicio': '25/07/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'11:30 - 13:30 (2hs)', 'instancia': 'G01/21', 'dias': u'S\xe1bado', 'inicio': '30/07/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'16:00 - 18:00 (2hs)', 'instancia': 'G01/22', 'dias': u'Lunes', 'inicio': '01/08/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'18:30 - 20:30 (2hs)', 'instancia': 'G01/23', 'dias': u'Mi\xe9rcoles', 'inicio': '03/08/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'14:00 - 16:00 (2hs)', 'instancia': 'G01/24', 'dias': u'Jueves', 'inicio': '04/08/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'16:00 - 18:00 (2hs)', 'instancia': 'G01/25', 'dias': u'Martes', 'inicio': '09/08/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'14:00 - 16:00 (2hs)', 'instancia': 'G01/26', 'dias': u'Viernes', 'inicio': '19/08/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'},
-         {'horario': u'18:30 - 20:30 (2hs)', 'instancia': 'G01/27', 'dias': u'Viernes', 'inicio': '26/08/2016'},
-         {'horario': '&nbsp;', 'instancia': '&nbsp;', 'dias': '&nbsp;', 'inicio': '&nbsp;'}
-     ],
-     'titulo': u'Curso de Automaquillaje',
-     'matricula': 'Bonificada',
-     'modalidad': u'Modalidad: una clase de 2 horas por semana',
-     'vacantes': 3,
-     'valor': '299.0',
-     'duracion': u'Duraci\xf3n 4 semanas, (8 hs)',
-     'codigo': u'G01',
-     'cuotas': '1'
- }
-"""

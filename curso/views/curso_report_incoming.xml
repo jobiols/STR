@@ -23,19 +23,33 @@
                                 <th>Fecha de Inicio</th>
                                 <th>Vacantes</th>
                             </tr>
-                            <t t-foreach="product.curso_instances" t-as="curso">
+                            <tr>
+                                <td>
+    <!--                                    <t t-if="curso.next" > -->
+                                    <t t-foreach="product.curso_instances" t-as="curso">
+                                    <p>----<span t-esc="curso.name"/></p>
+                                    <p>----<span t-esc="curso.next"/></p>
+                                    </t>
+    <!--                                    </t> -->
+                                </td>
+                            </tr>
 <!--                                <t t-if="curso.next" > -->
-                                    <t t-foreach="curso.get_calendar()[0]" t-as="cal">
-                                        <tr>
-                                            <td><span t-esc="cal.get('code','')"/></td>
-                                            <td><span t-esc="cal.get('days','')"/></td>
-                                            <td><span t-esc="cal.get('schedule','')"/></td>
-                                            <td><span t-esc="cal.get('begin','')"/></td>
-                                            <td><span t-esc="cal.get('avail','')"/></td>
-                                        </tr>
-<!--                                    </t> -->
+
+<!--
+                                <t t-foreach="curso.get_calendar()[0]" t-as="cal">
+                                    <tr>
+                                        <td><span t-esc="cal.get('code','')"/></td>
+                                        <td><span t-esc="cal.get('days','')"/></td>
+                                        <td><span t-esc="cal.get('schedule','')"/></td>
+                                        <td><span t-esc="cal.get('begin','')"/></td>
+                                        <td><span t-esc="cal.get('avail','')"/></td>
+                                    </tr>
+
+
                                 </t>
+
                             </t>
+-->
                         </tbody>
                     </table>
                 </t>
