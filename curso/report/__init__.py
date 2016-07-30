@@ -20,4 +20,6 @@
 ##############################################################################
 
 import report_curso_registration
+import curso_report_incoming
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

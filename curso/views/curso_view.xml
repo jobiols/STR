@@ -20,9 +20,7 @@
         <menuitem name="Organización de cursos"
                   id="base.menu_curso_main" parent="curso_main_menu"/>
 
-        <!--
-        ================================================================================================================
-        Cursos  -->
+        <!-- Cursos  -->
 
         <!-- Cursos Form View -->
 
@@ -194,18 +192,24 @@
                                 </field>
                             </page>
 
-                            <page string="Configuración de mail"
-                                  groups="base.group_no_one">
+                            <page string="Configuración de mail">
                                 <group>
-                                    <field name="reply_to"/>
                                     <group>
+                                        <field name="reply_to"/>
                                         <field name="email_registration_id"/>
-                                    </group>
-                                    <group>
-                                        <field name="email_confirmation_id"/>
+<!--                                        <field name="email_confirmation_id"/> -->
                                     </group>
                                 </group>
+                                <group>
+                                    <field name="email_classes_ids" nolabel="1">
+                                        <tree string="diary" editable="top">
+                                            <field name="class_no"/>
+                                            <field name="template_id"/>
+                                        </tree>
+                                    </field>
+                                </group>
                             </page>
+
                             <page string="Clases">
                                 <field name="lecture_ids" colspan="4" nolabel="1"
                                        attrs="{'readonly':[('child', '==', True)]}"

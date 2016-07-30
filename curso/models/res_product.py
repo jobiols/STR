@@ -24,7 +24,6 @@ from datetime import datetime
 from openerp.osv import fields, osv
 import markdown
 
-
 def generate_html(dict):
     for data in dict:
         ret = u"""
@@ -109,48 +108,6 @@ def generate_html(dict):
 
 class product_product(osv.osv):
     _inherit = 'product.product'
-    _columns = {
-        'product_url': fields.char('URL del producto', size=200),
-        'tot_hs_lecture': fields.integer('Horas catedra',
-                                         help="Cantidad de horas que tiene el curso en total."),
-        'hs_lecture': fields.integer('Horas de clase',
-                                     help="Duración de cada una de las clases."),
-        'agenda': fields.text('Tema'),
-        'no_quotes': fields.integer('Cantidad de cuotas'),
-
-        'default_reply_to': fields.char('Respuesta por defecto', size=64,
-                                        help="El mail del organizador, que se pondra en \
-                                        el campo de respuesta de todos los mails \
-                                        enviados automaticamente en inscripciones \
-                                        y confirmaciones de cursos."),
-        'default_email_registration': fields.many2one('email.template',
-                                                      'Mail de inscripcion',
-                                                      help="Selecciona el mail de \
-                                                      inscripcion que se enviara a la \
-                                                      alumna"),
-        'default_email_curso': fields.many2one('email.template', 'Mail de confirmacion',
-                                               help="Selecciona el mail de confirmacion \
-                                               que se enviara a la alumna en el momento \
-                                               de la confirmacion"),
-        'default_registration_min': fields.integer('Minimo de alumnas en el curso',
-                                                   help="define la cantidad minima de \
-                                                   alumnas para arrancar el curso. (Pone \
-                                                   cero para no tener en cuenta la regla)"),
-        'default_registration_max': fields.integer('Maximo de alumnas en el curso',
-                                                   help="Define la cantidad maxima de \
-                                                   alumnas que puede tener el curso. \
-                                                   (Pone cero para no tener en cuenta \
-                                                   la regla)"),
-        'lecture_template_ids': fields.one2many('curso.lecture_template', 'product_id',
-                                                'Clases'),
-
-    }
-    _defaults = {
-        'default_registration_min': 0,
-        'default_registration_max': 0,
-        'no_quotes': 1,
-        'default_reply_to': "info@makeoverlab.com.ar"
-    }
 
     #    _sql_constraints = [('default_code_unique', 'unique (default_code)', 'ya hay un producto con esta referencia.')]
 
@@ -288,10 +245,13 @@ class product_product(osv.osv):
                     'matricula': 'Bonificada',
                     'cuotas': str(prod.no_quotes),
                     'valor': str(prod.list_price),
+                    'vacantes': 3
                 }
 
                 if False:
-                    print '------------------------------------------------- new'
+                    print '-------------------------------------------------'
+                    print data
+                    print '-------------------------------------------------'
                     print 'titulo           ', data['titulo']
                     print 'codigo           ', data['codigo']
                     print 'description      ', data['description']
@@ -337,5 +297,9 @@ class product_product(osv.osv):
             temp_obj.create_template(cr, uid, ids, no_clases)
 
         return True
+
+
+
+
 
         # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -10,3 +10,4 @@ access_curso_quota,curso.quota,model_curso_quota,curso.group_curso_manager,1,1,1
 access_curso_lapse,curso.lapse,model_curso_lapse,curso.group_curso_user,1,1,1,1
 access_curso_diary,access_curso_diary,model_curso_diary,curso.group_curso_user,1,1,1,1
 access_curso_lecture_template,access_curso_lecture_template,model_curso_lecture_template,curso.group_curso_user,1,1,1,1
+access_mail_template,access_mail_template,model_mail_template,,1,0,0,0
