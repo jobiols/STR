@@ -30,10 +30,10 @@ class curso_diary(models.Model):
     _order = 'seq'
 
     curso_id = fields.Many2one('curso.curso', 'Curso')
-    weekday = fields.Selection(selection="_get_day", required=True)
-    weekday_name = fields.Char(compute="_get_day_name", string='Nombre del dia')
-    schedule = fields.Many2one('curso.schedule', 'Horario')
-    seq = fields.Integer('Secuencia')
+    weekday = fields.Selection(selection="_get_day", required=True,string=u'Día')
+    weekday_name = fields.Char(compute="_get_day_name", string=u'Nombre del dia')
+    schedule = fields.Many2one('curso.schedule', u'Horario')
+    seq = fields.Integer(u'Secuencia')
 
     def _get_day(self):
         """

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="mail_confirm_view" model="ir.ui.view">
+            <field name="name">Confirmación de mails</field>
+            <field name="model">curso.mail.confirm</field>
+            <field name="arch" type="xml">
+              <form string="Confirmar los mails">
+                <group>
+                   <field name="registration_ids" colspan="4" nolabel="1"/>
+                </group>
+                  <label string="Warning: se van a enviar mails a los siguientes clientes"/>
+                  <footer>
+                      <button name="confirm" string="Confirmar" type="object" class="oe_highlight"/>
+                      or
+                      <button string="Cancelar" class="oe_link" special="cancel" />
+                  </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="curso.action_mail_confirm" model="ir.actions.act_window">
+            <field name="name">Confirmación de mail</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">curso.mail.confirm</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="mail_confirm_view"/>
+            <field name="context">{'record_id' : active_id}</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

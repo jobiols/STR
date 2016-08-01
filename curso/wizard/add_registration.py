@@ -23,6 +23,13 @@ from openerp.osv import fields, osv
 
 class add_registration(osv.osv_memory):
     """ Wizard para agregar una inscripción de una clienta a un curso """
+    _name = 'curso.add_registration'
+    _description = "Inscribir alumna en curso"
+
+    _columns = {
+        'curso_id': fields.many2one('curso.curso', 'Curso', required=True,
+                                    readonly=False, domain="[('next','=',True)]"),
+    }
 
     def button_add_curso(self, cr, uid, ids, context=None):
         """ Agrega un curso a la ficha de la alumna, y la pone como interesada
@@ -43,13 +50,4 @@ class add_registration(osv.osv_memory):
         }
         self.pool.get('curso.registration').create(cr, uid, registration_data,
                                                    context=context)
-
         return True
-
-    _name = 'curso.add_registration'
-    _description = "Inscribir alumna en curso"
-
-    _columns = {
-        'curso_id': fields.many2one('curso.curso', 'Curso', required=True,
-                                    readonly=False, domain="[('next','=',True)]"),
-    }

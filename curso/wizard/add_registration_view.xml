@@ -7,7 +7,8 @@
             <field name="arch" type="xml">
                 <form string="Anotar como interesada" version="7.0">
                     <group>
-                        <label string="Seleccione el curso en el que está interesada esta alumna. Para eliminarlo oprima Editar y luego podrá borrar el curso"/>
+                        <label string="Seleccione el curso en el que está interesada esta
+                        alumna. Para eliminarlo oprima Editar y luego podrá borrar el curso"/>
                     </group>
                     <group>
                         <field name="curso_id"/>
@@ -22,6 +23,7 @@
             </field>
         </record>
 
+        <!-- action -->
         <record id="wizard_curso_add_registration" model="ir.actions.act_window">
             <field name="name">Anotar como interesada</field>
             <field name="res_model">curso.add_registration</field>

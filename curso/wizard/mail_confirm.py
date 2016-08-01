@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#-----------------------------------------------------------------------------------
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2016  jeo Software  (http://www.jeo-soft.com.ar)
+#    All Rights Reserved.
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -17,21 +17,24 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#-----------------------------------------------------------------------------------
+from openerp import fields, models, api
 
-from openerp.osv import osv
 
+class mail_confirm(models.TransientModel):
+    """Mail Confirmation"""
+    _name = "curso.mail.confirm"
 
-class curso_confirm(osv.osv_memory):
-    """
-    Confirm curso
-    """
-    _name = "curso.confirm"
-    _description = "curso Confirmation"
+    registration_ids = fields.One2many(
+        'curso.registration', 'curso_id', u'Inscripciones',
+        domain=[],
+        readonly=True)
 
-    def confirm(self, cr, uid, ids, context=None):
-        self.pool.get('curso.curso').do_confirm(cr, uid, context.get('curso_ids', []),
-                                                context=context)
+    @api.multi
+    def confirm(self):
+        print '------------',self._context.get('curso_id', False)
+#        events = self.env['event.event'].browse(self._context.get('event_ids', []))
+#        events.do_confirm()
         return {'type': 'ir.actions.act_window_close'}
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

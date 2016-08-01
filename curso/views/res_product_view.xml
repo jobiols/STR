@@ -26,15 +26,36 @@
                                         string="Generar plantilla de clases" type="object"
                                         class="oe_highlight"/>
                         </group>
+                        <!-- temario del curso -->
+                        <div style="background-color:#D3D3D3;">
+                        <p>Este es el temario del curso, es lo que se publica en el sitio</p>
+                        </div>
                         <group col='1'>
                             <field name="agenda" placeholder="Temario del curso"
-                                   widget="text_html" nolabel="1"/>
+                                   widget="bootstrap_markdown" nolabel="1"/>
                         </group>
+                        <!-- contenido de cada clase -->
+                        <div style="background-color:#D3D3D3;">
+                        <p> Aquí se definen los temas que se ven en cada clase</p>
+                        </div>
                         <group>
                             <field name="lecture_template_ids" colspan="4" nolabel="1">
                                 <tree string="Clases" editable="top">
-                                    <field name="seq"/>
+                                    <field name="seq" string="Nro de clase"/>
                                     <field name="text"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <!-- mails que salen despues de cada clase -->
+                        <div style="background-color:#D3D3D3;">
+                        <p> Aquí se define que mail sale para cada alumna del curso después
+                            de cada clase</p>
+                        </div>
+                        <group>
+                            <field name="email_classes_ids" nolabel="1">
+                                <tree string="diary" editable="top">
+                                    <field name="class_no"/>
+                                    <field name="template_id"/>
                                 </tree>
                             </field>
                         </group>

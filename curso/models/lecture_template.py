@@ -18,7 +18,7 @@
 ########################################################################################
 from openerp import models, fields, api
 from openerp.osv import osv
-
+from openerp.exceptions import except_orm
 
 class lecture_template(models.Model):
     """ define los contenidos de las clases de cada producto curso """
@@ -29,18 +29,19 @@ class lecture_template(models.Model):
     text = fields.Text('Contenido de la clase')
     seq = fields.Integer('Sec')
 
-    def create_template(self, cr, uid, ids, no_lectures):
-        prod_ids = self.search(cr, uid, [('product_id', '=', ids[0])])
+    @api.model
+    def create_template(self, prod_id, no_lectures):
+        prod_ids = self.search([('product_id', '=', prod_id)])
         if prod_ids:
-            raise osv.except_osv(
+            raise except_orm,(
                 'Error!', u"ya existe una plantilla de clases hay que borrarla primero")
 
         for seq in range(no_lectures):
             new_rec = {
-                'product_id': ids[0],
-                'seq': seq,
+                'product_id': prod_id,
+                'seq': seq + 1,
                 'text': 'Clase nro %s' % (seq + 1)
             }
-            self.create(cr, uid, new_rec)
+            self.create(new_rec)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

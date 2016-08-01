@@ -21,8 +21,9 @@
 
 from datetime import datetime
 
-from openerp.osv import fields, osv
+from openerp.osv import osv
 import markdown
+
 
 def generate_html(dict):
     for data in dict:
@@ -275,7 +276,9 @@ class product_product(osv.osv):
             data = self._get_wordpress_data(cr, uid, ids, prod.default_code,
                                             context=context)
             if not data:
-                raise osv.except_osv('Error!','No hay instancias de cursos para este producto!')
+                raise osv.except_osv(
+                    'Error!',
+                    'No hay instancias de cursos para este producto!')
 
             new_page = {
                 'name': prod.name,
@@ -290,13 +293,6 @@ class product_product(osv.osv):
 
         return True
 
-    def button_generate_lecture_templates(self, cr, uid, ids, context=None):
-        for product in self.browse(cr, uid, ids):
-            no_clases = product.tot_hs_lecture / product.hs_lecture
-            temp_obj = self.pool['curso.lecture_template']
-            temp_obj.create_template(cr, uid, ids, no_clases)
-
-        return True
 
 
 

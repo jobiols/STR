@@ -457,66 +457,6 @@ class curso_curso(osv.osv):
 
         return ret
 
-    def button_generate_lectures(self, cr, uid, ids, context=None):
-        """ Generar las clases que correspondan a este curso
-        """
-        for curso in self.browse(cr, uid, ids, context=context):
-            date_begin = datetime.strptime(curso.date_begin, '%Y-%m-%d')
-            tot_hs_lecture = curso.tot_hs_lecture
-            hs_lecture = curso.hs_lecture
-            default_code = curso.default_code
-            if (operator.mod(tot_hs_lecture, hs_lecture) != 0):
-                raise osv.except_osv(
-                    'Error!',
-                    u"la cantidad de horas catedra no es divisible por las horas de clase!.")
-
-            no_lectures = int(tot_hs_lecture // hs_lecture)
-            weekload = self.get_weekload(cr, uid, ids)
-
-            if (weekload == []):
-                raise osv.except_osv('Error!', u"No se definió la agenda!.")
-
-            # get lecture templates
-            lecture_templates = self.get_lecture_templates(
-                cr, uid, ids, curso.product.id, context=context)
-
-            # get a lectures list or an exception if overlaps.
-            lectures = []
-            for date, schedule, room in self.lectures_list(
-                    self.weekdays(weekload, date_begin), no_lectures):
-                if not self.lecture_overlaps(date, schedule, room):
-                    lectures.append(
-                        {'date': date,
-                         'schedule': schedule,
-#                         'room': room,
-                         'curso': curso})
-                else:
-                    raise osv.except_osv(
-                        'Error!',
-                        u'La clase del %s en el horario %s y en el aula %s se superpone con una ya existente',
-                        date, schedule.name, room)
-
-            if len(lectures) != len(lecture_templates):
-                raise osv.except_osv(
-                    'Error!',
-                    u'La cantidad de clases no coincide con la cantidad de contenidos.')
-
-            lecs = []
-            for ix, lec in enumerate(lectures):
-                lec['date'] = lectures[ix]['date']
-                lec['name'] = lecture_templates[ix]['name']
-                lec['curso_id'] = lectures[ix]['curso'].id
-                lec['schedule_id'] = lectures[ix]['schedule'].id
-                lec['date_start'] = lectures[ix]['schedule'].start_datetime(lec['date'])
-                lec['date_stop'] = lectures[ix]['schedule'].stop_datetime(lec['date'])
-                lecs.append(lec)
-
-            # Add lectures
-            lectures_pool = self.pool.get('curso.lecture')
-            ids = lectures_pool.search(cr, uid, [('curso_id', '=', curso.id)])
-            lectures_pool.unlink(cr, uid, ids)
-            for lec in lecs:
-                lectures_pool.create(cr, uid, lec)
 
     def _check_change_begin_date(self, cr, uid, ids, context=None):
         for curso in self.browse(cr, uid, ids, context=context):

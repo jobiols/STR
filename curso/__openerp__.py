@@ -21,7 +21,7 @@
 
 {
     'name': 'Organización de Cursos',
-    'version': '8.0.1.2',
+    'version': '8.0.1.1.0',
     'category': 'Tools',
     'summary': 'Cursos, Inscripciones, Reservas etc.',
     'description': """
@@ -34,7 +34,7 @@ This proyect support [semver](http://semver.org/)
 Manejo de Cursos en una Academia
 ================================
 El módulo curso le ayuda a manejar y organizar en forma eficiente los cursos \
- de una academia.
+de una academia.
 
 Puntos Clave
 ------------
@@ -57,7 +57,8 @@ faltante en la ficha del alumno
                 'board',
                 'email_template',
                 'l10n_ar_invoice',
-                'document_page'],
+                'document_page',
+                'web_widget_text_markdown'],
     'data': [
         'security/curso_security.xml',
         'security/ir.model.access.csv',
@@ -69,11 +70,13 @@ faltante en la ficha del alumno
         'views/res_product_view.xml',
         'views/email_template.xml',
         'views/res_partner_view.xml',
+        # wizards
         'wizard/create_invoice_view.xml',
         'wizard/daily_report_view.xml',
         'report/report_curso_registration_view.xml',
-        'data/curso_data.xml',
         'wizard/move_registration.xml',
+        'data/curso_data.xml',
+        'wizard/mail_confirm_view.xml',
         # reportes.
         'curso_report.xml',
         'views/curso_report_incoming.xml',
