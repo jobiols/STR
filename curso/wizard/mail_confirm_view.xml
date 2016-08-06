@@ -7,16 +7,20 @@
             <field name="model">curso.mail.confirm</field>
             <field name="arch" type="xml">
               <form string="Confirmar los mails">
-                <group>
-                   <field name="registration_ids" colspan="4" nolabel="1"/>
-                </group>
-                  <label string="Warning: se van a enviar mails a los siguientes clientes"/>
+                <label string="Se van a enviar mails a los siguientes clientes,
+                               elimine los que no quiere que salgan."/>
+                  <group>
+                    <field name="mails_ids" nolabel="1"/>
+                      <field name="reset_mails"/>
+                  </group>
                   <footer>
+                      <button name="reset" string="Resetear" type="object" class="oe_highlight"/>
+                      or
                       <button name="confirm" string="Confirmar" type="object" class="oe_highlight"/>
                       or
                       <button string="Cancelar" class="oe_link" special="cancel" />
                   </footer>
-            </form>
+              </form>
             </field>
         </record>
 

@@ -187,4 +187,62 @@ class curso_registration(models.Model):
             }
             self.env['curso.quota'].create(quota_data)
 
+    @api.one
+    def try_send_mail_by_lecture(self):
+        print 'try send mail by lecture'
+        # en que clase estoy
+        lecture = 1
+
+        # que mail tengo que enviarle en esta clase
+        # por ahora traigo el de la clase 1
+        template = False
+        for reg in self.curso_id.product.email_classes_ids:
+            print 'getting template'
+            a = reg.class_no
+            template = reg.template_id
+            break
+
+        print 'template =',template
+        if template:
+            template.send_mail(self.id)
+
+    @api.multi
+    def get_diary_table_html(self):
+        get_agenda = [{'date':datetime},{'schedule':'10:00 a 12:00'},{'topic':'ojos esfumados'}]
+        ret =   """
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Dia</th>
+                            <th>Horario programado</th>
+                            <th>Contenido de la clase</th>
+                        </tr>
+                        <tr>
+                            <td>${lecture.date}</td>
+                            <td>${lecture.weekday}</td>
+                            <td>${lecture.schedule_id.name}</td>
+                            <td>${lecture.name}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                """
+        return ret
+
+    @api.multi
+    def get_formatted_begin_date(self):
+        print 'get formattedd begin date ---------------------------------------------'
+        date = datetime.strptime(self.curso_begin_date, '%Y-%m-%d')
+        return date.strftime('%d/%m/%Y')
+
+    @api.multi
+    def get_formatted_begin_time(self):
+        return '10:40'
+
+
+
+
+
+
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

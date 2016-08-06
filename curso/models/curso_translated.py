@@ -204,6 +204,7 @@ class curso_curso(models.Model):
 
     next = fields.Boolean(
         compute='_get_next',
+        store=True,
         string='Curso por venir')
 
     classes_per_week = fields.Integer(
@@ -265,12 +266,15 @@ class curso_curso(models.Model):
     @api.one
     @api.depends('date_begin')
     def _get_next(self):
-        # si esta cancelado o en borrador no lo reporto como proximo
-        if self.state in ['cancel','draft']:
+        # si esta cancelado no lo reporto como proximo
+        if self.state in ['cancel']:
             self.next = False
-            return True
+            return False
 
-        self.next = self.date_begin < str(date.today())
+        if self.date_begin:
+            self.next = self.date_begin > str(date.today())
+        else:
+            self.next = True
 
     @api.one
     def _get_classes_per_week_(self):

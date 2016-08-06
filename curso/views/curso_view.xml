@@ -403,8 +403,8 @@
                             help="Cursos terminados"/>
                     <separator/>
                     <filter icon="terp-go-today" string="Próximos" name="upcoming"
-                            domain="[('date_begin','&gt;=', time.strftime('%%Y-%%m-%%d 00:00:00'))]"
-                            help="Cursos que todavia no iniciaron"/>
+                            domain="[('next','=', True)]"
+                            help="Cursos con fecha futura, confirmados o en borrador"/>
                     <field name="name"/>
                     <group expand="0" string="Agrupar por...">
                         <filter string="Responsable" icon="terp-personal"

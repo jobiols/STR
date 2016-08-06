@@ -1,0 +1,51 @@
+<!--
+    Plantilla para enviar confirmación de inscripción a un curso G01
+-->
+
+<p>Hola ${object.partner_id.first_name},</p>
+
+<p>Te confirmamos tu inscripción en el curso ${object.curso_id.product.name} a cargo
+    de la profesora ${object.curso_id.main_speaker_id.name}</p>
+
+<p>El primer día del curso debés traer los elementos que usas para higiene y maquillaje,
+    pinceles y todo lo que tengas para que te asesoren en el correcto uso de los mismos,
+    durante el curso usarás los productos provistos por la escuela y no olvides traer
+    lapiz y papel para tomar notas.</p>
+
+<p>Estos son los datos que tenemos registrados, por favor verificá que sean correctos:</p>
+<p style="border-left: 1px solid #8e0000; margin-left: 30px;">&nbsp;&nbsp;<strong>TUS
+    DATOS PERSONALES</strong><br>
+    &nbsp;&nbsp; Nombre: ${object.partner_id.name}<br>
+    &nbsp;&nbsp; Teléfono de contacto: ${object.partner_id.mobile or '''No lo
+    tenemos'''}<br>
+    &nbsp;&nbsp; Fecha de nacimiento: ${object.partner_id.birthdate or '''No la
+    tenemos'''}<br>
+    &nbsp;&nbsp; Documento: ${object.partner_id.document_type}&nbsp;${object.partner_id.document_number
+    or "No lo tenemos"}</p>
+
+% if object.curso_id.product.description:
+<p> Descripción del curso: ${object.curso_id.product.description}</p>
+% endif
+
+% if object.get_diary_table_html():
+<p>Este es tu calendario de clases</p>
+${object.get_diary_table_html() | safe}
+% endif
+
+<p>Te esperamos entonces el día ${object.get_formatted_begin_date()}
+    a las ${object.get_formatted_begin_time()}</p>
+
+<p>Gracias por elegirnos!</p>
+
+<!-- pie de pagina makeover -->
+
+<p><span style="font-family:lucida sans unicode,lucida grande,sans-serif;
+        font-size:20px;">
+    <span style="color:#FF0000;"><strong>Makeover Lab</strong></span></span><br/>
+    Avda Rivadavia 5259 9&deg; &quot;34&quot;, Caballito<br/>
+    Tel&eacute;fono: 11 4902 4652<br/>
+    Horario de atenci&oacute;n al p&uacute;blico:<br/>
+    Lunes a Viernes de 17 a 20 hs.<br/>
+    S&aacute;bados de 11 a 19 hs<br/>
+    <a href="https://www.facebook.com/MakeoverLabs">face/makeoverlabs</a><br/>
+    <a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a></p>
