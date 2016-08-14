@@ -48,7 +48,7 @@ class curso_curso(models.Model):
     register_max = fields.Integer(
         u'Vacantes max', readonly=True,
         help=u"La cantidd máxima de vacantes del curso. Si la cantidad de "
-             u"inscripciones es mayor, no se puede arrancar el curso. (poner 0 para "
+             u"inscripciones es mayor, no se puede arrancar el curso. (dejar en blanco para "
              u"ignorar la regla)",
         states={'draft': [('readonly', False)]})
 
@@ -198,6 +198,11 @@ class curso_curso(models.Model):
         string='Interesadas',
         help=u"La cantidad de alumnas interesadas que todavía no concretaron")
 
+    register_cancel = fields.Integer(
+        compute='_get_register',
+        string='Canceladas',
+        help=u"La cantidad de alumnas que cancelaron el curso")
+
     is_subscribed = fields.Boolean(
         compute='_subscribe_fnc_',
         string='Subscribed')
@@ -242,7 +247,7 @@ class curso_curso(models.Model):
     @api.one
     @api.depends('register_max', 'registration_ids.state', 'registration_ids.nb_register')
     def _get_register(self):
-        reg_current = reg_attended = reg_prospect = 0
+        reg_current = reg_attended = reg_prospect = reg_cancel = 0
 
         # las que señaron o pagaron
         for registration in self.registration_ids:
@@ -254,10 +259,14 @@ class curso_curso(models.Model):
         # las que estan interesadas
             elif registration.state == 'draft':
                 reg_prospect += registration.nb_register
+        # las que cancelaron
+            elif registration.state == 'cancel':
+                reg_cancel += registration.nb_register
 
         self.register_current = reg_current
         self.register_attended = reg_attended
         self.register_prospect = reg_prospect
+        self.register_cancel = reg_cancel
         # the number of vacants is unlimited if the curso.register_max field is not set.
         # In that case we arbitrary set it to 9999, it is used in the
         # kanban view to special case the display of the 'subscribe' button
@@ -440,3 +449,22 @@ class curso_curso(models.Model):
 
         for lec in lecs:
             lectures.create(lec)
+
+    @api.one
+    @api.constrains('register_max', 'register_avail')
+    def _check_seats_limit(self):
+        if self.register_max and self.register_avail < 0:
+            raise Warning('No hay mas vacantes.')
+
+    @api.one
+    def confirm_curso(self):
+        if self.email_confirmation_id:
+            # send reminder that will confirm the event for all the people that were already confirmed
+            regs = self.registration_ids.filtered(lambda reg: reg.state not in ('draft', 'cancel'))
+#            regs.mail_user_confirm()
+        self.state = 'confirm'
+
+    @api.one
+    def button_curso_draft(self):
+        self.state = 'draft'
+

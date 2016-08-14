@@ -49,9 +49,10 @@
                                 <field name="curso_id"/>
                                 <field name="state"/>
                                 <!-- ESTADOS -->
-                                <button name="button_reg_sign" string="Seña el curso"
+                                <button name="button_reg_sign" string="Seña el curso5"
                                         states="draft"
-                                        type="object" icon="gtk-apply"/>
+                                        type="object" icon="gtk-apply"
+                                        confirm="Se va a confirmar la inscripción enviando un mail de confirmación. Está seguro?"/>
                                 <button name="button_reg_confirm" string="Empezó el curso"
                                         states="signed"
                                         type="object" icon="gtk-go-forward"/>

@@ -25,12 +25,13 @@ class curso_lapse(models.Model):
     """ Define un lapso de tiempo se usa como clase abstracta """
     _name = 'curso.lapse'
 
+    start_time = fields.Float(string='Desde', required=True)
+    end_time = fields.Float(string='Hasta', required=True)
+    elapsed_time = fields.Float(compute='_elapsed_time', string='Duración')
+
     @api.one
     def _elapsed_time(self):
         self.elapsed_time = self.end_time - self.start_time
 
-    start_time = fields.Float(string='Desde', required=True)
-    end_time = fields.Float(string='Hasta', required=True)
-    elapsed_time = fields.Float(compute=_elapsed_time, string='Duración')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

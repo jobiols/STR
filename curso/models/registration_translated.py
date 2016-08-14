@@ -19,6 +19,8 @@
 #
 # -----------------------------------------------------------------------------------
 from datetime import datetime, timedelta
+from openerp.exceptions import Warning
+
 from openerp import models, fields, api
 import babel.dates
 
@@ -28,7 +30,6 @@ class curso_registration(models.Model):
     _inherit = 'curso.registration'
     _order = 'create_date desc'
     _description = 'Inscripcion en cursos'
-
 
     create_date = fields.Date(
         u'Creación', readonly=True)
@@ -131,8 +132,8 @@ class curso_registration(models.Model):
 
     @api.one
     def button_reg_sign(self):
-        print 'seña el curso ------------------------------------------------------'
-        # La alumna seña el curso, eso la confirma en el mismo
+        """ La alumna seña el curso, eso la confirma en el mismo
+        """
 
         # poner la alumna como cliente
         self.partner_id.write({'customer': True})
@@ -140,21 +141,24 @@ class curso_registration(models.Model):
         # generarle las cuotas
         self.button_gen_quotes()
 
-        # señar la inscripción
+        # señar la inscripción pasando al estado señada
         res = self.sign_registration()
 
         # notificarla por mail si el curso tiene el template
+        return
+        # TODO aca habría que lanzar un wizard que puede mandar el mail de confirmacion
         if self.curso_id.email_registration_id:
             template = self.curso_id.email_registration_id
-            print '??',template.name
+            print '??', template.name
             if template:
-                print 'envia mail ------ ',template.name
-                mail_message = template.send_mail(self.id)
-                print 'msg enviado',mail_message
+                print 'envia mail ------ ', template.name
+#                mail_message = template.send_mail(self.id)
+                print 'msg enviado', mail_message
+        else:
+            raise Warning(('Falló envio de maio, no hay plantilla de mail para mandar.!'))
 
     @api.one
     def sign_registration(self):
-        print 'señar la inscripción -------------------------------------------------'
         self.curso_id.message_post(
             body=(u'Nueva seña para el curso: %s.') % (
                 self.partner_id.name or '',),
@@ -167,18 +171,18 @@ class curso_registration(models.Model):
     def _check_seats_limit(self):
         if self.curso_id.register_max and \
                         self.curso_id.register_avail < (
-                self.nb_register if self.state == 'draft' else 0):
+                        self.nb_register if self.state == 'draft' else 0):
             raise Warning(('No hay mas vacantes.!'))
 
     @api.one
     def button_gen_quotes(self):
-        print 'generar cuotas ----------------------------------------------------'
+        """ Generar las cuotas que la alumna deberá pagar
+        """
         def calculate_invoice_date(sourcedate, months):
             return sourcedate + timedelta(days=30 * (months))
 
         date = datetime.strptime(self.curso_begin_date, '%Y-%m-%d')
         for quota in range(1, self.curso_id.product.no_quotes + 1):
-            print 'cuota ',quota
             quota_data = {
                 'registration_id': self.id,
                 'date': calculate_invoice_date(date, quota - 1),
@@ -189,7 +193,6 @@ class curso_registration(models.Model):
 
     @api.one
     def try_send_mail_by_lecture(self):
-        print 'try send mail by lecture'
         # en que clase estoy
         lecture = 1
 
@@ -197,19 +200,18 @@ class curso_registration(models.Model):
         # por ahora traigo el de la clase 1
         template = False
         for reg in self.curso_id.product.email_classes_ids:
-            print 'getting template'
             a = reg.class_no
             template = reg.template_id
             break
 
-        print 'template =',template
         if template:
             template.send_mail(self.id)
 
     @api.multi
     def get_diary_table_html(self):
-        get_agenda = [{'date':datetime},{'schedule':'10:00 a 12:00'},{'topic':'ojos esfumados'}]
-        ret =   """
+        get_agenda = [{'date': datetime}, {'schedule': '10:00 a 12:00'},
+                      {'topic': 'ojos esfumados'}]
+        ret = """
                 <table>
                     <tbody>
                         <tr>
@@ -231,7 +233,6 @@ class curso_registration(models.Model):
 
     @api.multi
     def get_formatted_begin_date(self):
-        print 'get formattedd begin date ---------------------------------------------'
         date = datetime.strptime(self.curso_begin_date, '%Y-%m-%d')
         return date.strftime('%d/%m/%Y')
 
@@ -239,10 +240,18 @@ class curso_registration(models.Model):
     def get_formatted_begin_time(self):
         return '10:40'
 
-
-
-
-
+    @api.multi
+    def button_reg_cancel(self):
+        """ Cancela un curso
+        """
+        # Eliminar todas las cuotas pendientes para no seguir cobrandole
+        for reg in self:
+            quota_obj = self.env['curso.quota']
+            quotas = quota_obj.search([('invoice_id', '=', None),
+                                      ('registration_id', '=', reg.id)])
+            for reg in quotas:
+                reg.unlink()
+            self.state = 'cancel'
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

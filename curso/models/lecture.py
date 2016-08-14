@@ -25,11 +25,6 @@ class curso_lecture(models.Model):
     """ Representa las clases del curso """
     _name = 'curso.lecture'
 
-    @api.one
-    def _weekday(self):
-        ans = datetime.strptime(self.date, '%Y-%m-%d')
-        self.weekday = ans.strftime("%A").capitalize()
-
     name = fields.Text('Contenido de la clase')
     date = fields.Date('Fecha')
     curso_id = fields.Many2one(
@@ -43,5 +38,10 @@ class curso_lecture(models.Model):
     date_start = fields.Datetime(string="Inicio de clase")
     date_stop = fields.Datetime(string="Fin de clase")
     seq = fields.Integer('Número de clase')
+
+    @api.one
+    def _weekday(self):
+        ans = datetime.strptime(self.date, '%Y-%m-%d')
+        self.weekday = ans.strftime("%A").capitalize()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

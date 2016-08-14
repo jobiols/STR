@@ -24,6 +24,7 @@
         </record>
 
         <!-- action -->
+
         <record id="wizard_curso_add_registration" model="ir.actions.act_window">
             <field name="name">Anotar como interesada</field>
             <field name="res_model">curso.add_registration</field>

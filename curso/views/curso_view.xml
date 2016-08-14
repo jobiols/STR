@@ -146,9 +146,10 @@
                                         <field name="phone"/>
                                         <field name="state"/>
                                         <!-- ESTADOS INSCRIPCIONES -->
-                                        <button name="button_reg_sign"
-                                                string="Seña el curso" states="draft"
-                                                type="object" icon="gtk-apply"/>
+                                        <button name="button_reg_sign" string="Seña el curso1"
+                                                states="draft"
+                                                type="object" icon="gtk-apply"
+                                                confirm="Se va a confirmar la inscripción enviando un mail de confirmación. Está seguro?"/>
                                         <button name="button_reg_confirm"
                                                 string="Empezó el curso" states="signed"
                                                 type="object" icon="gtk-go-forward"/>
@@ -178,9 +179,9 @@
                                             <newline/>
                                             <field name="state" colspan="2"/>
                                             <!-- ESTADOS -->
-                                            <button name="button_reg_sign"
-                                                    string="Seña el curso" states="draft"
-                                                    type="object" icon="gtk-apply"/>
+                                            <button name="button_reg_sign" string="Seña el curso2"
+                                                    states="draft" type="object" icon="gtk-apply"
+                                                confirm="Se va a confirmar la inscripción enviando un mail de confirmación. Está seguro?"/>
                                             <button name="button_reg_confirm"
                                                     string="Empezó el curso"
                                                     states="signed"
@@ -255,10 +256,14 @@
                     <field name="tot_hs_lecture"/>
                     <field name="list_price"/>
                     <field name="no_quotes"/>
-                    <field name="register_current"/>
+                    <field name="register_prospect" string="Int"/>
+                    <field name="register_current" string="Conf"/>
+                    <field name="register_cancel" string="Canc"/>
+                    <field name="register_attended" string="Cump"/>
                     <field name="register_min" invisible="1"/>
                     <field name="register_max" invisible="1"/>
                     <field name="main_speaker_id"/>
+                    <field name="secondary_speaker_id"/>
                     <field name="state"/>
                 </tree>
             </field>

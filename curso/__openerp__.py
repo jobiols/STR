@@ -63,6 +63,7 @@ faltante en la ficha del alumno
         'security/curso_security.xml',
         'security/ir.model.access.csv',
         'wizard/add_registration_view.xml',
+        'wizard/mail_confirm_view.xml',
         'views/curso_view.xml',
         'views/registration_view.xml',
         'views/engine_view.xml',
@@ -70,14 +71,11 @@ faltante en la ficha del alumno
         'views/res_product_view.xml',
         'views/email_template.xml',
         'views/res_partner_view.xml',
-        # wizards
         'wizard/create_invoice_view.xml',
         'wizard/daily_report_view.xml',
         'report/report_curso_registration_view.xml',
         'wizard/move_registration.xml',
         'data/curso_data.xml',
-        'wizard/mail_confirm_view.xml',
-        # reportes.
         'curso_report.xml',
         'views/curso_report_incoming.xml',
         'views/report_curso_attendance.xml'

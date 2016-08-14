@@ -94,17 +94,6 @@ class curso_registration(osv.osv):
 
         return True
 
-    def button_reg_cancel(self, cr, uid, ids, context=None, *args):
-        # Eliminar todas las cuotas pendientes para no seguir cobrandole
-        for registration in self.browse(cr, uid, ids, context=context):
-            id = registration.id
-            register_pool = self.pool.get('curso.quota')
-            records = register_pool.search(cr, uid, [('invoice_id', '=', None),
-                                                     ('registration_id', '=', id)])
-        register_pool.unlink(cr, uid, records, context=None)
-        return self.write(cr, uid, ids, {'state': 'cancel'})
-
-
     def mail_user(self, cr, uid, ids, context=None):
         """
         Send email to user with email_template when registration is done
