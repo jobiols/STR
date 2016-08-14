@@ -18,35 +18,34 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # -----------------------------------------------------------------------------------
-from openerp import models, fields, api
+from openerp import fields, models, api
 
+class mail_confirm(models.TransientModel):
+    """Mail Confirmation"""
+    _name = "curso.mail.confirm"
 
-class add_registration(models.TransientModel):
-    """ Wizard para agregar una inscripción de una clienta a un curso """
-    _name = 'curso.add_registration'
-    _description = "Inscribir alumna en curso"
+    mails_ids = fields.Many2many(
+        comodel_name='curso.registration')
 
-    curso_id = fields.Many2one(
-        'curso.curso',
-        string="Curso",
-        required=True,
-        domain="[('next','=',1)]")
+    # este campo esta solo para que funcione el onchange
+    reset_mails = fields.Boolean()
 
+    # el onchange hace que se carge al iniciar del wizard
+    @api.onchange('reset_mails')
+    @api.multi
+    def reset(self):
+        curso_id = self._context.get('curso_id', False)
+        reg_obj = self.env['curso.registration'].search([('curso_id', '=', curso_id)])
+        for reg in reg_obj:
+            self.mails_ids += reg
 
-    @api.one
-    def button_add_curso(self):
-        """ Agrega un curso a la ficha de la alumna, y la pone como interesada
+    @api.multi
+    def confirm(self):
+        """ Intentar enviar mail a todas las alumnas que tengo
         """
-        #  obtener el id de la alumna que viene en el contexto
-        partner_ids = self._context.get("active_ids")
+        for reg in self.mails_ids:
+            reg.try_send_mail_by_lecture()
 
-        # Crear la inscripcion y agregarla
-        vals = {
-            'curso_id': self.curso_id.id,
-            'partner_id': partner_ids[0],
-            'user_id': self._uid
-        }
-        self.env['curso.registration'].create(vals)
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

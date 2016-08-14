@@ -26,8 +26,10 @@ class res_partner(models.Model):
     teacher = fields.Boolean(
         'Profesora',
         help="Poner el tilde si el contacto es una profesora.")
+
     curso_ids = fields.One2many(
         'curso.curso', 'main_speaker_id', readonly=True)
+
     curso_registration_ids = fields.One2many(
         'curso.registration', 'partner_id')
 

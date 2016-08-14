@@ -105,6 +105,11 @@
                                     string="Generar hoja de asistencia" type="object"
                                     class="oe_highlight"/>
 
+                            <button name="%(action_mail_confirm)d"
+                                    string="Enviar mails" type="action"
+                                    context="{'curso_id': id}"
+                                    class="oe_highlight"/>
+
                             <button name="button_update_child_from_parent"
                                     string="Actualizar datos"
                                     type="object"
@@ -122,6 +127,8 @@
                                         <field name="main_speaker_id"
                                                domain="[('teacher','=',True)]"
                                                context="{'default_speaker':1}"/>
+                                        <field name="secondary_speaker_id"
+                                               domain="[('teacher','=',True)]"/>
                                     </group>
                                     <group>
                                         <field name="register_prospect"
@@ -139,9 +146,10 @@
                                         <field name="phone"/>
                                         <field name="state"/>
                                         <!-- ESTADOS INSCRIPCIONES -->
-                                        <button name="button_reg_sign"
-                                                string="Seña el curso" states="draft"
-                                                type="object" icon="gtk-apply"/>
+                                        <button name="button_reg_sign" string="Seña el curso1"
+                                                states="draft"
+                                                type="object" icon="gtk-apply"
+                                                confirm="Se va a confirmar la inscripción enviando un mail de confirmación. Está seguro?"/>
                                         <button name="button_reg_confirm"
                                                 string="Empezó el curso" states="signed"
                                                 type="object" icon="gtk-go-forward"/>
@@ -171,9 +179,9 @@
                                             <newline/>
                                             <field name="state" colspan="2"/>
                                             <!-- ESTADOS -->
-                                            <button name="button_reg_sign"
-                                                    string="Seña el curso" states="draft"
-                                                    type="object" icon="gtk-apply"/>
+                                            <button name="button_reg_sign" string="Seña el curso2"
+                                                    states="draft" type="object" icon="gtk-apply"
+                                                confirm="Se va a confirmar la inscripción enviando un mail de confirmación. Está seguro?"/>
                                             <button name="button_reg_confirm"
                                                     string="Empezó el curso"
                                                     states="signed"
@@ -200,26 +208,19 @@
 <!--                                        <field name="email_confirmation_id"/> -->
                                     </group>
                                 </group>
-                                <group>
-                                    <field name="email_classes_ids" nolabel="1">
-                                        <tree string="diary" editable="top">
-                                            <field name="class_no"/>
-                                            <field name="template_id"/>
-                                        </tree>
-                                    </field>
-                                </group>
                             </page>
 
                             <page string="Clases">
                                 <field name="lecture_ids" colspan="4" nolabel="1"
                                        attrs="{'readonly':[('child', '==', True)]}"
-                                       groups="curso.group_curso_manager,curso.group_curso_user">
+                                       groups="curso.group_curso_manager, curso.group_curso_user">
                                     <tree string="Clases">
                                         <field name="date"/>
                                         <field name="weekday" type="string"/>
                                         <!--     <field name="start_time" widget="float_time"/>
                                                  <field name="end_time" widget="float_time"/> -->
                                         <field name="schedule_id"/>
+                                        <field name="seq"/>
                                         <!--     <field name="elapsed_time" widget="float_time"/> -->
                                         <field name="name"/>
                                     </tree>
@@ -255,10 +256,14 @@
                     <field name="tot_hs_lecture"/>
                     <field name="list_price"/>
                     <field name="no_quotes"/>
-                    <field name="register_current"/>
+                    <field name="register_prospect" string="Int"/>
+                    <field name="register_current" string="Conf"/>
+                    <field name="register_cancel" string="Canc"/>
+                    <field name="register_attended" string="Cump"/>
                     <field name="register_min" invisible="1"/>
                     <field name="register_max" invisible="1"/>
                     <field name="main_speaker_id"/>
+                    <field name="secondary_speaker_id"/>
                     <field name="state"/>
                 </tree>
             </field>
@@ -403,8 +408,8 @@
                             help="Cursos terminados"/>
                     <separator/>
                     <filter icon="terp-go-today" string="Próximos" name="upcoming"
-                            domain="[('date_begin','&gt;=', time.strftime('%%Y-%%m-%%d 00:00:00'))]"
-                            help="Cursos que todavia no iniciaron"/>
+                            domain="[('next','=', True)]"
+                            help="Cursos con fecha futura, confirmados o en borrador"/>
                     <field name="name"/>
                     <group expand="0" string="Agrupar por...">
                         <filter string="Responsable" icon="terp-personal"

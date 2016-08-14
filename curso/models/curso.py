@@ -260,30 +260,6 @@ class curso_curso(osv.osv):
         return super(curso_curso, self).copy(
             cr, uid, id, default=default, context=context)
 
-    def check_registration_limits(self, cr, uid, ids, context=None):
-        for self.curso in self.browse(cr, uid, ids, context=context):
-            total_confirmed = self.curso.register_current
-            if total_confirmed < self.curso.register_min or \
-                                    total_confirmed > self.curso.register_max and \
-                                    self.curso.register_max != 0:
-                raise osv.except_osv('Error!',
-                    u"El total de inscripciones confirmadas para el curso '%s' no \
-                    cumple con los requerimientos esperados de minimo/maximo. \
-                    Reconsidere estos limites antes de continuar." % (
-                                         self.curso.name))
-
-    def check_registration_limits_before(self, cr, uid, ids, no_of_registration,
-                                         context=None):
-        for curso in self.browse(cr, uid, ids, context=context):
-            available_seats = curso.register_avail
-            if available_seats and no_of_registration > available_seats:
-                raise osv.except_osv('Cuidado!',
-                                     u"Solo hay %d vacantes disponnibles!" %
-                                     available_seats)
-            elif available_seats == 0:
-                raise osv.except_osv('Cuidado!',
-                                     u"No Hay mas vacantes en este curso!")
-
     def get_weekload(self, cr, uid, ids, context=None):
         ret = []
         for curso in self.browse(cr, uid, ids, context=context):
@@ -297,17 +273,6 @@ class curso_curso(osv.osv):
                 })
 
         return ret
-
-    def confirm_curso(self, cr, uid, ids, context=None):
-        register_pool = self.pool.get('curso.registration')
-        if self.curso.email_confirmation_id:
-            # send reminder that will confirm the curso for all
-            # the people that were already confirmed
-            reg_ids = register_pool.search(cr, uid, [
-                ('curso_id', '=', self.curso.id),
-                ('state', 'not in', ['draft', 'cancel'])], context=context)
-        # register_pool.mail_user_confirm(cr, uid, reg_ids)
-        return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
 
     # Estados de los cursos
     ###############################################################################
@@ -342,7 +307,6 @@ class curso_curso(osv.osv):
 
                 if isinstance(ids, (int, long)):
                     ids = [ids]
-                self.check_registration_limits(cr, uid, ids, context=context)
                 return self.confirm_curso(cr, uid, ids, context=context)
 
     def button_curso_done(self, cr, uid, ids, context=None):
@@ -378,9 +342,6 @@ class curso_curso(osv.osv):
                     curso")
 
         return self.write(cr, uid, ids, {'state': 'done'}, context=context)
-
-    def button_curso_draft(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
 
     def button_curso_cancel(self, cr, uid, ids, context=None):
         """
@@ -456,67 +417,6 @@ class curso_curso(osv.osv):
             ret.append({'name': rec.text})
 
         return ret
-
-    def button_generate_lectures(self, cr, uid, ids, context=None):
-        """ Generar las clases que correspondan a este curso
-        """
-        for curso in self.browse(cr, uid, ids, context=context):
-            date_begin = datetime.strptime(curso.date_begin, '%Y-%m-%d')
-            tot_hs_lecture = curso.tot_hs_lecture
-            hs_lecture = curso.hs_lecture
-            default_code = curso.default_code
-            if (operator.mod(tot_hs_lecture, hs_lecture) != 0):
-                raise osv.except_osv(
-                    'Error!',
-                    u"la cantidad de horas catedra no es divisible por las horas de clase!.")
-
-            no_lectures = int(tot_hs_lecture // hs_lecture)
-            weekload = self.get_weekload(cr, uid, ids)
-
-            if (weekload == []):
-                raise osv.except_osv('Error!', u"No se definió la agenda!.")
-
-            # get lecture templates
-            lecture_templates = self.get_lecture_templates(
-                cr, uid, ids, curso.product.id, context=context)
-
-            # get a lectures list or an exception if overlaps.
-            lectures = []
-            for date, schedule, room in self.lectures_list(
-                    self.weekdays(weekload, date_begin), no_lectures):
-                if not self.lecture_overlaps(date, schedule, room):
-                    lectures.append(
-                        {'date': date,
-                         'schedule': schedule,
-#                         'room': room,
-                         'curso': curso})
-                else:
-                    raise osv.except_osv(
-                        'Error!',
-                        u'La clase del %s en el horario %s y en el aula %s se superpone con una ya existente',
-                        date, schedule.name, room)
-
-            if len(lectures) != len(lecture_templates):
-                raise osv.except_osv(
-                    'Error!',
-                    u'La cantidad de clases no coincide con la cantidad de contenidos.')
-
-            lecs = []
-            for ix, lec in enumerate(lectures):
-                lec['date'] = lectures[ix]['date']
-                lec['name'] = lecture_templates[ix]['name']
-                lec['curso_id'] = lectures[ix]['curso'].id
-                lec['schedule_id'] = lectures[ix]['schedule'].id
-                lec['date_start'] = lectures[ix]['schedule'].start_datetime(lec['date'])
-                lec['date_stop'] = lectures[ix]['schedule'].stop_datetime(lec['date'])
-                lecs.append(lec)
-
-            # Add lectures
-            lectures_pool = self.pool.get('curso.lecture')
-            ids = lectures_pool.search(cr, uid, [('curso_id', '=', curso.id)])
-            lectures_pool.unlink(cr, uid, ids)
-            for lec in lecs:
-                lectures_pool.create(cr, uid, lec)
 
     def _check_change_begin_date(self, cr, uid, ids, context=None):
         for curso in self.browse(cr, uid, ids, context=context):
@@ -597,36 +497,35 @@ class curso_curso(osv.osv):
             #                print res
 
 
-def subscribe_to_curso(self, cr, uid, ids, context=None):
-    register_pool = self.pool.get('curso.registration')
-    user_pool = self.pool.get('res.users')
-    num_of_seats = int(context.get('ticket', 1))
-    self.check_registration_limits_before(cr, uid, ids, num_of_seats, context=context)
-    user = user_pool.browse(cr, uid, uid, context=context)
-    curr_reg_ids = register_pool.search(cr, uid, [('user_id', '=', user.id),
-                                                  ('curso_id', '=', ids[0])])
-    # the subscription is done with SUPERUSER_ID because in case we share the
-    # kanban view, we want anyone to be able to subscribe
-    if not curr_reg_ids:
-        curr_reg_ids = [register_pool.create(cr, SUPERUSER_ID,
-                                             {'curso_id': ids[0], 'email': user.email,
-                                              'name': user.name,
-                                              'user_id': user.id,
-                                              'nb_register': num_of_seats})]
-    else:
-        register_pool.write(cr, uid, curr_reg_ids, {'nb_register': num_of_seats},
-                            context=context)
-    return register_pool.confirm_registration(cr, SUPERUSER_ID, curr_reg_ids,
-                                              context=context)
+    def subscribe_to_curso(self, cr, uid, ids, context=None):
+        register_pool = self.pool.get('curso.registration')
+        user_pool = self.pool.get('res.users')
+        num_of_seats = int(context.get('ticket', 1))
+        user = user_pool.browse(cr, uid, uid, context=context)
+        curr_reg_ids = register_pool.search(cr, uid, [('user_id', '=', user.id),
+                                                      ('curso_id', '=', ids[0])])
+        # the subscription is done with SUPERUSER_ID because in case we share the
+        # kanban view, we want anyone to be able to subscribe
+        if not curr_reg_ids:
+            curr_reg_ids = [register_pool.create(cr, SUPERUSER_ID,
+                                                 {'curso_id': ids[0], 'email': user.email,
+                                                  'name': user.name,
+                                                  'user_id': user.id,
+                                                  'nb_register': num_of_seats})]
+        else:
+            register_pool.write(cr, uid, curr_reg_ids, {'nb_register': num_of_seats},
+                                context=context)
+        return register_pool.confirm_registration(cr, SUPERUSER_ID, curr_reg_ids,
+                                                  context=context)
 
 
-def unsubscribe_to_curso(self, cr, uid, ids, context=None):
-    register_pool = self.pool.get('curso.registration')
-    # the unsubscription is done with SUPERUSER_ID because in case we share the
-    # kanban view, we want anyone to be able to unsubscribe
-    curr_reg_ids = register_pool.search(cr, SUPERUSER_ID, [('user_id', '=', uid),
-                                                           ('curso_id', '=', ids[0])])
-    return register_pool.button_reg_cancel(cr, SUPERUSER_ID, curr_reg_ids,
-                                           context=context)
+    def unsubscribe_to_curso(self, cr, uid, ids, context=None):
+        register_pool = self.pool.get('curso.registration')
+        # the unsubscription is done with SUPERUSER_ID because in case we share the
+        # kanban view, we want anyone to be able to unsubscribe
+        curr_reg_ids = register_pool.search(cr, SUPERUSER_ID, [('user_id', '=', uid),
+                                                               ('curso_id', '=', ids[0])])
+        return register_pool.button_reg_cancel(cr, SUPERUSER_ID, curr_reg_ids,
+                                               context=context)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

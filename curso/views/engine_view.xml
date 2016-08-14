@@ -128,6 +128,7 @@
                         <field name="date_start"/>
                         <field name="date_stop"/>
                         <field name="schedule_id"/>
+                        <field name="seq"/>
                     </group>
                     <group>
                         <field name="name" nolabel="1"/>

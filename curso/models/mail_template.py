@@ -27,7 +27,7 @@ class mail_template(models.Model):
     _name = 'mail.template'
     _order = 'class_no'
 
-    curso_id = fields.Many2one('curso.curso', 'Curso')
+    product_id = fields.Many2one('product.product', 'Producto')
     class_no = fields.Integer('Nro clase')
     template_id = fields.Many2one('email.template','Plantilla de mail')
 
