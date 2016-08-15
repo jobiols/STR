@@ -76,8 +76,7 @@ class TestCurso(SingleTransactionCase):
             'type': 'service',
             'name': 'Curso de maquillaje Social Profesional rafañuso',
             'agenda': 'Titulo Cuerpo del texto **negrita** Año 2016',
-            'description': 'este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño',
-            'main_speaker_id': self.partner_prof.id
+            'description': 'este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño'
         })
 
         # creo una plantilla de clases para este producto
@@ -87,6 +86,7 @@ class TestCurso(SingleTransactionCase):
         # creo un curso basado en este producto
         self.curso1 = self.curso_obj.create({
             'product':self.product.id,
+            'main_speaker_id': self.partner_prof.id
         })
 
         # chequeo state instance y name
@@ -97,7 +97,8 @@ class TestCurso(SingleTransactionCase):
 
         # creo otro curso basado en este producto
         self.curso2 = self.curso_obj.create({
-            'product':self.product.id
+            'product':self.product.id,
+            'main_speaker_id': self.partner_prof.id
         })
 
         # chequeo state instance y name
