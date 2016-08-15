@@ -20,7 +20,7 @@
 from openerp.tests.common import SingleTransactionCase
 
 # testear con
-# ./odooenv.py -T cursos test_curso1.py -c makeover -d makeover_test -m curso
+# ./odooenv.py -Q cursos test_curso1.py -c makeover -d makeover_test -m curso
 #
 
 class TestCurso(SingleTransactionCase):
@@ -34,6 +34,7 @@ class TestCurso(SingleTransactionCase):
         self.curso_obj = self.env['curso.curso']
         self.diary_obj = self.env['curso.diary']
         self.schedule_obj = self.env['curso.schedule']
+        self.registration_obj = self.env['curso.registration']
 
         # creo un alumno
         self.partner = self.partner_obj.create({
@@ -43,8 +44,8 @@ class TestCurso(SingleTransactionCase):
         print 'test curso create schedules ----------------------------------'
         # creo tres horarios
         self.schedule1 = self.schedule_obj.create({
-            'start_time':12,
-            'end_time':15
+            'start_time':12.5,
+            'end_time':15.5
         })
         self.schedule2 = self.schedule_obj.create({
             'start_time':11,
@@ -56,7 +57,7 @@ class TestCurso(SingleTransactionCase):
         })
 
         print 'test schedules'
-        self.assertEqual(self.schedule1.name,u'12:00 - 15:00 (3hs)','El nombre está mal')
+        self.assertEqual(self.schedule1.name,u'12:30 - 15:30 (3hs)','El nombre está mal')
         self.assertEqual(self.schedule2.name,u'11:00 - 16:00 (5hs)','El nombre está mal')
         self.assertEqual(self.schedule3.name,u'04:00 - 06:00 (2hs)','El nombre está mal')
 
@@ -122,6 +123,28 @@ class TestCurso(SingleTransactionCase):
 
         # le agrego la fecha al curso 2
         self.curso2.date_begin = '2016-01-11'
+
+
+        # registro la alumna en el curso 2
+        vals = {
+            'curso_id': self.curso2.id,
+            'partner_id': self.partner.id,
+            'user_id': 1
+        }
+        self.registration_1 = self.registration_obj.create(vals)
+
+
+        # chequeando generacion de plantillas
+        ##################################################################################
+        self.assertEqual(self.schedule1.formatted_start_time,u'12:30',
+                         'Falla formatted_start_time')
+        self.assertEqual(self.registration_1.get_formatted_begin_date(),u'Lunes 11/01/2016',
+                         'Falla get_formatted_begin_date')
+        self.assertEqual(self.registration_1.get_formatted_begin_time(),u'12:30',
+                         'Falla get_formatted_begin_time')
+
+
+
 
 
 

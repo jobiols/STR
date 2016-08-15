@@ -145,15 +145,11 @@ class curso_registration(models.Model):
         res = self.sign_registration()
 
         # notificarla por mail si el curso tiene el template
-        return
         # TODO aca habría que lanzar un wizard que puede mandar el mail de confirmacion
         if self.curso_id.email_registration_id:
             template = self.curso_id.email_registration_id
-            print '??', template.name
             if template:
-                print 'envia mail ------ ', template.name
-#                mail_message = template.send_mail(self.id)
-                print 'msg enviado', mail_message
+                mail_message = template.send_mail(self.id)
         else:
             raise Warning(('Falló envio de maio, no hay plantilla de mail para mandar.!'))
 
@@ -208,10 +204,25 @@ class curso_registration(models.Model):
             template.send_mail(self.id)
 
     @api.multi
+    def get_mail_footer_html(self):
+        return  """
+                <p><span style="font-family:lucida sans unicode,lucida grande,sans-serif;
+                    font-size:20px;">
+                <span style="color:#FF0000;"><strong>Makeover Lab</strong></span></span><br/>
+                Avda Rivadavia 5259 9&deg; &quot;34&quot;, Caballito<br/>
+                Tel&eacute;fono: 11 4902 4652<br/>
+                Horario de atenci&oacute;n al p&uacute;blico:<br/>
+                Lunes a Viernes de 17 a 20 hs.<br/>
+                S&aacute;bados de 11 a 19 hs<br/>
+                <a href="https://www.facebook.com/MakeoverLabs">face/makeoverlabs</a><br/>
+                <a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a></p>
+                """
+
+    @api.multi
     def get_diary_table_html(self):
         get_agenda = [{'date': datetime}, {'schedule': '10:00 a 12:00'},
                       {'topic': 'ojos esfumados'}]
-        ret = """
+        ret =   """
                 <table>
                     <tbody>
                         <tr>
@@ -229,16 +240,16 @@ class curso_registration(models.Model):
                     </tbody>
                 </table>
                 """
-        return ret
+        return ''
 
     @api.multi
     def get_formatted_begin_date(self):
         date = datetime.strptime(self.curso_begin_date, '%Y-%m-%d')
-        return date.strftime('%d/%m/%Y')
+        return date.strftime('%A %d/%m/%Y').capitalize()
 
     @api.multi
     def get_formatted_begin_time(self):
-        return '10:40'
+        return self.curso_id.diary_ids[0].schedule.formatted_start_time
 
     @api.multi
     def button_reg_cancel(self):

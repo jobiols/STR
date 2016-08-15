@@ -5,8 +5,8 @@
         name: Juana Perez Alumna
         customer: False
 -
-    !assert {model: res.partner, id: curso_student_1, severity: error, string: Must be a client}:
-        - customer == True
+    !assert {model: res.partner, id: curso_student_1, severity: error, string: Must not be a client}:
+        - customer == False
 -
     I create a product / 3 classes
 -
@@ -14,7 +14,7 @@
         tot_hs_lecture: 15
         hs_lecture: 5
         no_quotes: 10
-        default_code: SPR
+        default_code: PSK
         list_price: 800
         type: service
         name: Curso de maquillaje Social Profesional rafañuso
@@ -36,7 +36,7 @@
     !assert {model: curso.curso, id: curso_curso_1, severity: error, string: State should be draft.}:
         - state == 'draft'
         - instance == 1
-        - name == u'[SPR/01] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
+        - name == u'[PSK/01] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
 -
   Then I create another curso based on this product
 -
@@ -51,7 +51,26 @@
   I check name on second curso
 -
     !assert {model: curso.curso, id: curso_curso_2, severity: error, string: Instance does not increment correctly.}:
-        - name == u'[SPR/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
+        - name == u'[PSK/02] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso'
+-
+  I create a schedule
+-
+  !record {model: curso.schedule, id: curso_schedule_1}:
+    start_time: 12
+    end_time: 15
+-
+  !record {model: curso.schedule, id: curso_schedule_2}:
+    start_time: 11
+    end_time: 16
+-
+  !record {model: curso.schedule, id: curso_schedule_3}:
+    start_time: 4
+    end_time: 6
+-
+  I check that name is ok
+-
+  !assert {model: curso.schedule, id: curso_schedule_3, severity: error, string: 'ill formed name'}:
+    - name == u'04:00 - 06:00 (2hs)'
 -
     I create a diary with tree days adding it to curso_curso_2 / 3 classes in a week
 -
@@ -81,7 +100,7 @@
     I check curso name the last time
 -
     !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
-        - name == u'[SPR/02] Mon 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso'
+        - name == u'[PSK/02] Lun 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso'
 -
     I check curso classes per weeek
 -
@@ -106,21 +125,6 @@
     !python {model: curso.lecture}: |
         curso_lecture = self.pool.get('curso.lecture')
         records = curso_lecture.search(cr, uid, [], context=context)
--
-    I check generated lectures 1
--
-    !assert {model: curso.lecture, id: 1, severity: error, string: error in lecture 0}:
-        - name == 'Clase nro 1'
--
-    I check generated lectures 2
--
-    !assert {model: curso.lecture, id: 2, severity: error, string: error}:
-        - name == 'Clase nro 2'
--
-    I check generated lectures 3
--
-    !assert {model: curso.lecture, id: 3, severity: error, string: error}:
-        - name == 'Clase nro 3'
 -
     I Register a student in the course
 -
@@ -151,7 +155,7 @@
     I test wordpress report data
 -
     !python {model: product.product}: |
-        data = self._get_wordpress_data(cr, uid, [ref("curso_product_1")],'SPR',context=context)
+        data = self._get_wordpress_data(cr, uid, [ref("curso_product_1")],'PSK',context=context)
         assert data['titulo'] == u'Curso de maquillaje Social Profesional rafañuso',    'Failed report data 1'
-        assert data['codigo'] == u'SPR',                                                'Failed report data 2'
+        assert data['codigo'] == u'PSK',                                                'Failed report data 2'
         assert data['description'] == u'<p>este es un curso <strong>de prueba</strong> para el test en UTF8 ajá tomá ñoño</p>' ,  'Failed report data 3'
