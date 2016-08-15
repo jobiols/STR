@@ -40,6 +40,10 @@ class TestCurso(SingleTransactionCase):
         self.partner = self.partner_obj.create({
             'name': 'Juana Perez Alumna'})
 
+        # creo una profesora
+        self.partner_prof = self.partner_obj.create({
+            'name': 'Juana Perez Profesora'})
+
     def test_CreateSchedules_01(self):
         print 'test curso create schedules ----------------------------------'
         # creo tres horarios
@@ -72,7 +76,8 @@ class TestCurso(SingleTransactionCase):
             'type': 'service',
             'name': 'Curso de maquillaje Social Profesional rafañuso',
             'agenda': 'Titulo Cuerpo del texto **negrita** Año 2016',
-            'description': 'este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño'
+            'description': 'este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño',
+            'main_speaker_id': self.partner_prof.id
         })
 
         # creo una plantilla de clases para este producto
