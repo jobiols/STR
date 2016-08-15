@@ -130,7 +130,6 @@ class TestCurso(SingleTransactionCase):
         # le agrego la fecha al curso 2
         self.curso2.date_begin = '2016-01-11'
 
-
         # registro la alumna en el curso 2
         vals = {
             'curso_id': self.curso2.id,
@@ -139,18 +138,18 @@ class TestCurso(SingleTransactionCase):
         }
         self.registration_1 = self.registration_obj.create(vals)
 
-
         # chequeando generacion de plantillas
         ##################################################################################
         self.assertEqual(self.schedule1.formatted_start_time,u'12:30',
                          'Falla formatted_start_time')
-        self.assertEqual(self.registration_1.get_formatted_begin_date(),u'Lunes 11/01/2016',
+        self.assertEqual(self.registration_1.get_formatted_begin_date()[-10:],u'11/01/2016',
                          'Falla get_formatted_begin_date')
         self.assertEqual(self.registration_1.get_formatted_begin_time(),u'12:30',
                          'Falla get_formatted_begin_time')
 
+        # chequeo titulo del curso para html
 
-
+        print self.partner.info_curso_html('SPR')
 
 
 

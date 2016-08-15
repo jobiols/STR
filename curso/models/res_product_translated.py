@@ -84,6 +84,9 @@ class product_product(models.Model):
         'mail.template', 'product_id', 'templates',
         help=u"Definición de las plantillas de mail a enviar después de cada clase")
 
+#    default_code
+
+
     @api.one
     def button_generate_lecture_templates(self):
         no_clases = self.tot_hs_lecture / self.hs_lecture
