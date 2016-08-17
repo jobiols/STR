@@ -17,13 +17,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #####################################################################################
-from openerp.tests.common import SingleTransactionCase
+from openerp.tests.common import TransactionCase
 
 # testear con
 # ./odooenv.py -Q cursos test_curso1.py -c makeover -d makeover_test -m curso
 #
 
-class TestCurso(SingleTransactionCase):
+class TestCurso(TransactionCase):
 
     def setUp(self):
         super(TestCurso, self).setUp()
@@ -45,7 +45,7 @@ class TestCurso(SingleTransactionCase):
             'name': 'Juana Perez Profesora'})
 
     def test_CreateSchedules_01(self):
-        print 'test curso create schedules ----------------------------------'
+        print 'test curso create schedules ----------------------------------------------'
         # creo tres horarios
         self.schedule1 = self.schedule_obj.create({
             'start_time':12.5,
@@ -60,20 +60,18 @@ class TestCurso(SingleTransactionCase):
             'end_time':6
         })
 
-        print 'test schedules'
         self.assertEqual(self.schedule1.name,u'12:30 - 15:30 (3hs)','El nombre está mal')
         self.assertEqual(self.schedule2.name,u'11:00 - 16:00 (5hs)','El nombre está mal')
         self.assertEqual(self.schedule3.name,u'04:00 - 06:00 (2hs)','El nombre está mal')
 
         # creo un producto con tres clases
-        print 'create product'
         self.product = self.product_obj.create({
             'tot_hs_lecture': 15,
             'hs_lecture': 5,
             'no_quotes': 10,
-            'default_code': 'SPR',
+            'default_code': 'SPX',
             'list_price': 800,
-            'type': 'service',
+            'type': 'curso',
             'name': 'Curso de maquillaje Social Profesional rafañuso',
             'agenda': 'Titulo Cuerpo del texto **negrita** Año 2016',
             'description': 'este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño'
@@ -92,7 +90,7 @@ class TestCurso(SingleTransactionCase):
         # chequeo state instance y name
         self.assertEqual(self.curso1.state,'draft','El estado debe ser draft')
         self.assertEqual(self.curso1.name,
-                         u'[SPR/00] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso',
+                         u'[SPX/00] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso',
                          'El nombre está mal')
 
         # creo otro curso basado en este producto
@@ -104,7 +102,7 @@ class TestCurso(SingleTransactionCase):
         # chequeo state instance y name
         self.assertEqual(self.curso1.state,'draft','El estado debe ser draft')
         self.assertEqual(self.curso1.name,
-                         u'[SPR/00] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso',
+                         u'[SPX/00] ? ?/?/? (00:00 00:00) - Curso de maquillaje Social Profesional rafañuso',
                          'El nombre está mal')
 
         # creo un diario con tres dias agregandolo al curso 2, 3 clases en la semana
@@ -147,10 +145,92 @@ class TestCurso(SingleTransactionCase):
         self.assertEqual(self.registration_1.get_formatted_begin_time(),u'12:30',
                          'Falla get_formatted_begin_time')
 
+        # check formatted dia
+        # ry
+        data = self.product._get_formatted_diary(self.curso2.id)
+
         # chequeo titulo del curso para html
+#        data = self.product._get_html_data()
+#        self.assertEqual(data['code'],
+#                         u'SPX',
+#                         'Falla codigo')
+#        self.assertEqual(data['description'],
+#                         u'Curso de maquillaje Social Profesional rafañuso',
+#                         'Falla descripcion')
 
-        print self.partner.info_curso_html('SPR')
+#        self.product.get_html_data()
 
 
+    def test_generate_html_02(self):
+        print 'generate html 02 ---------------------------------------------------------'
+        # creo un producto con tres clases
+        ##################################################################################
+        self.product = self.product_obj.create({
+            'tot_hs_lecture': 15,
+            'hs_lecture': 5,
+            'no_quotes': 10,
+            'default_code': 'SPX',
+            'list_price': 800,
+            'type': 'curso',
+            'name': 'Maquillaje social profesional',
+            'agenda':
+            """
+- Presentación, protocolo y herramientas de trabajo. / Psicología y marketing del maquillaje.
+- Biotipos y fototipos cutáneos / Cuidados de la piel, vehículo e higiene .
+- Correcciones y puntos de luz / Diferentes texturas de bases de maquillaje 1.
+- Análisis de la morfología del rostro - visagismo en crema.
+- Visagismo en polvo & strobing.
+- Teoría del color apllicada al maquillaje / Esfumatura de ojos juntos y separados (delineado).
+- Esfumatura de ojos poco redondos y chicos (delineado).
+- Esfumatura de ojos hundidos y saltones (delineado).
+- Esfumatura de ojos caídos y encapotados (delineado). / Colocación de pestañas y reconocimiento de adhesivos  Diseño y perfilado de  cejas.
+- Diseño y perfilado de cejas. / Corrector o color? Rubor - labios.
+- Evaluación.
+- Maquillaje para adolescentes / protocolo para evento
+- Maquillaje para novias  / protocolo para evento
+- Maquillaje de rejuvenecimiento  / protocolo para evento
+- Adaptación de maquillajes a las distintas razas y culturas / maquillaje masculino
+- Maquillaje Masculino
+- Maquillaje para pasarela y fantasia. Esfumatura de ojos de moda y cut crease
+- Técnicas para fotografía color, blanco y negro, cinematografía, video, TV en HD / Como hacer cambios rápidos de maquillaje en una sesión de fotos / Shooting
+- Organización de cursos de automaquillaje - autoempleo
+- Evaluación con trabajo práctico final.
+            """,
+            'description':
+            """
+Te formarás con los mejores conocimientos, información, profesionales de trayectoria; en un lugar único, destacando el
+ambiente cálido y humano. Con sólidos contenidos teóricos que fundamentan la carrera dando una base para que luego el
+estudiante pueda canalizar su arte. El estudio de la estructura facial, la teoría del color y las características de
+cada tipo de piel, son algunas de las herramientas que el estudiante podrá obtener.
+            """
+        })
+
+        # creo un curso basado en este producto
+        ##################################################################################
+        self.curso = self.curso_obj.create({
+            'product':self.product.id,
+            'main_speaker_id': self.partner_prof.id
+        })
+
+        # creo un horario
+        ##################################################################################
+        self.schedule = self.schedule_obj.create({
+            'start_time':12.5,
+            'end_time':15.5
+        })
+
+        # creo un diario
+        ##################################################################################
+        self.diary = self.diary_obj.create({
+            'curso_id': self.curso.id,
+            'weekday': '1',
+            'seq': 1,
+            'schedule': self.schedule.id
+        })
+
+        # le agrego la fecha al curso
+        self.curso.date_begin = '2016-01-11'
+
+        print self.partner.info_curso_html('G01')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

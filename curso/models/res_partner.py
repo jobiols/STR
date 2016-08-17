@@ -20,6 +20,7 @@
 ##############################################################################
 from openerp import models, fields
 
+
 class res_partner(models.Model):
     _inherit = 'res.partner'
 
@@ -33,68 +34,79 @@ class res_partner(models.Model):
     curso_registration_ids = fields.One2many(
         'curso.registration', 'partner_id')
 
-    def info_curso_html(self,default_code):
-        producto = self.env['product.product'].search([('default_code','=',default_code)])
-        for pr in producto:
-            print pr.default_code, pr.name
-        ret = u"""
-        <table border="0" cellpadding="0" cellspacing="0">
-            <tbody>
-                <tr>
-                    <td>
-                    <h2>{}</h2>
-                    </td>
-                    <td>
-                    <h5><sub>&nbsp;cod {}</sub></h5>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    def info_curso_html(self, default_code):
+        producto = self.env['product.product'].search(
+            [('default_code', '=', default_code)])
+        data = producto.info_curso_html_data()
+        data = data or {}
+        ret = u'<table border="0" cellpadding="0" cellspacing="0">'
+        ret += u'   <tbody>'
+        ret += u'       <tr>'
+        ret += u'           <td>'
+        ret += u'               <h2>{}</h2>'.format(data.get('title'))
+        ret += u'           </td>'
+        ret += u'           <td>'
+        ret += u'               <h5><sub>&nbsp;cod {}</sub></h5>'.format(data.get('code'))
+        ret += u'           </td>'
+        ret += u'           <td>'
+        ret += u'               <h3>&nbsp;&nbsp;<a'
+        ret += u'               href="{}">Conocer más</a></h3>'.format(
+            data.get('product_url'))
+        ret += u'           </td>'
+        ret += u'       </tr>'
+        ret += u'   </tbody>'
+        ret += u'</table>'
 
-        <blockquote>
-            <p>Regalate o regalá un curso de automaquillaje.</p>
-        </blockquote>
+        ret += u'<div style="width: 550px;">'
+        ret += data.get('description')
+        ret += u'</div>'
 
-        <p>Vení a disfrutar del día y aprendé a maquillarte! Animate a pasar una tarde distinta
-        aprendiendo tips y consejos para verte más linda, maquillada como una profesional</p>
+        ret += u'<table style="width: 550px;">'
+        ret += u'<tbody>'
+        ret += u'    <tr>'
+        ret += u'        <td valign="top">'
+        ret += u'            <p style="border-left: 1px solid #8e0000; margin-left: 10px;">'
+        for itm in data.get('comercial_data'):
+            ret += u'                    &nbsp;&nbsp;{}.<br/>'.format(itm)
+        ret += u'            </p>'
+        ret += u'        </td>'
+        ret += u'        <td>&nbsp;&nbsp;</td>'
+        ret += u'        <td valign="top">'
+        ret += u'            <p style="border-left: 1px solid #8e0000; margin-left: 10px;">'
+        for itm in data.get('curso_data'):
+            ret += u'                    &nbsp;&nbsp;{}.<br/>'.format(itm)
+        ret += u'            </p>'
+        ret += u'        </td>'
+        ret += u'    </tr>'
+        ret += u'</tbody>'
+        ret += u'</table>'
 
-        <p>Modalidad: 4&nbsp;clases de 2 hs</p>
+        ret += u'<h3>Nuevos Inicios</h3>'
 
-        <table border="0" cellpadding="0" cellspacing="0" style="width: 500px;">
-            <tbody>
-                <tr>
-                    <td><strong>Inicio</strong></td>
-                    <td><strong>Cód</strong></td>
-                    <td><strong>Días de cursada</strong></td>
-                    <td><strong>Horario</strong></td>
-                </tr>
-                <tr bgcolor="#E0ECF8">
-                    <td><span>19/08/2016</span></td>
-                    <td><span>G01/26</span></td>
-                    <td><span>Viernes</span></td>
-                    <td><span>16:00 - 18:00 (2hs)</span></td>
-
-                </tr>
-                <tr bgcolor="#E0ECF8">
-                    <td><span>26/08/2016</span></td>
-                    <td><span>G01/27</span></td>
-                    <td><span>Viernes</span></td>
-                    <td><span>18:30 - 20:30 (2hs)</span></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <br>
-
-        <ul>
-            <li>Valor del curso $1200.</li>
-            <li>Matricula bonificada.</li>
-            <li>Se entrega certificado digital.</li>
-            <li>Los materiales están incluidos en el valor del curso.</li>
-        </ul>
-
-        <p>Ver mas información en <a href="http://makeoverlab.com.ar/automaquillaje-2/">nuesro sitio</a></p>
-        """.format(producto.name,default_code)
+        ret += u'<table style="width:550px;">'
+        ret += u'<tbody>'
+        for instance in data.get('instances',[]):
+            ret += u'<tr>'
+            ret += u'   <td style="text-align: center; color: rgb(224, 30, 38); bgcolor: rgb(200,100,00);">'
+            ret += u'       <p><span style="align: center; font-size: 10.8px; '
+            ret += u'       text-transform: uppercase;">{}</span><br/>'.format(instance.get('month'))
+            ret += u'       <span style="font-size: 45px; font-family: Oswald, sans-serif; '
+            ret += u'       ">{}</span></p></td>'.format(instance.get('day'))
+            ret += u'   <td style="padding-right:10px">&nbsp;</td>'
+            ret += u'   <td style="padding-right:10px" align="top">'
+            ret += u'       <p> <strong>{}</strong> -'.format(instance.get('name'))
+            ret += u'       Se dicta los días {} en el horario de {}<br/>'.format(instance.get('weekday'),instance.get('schedule'))
+            ret += u'       {}</p>'.format(instance.get('vacancy'))
+            ret += u'   </td>'
+            ret += u'   <td style="text-align: center;">'
+            ret += u'       <span style="font-size: 20px; font-family: Oswald, sans-serif; color: rgb(0, 0, 0);'
+            ret += u'       line-height: 30px;">'
+            ret += u'       ${} <br/> /mes</span>'.format(instance.get('price'))
+            ret += u'   </td>'
+            ret += u'</tr>'
+        ret += u'</tbody>'
+        ret += u'</table>'
+        print ret
         return ret
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

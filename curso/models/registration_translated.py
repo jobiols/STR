@@ -219,7 +219,7 @@ class curso_registration(models.Model):
                 """
 
     @api.multi
-    def get_diary_table_html(self):
+    def get_html(self):
         get_agenda = [{'date': datetime}, {'schedule': '10:00 a 12:00'},
                       {'topic': 'ojos esfumados'}]
         ret =   """

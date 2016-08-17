@@ -19,6 +19,7 @@
 #
 # -----------------------------------------------------------------------------------
 from openerp import models, fields, api
+from openerp.exceptions import ValidationError
 
 
 class product_template(models.Model):
@@ -84,8 +85,13 @@ class product_product(models.Model):
         'mail.template', 'product_id', 'templates',
         help=u"Definición de las plantillas de mail a enviar después de cada clase")
 
-#    default_code
-
+    @api.one
+    @api.constrains('default_code','type')
+    def _curso_unique_default_code(self):
+        if self.type == 'curso':
+            recordset = self.search([('default_code', '=', self.default_code)])
+            if len(recordset) > 1:
+                raise ValidationError('El curso {} {} ya está ingresado'.format(self.default_code,self.name))
 
     @api.one
     def button_generate_lecture_templates(self):
@@ -93,4 +99,60 @@ class product_product(models.Model):
         temp_obj = self.env['curso.lecture_template']
         temp_obj.create_template(self.id, no_clases)
 
+    @api.multi
+    def info_curso_html_data(self):
+        data = {}
+        data['title'] = u'Maquillaje social profesional'
+        data['code'] = u'SPR'
+        data['description'] = u"""
+        Te formarás con los mejores conocimientos, información, profesionales de trayectoria; en un lugar único,
+        destacando el ambiente cálido y humano. Con sólidos contenidos teóricos que fundamentan la carrera dando
+        una base para que luego el estudiante pueda canalizar su arte. El estudio de la estructura facial, la teoría
+        del color y las características de cada tipo de piel, son algunas de las herramientas que el estudiante
+        podrá obtener.
+        No menos importante el curso se complementa con nociones de marketing aplicadas
+        a la profesión para que la alumna pueda iniciar su propio negocio. Las capacitaciones que
+        brindamos son para instruir a profesionales en el arte del maquillaje con una fuerte orientación
+        a las salidas laborales más demandadas por el mercado actual.
+        """
+        data['comercial_data'] = [
+            u'Matricula bonificada.',
+            u'No se cobra derecho de examen.',
+            u'Materiales incluidos en el valor del curso.',
+            u'Se entrega certificado contra examen aprobado.',
+        ]
+        data['curso_data'] = [
+            u'Carga horaria 80 horas',
+            u'Duración 5 meses (20 semanas)',
+            u'Modalidad 1 clase por semana',
+        ]
+        data['instances'] = [
+            {'month':u'agosto',
+             'day':u'6',
+             'name': u'Maquillaje Social Profesional',
+             'weekday': u'Miércoles',
+             'schedule': u'08:00 a 16',
+             'vacancy': u'Hay vacantes',
+             'price': u'1200'
+             },
+            {'month':u'agosto',
+             'day':u'16',
+             'name': u'Maquillaje Social Profesional',
+             'weekday': u'Miércoles',
+             'schedule': u'08:00 a 16',
+             'vacancy': u'Hay vacantes',
+             'price': u'1200'
+             },
+            {'month':u'agosto',
+             'day':u'26',
+             'name': u'Maquillaje Social Profesional',
+             'weekday': u'Miércoles',
+             'schedule': u'08:00 a 16',
+             'vacancy': u'Hay vacantes',
+             'price': u'1200'
+             }
+        ]
+        return data
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+
