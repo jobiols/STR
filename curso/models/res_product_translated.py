@@ -20,7 +20,7 @@
 # -----------------------------------------------------------------------------------
 from openerp import models, fields, api
 from openerp.exceptions import ValidationError
-
+from datetime import datetime
 
 class product_template(models.Model):
     _inherit = 'product.template'
@@ -102,19 +102,10 @@ class product_product(models.Model):
     @api.multi
     def info_curso_html_data(self):
         data = {}
-        data['title'] = u'Maquillaje social profesional'
-        data['code'] = u'SPR'
-        data['description'] = u"""
-        Te formarás con los mejores conocimientos, información, profesionales de trayectoria; en un lugar único,
-        destacando el ambiente cálido y humano. Con sólidos contenidos teóricos que fundamentan la carrera dando
-        una base para que luego el estudiante pueda canalizar su arte. El estudio de la estructura facial, la teoría
-        del color y las características de cada tipo de piel, son algunas de las herramientas que el estudiante
-        podrá obtener.
-        No menos importante el curso se complementa con nociones de marketing aplicadas
-        a la profesión para que la alumna pueda iniciar su propio negocio. Las capacitaciones que
-        brindamos son para instruir a profesionales en el arte del maquillaje con una fuerte orientación
-        a las salidas laborales más demandadas por el mercado actual.
-        """
+        data['name'] = self.name
+        data['code'] = self.default_code
+        data['description'] = self.description
+
         data['comercial_data'] = [
             u'Matricula bonificada.',
             u'No se cobra derecho de examen.',
@@ -122,37 +113,33 @@ class product_product(models.Model):
             u'Se entrega certificado contra examen aprobado.',
         ]
         data['curso_data'] = [
-            u'Carga horaria 80 horas',
-            u'Duración 5 meses (20 semanas)',
-            u'Modalidad 1 clase por semana',
+            u'Carga horaria {} horas.'.format(self.tot_hs_lecture),
+            u'Duración 5 meses (20 semanas).',
+            u'Modalidad 1 clase por semana.',
+            u'Valor $1200 por mes.'
         ]
-        data['instances'] = [
-            {'month':u'agosto',
-             'day':u'6',
-             'name': u'Maquillaje Social Profesional',
-             'weekday': u'Miércoles',
-             'schedule': u'08:00 a 16',
-             'vacancy': u'Hay vacantes',
-             'price': u'1200'
-             },
-            {'month':u'agosto',
-             'day':u'16',
-             'name': u'Maquillaje Social Profesional',
-             'weekday': u'Miércoles',
-             'schedule': u'08:00 a 16',
-             'vacancy': u'Hay vacantes',
-             'price': u'1200'
-             },
-            {'month':u'agosto',
-             'day':u'26',
-             'name': u'Maquillaje Social Profesional',
-             'weekday': u'Miércoles',
-             'schedule': u'08:00 a 16',
-             'vacancy': u'Hay vacantes',
-             'price': u'1200'
+
+        data['instances'] = []
+        for curso in self.curso_instances:
+            print '-*------------------------------------------'
+            print curso.date_begin
+            print datetime.strptime(curso.date_begin,'%Y-%m-%d').strftime('%A')
+            print '-*------------------------------------------'
+
+            datetime.strptime(curso.date_begin,'%Y-%M-%d').strftime('%A')
+
+            data['instances'].append(
+                {'month': datetime.strptime(curso.date_begin,'%Y-%m-%d').strftime('%B'),
+                 'day':datetime.strptime(curso.date_begin,'%Y-%m-%d').strftime('%-d'),
+                 'name': curso.name,
+                 'weekday': datetime.strptime(curso.date_begin,'%Y-%m-%d').strftime('%A'),
+                 'schedule': curso.diary_ids[0].schedule.name,
+                 'vacancy': u'Hay {} vacantes'.format(curso.register_avail),
              }
-        ]
+            )
+
         return data
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

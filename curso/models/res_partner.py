@@ -39,74 +39,84 @@ class res_partner(models.Model):
             [('default_code', '=', default_code)])
         data = producto.info_curso_html_data()
         data = data or {}
-        ret = u'<table border="0" cellpadding="0" cellspacing="0">'
-        ret += u'   <tbody>'
-        ret += u'       <tr>'
-        ret += u'           <td>'
-        ret += u'               <h2>{}</h2>'.format(data.get('title'))
-        ret += u'           </td>'
-        ret += u'           <td>'
-        ret += u'               <h5><sub>&nbsp;cod {}</sub></h5>'.format(data.get('code'))
-        ret += u'           </td>'
-        ret += u'           <td>'
-        ret += u'               <h3>&nbsp;&nbsp;<a'
-        ret += u'               href="{}">Conocer más</a></h3>'.format(
-            data.get('product_url'))
-        ret += u'           </td>'
-        ret += u'       </tr>'
-        ret += u'   </tbody>'
-        ret += u'</table>'
+        ret = u"""
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td>
+                        <h2>{}</h2>
+                    </td>
+                    <td>
+                        <h5><sub>&nbsp;cod {}</sub></h5>
+                    </td>
+                    <td>
+                        <h3>&nbsp;&nbsp;<a
+                        href="{}">Conocer más</a></h3>
+                    </td>
+                </tr>
+            </tbody>
+        </table>""".format(data.get('title'),data.get('code'),data.get('product_url'))
 
-        ret += u'<div style="width: 550px;">'
-        ret += data.get('description')
-        ret += u'</div>'
+        ret += u"""
+        <div style="width: 550px;">{}</div>""".format(data.get('description'))
 
-        ret += u'<table style="width: 550px;">'
-        ret += u'<tbody>'
-        ret += u'    <tr>'
-        ret += u'        <td valign="top">'
-        ret += u'            <p style="border-left: 1px solid #8e0000; margin-left: 10px;">'
+        ret += u"""
+        <table style="width: 550px;">
+            <tbody>
+                <tr>
+                    <td valign="top">
+                        <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
+        """
         for itm in data.get('comercial_data'):
-            ret += u'                    &nbsp;&nbsp;{}.<br/>'.format(itm)
-        ret += u'            </p>'
-        ret += u'        </td>'
-        ret += u'        <td>&nbsp;&nbsp;</td>'
-        ret += u'        <td valign="top">'
-        ret += u'            <p style="border-left: 1px solid #8e0000; margin-left: 10px;">'
+            ret += u'       &nbsp;&nbsp;{}.<br/>'.format(itm)
+        ret += u"""
+                        </p>
+                    </td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td valign="top">
+                        <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
+        """
         for itm in data.get('curso_data'):
-            ret += u'                    &nbsp;&nbsp;{}.<br/>'.format(itm)
-        ret += u'            </p>'
-        ret += u'        </td>'
-        ret += u'    </tr>'
-        ret += u'</tbody>'
-        ret += u'</table>'
+            ret += u'       &nbsp;&nbsp;{}.<br/>'.format(itm)
+        ret += u"""
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        """
 
-        ret += u'<h3>Nuevos Inicios</h3>'
+        ret += u'<h3><br/>Nuevos Inicios</h3>'
 
-        ret += u'<table style="width:550px;">'
-        ret += u'<tbody>'
+        ret += u"""
+        <table style="width:550px;">
+            <tbody>
+        """
         for instance in data.get('instances',[]):
-            ret += u'<tr>'
-            ret += u'   <td style="text-align: center; color: rgb(224, 30, 38); bgcolor: rgb(200,100,00);">'
-            ret += u'       <p><span style="align: center; font-size: 10.8px; '
-            ret += u'       text-transform: uppercase;">{}</span><br/>'.format(instance.get('month'))
-            ret += u'       <span style="font-size: 45px; font-family: Oswald, sans-serif; '
-            ret += u'       ">{}</span></p></td>'.format(instance.get('day'))
-            ret += u'   <td style="padding-right:10px">&nbsp;</td>'
-            ret += u'   <td style="padding-right:10px" align="top">'
-            ret += u'       <p> <strong>{}</strong> -'.format(instance.get('name'))
-            ret += u'       Se dicta los días {} en el horario de {}<br/>'.format(instance.get('weekday'),instance.get('schedule'))
-            ret += u'       {}</p>'.format(instance.get('vacancy'))
-            ret += u'   </td>'
-            ret += u'   <td style="text-align: center;">'
-            ret += u'       <span style="font-size: 20px; font-family: Oswald, sans-serif; color: rgb(0, 0, 0);'
-            ret += u'       line-height: 30px;">'
-            ret += u'       ${} <br/> /mes</span>'.format(instance.get('price'))
-            ret += u'   </td>'
-            ret += u'</tr>'
-        ret += u'</tbody>'
-        ret += u'</table>'
-        print ret
+            ret += u"""
+            <tr>
+                <td>
+                    <div style="  vertical-align: top;
+                        border-radius: 16px 16px 16px 16px;
+                        -moz-border-radius: 16px 16px 16px 16px;
+                        -webkit-border-radius: 16px 16px 16px 16px; border: 0px solid #2b0f2b;
+                        background-color: rgb(211, 211, 211); width: 70px; text-align: center;
+                        border-right-color: rgb(255, 255, 255);">
+                    <span style="box-sizing: border-box; font-size: 50px; font-family: Oswald, sans-serif;
+                        color: rgb(224, 30, 38); line-height: 50px;">{}</span><br/>
+                    <span style="box-sizing: border-box; font-size: 11px; color: rgb(224, 30, 38);
+                        text-transform: uppercase;"><strong>{}</strong></span>
+                    </div>
+                </td>
+                <td style="vertical-align:top">
+                    <p>Se cursa los días {} en el horario de {}</p>
+                    <p>Hay vacantes</p>
+                </td>
+            </tr>""".format(instance.get('day'),instance.get('month'),instance.get('weekday'),instance.get('schedule'))
+        ret += u"""
+            </tbody>
+        </table>
+        """
         return ret
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -163,16 +163,16 @@ class TestCurso(TransactionCase):
 
     def test_generate_html_02(self):
         print 'generate html 02 ---------------------------------------------------------'
-        # creo un producto con tres clases
+        # creo el producto SPX
         ##################################################################################
-        self.product = self.product_obj.create({
-            'tot_hs_lecture': 15,
-            'hs_lecture': 5,
-            'no_quotes': 10,
+        self.product1 = self.product_obj.create({
+            'tot_hs_lecture': 80,
+            'hs_lecture': 4,
+            'no_quotes': 5,
             'default_code': 'SPX',
-            'list_price': 800,
+            'list_price': 1200,
             'type': 'curso',
-            'name': 'Maquillaje social profesional',
+            'name': 'Maquillaje Social Profesional',
             'agenda':
             """
 - Presentación, protocolo y herramientas de trabajo. / Psicología y marketing del maquillaje.
@@ -205,32 +205,138 @@ cada tipo de piel, son algunas de las herramientas que el estudiante podrá obte
             """
         })
 
+        # creo el producto QBX
+        ##################################################################################
+        self.product2 = self.product_obj.create({
+            'tot_hs_lecture': 40,
+            'hs_lecture': 8,
+            'no_quotes': 5,
+            'default_code': 'SPX',
+            'list_price': 1200,
+            'type': 'curso',
+            'name': 'Maquillaje Social Profesional',
+            'agenda':
+            """
+- Presentación, protocolo y herramientas de trabajo. / Psicología y marketing del maquillaje.
+- Biotipos y fototipos cutáneos / Cuidados de la piel, vehículo e higiene .
+- Correcciones y puntos de luz / Diferentes texturas de bases de maquillaje 1.
+- Análisis de la morfología del rostro - visagismo en crema.
+- Visagismo en polvo & strobing.
+- Teoría del color apllicada al maquillaje / Esfumatura de ojos juntos y separados (delineado).
+- Esfumatura de ojos poco redondos y chicos (delineado).
+- Esfumatura de ojos hundidos y saltones (delineado).
+- Esfumatura de ojos caídos y encapotados (delineado). / Colocación de pestañas y reconocimiento de adhesivos  Diseño y perfilado de  cejas.
+- Diseño y perfilado de cejas. / Corrector o color? Rubor - labios.
+- Evaluación.
+- Maquillaje para adolescentes / protocolo para evento
+- Maquillaje para novias  / protocolo para evento
+- Maquillaje de rejuvenecimiento  / protocolo para evento
+- Adaptación de maquillajes a las distintas razas y culturas / maquillaje masculino
+- Maquillaje Masculino
+- Maquillaje para pasarela y fantasia. Esfumatura de ojos de moda y cut crease
+- Técnicas para fotografía color, blanco y negro, cinematografía, video, TV en HD / Como hacer cambios rápidos de maquillaje en una sesión de fotos / Shooting
+- Organización de cursos de automaquillaje - autoempleo
+- Evaluación con trabajo práctico final.
+            """,
+            'description':
+            """
+Te formarás con los mejores conocimientos, información, profesionales de trayectoria; en un lugar único, destacando el
+ambiente cálido y humano. Con sólidos contenidos teóricos que fundamentan la carrera dando una base para que luego el
+estudiante pueda canalizar su arte. El estudio de la estructura facial, la teoría del color y las características de
+cada tipo de piel, son algunas de las herramientas que el estudiante podrá obtener.
+            """
+        })
+
+
+
         # creo un curso basado en este producto
         ##################################################################################
-        self.curso = self.curso_obj.create({
-            'product':self.product.id,
+        self.curso1 = self.curso_obj.create({
+            'product':self.product1.id,
             'main_speaker_id': self.partner_prof.id
         })
 
         # creo un horario
         ##################################################################################
-        self.schedule = self.schedule_obj.create({
-            'start_time':12.5,
-            'end_time':15.5
+        self.schedule1 = self.schedule_obj.create({
+            'start_time':12,
+            'end_time':16
         })
 
         # creo un diario
         ##################################################################################
-        self.diary = self.diary_obj.create({
-            'curso_id': self.curso.id,
+        self.diary1 = self.diary_obj.create({
+            'curso_id': self.curso1.id,
             'weekday': '1',
             'seq': 1,
-            'schedule': self.schedule.id
+            'schedule': self.schedule1.id
         })
 
         # le agrego la fecha al curso
-        self.curso.date_begin = '2016-01-11'
+        self.curso1.date_begin = '2016-08-01'
 
-        print self.partner.info_curso_html('G01')
+
+        # creo otro curso basado en este producto
+        ##################################################################################
+        self.curso2 = self.curso_obj.create({
+            'product':self.product1.id,
+            'main_speaker_id': self.partner_prof.id
+        })
+
+        # creo otro horario
+        ##################################################################################
+        self.schedule2 = self.schedule_obj.create({
+            'start_time':16,
+            'end_time':20
+        })
+
+        # creo otro diario
+        ##################################################################################
+        self.diary2 = self.diary_obj.create({
+            'curso_id': self.curso2.id,
+            'weekday': '3',
+            'seq': 1,
+            'schedule': self.schedule2.id
+        })
+
+        # le agrego la fecha al segundo curso
+        self.curso2.date_begin = '2016-08-09'
+
+        ##################################################################################
+        # Se chequea el producto
+        data = self.product1.info_curso_html_data()
+
+        print data
+
+        self.assertEqual(data['name'],u'Maquillaje Social Profesional','falla name')
+
+        self.assertEqual(data['comercial_data'][0],u'Matricula bonificada.','falla comercial data [0]')
+        self.assertEqual(data['comercial_data'][1],u'No se cobra derecho de examen.','falla comercial data [1]')
+        self.assertEqual(data['comercial_data'][2],u'Materiales incluidos en el valor del curso.','falla comercial data [2]')
+        self.assertEqual(data['comercial_data'][3],u'Se entrega certificado contra examen aprobado.','falla comercial data [3]')
+
+        self.assertEqual(data['curso_data'][0],u'Carga horaria 80 horas.','falla curso data [0]')
+        self.assertEqual(data['curso_data'][1],u'Duración 5 meses (20 semanas).','falla curso data [1]')
+        self.assertEqual(data['curso_data'][2],u'Modalidad 1 clase por semana.','falla curso data [2]')
+        self.assertEqual(data['curso_data'][3],u'Valor $1200 por mes.','falla curso data [3]')
+
+        instance = data['instances'][0]
+        self.assertEqual(instance['month'],u'agosto')
+        self.assertEqual(instance['day'],u'1')
+        self.assertEqual(instance['name'],u'[SPX/00] Lun 01/08/16 (12:00 16:00) - Maquillaje Social Profesional')
+        self.assertEqual(instance['weekday'],u'lunes')
+        self.assertEqual(instance['schedule'],u'12:00 - 16:00 (4hs)')
+        self.assertEqual(instance['vacancy'],u'Hay 9999 vacantes')
+
+        instance = data['instances'][1]
+        self.assertEqual(instance['month'],u'agosto')
+        self.assertEqual(instance['day'],u'9')
+        self.assertEqual(instance['name'],u'[SPX/00] Mar 09/08/16 (16:00 20:00) - Maquillaje Social Profesional')
+        self.assertEqual(instance['weekday'],u'martes')
+        self.assertEqual(instance['schedule'],u'16:00 - 20:00 (4hs)')
+        self.assertEqual(instance['vacancy'],u'Hay 9999 vacantes')
+
+
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
