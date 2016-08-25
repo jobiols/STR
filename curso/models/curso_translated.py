@@ -208,11 +208,6 @@ class curso_curso(models.Model):
         compute='_subscribe_fnc_',
         string='Subscribed')
 
-    next = fields.Boolean(
-        compute='_get_next',
-        store=True,
-        string='Curso por venir')
-
     classes_per_week = fields.Integer(
         compute='_get_classes_per_week_',
         string='Clases por semana',
@@ -243,10 +238,9 @@ class curso_curso(models.Model):
         try:
             # fecha de inicio
             dt = datetime.strptime(self.date_begin, '%Y-%m-%d')
-            date_begin = dt.strftime('%d/%m/%Y')             # fecha
-            date_begin_day = dt.strftime('%A').capitalize()  # nombre del dia
-            wd_date_no = dt.strftime('%w')                   # numero de dia de la semana
-            print date_begin,date_begin_day,wd_date_no
+            date_begin = dt.strftime('%d/%m/%Y')            # fecha
+            date_begin_day = dt.strftime('%A').decode('utf-8', 'ignore').capitalize()  # nombre del dia
+            wd_date_no = dt.strftime('%w')                  # numero de dia de la semana
 
             # diario
             dry = self.diary_ids[0]
@@ -255,7 +249,6 @@ class curso_curso(models.Model):
         except:
             wd_date_no = wd_diary_no = 1
 
-        print wd_date_no, wd_diary_no
         if int(wd_date_no) != int(wd_diary_no):
             raise ValidationError(
                 u"No se puede salvar el curso porque la fecha de inicio ({}) cae en {}"
@@ -299,19 +292,6 @@ class curso_curso(models.Model):
         # In that case we arbitrary set it to 9999, it is used in the
         # kanban view to special case the display of the 'subscribe' button
         self.register_avail = self.register_max - reg_current if self.register_max != 0 else 9999
-
-    @api.one
-    @api.depends('date_begin')
-    def _get_next(self):
-        # si esta cancelado no lo reporto como proximo
-        if self.state in ['cancel']:
-            self.next = False
-            return False
-
-        if self.date_begin:
-            self.next = self.date_begin > str(date.today())
-        else:
-            self.next = True
 
     @api.one
     def _get_classes_per_week_(self):
@@ -487,7 +467,6 @@ class curso_curso(models.Model):
     def button_curso_confirm(self):
         """ Confirmar curso chequeando antes que tenga fecha de inicio y que coincida con la agenda
         """
-        print 'confirmar curso ------------------------------------------'
         # Verificar si tiene fecha de inicio.
         if not (self.date_begin):
             raise ValidationError(u"No se puede confirmar el curso porque no tiene "
