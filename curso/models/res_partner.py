@@ -20,7 +20,6 @@
 ##############################################################################
 from openerp import models, fields
 
-
 class res_partner(models.Model):
     _inherit = 'res.partner'
 
@@ -55,7 +54,7 @@ class res_partner(models.Model):
                     </td>
                 </tr>
             </tbody>
-        </table>""".format(data.get('title'),data.get('code'),data.get('product_url'))
+        </table>""".format(data.get('name'),data.get('code'),data.get('product_url'))
 
         ret += u"""
         <div style="width: 550px;">{}</div>""".format(data.get('description'))
@@ -68,7 +67,7 @@ class res_partner(models.Model):
                         <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
         """
         for itm in data.get('comercial_data'):
-            ret += u'       &nbsp;&nbsp;{}.<br/>'.format(itm)
+            ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
         ret += u"""
                         </p>
                     </td>
@@ -77,7 +76,7 @@ class res_partner(models.Model):
                         <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
         """
         for itm in data.get('curso_data'):
-            ret += u'       &nbsp;&nbsp;{}.<br/>'.format(itm)
+            ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
         ret += u"""
                         </p>
                     </td>
@@ -95,24 +94,41 @@ class res_partner(models.Model):
         for instance in data.get('instances',[]):
             ret += u"""
             <tr>
-                <td>
+                <td style="height:85px;">
                     <div style="  vertical-align: top;
-                        border-radius: 16px 16px 16px 16px;
-                        -moz-border-radius: 16px 16px 16px 16px;
-                        -webkit-border-radius: 16px 16px 16px 16px; border: 0px solid #2b0f2b;
+                        border-radius: 15px 15px 15px 15px;
+                        -moz-border-radius: 15px 15px 15px 15px;
+                        -webkit-border-radius: 15px 15px 15px 15px; border: 0px solid #2b0f2b;
                         background-color: rgb(211, 211, 211); width: 70px; text-align: center;
                         border-right-color: rgb(255, 255, 255);">
-                    <span style="box-sizing: border-box; font-size: 50px; font-family: Oswald, sans-serif;
-                        color: rgb(224, 30, 38); line-height: 50px;">{}</span><br/>
-                    <span style="box-sizing: border-box; font-size: 11px; color: rgb(224, 30, 38);
-                        text-transform: uppercase;"><strong>{}</strong></span>
+
+                    <div style="box-sizing: border-box; font-size: 10px; color: rgb(224, 30, 38);
+                        text-transform: uppercase;"><strong>{}</strong></div>
+
+                    <div style="box-sizing: border-box; font-size: 40px; font-family: Oswald, sans-serif;
+                        color: rgb(224, 30, 38); line-height: 50px;">{}</div>
+
+                    <div style="box-sizing: border-box; font-size: 10px; color: rgb(224, 30, 38);
+                        text-transform: uppercase;"><strong>{}</strong></div>
                     </div>
                 </td>
+                <td>&nbsp;&nbsp;</td>
                 <td style="vertical-align:top">
-                    <p>Se cursa los días {} en el horario de {}</p>
-                    <p>Hay vacantes</p>
+                    <p>Se cursa los días {} en el horario de {}.
+                       Son {} clases de {} horas c/u.
+                    </p>
+                    <p>código {} - {}</p>
                 </td>
-            </tr>""".format(instance.get('day'),instance.get('month'),instance.get('weekday'),instance.get('schedule'))
+            </tr>""".format(instance.get('weekday'),
+                            instance.get('day'),
+                            instance.get('month'),
+                            instance.get('weekday'),
+                            instance.get('schedule'),
+                            data.get('no_lectures'),
+                            data.get('hs_lecture'),
+                            instance.get('curso_instance'),
+                            instance.get('vacancy'),
+                            )
         ret += u"""
             </tbody>
         </table>
