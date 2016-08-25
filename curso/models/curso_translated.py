@@ -270,9 +270,9 @@ class curso_curso(models.Model):
     def _get_register(self):
         reg_current = reg_attended = reg_prospect = reg_cancel = 0
 
-        # las que señaron o pagaron
         for registration in self.registration_ids:
-            if registration.state == 'confirm':
+                # las que señaron o pagaron o estan cursando
+            if registration.state == 'confirm' or registration.state == 'signed':
                 reg_current += registration.nb_register
                 # las que terminaron
             elif registration.state == 'done':
