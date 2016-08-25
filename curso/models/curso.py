@@ -277,38 +277,6 @@ class curso_curso(osv.osv):
     # Estados de los cursos
     ###############################################################################
 
-    def button_curso_confirm(self, cr, uid, ids, context=None):
-        """ Confirmar curso chequeando antes que tenga fecha de inicio y que coincida con la agenda
-        """
-        # Verificar si tiene fecha de inicio.
-        for curso in self.browse(cr, uid, ids, context=context):
-            # chequear si tiene fecha de inicio
-            if not (curso.date_begin):
-                raise osv.except_osv(('Error!'), (
-                    u"No se puede confirmar el curso porque no tiene fecha de inicio."))
-
-            # chequear si tiene agenda
-            diary_obj = self.pool.get('curso.diary')
-            diary_ids = diary_obj.search(
-                cr, uid, [('curso_id', '=', curso.id)], context=context)
-            if not diary_ids:
-                raise osv.except_osv(
-                    'Error!',
-                    u"No se puede confirmar el curso porque no tiene agenda creada.")
-
-            # chequear si el dia de inicio corresponde a la agenda
-            for diary_line in diary_obj.browse(cr, uid, diary_ids, context=context):
-                if not diary_line.check_weekday(curso.date_begin):
-                    raise osv.except_osv(
-                        'Error!',
-                        u'No se puede confirmar el curso porque la fecha de inicio (%s) cae en un dia \
-                        que no es el primer dia de la agenda (%s).' % (
-                            curso.date_begin, diary_line.weekday_name))
-
-                if isinstance(ids, (int, long)):
-                    ids = [ids]
-                return self.confirm_curso(cr, uid, ids, context=context)
-
     def button_curso_done(self, cr, uid, ids, context=None):
         """
         Terminar el curso
@@ -417,28 +385,6 @@ class curso_curso(osv.osv):
             ret.append({'name': rec.text})
 
         return ret
-
-    def _check_change_begin_date(self, cr, uid, ids, context=None):
-        for curso in self.browse(cr, uid, ids, context=context):
-            diary_pool = self.pool['curso.diary']
-            ids = diary_pool.search(
-                cr, uid, [('curso_id', '=', curso.id)], context=context)
-            for diary_line in diary_pool.browse(cr, uid, ids, context):
-                diary_weekday = diary_line.weekday
-                weekday = datetime.strptime(curso.date_begin, '%Y-%m-%d').strftime('%w')
-                if weekday != diary_weekday:
-                    raise osv.except_osv('Error!', (
-                        u"La fecha de inicio no corresponde con el primer dia de la agenda"))
-                return True
-        return True
-
-    def onchange_diary_ids(self, cr, uid, ids, context=None):
-        self._check_change_begin_date(cr, uid, ids, context=context)
-        return True
-
-    def onchange_date_begin(self, cr, uid, ids, context=None):
-        self._check_change_begin_date(cr, uid, ids, context=context)
-        return self.pool
 
     def onchange_curso_product(self, cr, uid, ids, product, context=None):
         values = {}

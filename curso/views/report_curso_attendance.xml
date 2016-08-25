@@ -14,9 +14,6 @@
                                         Nombre
                                     </td>
                                     <td>
-                                        Dirección
-                                    </td>
-                                    <td>
                                         Documento
                                     </td>
                                     <td>
@@ -36,9 +33,6 @@
                                     <tr>
                                         <td>
                                             <p><span t-field="r.partner_id.name"/></p>
-                                        </td>
-                                        <td>
-                                            <p><span t-field="r.partner_id.street"/></p>
                                         </td>
                                         <td>
                                             <p><span t-field="r.partner_id.document_number"/></p>

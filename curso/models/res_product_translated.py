@@ -18,7 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # -----------------------------------------------------------------------------------
+from datetime import datetime
+
 from openerp import models, fields, api
+from openerp.exceptions import ValidationError
 
 
 class product_template(models.Model):
@@ -84,13 +87,91 @@ class product_product(models.Model):
         'mail.template', 'product_id', 'templates',
         help=u"Definición de las plantillas de mail a enviar después de cada clase")
 
-#    default_code
-
+    @api.one
+    @api.constrains('default_code', 'type')
+    def _curso_unique_default_code(self):
+        if self.type == 'curso':
+            recordset = self.search([('default_code', '=', self.default_code)])
+            if len(recordset) > 1:
+                raise ValidationError(
+                    'El curso {} {} ya está ingresado'.format(self.default_code,
+                                                              self.name))
 
     @api.one
     def button_generate_lecture_templates(self):
         no_clases = self.tot_hs_lecture / self.hs_lecture
         temp_obj = self.env['curso.lecture_template']
         temp_obj.create_template(self.id, no_clases)
+
+    @api.multi
+    def info_curso_html_data(self):
+        def get_quote_price(dur_weeks, price):
+            if dur_weeks <= 4:
+                return u'Valor ${}'.format(price)
+            else:
+                return u'Valor ${} por mes'.format(price)
+
+        data = {}
+        data['name'] = self.name
+        data['code'] = self.default_code
+        data['description'] = self.description
+        data['no_lectures'] = self.tot_hs_lecture / self.hs_lecture
+        data['hs_lecture'] = self.hs_lecture
+
+        data['comercial_data'] = [
+            u'Matricula bonificada.',
+            u'No se cobra derecho de examen.',
+            u'Materiales incluidos en el valor del curso.',
+            u'Se entrega certificado.',
+        ]
+        dur_weeks = self.tot_hs_lecture / self.hs_lecture
+        data['curso_data'] = [
+            u'Carga horaria {} horas.'.format(self.tot_hs_lecture),
+            u'Duración {} semanas.'.format(dur_weeks),
+            get_quote_price(dur_weeks, self.list_price)
+        ]
+
+        def calc_vacancy(vac):
+            if vac > 100:
+                return u'Hay vacantes!'
+            if vac < 10:
+                return u'Vacantes limitadas'
+            if vac <= 2:
+                return u'Pocas vacantes'
+            if vac == 0:
+                return u'No hay vacantes'
+
+        def get_schedule(curso):
+            try:
+                ret = curso.diary_ids[0].schedule.name
+            except:
+                ret = 'Horario no definido'
+            return ret
+
+        data['instances'] = []
+        for curso in self.curso_instances.search([('next', '=', True),
+                                                  ('product', '=', self.id),
+                                                  ('date_begin', '!=', False)]):
+            # trae cursos en el futuro, con fecha
+            # TODO quitar estos chequeos de fecha
+            try:
+                dt = datetime.strptime(curso.date_begin, '%Y-%m-%d')
+            except:
+                dt = False
+
+            mon = dt.strftime('%B') if dt else '?'
+            day = dt.strftime('%-d') if dt else '?'
+            wee = dt.strftime('%A').decode('utf-8', 'ignore') if dt else '?'
+            data['instances'].append(
+                {'month': mon,
+                 'day': day,
+                 'name': curso.name,
+                 'weekday': wee,
+                 'schedule': get_schedule(curso),
+                 'vacancy': calc_vacancy(curso.register_avail or 'no'),
+                 'curso_instance': curso.curso_instance
+                 })
+
+        return data
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

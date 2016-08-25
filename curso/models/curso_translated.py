@@ -21,6 +21,7 @@
 from datetime import datetime, date
 import operator
 
+from openerp.exceptions import ValidationError
 from openerp import models, fields, api
 from openerp.exceptions import Warning
 
@@ -136,11 +137,11 @@ class curso_curso(models.Model):
         help='Define los dias y horarios en los que se da el curso')
 
     state = fields.Selection([
-        ('draft', 'Borrador'),      # estado inicial
+        ('draft', 'Borrador'),  # estado inicial
         ('confirm', 'Confirmado'),  # se publica
-        ('in_progress','Cursando'), # está activo, verifica fechas inicio - fin
-        ('done', 'Cumplido'),       # está cumpllido verifica fechas fin
-        ('cancel', 'Cancelado')     # está cancelado no se publica
+        ('in_progress', 'Cursando'),  # está activo, verifica fechas inicio - fin
+        ('done', 'Cumplido'),  # está cumpllido verifica fechas fin
+        ('cancel', 'Cancelado')  # está cancelado no se publica
     ],
         'Estado', readonly=True, required=True,
         default='draft',
@@ -207,11 +208,6 @@ class curso_curso(models.Model):
         compute='_subscribe_fnc_',
         string='Subscribed')
 
-    next = fields.Boolean(
-        compute='_get_next',
-        store=True,
-        string='Curso por venir')
-
     classes_per_week = fields.Integer(
         compute='_get_classes_per_week_',
         string='Clases por semana',
@@ -234,6 +230,31 @@ class curso_curso(models.Model):
         default=lambda self: self.env.user.company_id.partner_id,
         readonly=False, states={'done': [('readonly', True)]})
 
+    @api.constrains('date_begin', 'diary_ids')
+    def _check_first_date(self):
+        """ Verifica que la fecha de inicio sea el primer dia del diary
+            Si no tiene fecha de inicio no chequea nada
+        """
+        try:
+            # fecha de inicio
+            dt = datetime.strptime(self.date_begin, '%Y-%m-%d')
+            date_begin = dt.strftime('%d/%m/%Y')            # fecha
+            date_begin_day = dt.strftime('%A').decode('utf-8', 'ignore').capitalize()  # nombre del dia
+            wd_date_no = dt.strftime('%w')                  # numero de dia de la semana
+
+            # diario
+            dry = self.diary_ids[0]
+            weekday = dry.weekday_name  # nombre del dia
+            wd_diary_no = dry.weekday  # código del dia
+        except:
+            wd_date_no = wd_diary_no = 1
+
+        if int(wd_date_no) != int(wd_diary_no):
+            raise ValidationError(
+                u"No se puede salvar el curso porque la fecha de inicio ({}) cae en {}"
+                u" y el primer dia de la agenda es {}.".format(
+                    date_begin, date_begin_day, weekday))
+
     @api.one
     @api.depends('registration_ids.user_id', 'registration_ids.state')
     def _subscribe_fnc_(self):
@@ -245,7 +266,7 @@ class curso_curso(models.Model):
         )
 
     @api.one
-    @api.depends('register_max', 'registration_ids.state', 'registration_ids.nb_register')
+    @api.depends('register_max', 'registration_ids')
     def _get_register(self):
         reg_current = reg_attended = reg_prospect = reg_cancel = 0
 
@@ -253,13 +274,13 @@ class curso_curso(models.Model):
         for registration in self.registration_ids:
             if registration.state == 'confirm':
                 reg_current += registration.nb_register
-        # las que terminaron
+                # las que terminaron
             elif registration.state == 'done':
                 reg_attended += registration.nb_register
-        # las que estan interesadas
+                # las que estan interesadas
             elif registration.state == 'draft':
                 reg_prospect += registration.nb_register
-        # las que cancelaron
+                # las que cancelaron
             elif registration.state == 'cancel':
                 reg_cancel += registration.nb_register
 
@@ -271,19 +292,6 @@ class curso_curso(models.Model):
         # In that case we arbitrary set it to 9999, it is used in the
         # kanban view to special case the display of the 'subscribe' button
         self.register_avail = self.register_max - reg_current if self.register_max != 0 else 9999
-
-    @api.one
-    @api.depends('date_begin')
-    def _get_next(self):
-        # si esta cancelado no lo reporto como proximo
-        if self.state in ['cancel']:
-            self.next = False
-            return False
-
-        if self.date_begin:
-            self.next = self.date_begin > str(date.today())
-        else:
-            self.next = True
 
     @api.one
     def _get_classes_per_week_(self):
@@ -383,7 +391,6 @@ class curso_curso(models.Model):
 
         return res
 
-
     @api.one
     def button_generate_lectures(self):
         """ Generar las clases que correspondan a este curso
@@ -457,14 +464,25 @@ class curso_curso(models.Model):
             raise Warning('No hay mas vacantes.')
 
     @api.one
-    def confirm_curso(self):
+    def button_curso_confirm(self):
+        """ Confirmar curso chequeando antes que tenga fecha de inicio y que coincida con la agenda
+        """
+        # Verificar si tiene fecha de inicio.
+        if not (self.date_begin):
+            raise ValidationError(u"No se puede confirmar el curso porque no tiene "
+                                  u"fecha de inicio.")
+
+        if not self.diary_ids:
+            raise ValidationError(u"No se puede confirmar el curso porque no tiene "
+                                  u"agenda creada.")
+
         if self.email_confirmation_id:
             # send reminder that will confirm the event for all the people that were already confirmed
-            regs = self.registration_ids.filtered(lambda reg: reg.state not in ('draft', 'cancel'))
-#            regs.mail_user_confirm()
+            regs = self.registration_ids.filtered(
+                lambda reg: reg.state not in ('draft', 'cancel'))
+        # regs.mail_user_confirm()
         self.state = 'confirm'
 
     @api.one
     def button_curso_draft(self):
         self.state = 'draft'
-
