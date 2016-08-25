@@ -129,11 +129,10 @@
                                                domain="[('teacher','=',True)]"/>
                                     </group>
                                     <group>
-                                        <field name="register_prospect"
-                                               class="oe_inline"/>
-                                        <field name="register_current" class="oe_inline"/>
-                                        <field name="register_attended"
-                                               class="oe_inline"/>
+                                        <field name="register_prospect" class="oe_inline"/>
+                                        <field name="register_current"  class="oe_inline"/>
+                                        <field name="register_attended" class="oe_inline"/>
+                                        <field name="register_cancel"   class="oe_inline"/>
                                     </group>
                                 </group>
                                 <field name="registration_ids" colspan="4" nolabel="1"

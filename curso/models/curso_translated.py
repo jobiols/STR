@@ -266,7 +266,7 @@ class curso_curso(models.Model):
         )
 
     @api.one
-    @api.depends('register_max', 'registration_ids.state', 'registration_ids.nb_register')
+    @api.depends('register_max', 'registration_ids')
     def _get_register(self):
         reg_current = reg_attended = reg_prospect = reg_cancel = 0
 

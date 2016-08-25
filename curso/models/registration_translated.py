@@ -144,6 +144,8 @@ class curso_registration(models.Model):
         # señar la inscripción pasando al estado señada
         res = self.sign_registration()
 
+        return True
+
         # notificarla por mail si el curso tiene el template
         # TODO aca habría que lanzar un wizard que puede mandar el mail de confirmacion
         if self.curso_id.email_registration_id:
