@@ -403,7 +403,7 @@
                             help="Cursos terminados"/>
                     <separator/>
                     <filter icon="terp-go-today" string="Próximos" name="upcoming"
-                            domain="[('date_begin','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"
+                            domain="[('next','=', True)]"
                             help="Cursos con fecha futura, confirmados o en borrador"/>
                     <field name="name"/>
                     <group expand="0" string="Agrupar por...">
