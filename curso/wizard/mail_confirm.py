@@ -24,26 +24,18 @@ class mail_confirm(models.TransientModel):
     """Mail Confirmation"""
     _name = "curso.mail.confirm"
 
-    mails_ids = fields.Many2many(
-        comodel_name='curso.registration')
-
-    # este campo esta solo para que funcione el onchange
-    reset_mails = fields.Boolean()
-
-    # el onchange hace que se carge al iniciar del wizard
-    @api.onchange('reset_mails')
-    @api.multi
-    def reset(self):
-        curso_id = self._context.get('curso_id', False)
-        reg_obj = self.env['curso.registration'].search([('curso_id', '=', curso_id)])
-        for reg in reg_obj:
-            self.mails_ids += reg
-
     @api.multi
     def confirm(self):
         """ Intentar enviar mail a todas las alumnas que tengo
         """
-        for reg in self.mails_ids:
+        curso_id = self._context.get('curso_id', False)
+        reg_obj = self.env['curso.registration'].search([
+            ('curso_id', '=', curso_id),
+            ('state','=','confirm')
+        ])
+
+        for reg in reg_obj:
+            print reg.partner_id.name
             reg.try_send_mail_by_lecture()
 
 

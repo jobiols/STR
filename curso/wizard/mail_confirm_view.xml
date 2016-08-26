@@ -7,12 +7,7 @@
             <field name="model">curso.mail.confirm</field>
             <field name="arch" type="xml">
               <form string="Confirmar los mails">
-                <label string="Se van a enviar mails a los siguientes clientes,
-                               elimine los que no quiere que salgan."/>
-                  <group>
-                    <field name="mails_ids" nolabel="1"/>
-                      <field name="reset_mails"/>
-                  </group>
+                <label string="Se van a enviar mails a todas las alumnas que estan cursando"/>
                   <footer>
                       <button name="reset" string="Resetear" type="object" class="oe_highlight"/>
                       or

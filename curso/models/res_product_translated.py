@@ -84,8 +84,11 @@ class product_product(models.Model):
         help=u'Instancias de este producto cuando es tipo (curso)')
 
     email_classes_ids = fields.One2many(
-        'mail.template', 'product_id', 'templates',
-        help=u"Definición de las plantillas de mail a enviar después de cada clase")
+        comodel_name='mail.template',
+        inverse_name='product_id',
+        string='templates',
+        help=u"Definición de las plantillas de mail a enviar después de cada clase",
+    )
 
     @api.one
     @api.constrains('default_code', 'type')

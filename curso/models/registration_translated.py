@@ -153,7 +153,7 @@ class curso_registration(models.Model):
             if template:
                 mail_message = template.send_mail(self.id)
         else:
-            raise Warning(('Falló envio de maio, no hay plantilla de mail para mandar.!'))
+            raise Warning(('Falló envio de mail, no hay plantilla de mail para mandar.!'))
 
     @api.one
     def sign_registration(self):
@@ -195,6 +195,7 @@ class curso_registration(models.Model):
 
     @api.one
     def try_send_mail_by_lecture(self):
+        print 'try send mail --------------------'
         # en que clase estoy
         lecture = 1
 
@@ -207,6 +208,7 @@ class curso_registration(models.Model):
             break
 
         if template:
+            print 'sending --'
             template.send_mail(self.id)
 
     @api.multi

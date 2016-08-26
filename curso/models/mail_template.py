@@ -29,6 +29,10 @@ class mail_template(models.Model):
 
     product_id = fields.Many2one('product.product', 'Producto')
     class_no = fields.Integer('Nro clase')
-    template_id = fields.Many2one('email.template','Plantilla de mail')
+    template_id = fields.Many2one(
+        'email.template',
+        'Plantilla de mail',
+        domain="[('model_id','=','curso.registration')]"
+    )
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
