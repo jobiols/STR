@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # -----------------------------------------------------------------------------------
-from datetime import datetime, date
+from datetime import datetime
 import operator
 
 from openerp.exceptions import ValidationError
@@ -230,6 +230,20 @@ class curso_curso(models.Model):
         default=lambda self: self.env.user.company_id.partner_id,
         readonly=False, states={'done': [('readonly', True)]})
 
+    next = fields.Boolean(
+        compute='_get_next',
+        search='_search_next',
+        help='curso por venir'
+    )
+
+    def _search_next(self, operator, value):
+        return [('date_begin', '>', datetime.today().strftime('%Y-%m-%d'))]
+
+    @api.depends('date_begin')
+    def _get_next(self):
+        for curso in self:
+            curso.next = self.date_begin > datetime.today().strftime('%Y-%m-%d')
+
     @api.constrains('date_begin', 'diary_ids')
     def _check_first_date(self):
         """ Verifica que la fecha de inicio sea el primer dia del diary
@@ -238,9 +252,10 @@ class curso_curso(models.Model):
         try:
             # fecha de inicio
             dt = datetime.strptime(self.date_begin, '%Y-%m-%d')
-            date_begin = dt.strftime('%d/%m/%Y')            # fecha
-            date_begin_day = dt.strftime('%A').decode('utf-8', 'ignore').capitalize()  # nombre del dia
-            wd_date_no = dt.strftime('%w')                  # numero de dia de la semana
+            date_begin = dt.strftime('%d/%m/%Y')  # fecha
+            date_begin_day = dt.strftime('%A').decode('utf-8',
+                                                      'ignore').capitalize()  # nombre del dia
+            wd_date_no = dt.strftime('%w')  # numero de dia de la semana
 
             # diario
             dry = self.diary_ids[0]
@@ -271,7 +286,7 @@ class curso_curso(models.Model):
         reg_current = reg_attended = reg_prospect = reg_cancel = 0
 
         for registration in self.registration_ids:
-                # las que señaron o pagaron o estan cursando
+            # las que señaron o pagaron o estan cursando
             if registration.state == 'confirm' or registration.state == 'signed':
                 reg_current += registration.nb_register
                 # las que terminaron
@@ -308,7 +323,7 @@ class curso_curso(models.Model):
 
     @api.one
     @api.onchange('diary_ids')
-    @api.depends('date_begin', 'curso_instance', 'product.name','diary_ids')
+    @api.depends('date_begin', 'curso_instance', 'product.name', 'diary_ids')
     def _get_name_(self):
         try:
             init = datetime.strptime(self.date_begin, "%Y-%m-%d")

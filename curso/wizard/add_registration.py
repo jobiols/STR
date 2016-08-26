@@ -29,8 +29,9 @@ class add_registration(models.TransientModel):
     curso_id = fields.Many2one(
         'curso.curso',
         string="Curso",
-        required=True)
-#        domain="[('begin_date','&gt;=',context_today())]")
+        required=True,
+        domain="[('next','=',True)]"
+    )
 
     @api.one
     def button_add_curso(self):
