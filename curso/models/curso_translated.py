@@ -307,7 +307,8 @@ class curso_curso(models.Model):
         self.curso_instance = self.get_formatted_instance(self.id)
 
     @api.one
-    @api.depends('date_begin', 'curso_instance', 'product.name')
+    @api.onchange('diary_ids')
+    @api.depends('date_begin', 'curso_instance', 'product.name','diary_ids')
     def _get_name_(self):
         try:
             init = datetime.strptime(self.date_begin, "%Y-%m-%d")
@@ -318,9 +319,8 @@ class curso_curso(models.Model):
             day_n = init.strftime('%d')
             month_n = init.strftime('%m')
             year_n = init.strftime('%y')
-        diary_obj = self.env['curso.diary']
         hhs = mms = hhe = mme = 0
-        for diary_line in diary_obj.search([('curso_id', '=', self.id)]):
+        for diary_line in self.diary_ids.search([('curso_id', '=', self.id)]):
             ss = diary_line.schedule.start_time
             ee = diary_line.schedule.end_time
             mms = ss - int(ss)

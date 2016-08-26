@@ -25,12 +25,10 @@
                             </tr>
                             <tr>
                                 <td>
-    <!--                                    <t t-if="curso.next" > -->
                                     <t t-foreach="product.curso_instances" t-as="curso">
                                     <p>----<span t-esc="curso.name"/></p>
                                     <p>----<span t-esc="curso.next"/></p>
                                     </t>
-    <!--                                    </t> -->
                                 </td>
                             </tr>
 <!--                                <t t-if="curso.next" > -->

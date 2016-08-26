@@ -19,7 +19,7 @@
 #
 # -----------------------------------------------------------------------------------
 from openerp import models, fields, api
-
+from datetime import datetime
 
 class add_registration(models.TransientModel):
     """ Wizard para agregar una inscripción de una clienta a un curso """
@@ -29,9 +29,8 @@ class add_registration(models.TransientModel):
     curso_id = fields.Many2one(
         'curso.curso',
         string="Curso",
-        required=True,
-        domain="[('next','=',1)]")
-
+        required=True)
+#        domain="[('begin_date','&gt;=',context_today())]")
 
     @api.one
     def button_add_curso(self):
