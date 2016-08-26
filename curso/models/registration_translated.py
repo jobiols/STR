@@ -19,8 +19,8 @@
 #
 # -----------------------------------------------------------------------------------
 from datetime import datetime, timedelta
-from openerp.exceptions import Warning
 
+from openerp.exceptions import Warning
 from openerp import models, fields, api
 import babel.dates
 
@@ -175,11 +175,11 @@ class curso_registration(models.Model):
         if self.curso_id.state == 'cancel':
             raise Warning('No se puede registrar una alumna en un curso cancelado')
 
-
     @api.one
     def button_gen_quotes(self):
         """ Generar las cuotas que la alumna deberá pagar
         """
+
         def calculate_invoice_date(sourcedate, months):
             return sourcedate + timedelta(days=30 * (months))
 
@@ -211,7 +211,7 @@ class curso_registration(models.Model):
 
     @api.multi
     def get_mail_footer_html(self):
-        return  """
+        return """
                 <p><span style="font-family:lucida sans unicode,lucida grande,sans-serif;
                     font-size:20px;">
                 <span style="color:#FF0000;"><strong>Makeover Lab</strong></span></span><br/>
@@ -228,7 +228,7 @@ class curso_registration(models.Model):
     def get_html(self):
         get_agenda = [{'date': datetime}, {'schedule': '10:00 a 12:00'},
                       {'topic': 'ojos esfumados'}]
-        ret =   """
+        ret = """
                 <table>
                     <tbody>
                         <tr>
@@ -265,10 +265,9 @@ class curso_registration(models.Model):
         for reg in self:
             quota_obj = self.env['curso.quota']
             quotas = quota_obj.search([('invoice_id', '=', None),
-                                      ('registration_id', '=', reg.id)])
+                                       ('registration_id', '=', reg.id)])
             for reg in quotas:
                 reg.unlink()
             self.state = 'cancel'
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
