@@ -170,7 +170,11 @@ class curso_registration(models.Model):
         if self.curso_id.register_max and \
                         self.curso_id.register_avail < (
                         self.nb_register if self.state == 'draft' else 0):
-            raise Warning(('No hay mas vacantes.!'))
+            raise Warning('No hay mas vacantes.!')
+
+        if self.curso_id.state == 'cancel':
+            raise Warning('No se puede registrar una alumna en un curso cancelado')
+
 
     @api.one
     def button_gen_quotes(self):
