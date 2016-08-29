@@ -246,6 +246,10 @@ class curso_curso(models.Model):
                  'registration_ids', 'lecture_ids')
     def _get_error(self):
 
+        if self.state == 'cancel':
+            self.error = ''
+            return
+
         # obtener la fecha de la ultima clase, es cuando termina el curso
         lects = self.lecture_ids.search([('curso_id', '=', self.id)], order='date desc')
         date_end = lects[0].date if lects else False
