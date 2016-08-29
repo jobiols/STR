@@ -236,13 +236,56 @@ class curso_curso(models.Model):
         help='curso por venir'
     )
 
+    error = fields.Char(
+        compute='_get_error',
+        help='Indica si el curso tiene un error',
+    )
+
+    @api.one
+    @api.depends('register_min', 'register_current', 'register_max', 'next', 'state',
+                 'registration_ids', 'lecture_ids')
+    def _get_error(self):
+
+        # obtener la fecha de la ultima clase, es cuando termina el curso
+        lects = self.lecture_ids.search([('curso_id', '=', self.id)], order='date desc')
+        date_end = lects[0].date if lects else False
+
+        if self.state not in ['cancel'] and not date_end:
+            self.error = 'El curso no tiene clases'
+            return
+
+        if self.state not in ['cancel', 'done'] \
+           and date_end < datetime.today().strftime('%Y-%m-%d'):
+            self.error = 'Hay que terminar o cancelar este curso'
+            return
+
+        if not self.next and self.state in ['draft', 'confirmed']:
+            self.error = 'Debería estar en estado cursando'
+            return
+
+        if (self.register_min and self.register_min >= self.register_current):
+            self.error = 'No alcanza mínimo de alumnas'
+            return
+
+        if (self.register_max and self.register_max <= self.register_current):
+            self.error = 'Supera maximo de vacantes'
+            return
+
+        if self.state in ['in_process', 'done', 'cancel']:
+            for reg in self.registration_ids.search([('curso_id','=',self.id)]):
+                if reg.state == 'signed':
+                    self.error = 'La alumna ({}) no puede estar en estado señada'.format(
+                        reg.partner_id.name)
+                    return
+
+
     def _search_next(self, operator, value):
         return [('date_begin', '>', datetime.today().strftime('%Y-%m-%d'))]
 
     @api.depends('date_begin')
+    @api.one
     def _get_next(self):
-        for curso in self:
-            curso.next = self.date_begin > datetime.today().strftime('%Y-%m-%d')
+        self.next = self.date_begin > datetime.today().strftime('%Y-%m-%d')
 
     @api.constrains('date_begin', 'diary_ids')
     def _check_first_date(self):
@@ -313,6 +356,7 @@ class curso_curso(models.Model):
         """ Calcula la cantidad de clases por semana basado en el diary
         """
         diary_obj = self.env['curso.diary']
+        # TODO hay otra forma de ahcer esto conun searh_count creo
         ids = diary_obj.search([('curso_id', '=', self.id)])
         self.classes_per_week = len(ids)
 

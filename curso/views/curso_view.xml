@@ -234,17 +234,24 @@
         </record>
 
         <!-- curso tree view -->
+<!--
+                      red:(register_min and register_min&gt;register_current) or
+                                  (register_max and register_max&lt;register_current) or
+                                  (warning==True);
+-->
 
         <record model="ir.ui.view" id="view_curso_tree">
             <field name="name">curso.curso.tree</field>
             <field name="model">curso.curso</field>
             <field name="arch" type="xml">
-                <tree string="Cursos" fonts="bold:state=='confirm'"
-                      colors="red:(register_min and register_min&gt;register_current) or
-                                  (register_max and register_max&lt;register_current);
-                              grey:state=='cancel';
-                              green:state=='confirm';
-                              black:state=='done'">
+                <tree string="Cursos"
+                       fonts="bold:  no_lectures==1"
+                      colors="black: state=='draft';
+                              green: state=='confirm';
+                              blue:  state=='in_progress';
+                              brown: state=='done';
+                              grey:  state=='cancel';"
+                >
                     <field name="name"/>
                     <field name="no_lectures"/>
                     <field name="hs_lecture"/>
@@ -259,6 +266,7 @@
                     <field name="register_max" invisible="1"/>
                     <field name="main_speaker_id"/>
                     <field name="secondary_speaker_id"/>
+                    <field name="error"/>
                     <field name="state"/>
                 </tree>
             </field>
