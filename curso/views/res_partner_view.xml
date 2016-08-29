@@ -49,7 +49,7 @@
                                 <field name="curso_id"/>
                                 <field name="state"/>
                                 <!-- ESTADOS -->
-                                <button name="button_reg_sign" string="Seña el curso5"
+                                <button name="button_reg_sign" string="Seña el curso"
                                         states="draft"
                                         type="object" icon="gtk-apply"/>
                                 <button name="button_reg_confirm" string="Empezó el curso"

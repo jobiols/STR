@@ -31,7 +31,7 @@
                     <field name="discount" string="Desc"/>
                     <field name="state"/>
                     <!--- ESTADOS -->
-                    <button name="button_reg_sign" string="Seña el curso3"
+                    <button name="button_reg_sign" string="Seña el curso"
                             states="draft"
                             type="object"
                             icon="gtk-apply"/>
@@ -58,7 +58,7 @@
                 <form string="Inscripción en Cursos">
                     <header>
                         <!--- ESTADOS BTN Inscripciones-->
-                        <button name="button_reg_sign" string="Seña el curso4"
+                        <button name="button_reg_sign" string="Seña el curso"
                                 states="draft" type="object"
                                 icon="gtk-apply"/>
                         <button name="button_reg_confirm" string="Empezó el curso"
