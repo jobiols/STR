@@ -19,34 +19,29 @@
 #
 # -----------------------------------------------------------------------------------
 from openerp import models, fields, api
-from datetime import datetime
 
-class add_registration(models.TransientModel):
-    """ Wizard para agregar una inscripción de una clienta a un curso """
-    _name = 'curso.add_registration'
-    _description = "Inscribir alumna en curso"
 
-    curso_id = fields.Many2one(
-        'curso.curso',
-        string="Curso",
-        required=True,
-        domain="[('next','=',True)]"
+class send_mail(models.TransientModel):
+    """ Wizard para validar el envio de un mail """
+    _name = 'curso.send_mail'
+    _description = "Validar el envio de un mail"
+
+    template = fields.Many2one(
+        'email.template', u'Confirmación de inscripción',
+        help=u'Plantilla de mail que se enviará',
     )
 
     @api.one
-    def button_add_curso(self):
-        """ Agrega un curso a la ficha de la alumna, y la pone como interesada
-        """
-        #  obtener el id de la alumna que viene en el contexto
-        partner_ids = self._context.get('active_ids')
+    @api.onchange('template')
+    def _get_default_template(self):
+        template = self.env['email.template'].search(
+            [('id', '=', self._context.get('template'))]
+        )
+        self.template = template
 
-        # Crear la inscripcion y agregarla
-        vals = {
-            'curso_id': self.curso_id.id,
-            'partner_id': partner_ids[0],
-            'user_id': self._uid
-        }
-        self.env['curso.registration'].create(vals)
-
+    @api.one
+    def button_send_mail(self):
+        if self.template:
+            self.template.send_mail(self._context.get('registration'))
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -1,10 +1,19 @@
 <!--
     Plantilla para enviar confirmación de inscripción a un curso G01
 -->
+<style type="text/css">p, li {
+    color: rgb(76, 76, 76);
+    font-family: 'Lucida Grande', Helvetica, Verdana, Arial, sans-serif;
+    font-size: 13px;
+}
+</style>
+
+<div style="width:600px;">
+
 <p>Hola ${object.partner_id.first_name},</p>
 
-<p>Te confirmamos tu inscripción en el curso "${object.curso_id.product.name}" a cargo de
-    la profesora ${object.curso_id.main_speaker_id.name}</p>
+<p>Te confirmamos tu inscripción en el curso "${object.curso_id.product.name}"
+    a cargo de la profesora ${object.curso_id.main_speaker_id.name}</p>
 
 <p>Recordá traer para la primera clase:</p>
 
@@ -20,10 +29,11 @@
     clase!!!</p>
 
 <p>Estos son los datos que tenemos registrados, por favor verificá que sean correctos,
-    si hay algún error o si falta algún dato por favor corregilo respondiendo este mail:</p>
+   si hay algún error o si falta algún dato por favor corregilo respondiendo este mail.</p>
 
-<p style="border-left: 1px solid #8e0000; margin-left: 30px;">&nbsp;&nbsp; Nombre: ${object.partner_id.name}<br />
-&nbsp;&nbsp; Teléfono de contacto: ${object.partner_id.mobile or "No lo tenemos"}<br />
+<p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+&nbsp;&nbsp; Nombre: ${object.partner_id.name}<br />
+&nbsp;&nbsp; Teléfono: ${object.partner_id.mobile or "No lo tenemos"}<br />
 &nbsp;&nbsp; Fecha de nacimiento: ${object.partner_id.birthdate or "No la tenemos"}<br />
 &nbsp;&nbsp; Documento: ${object.partner_id.document_type} ${object.partner_id.document_number or "No lo tenemos"}</p>
 
@@ -35,7 +45,7 @@
 <p>Te esperamos entonces el día ${object.get_formatted_begin_date()} a las ${object.get_formatted_begin_time()}</p>
 
 <p>Gracias por elegirnos!</p>
-
+</div>
 <!-- pie de pagina makeover -->
 
 <p>${object.get_mail_footer_html() | safe}</p>

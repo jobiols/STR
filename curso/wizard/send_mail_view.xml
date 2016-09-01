@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_validate_send_mail" model="ir.ui.view">
+            <field name="name">Validar envio de mail</field>
+            <field name="model">curso.send_mail</field>
+            <field name="arch" type="xml">
+                <form string="Anotar como interesada">
+                    <group>
+                        <label string="Se va a enviar un mail basado en la siguiente plantilla"/>
+                    </group>
+                    <group>
+                        <field name="template"/>
+                    </group>
+                    <footer>
+                        <button name="button_send_mail" string="Enviar" type="object"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- action -->
+
+        <record id="wizard_curso_send_mail" model="ir.actions.act_window">
+            <field name="name">Enviar mail</field>
+            <field name="res_model">curso.send_mail</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

@@ -78,7 +78,8 @@ faltante en la ficha del alumno
         'data/curso_data.xml',
         'curso_report.xml',
         'views/curso_report_incoming.xml',
-        'views/report_curso_attendance.xml'
+        'views/report_curso_attendance.xml',
+        'wizard/send_mail_view.xml'
     ],
     #    'demo': ['data/curso_demo.xml'],
 

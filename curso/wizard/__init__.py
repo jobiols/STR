@@ -24,5 +24,6 @@ from . import create_invoice
 from . import add_registration
 from . import move_registration
 from . import mail_confirm
+from . import send_mail
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

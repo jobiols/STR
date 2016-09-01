@@ -130,30 +130,32 @@ class curso_registration(models.Model):
 
         self.curso_begin_day = weekday.capitalize()
 
-    @api.one
+    @api.multi
     def button_reg_sign(self):
         """ La alumna seña el curso, eso la confirma en el mismo
         """
+        for reg in self:
+            # poner la alumna como cliente
+            reg.partner_id.write({'customer': True})
 
-        # poner la alumna como cliente
-        self.partner_id.write({'customer': True})
+            # generarle las cuotas
+            reg.button_gen_quotes()
 
-        # generarle las cuotas
-        self.button_gen_quotes()
+            # señar la inscripción pasando al estado señada
+            res = reg.sign_registration()
 
-        # señar la inscripción pasando al estado señada
-        res = self.sign_registration()
-
-        return True
-
-        # notificarla por mail si el curso tiene el template
-        # TODO aca habría que lanzar un wizard que puede mandar el mail de confirmacion
-        if self.curso_id.email_registration_id:
-            template = self.curso_id.email_registration_id
-            if template:
-                mail_message = template.send_mail(self.id)
-        else:
-            raise Warning(('Falló envio de mail, no hay plantilla de mail para mandar.!'))
+            context = self._context.copy()
+            context['template'] = reg.curso_id.email_registration_id.id
+            context['registration'] = reg.id
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Enviar mail de confirmación',
+            'res_model': 'curso.send_mail',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': context
+            }
 
     @api.one
     def sign_registration(self):
@@ -271,5 +273,9 @@ class curso_registration(models.Model):
             for reg in quotas:
                 reg.unlink()
             self.state = 'cancel'
+
+    @api.multi
+    def get_diary_table_html(self):
+        return False
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
