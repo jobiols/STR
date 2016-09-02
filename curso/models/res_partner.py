@@ -174,7 +174,6 @@ class res_partner(models.Model):
                         </tbody>
                     </table>
                 </div>
-                </div>
                 """.format( instance.get('weekday'),
                             instance.get('day'),
                             instance.get('month'),
@@ -185,7 +184,7 @@ class res_partner(models.Model):
                             data.get('hs_lecture'),
                             instance.get('vacancy'),
                         )
-        ret += u'<br/>'
+        ret += u'</div><br/>'
         return ret
 
     @api.multi
