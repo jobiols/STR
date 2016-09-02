@@ -197,7 +197,6 @@ class curso_registration(models.Model):
 
     @api.one
     def try_send_mail_by_lecture(self):
-        print 'try send mail --------------------'
         # en que clase estoy
         lecture = 1
 
@@ -210,7 +209,6 @@ class curso_registration(models.Model):
             break
 
         if template:
-            print 'sending --'
             template.send_mail(self.id)
 
     @api.multi

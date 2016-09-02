@@ -184,4 +184,21 @@ class res_partner(models.Model):
         ret += u'<br/>'
         return ret
 
+    @api.multi
+    def get_mail_footer_html(self):
+        return """
+                <p><span style="font-family:lucida sans unicode,lucida grande,sans-serif;
+                    font-size:20px;">
+                <span style="color:#FF0000;"><strong>Makeover Lab</strong></span></span><br/>
+                Avda Rivadavia 5259 9&deg; &quot;34&quot;, Caballito<br/>
+                Tel&eacute;fono: 11 4902 4652<br/>
+                Horario de atenci&oacute;n al p&uacute;blico:<br/>
+                Lunes a Viernes de 17 a 20 hs.<br/>
+                S&aacute;bados de 11 a 19 hs<br/>
+                <a href="https://www.facebook.com/MakeoverLabs">face/makeoverlabs</a><br/>
+                <a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a></p>
+                """
+
+
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
