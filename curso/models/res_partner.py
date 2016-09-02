@@ -73,7 +73,7 @@ class res_partner(models.Model):
         <br/>
         """
 
-        ret += u'<h2><br/>Nuevos Inicios</h2><br/>'
+        ret += u'<h2><br/>&nbsp;Nuevos Inicios</h2><br/>'
 
         for instance in data.get('instances',[]):
             ret += u"""
@@ -85,7 +85,7 @@ class res_partner(models.Model):
                                 <div style="border-top-left-radius:3px;border-top-right-radius:3px;
                                 border-collapse:separate;text-align:center;
                                 font-weight:bold;color:#ffffff;width:100px;min-height: 17px;
-                                border-color:#ffffff;background:#8a89ba;padding-top: 4px;">
+                                border-color:#ffffff;background:#8a89ba;padding-top: 3px;">
                                     {}
                                 </div>
                                 <div style="font-size:30px;min-height:auto;font-weight:bold;
@@ -97,7 +97,7 @@ class res_partner(models.Model):
                                     {}
                                 </div>
                                 <div style="border-collapse:separate;color:#8a89ba;text-align:center;
-                                width: 100px;font-size:11px;border-bottom-right-radius:3px;
+                                width: 98px;font-size:11px;border-bottom-right-radius:3px;
                                 font-weight:bold;border:1px solid;border-bottom-left-radius:3px;">
                                     {}
                                 </div>
