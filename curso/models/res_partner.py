@@ -76,6 +76,7 @@ class res_partner(models.Model):
 
         ret += u'<h2 style="text-align:center;"><br/>Nuevos Inicios</h2><br/>'
 
+        ret += u'<div style="background:rgb(211, 211, 211); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">'
         if False:
             ret += u"""
             <table style="width:550px;">
@@ -172,6 +173,7 @@ class res_partner(models.Model):
                         </tr>
                         </tbody>
                     </table>
+                </div>
                 </div>
                 """.format( instance.get('weekday'),
                             instance.get('day'),
