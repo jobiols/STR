@@ -96,6 +96,7 @@
                             <group>
                                 <field name="discount"/>
                                 <field name="disc_desc"/>
+                                <field name="source"/>
                             </group>
                             <group groups="base.group_no_one">
                                 <field name="create_date"/>

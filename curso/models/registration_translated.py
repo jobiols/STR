@@ -117,6 +117,13 @@ class curso_registration(models.Model):
         compute='_get_weekday',
         string='Dia')
 
+    source = fields.Selection([
+        ('none', 'Sin descuento'),
+        ('groupon', 'Groupon'),
+        ],
+        'Origen', required=True,
+        default='none')
+
     @api.one
     @api.depends('curso_begin_date')
     def _get_weekday(self):
@@ -275,5 +282,13 @@ class curso_registration(models.Model):
     @api.multi
     def get_diary_table_html(self):
         return False
+
+    #TODO poner los descuentos en una tabla de configuracion DUPLICADO!!
+    @api.onchange('source')
+    def _compute_source(self):
+        for rec in self:
+            if rec.source == 'groupon':
+                rec.discount = 73.42
+                rec.disc_desc = 'Descuento groupon'
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

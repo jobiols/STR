@@ -7,11 +7,15 @@
             <field name="arch" type="xml">
                 <form string="Anotar como interesada" version="7.0">
                     <group>
-                        <label string="Seleccione el curso en el que está interesada esta
-                        alumna. Para eliminarlo oprima Editar y luego podrá borrar el curso"/>
+                        <label string="Seleccione el curso en el que está interesada esta alumna."/>
                     </group>
                     <group>
                         <field name="curso_id"/>
+                        <field name="discount"/>
+                        <field name="disc_desc"/>
+                    </group>
+                    <group>
+                        <field name="source"/>
                     </group>
                     <footer>
                         <button name="button_add_curso" string="Confirmar" type="object"
