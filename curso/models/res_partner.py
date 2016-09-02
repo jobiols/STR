@@ -39,8 +39,7 @@ class res_partner(models.Model):
         data = producto.info_curso_html_data()
         data = data or {}
         ret = u"""
-        <h2>{}</h2>
-        <a href="{}">Conocer más</a>
+        <h2>{} <a href="{}" style="font-size: 13px;" >Conocer más</a> </h2>
         """.format(data.get('name'),data.get('product_url'))
 
         ret += u"""
