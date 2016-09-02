@@ -120,6 +120,7 @@ class product_product(models.Model):
         data['description'] = self.description
         data['no_lectures'] = self.tot_hs_lecture / self.hs_lecture
         data['hs_lecture'] = self.hs_lecture
+        data['product_url'] = self.product_url
 
         data['comercial_data'] = [
             u'Matricula bonificada.',
