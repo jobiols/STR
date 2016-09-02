@@ -125,7 +125,7 @@ class product_product(models.Model):
             u'Matricula bonificada.',
             u'No se cobra derecho de examen.',
             u'Materiales incluidos en el valor del curso.',
-            u'Se entrega certificado.',
+            u'Se entrega certificado digital.',
         ]
         dur_weeks = self.tot_hs_lecture / self.hs_lecture
         data['curso_data'] = [
@@ -136,13 +136,11 @@ class product_product(models.Model):
 
         def calc_vacancy(vac):
             if vac > 100:
-                return u'Hay vacantes!'
-            if vac < 10:
-                return u'Vacantes limitadas'
+                return u'<font color="green">Hay vacantes!</font>'
             if vac <= 2:
-                return u'Pocas vacantes'
+                return u'<font color="yellow">Pocas vacantes</font>'
             if vac == 0:
-                return u'No hay vacantes'
+                return u'<font color="red">No hay vacantes</font>'
 
         def get_schedule(curso):
             try:
@@ -165,11 +163,12 @@ class product_product(models.Model):
             mon = dt.strftime('%B') if dt else '?'
             day = dt.strftime('%-d') if dt else '?'
             wee = dt.strftime('%A').decode('utf-8', 'ignore') if dt else '?'
+            year = dt.strftime('%Y')
             data['instances'].append(
-                {'month': mon,
+                {'month': mon.capitalize()+' '+year,
                  'day': day,
                  'name': curso.name,
-                 'weekday': wee,
+                 'weekday': wee.capitalize(),
                  'schedule': get_schedule(curso),
                  'vacancy': calc_vacancy(curso.register_avail or 'no'),
                  'curso_instance': curso.curso_instance

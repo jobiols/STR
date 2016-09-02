@@ -1,25 +1,111 @@
-<table style="width:550px;">
-<tbody>
-<tr>
-   <td>
-      <span style="align: center; font-size: 10.8px; color: rgb(224, 30, 38); text-transform: uppercase;">
-         <p>AGOSTO</p>
-      </span>
-   </td>
-   <td rowspan="2">&nbsp;</td>
-   <td rowspan="2">
-      {} - Se dicta los días {} en el horario de {}<br/>
-   </td>
-   <td rowspan="2">
-      $1500 /mes
-   </td>
-</tr>
-<tr>
-   <td>
-      <span style="font-size: 45px; font-family: Oswald, sans-serif; color: rgb(224, 30, 38); ">
-      <p>08</p>
-      </span>
-   </td>
-</tr>
-</tbody>
-</table>
+<style type="text/css">p, li ,td {
+    color: rgb(76, 76, 76);
+    font-family: 'Lucida Grande', Helvetica, Verdana, Arial, sans-serif;
+    font-size: 13px;
+}
+</style>
+
+<div style="height: 50px;text-align: left;font-size : 14px;border-collapse: separate;margin-top:10px">
+    <strong style="margin-left:12px">Hola ${object.cn}</strong> ,
+
+    <p style="margin-left:12px">The date of the meeting has been changed...<br/>
+        The meeting created by ${object.event_id.user_id.partner_id.name} is now scheduled
+        for : ${object.event_id.get_display_time_tz(tz=object.partner_id.tz)}.</p>
+</div>
+
+<div style="height: auto;margin-left:12px;margin-top:30px;">
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                <div style="border-top-left-radius:3px;border-top-right-radius:3px;
+                font-size:11px;border-collapse:separate;text-align:center;
+                font-weight:bold;color:#ffffff;width:100px;min-height: 17px;
+                border-color:#ffffff;background:#8a89ba;padding-top: 4px;">
+                    Lunes
+                </div>
+                <div style="font-size:45px;min-height:auto;font-weight:bold;
+                text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 100px;">
+                    5
+                </div>
+                <div style="font-size:11px;text-align:center;font-weight:bold;
+                color:#ffffff;background-color:#8a89ba">
+                    Septiembre 2016
+                </div>
+                <div style="border-collapse:separate;color:#8a89ba;text-align:center;
+                width: 98px;font-size:11px;border-bottom-right-radius:3px;
+                font-weight:bold;border:1px solid;border-bottom-left-radius:3px;">
+                    G01/17
+                </div>
+            </td>
+            <td>
+                <table border="0" cellpadding="0" cellspacing="0"
+                       style="margin-top: 15px; margin-left: 10px;font-size: 16px;">
+                    <tbody>
+                    <tr>
+                        <td style="vertical-align:top;">Se cursa los días sáb en el
+                            horario de 14:00 - 16:00 (2hs)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:top;">Son 4 clases de 2 horas c/u.</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:top;">Hay vacantes</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div style="height: auto;margin-left:12px;margin-top:30px;">
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                <div style="border-top-left-radius:3px;border-top-right-radius:3px;
+                font-size:12px;border-collapse:separate;text-align:center;
+                font-weight:bold;color:#ffffff;width:100px;min-height: 17px;
+                border-color:#ffffff;background:#8a89ba;padding-top: 4px;">
+                    Lunes
+                </div>
+                <div style="font-size:45px;min-height:auto;font-weight:bold;
+                text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 100px;">
+                    88
+                </div>
+                <div style="font-size:12px;text-align:center;font-weight:bold;
+                color:#ffffff;background-color:#8a89ba">
+                    Septiembre 2016
+                </div>
+                <div style="border-collapse:separate;color:#8a89ba;text-align:center;
+                width: 98px;font-size:12px;border-bottom-right-radius:3px;
+                font-weight:bold;border:1px solid;border-bottom-left-radius:3px;">
+                    G01/17
+                </div>
+            </td>
+            <td>
+                <table border="0" cellpadding="0" cellspacing="0"
+                       style="margin-top: 15px; margin-left: 10px;font-size: 16px;">
+                    <tbody>
+                    <tr>
+                        <td style="vertical-align:top;">Se cursa los días sáb en el
+                            horario de 14:00 - 16:00 (2hs)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:top;">Son 4 clases de 2 horas c/u.</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:top;">Hay vacantes</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

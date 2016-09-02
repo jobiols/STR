@@ -39,22 +39,9 @@ class res_partner(models.Model):
         data = producto.info_curso_html_data()
         data = data or {}
         ret = u"""
-        <table border="0" cellpadding="0" cellspacing="0">
-            <tbody>
-                <tr>
-                    <td>
-                        <h2>{}</h2>
-                    </td>
-                    <td>
-                        <h5><sub>&nbsp;cod {}</sub></h5>
-                    </td>
-                    <td>
-                        <h3>&nbsp;&nbsp;<a
-                        href="{}">Conocer más</a></h3>
-                    </td>
-                </tr>
-            </tbody>
-        </table>""".format(data.get('name'),data.get('code'),data.get('product_url'))
+        <h2>{}</h2>
+        <a href="{}">Conocer más</a>
+        """.format(data.get('name'),data.get('product_url'))
 
         ret += u"""
         <div style="width: 550px;">{}</div>""".format(data.get('description'))
@@ -85,54 +72,116 @@ class res_partner(models.Model):
         </table>
         """
 
-        ret += u'<h3><br/>Nuevos Inicios</h3>'
+        ret += u'<h3><br/>Nuevos Inicios</h3><br/>'
 
-        ret += u"""
-        <table style="width:550px;">
-            <tbody>
-        """
+        if False:
+            ret += u"""
+            <table style="width:550px;">
+                <tbody>
+            """
+            for instance in data.get('instances',[]):
+                ret += u"""
+                <tr>
+                    <td style="height:85px;">
+                        <div style="  vertical-align: top;
+                            border-radius: 15px 15px 15px 15px;
+                            -moz-border-radius: 15px 15px 15px 15px;
+                            -webkit-border-radius: 15px 15px 15px 15px; border: 0px solid #2b0f2b;
+                            background-color: rgb(211, 211, 211); width: 70px; text-align: center;
+                            border-right-color: rgb(255, 255, 255);">
+
+                        <div style="box-sizing: border-box; font-size: 10px; color: rgb(224, 30, 38);
+                            text-transform: uppercase;"><strong>{}</strong></div>
+
+                        <div style="box-sizing: border-box; font-size: 40px; font-family: Oswald, sans-serif;
+                            color: rgb(224, 30, 38); line-height: 50px;"><strong>{}</strong></div>
+
+                        <div style="box-sizing: border-box; font-size: 10px; color: rgb(224, 30, 38);
+                            text-transform: uppercase;"><strong>{}</strong></div>
+                        </div>
+                    </td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td style="vertical-align:top">
+                        <p>Se cursa los días {} en el horario de {}.
+                           Son {} clases de {} horas c/u.
+                        </p>
+                        <p>código {} - {}</p>
+                    </td>
+                </tr>""".format(instance.get('weekday'),
+                                instance.get('day'),
+                                instance.get('month'),
+                                instance.get('weekday'),
+                                instance.get('schedule'),
+                                data.get('no_lectures'),
+                                data.get('hs_lecture'),
+                                instance.get('curso_instance'),
+                                instance.get('vacancy'),
+                                )
+            ret += u"""
+                </tbody>
+            </table>
+            """
+
         for instance in data.get('instances',[]):
             ret += u"""
-            <tr>
-                <td style="height:85px;">
-                    <div style="  vertical-align: top;
-                        border-radius: 15px 15px 15px 15px;
-                        -moz-border-radius: 15px 15px 15px 15px;
-                        -webkit-border-radius: 15px 15px 15px 15px; border: 0px solid #2b0f2b;
-                        background-color: rgb(211, 211, 211); width: 70px; text-align: center;
-                        border-right-color: rgb(255, 255, 255);">
-
-                    <div style="box-sizing: border-box; font-size: 10px; color: rgb(224, 30, 38);
-                        text-transform: uppercase;"><strong>{}</strong></div>
-
-                    <div style="box-sizing: border-box; font-size: 40px; font-family: Oswald, sans-serif;
-                        color: rgb(224, 30, 38); line-height: 50px;">{}</div>
-
-                    <div style="box-sizing: border-box; font-size: 10px; color: rgb(224, 30, 38);
-                        text-transform: uppercase;"><strong>{}</strong></div>
-                    </div>
-                </td>
-                <td>&nbsp;&nbsp;</td>
-                <td style="vertical-align:top">
-                    <p>Se cursa los días {} en el horario de {}.
-                       Son {} clases de {} horas c/u.
-                    </p>
-                    <p>código {} - {}</p>
-                </td>
-            </tr>""".format(instance.get('weekday'),
+                <div style="height: auto;margin-left:12px;margin-top:30px;">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <div style="border-top-left-radius:3px;border-top-right-radius:3px;
+                                font-size:11px;border-collapse:separate;text-align:center;
+                                font-weight:bold;color:#ffffff;width:100px;min-height: 17px;
+                                border-color:#ffffff;background:#8a89ba;padding-top: 4px;">
+                                    {}
+                                </div>
+                                <div style="font-size:45px;min-height:auto;font-weight:bold;
+                                text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 100px;">
+                                    {}
+                                </div>
+                                <div style="font-size:11px;text-align:center;font-weight:bold;
+                                color:#ffffff;background-color:#8a89ba">
+                                    {}
+                                </div>
+                                <div style="border-collapse:separate;color:#8a89ba;text-align:center;
+                                width: 100px;font-size:11px;border-bottom-right-radius:3px;
+                                font-weight:bold;border:1px solid;border-bottom-left-radius:3px;">
+                                    {}
+                                </div>
+                            </td>
+                            <td>
+                                <table border="0" cellpadding="0" cellspacing="0"
+                                       style="margin-top: 15px; margin-left: 10px;font-size: 16px;">
+                                    <tbody>
+                                    <tr>
+                                        <td style="vertical-align:top;">Se cursa los días {} en el
+                                            horario de {}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="vertical-align:top;">Son {} clases de {} horas c/u.</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="vertical-align:top;">{}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                """.format( instance.get('weekday'),
                             instance.get('day'),
                             instance.get('month'),
+                            instance.get('curso_instance'),
                             instance.get('weekday'),
                             instance.get('schedule'),
                             data.get('no_lectures'),
                             data.get('hs_lecture'),
-                            instance.get('curso_instance'),
                             instance.get('vacancy'),
-                            )
-        ret += u"""
-            </tbody>
-        </table>
-        """
+                        )
+        ret += u'<br/>'
         return ret
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
