@@ -39,7 +39,7 @@ class res_partner(models.Model):
         data = producto.info_curso_html_data()
         data = data or {}
         ret = u"""
-        <div style="background:rgb(211, 211, 211); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
+        <br/>
         <h2>{} <a href="{}" style="font-size: 13px;" >Conocer más</a> </h2>
         """.format(data.get('name'),data.get('product_url'))
 
@@ -70,60 +70,10 @@ class res_partner(models.Model):
                 </tr>
             </tbody>
         </table>
-        </div>
         <br/>
         """
 
-        ret += u'<h2 style="text-align:center;"><br/>Nuevos Inicios</h2><br/>'
-
-        ret += u'<div style="background:rgb(211, 211, 211); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">'
-        if False:
-            ret += u"""
-            <table style="width:550px;">
-                <tbody>
-            """
-            for instance in data.get('instances',[]):
-                ret += u"""
-                <tr>
-                    <td style="height:85px;">
-                        <div style="  vertical-align: top;
-                            border-radius: 15px 15px 15px 15px;
-                            -moz-border-radius: 15px 15px 15px 15px;
-                            -webkit-border-radius: 15px 15px 15px 15px; border: 0px solid #2b0f2b;
-                            background-color: rgb(211, 211, 211); width: 70px; text-align: center;
-                            border-right-color: rgb(255, 255, 255);">
-
-                        <div style="box-sizing: border-box; font-size: 10px; color: rgb(224, 30, 38);
-                            text-transform: uppercase;"><strong>{}</strong></div>
-
-                        <div style="box-sizing: border-box; font-size: 40px; font-family: Oswald, sans-serif;
-                            color: rgb(224, 30, 38); line-height: 50px;"><strong>{}</strong></div>
-
-                        <div style="box-sizing: border-box; font-size: 10px; color: rgb(224, 30, 38);
-                            text-transform: uppercase;"><strong>{}</strong></div>
-                        </div>
-                    </td>
-                    <td>&nbsp;&nbsp;</td>
-                    <td style="vertical-align:top">
-                        <p>Se cursa los días {} en el horario de {}.
-                           Son {} clases de {} horas c/u.
-                        </p>
-                        <p>código {} - {}</p>
-                    </td>
-                </tr>""".format(instance.get('weekday'),
-                                instance.get('day'),
-                                instance.get('month'),
-                                instance.get('weekday'),
-                                instance.get('schedule'),
-                                data.get('no_lectures'),
-                                data.get('hs_lecture'),
-                                instance.get('curso_instance'),
-                                instance.get('vacancy'),
-                                )
-            ret += u"""
-                </tbody>
-            </table>
-            """
+        ret += u'<h2><br/>Nuevos Inicios</h2><br/>'
 
         for instance in data.get('instances',[]):
             ret += u"""
@@ -133,12 +83,12 @@ class res_partner(models.Model):
                         <tr>
                             <td>
                                 <div style="border-top-left-radius:3px;border-top-right-radius:3px;
-                                font-size:11px;border-collapse:separate;text-align:center;
+                                border-collapse:separate;text-align:center;
                                 font-weight:bold;color:#ffffff;width:100px;min-height: 17px;
                                 border-color:#ffffff;background:#8a89ba;padding-top: 4px;">
                                     {}
                                 </div>
-                                <div style="font-size:45px;min-height:auto;font-weight:bold;
+                                <div style="font-size:30px;min-height:auto;font-weight:bold;
                                 text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 100px;">
                                     {}
                                 </div>
@@ -154,7 +104,7 @@ class res_partner(models.Model):
                             </td>
                             <td>
                                 <table border="0" cellpadding="0" cellspacing="0"
-                                       style="margin-top: 15px; margin-left: 10px;font-size: 16px;">
+                                       style="margin-top: 15px; margin-left: 10px;">
                                     <tbody>
                                     <tr>
                                         <td style="vertical-align:top;">Se cursa los días {} en el
@@ -184,7 +134,7 @@ class res_partner(models.Model):
                             data.get('hs_lecture'),
                             instance.get('vacancy'),
                         )
-        ret += u'</div><br/>'
+        ret += u'<br/>'
         return ret
 
     @api.multi
@@ -201,7 +151,6 @@ class res_partner(models.Model):
                 <a href="https://www.facebook.com/MakeoverLabs">face/makeoverlabs</a><br/>
                 <a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a></p>
                 """
-
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
