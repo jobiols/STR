@@ -218,6 +218,7 @@ class curso_registration(models.Model):
         if template:
             template.send_mail(self.id)
 
+    #TODO este footer está duplicado !!
     @api.multi
     def get_mail_footer_html(self):
         return """

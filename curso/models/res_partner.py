@@ -39,6 +39,7 @@ class res_partner(models.Model):
         data = producto.info_curso_html_data()
         data = data or {}
         ret = u"""
+        <div style="background:rgb(211, 211, 211); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
         <h2>{} <a href="{}" style="font-size: 13px;" >Conocer más</a> </h2>
         """.format(data.get('name'),data.get('product_url'))
 
@@ -69,9 +70,11 @@ class res_partner(models.Model):
                 </tr>
             </tbody>
         </table>
+        </div>
+        <br/>
         """
 
-        ret += u'<h3><br/>Nuevos Inicios</h3><br/>'
+        ret += u'<h2 style="text-align:center;"><br/>Nuevos Inicios</h2><br/>'
 
         if False:
             ret += u"""
