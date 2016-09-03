@@ -107,7 +107,7 @@ class product_product(models.Model):
         temp_obj.create_template(self.id, no_clases)
 
     @api.multi
-    def info_curso_html_data(self):
+    def info_curso_html_data(self,debug=False):
         def get_quote_price(dur_weeks, price):
             if dur_weeks <= 4:
                 return u'<strong>Valor ${}</strong>'.format(price)
@@ -152,9 +152,15 @@ class product_product(models.Model):
             return ret
 
         data['instances'] = []
-        for curso in self.curso_instances.search([('next', '=', True),
-                                                  ('product', '=', self.id),
-                                                  ('date_begin', '!=', False)]):
+        if debug:
+            domain = [('product', '=', self.id),
+                      ('date_begin', '!=', False)]
+        else:
+            domain = [('next', '=', True),
+                      ('product', '=', self.id),
+                      ('date_begin', '!=', False)]
+
+        for curso in self.curso_instances.search(domain):
             # trae cursos en el futuro, con fecha
             # TODO quitar estos chequeos de fecha
             try:
@@ -166,8 +172,6 @@ class product_product(models.Model):
             day = dt.strftime('%-d') if dt else '?'
             wee = dt.strftime('%A').decode('utf-8', 'ignore') if dt else '?'
             year = dt.strftime('%Y')
-            print '------------------------------'
-            print curso.name, curso.register_avail
             data['instances'].append(
                 {'month': mon.capitalize()+' '+year,
                  'day': day,

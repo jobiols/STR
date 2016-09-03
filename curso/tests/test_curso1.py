@@ -299,8 +299,6 @@ class TestCurso(TransactionCase):
         self.diary45 = self.diary_obj.create({
             'curso_id': self.curso4.id, 'weekday': '2', 'seq': 5, 'schedule': self.schedule6.id
         })
-        ###
-
 
         # les agrego la fecha de inicio
         self.curso1.date_begin = '2016-08-01'
@@ -311,7 +309,7 @@ class TestCurso(TransactionCase):
         ##################################################################################
         # Se chequea el producto
 
-        data = self.product1.info_curso_html_data()
+        data = self.product1.info_curso_html_data(debug=True)
         self.assertEqual(data['name'], u'Maquillaje Social Profesional', 'error 01')
 
         self.assertEqual(data['comercial_data'][0], u'Matricula bonificada.',
@@ -322,33 +320,31 @@ class TestCurso(TransactionCase):
                          u'Materiales incluidos en el valor del curso.',
                          'error 04')
         self.assertEqual(data['comercial_data'][3],
-                         u'Se entrega certificado.',
+                         u'Se entrega certificado digital.',
                          'error 05')
-
         self.assertEqual(data['curso_data'][0], u'Carga horaria 80 horas.',
                          'error 06')
         self.assertEqual(data['curso_data'][1], u'Duración 20 semanas.',
                          'error 07')
-        self.assertEqual(data['curso_data'][2], u'Valor $1200.0 por mes.',
+        self.assertEqual(data['curso_data'][2], u'<strong>Valor $1200.0 por mes</strong>',
                          'error 08')
 
         instance = data['instances'][0]
-        self.assertEqual(instance['month'], u'agosto','error 10')
+        self.assertEqual(instance['month'], u'Agosto 2016','error 10')
         self.assertEqual(instance['day'], u'1','error 11')
         self.assertEqual(instance['name'],
                          u'[SPX/00] Lun 01/08/16 (12:00 16:00) - Maquillaje Social Profesional','error 12')
-        self.assertEqual(instance['weekday'], u'lunes','error 13')
+        self.assertEqual(instance['weekday'], u'Lunes','error 13')
         self.assertEqual(instance['schedule'], u'12:00 - 16:00 (4hs)','error 14')
-        self.assertEqual(instance['vacancy'], u'Hay 9999 vacantes', 'error 15')
+        self.assertEqual(instance['vacancy'], u'<p style="color:green;">Hay vacantes</p>', 'error 15')
 
         instance = data['instances'][1]
-        self.assertEqual(instance['month'], u'agosto','error 16')
+        self.assertEqual(instance['month'], u'Agosto 2016','error 16')
         self.assertEqual(instance['day'], u'9','error 17')
         self.assertEqual(instance['name'],
                          '[SPX/00] Mar 09/08/16 (15:00 19:00) - Maquillaje Social Profesional','error 18')
-        self.assertEqual(instance['weekday'], u'martes','error 19')
+        self.assertEqual(instance['weekday'], u'Martes','error 19')
         self.assertEqual(instance['schedule'], u'15:00 - 19:00 (4hs)','error 20')
-        self.assertEqual(instance['vacancy'], u'Hay 9999 vacantes','error 21')
-
+        self.assertEqual(instance['vacancy'], u'<p style="color:green;">Hay vacantes</p>','error 21')
 
         # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

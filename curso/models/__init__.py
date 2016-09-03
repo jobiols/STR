@@ -34,5 +34,6 @@ from . import mail_template
 from . import curso_translated
 from . import registration_translated
 from . import res_product_translated
+from . import html_filter
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
