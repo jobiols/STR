@@ -136,12 +136,14 @@ class product_product(models.Model):
         ]
 
         def calc_vacancy(vac):
+            ret = u'<p style="color:{};">{}</p>'
             if vac > 100:
-                return u'<font color="green">Hay vacantes!</font>'
+                ret = ret.format('green','Hay vacantes')
             if vac <= 2:
-                return u'<font color="yellow">Pocas vacantes</font>'
+                ret = ret.format('yellow','Pocas vacantes!')
             if vac == 0:
-                return u'<font color="red">No hay vacantes</font>'
+                ret = ret.format('red','No hay vacantes!!')
+            return ret
 
         def get_schedule(curso):
             try:
@@ -171,7 +173,7 @@ class product_product(models.Model):
                  'name': curso.name,
                  'weekday': wee.capitalize(),
                  'schedule': get_schedule(curso),
-                 'vacancy': calc_vacancy(curso.register_avail or 'no'),
+                 'vacancy': calc_vacancy(curso.register_avail),
                  'curso_instance': curso.curso_instance
                  })
 
