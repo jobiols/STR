@@ -27,7 +27,8 @@ class html_filter(models.TransientModel):
     dummy = fields.Char()
 
     def default_footer(self):
-        return """
+        """ Devuelve el footer default para los mails """
+        return u"""
                 <br/>
                 <p><span style="font-family:lucida sans unicode,lucida grande,sans-serif;
                     font-size:20px;">

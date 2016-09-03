@@ -120,7 +120,7 @@ class curso_registration(models.Model):
     source = fields.Selection([
         ('none', 'Sin descuento'),
         ('groupon', 'Groupon'),
-        ],
+    ],
         'Origen', required=True,
         default='none')
 
@@ -162,7 +162,7 @@ class curso_registration(models.Model):
             'view_mode': 'form',
             'target': 'new',
             'context': context
-            }
+        }
 
     @api.one
     def sign_registration(self):
@@ -250,7 +250,7 @@ class curso_registration(models.Model):
     @api.multi
     def get_formatted_begin_date(self):
         date = datetime.strptime(self.curso_begin_date, '%Y-%m-%d')
-        return date.strftime('%A %d/%m/%Y').capitalize()
+        return date.strftime('%A %d/%m/%Y').capitalize().decode('utf-8', 'ignore')
 
     @api.multi
     def get_formatted_begin_time(self):
@@ -275,7 +275,7 @@ class curso_registration(models.Model):
         html = self.env['html_filter']
         return html.diary_table()
 
-    #TODO poner los descuentos en una tabla de configuracion DUPLICADO!!
+    # TODO poner los descuentos en una tabla de configuracion DUPLICADO!!
     @api.onchange('source')
     def _compute_source(self):
         for rec in self:

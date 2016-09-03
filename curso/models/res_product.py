@@ -21,7 +21,6 @@
 from datetime import datetime
 
 import markdown
-
 from openerp import models, fields, api
 from openerp.exceptions import ValidationError, Warning
 
@@ -191,7 +190,7 @@ class product_product(models.Model):
         """ Generate html data for curso """
         html = self.env['html_filter']
         for prod in self:
-            data = self._get_wordpress_data(prod.default_code)
+            data = self._get_wordpress_data()
             if not data:
                 raise Warning(
                     'Error!',
@@ -209,10 +208,11 @@ class product_product(models.Model):
             docs.create(new_page)
 
     @api.multi
-    def _get_wordpress_data(self, default_code):
-        """ Genera el los datos para pegar html, trae todas las instancias de cursos
+    def _get_wordpress_data(self):
+        """ Genera los datos para pegar html, trae todas las instancias de cursos
             basadas en este producto.
         """
+        self.ensure_one()
         data = {}
         for prod in self:
             curso_obj = self.env['curso.curso']
@@ -233,8 +233,8 @@ class product_product(models.Model):
                 for idx, fdline in enumerate(formatted_diary):
                     if idx == 0:
                         grid.append(
-                            {'inicio': datetime.strptime(curso.date_begin,
-                                                         '%Y-%m-%d').strftime('%d/%m/%Y'),
+                            {'inicio': datetime.strptime(
+                                curso.date_begin, '%Y-%m-%d').strftime('%d/%m/%Y'),
                              'instancia': curso.get_formatted_instance(curso.id),
                              'dias': fdline['dias'],
                              'horario': fdline['horario'],
