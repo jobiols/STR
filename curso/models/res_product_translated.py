@@ -110,9 +110,9 @@ class product_product(models.Model):
     def info_curso_html_data(self):
         def get_quote_price(dur_weeks, price):
             if dur_weeks <= 4:
-                return u'Valor ${}'.format(price)
+                return u'<strong>Valor ${}</strong>'.format(price)
             else:
-                return u'Valor ${} por mes'.format(price)
+                return u'<strong>Valor ${} por mes</strong>'.format(price)
 
         data = {}
         data['name'] = self.name
@@ -137,13 +137,12 @@ class product_product(models.Model):
 
         def calc_vacancy(vac):
             ret = u'<p style="color:{};">{}</p>'
-            if vac > 100:
-                ret = ret.format('green','Hay vacantes')
+            if vac <= 0:
+                return ret.format('red','No hay vacantes!!')
             if vac <= 2:
-                ret = ret.format('yellow','Pocas vacantes!')
-            if vac == 0:
-                ret = ret.format('red','No hay vacantes!!')
-            return ret
+                return ret.format('orange','Pocas vacantes!')
+            if vac > 2:
+                return ret.format('green','Hay vacantes')
 
         def get_schedule(curso):
             try:
@@ -167,6 +166,8 @@ class product_product(models.Model):
             day = dt.strftime('%-d') if dt else '?'
             wee = dt.strftime('%A').decode('utf-8', 'ignore') if dt else '?'
             year = dt.strftime('%Y')
+            print '------------------------------'
+            print curso.name, curso.register_avail
             data['instances'].append(
                 {'month': mon.capitalize()+' '+year,
                  'day': day,
