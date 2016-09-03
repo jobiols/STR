@@ -28,12 +28,11 @@ from . import quota
 from . import curso
 from . import registration
 from . import res_partner
-from . import res_product
 from . import lecture_template
 from . import mail_template
 from . import curso_translated
 from . import registration_translated
-from . import res_product_translated
+from . import res_product
 from . import html_filter
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

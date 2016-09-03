@@ -33,109 +33,13 @@ class res_partner(models.Model):
     curso_registration_ids = fields.One2many(
         'curso.registration', 'partner_id')
 
-    def info_curso_html(self, default_code):
+    def info_curso_html(self,default_code):
         producto = self.env['product.product'].search(
             [('default_code', '=', default_code)])
         data = producto.info_curso_html_data()
         data = data or {}
-        ret = u"""
-        <br/>
-        <h2>{} <a href="{}" style="font-size: 13px;" >Conocer más</a> </h2>
-        """.format(data.get('name'),data.get('product_url'))
-
-        ret += u"""
-        <div style="width: 550px;">{}</div>""".format(data.get('description'))
-
-        ret += u"""
-        <table style="width: 550px;">
-            <tbody>
-                <tr>
-                    <td valign="top">
-                        <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
-        """
-        for itm in data.get('comercial_data'):
-            ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
-        ret += u"""
-                        </p>
-                    </td>
-                    <td>&nbsp;&nbsp;</td>
-                    <td valign="top">
-                        <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
-        """
-        for itm in data.get('curso_data'):
-            ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
-        ret += u"""
-                        </p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <br/>
-        """
-
-        ret += u'<h2><br/>&nbsp;Nuevos Inicios</h2><br/>'
-
-        for instance in data.get('instances',[]):
-            ret += u"""
-                <div style="height: auto;margin-left:12px;margin-top:30px;">
-                    <table>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <div style="border-top-left-radius:3px;border-top-right-radius:3px;
-                                border-collapse:separate;text-align:center;
-                                font-weight:bold;color:#ffffff;width:100px;min-height: 17px;
-                                border-color:#ffffff;background:#8a89ba;padding-top: 3px;">
-                                    {}
-                                </div>
-                                <div style="font-size:30px;min-height:auto;font-weight:bold;
-                                text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 100px;">
-                                    {}
-                                </div>
-                                <div style="font-size:11px;text-align:center;font-weight:bold;
-                                color:#ffffff;background-color:#8a89ba">
-                                    {}
-                                </div>
-                                <div style="border-collapse:separate;color:#8a89ba;text-align:center;
-                                width: 98px;font-size:11px;border-bottom-right-radius:3px;
-                                font-weight:bold;border:1px solid;border-bottom-left-radius:3px;">
-                                    {}
-                                </div>
-                            </td>
-                            <td>
-                                <table border="0" cellpadding="0" cellspacing="0"
-                                       style="margin-top: 15px; margin-left: 10px;">
-                                    <tbody>
-                                    <tr>
-                                        <td style="vertical-align:top;">Se cursa los días {} en el
-                                            horario de {}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align:top;">Son {} clases de {} horas c/u.</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align:top;">{}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                """.format( instance.get('weekday'),
-                            instance.get('day'),
-                            instance.get('month'),
-                            instance.get('curso_instance'),
-                            instance.get('weekday'),
-                            instance.get('schedule'),
-                            data.get('no_lectures'),
-                            data.get('hs_lecture'),
-                            instance.get('vacancy'),
-                        )
-        ret += u'<br/>'
-        return ret
+        html = self.env['html_filter']
+        return html.info_curso(data)
 
     @api.multi
     def get_mail_footer_html(self):

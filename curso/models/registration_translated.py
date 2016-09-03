@@ -35,19 +35,19 @@ class curso_registration(models.Model):
         u'Creación', readonly=True)
 
     date_closed = fields.Date(
-        'Fecha de cierre', readonly=True)
+        u'Fecha de cierre', readonly=True)
 
     date_open = fields.Date(
         u'Fecha de inscripción', readonly=True)
 
     discount = fields.Float(
-        'Descuento (%)', digits=(2, 2))
+        u'Descuento (%)', digits=(2, 2))
 
     disc_desc = fields.Char(
-        'Razon del descuento', size=128, select=True)
+        u'Razon del descuento', size=128, select=True)
 
     nb_register = fields.Integer(
-        'Number of Participants', required=True,
+        u'Number of Participants', required=True,
         readonly=True,
         states={'draft': [('readonly', False)]},
         default=1)
@@ -79,7 +79,7 @@ class curso_registration(models.Model):
 
     partner_id = fields.Many2one(
         'res.partner',
-        'Alumna',
+        u'Alumna',
         required=True,
         states={'done': [('readonly', True)]})
 
@@ -107,7 +107,7 @@ class curso_registration(models.Model):
 
     curso_state = fields.Selection(
         related='curso_id.state',
-        string='Estado del curso', readonly=True)
+        string=u'Estado del curso', readonly=True)
 
     company_id = fields.Many2one(
         'res.company', string='Company', related='curso_id.company_id',
@@ -270,8 +270,10 @@ class curso_registration(models.Model):
             self.state = 'cancel'
 
     @api.multi
-    def get_diary_table_html(self):
-        return False
+    def diary_table_html(self):
+        """ Calendario de clases """
+        html = self.env['html_filter']
+        return html.diary_table()
 
     #TODO poner los descuentos en una tabla de configuracion DUPLICADO!!
     @api.onchange('source')
