@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from openerp import models, fields, api
+from datetime import datetime
 
 class res_partner(models.Model):
     _inherit = 'res.partner'
@@ -45,6 +46,10 @@ class res_partner(models.Model):
     def get_mail_footer_html(self):
         html = self.env['html_filter']
         return html.default_footer()
+
+    @api.multi
+    def get_birthdate(self):
+        return datetime.strptime(self.date, '%Y-%m-%d').strftime('%d/%m/%Y')
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
