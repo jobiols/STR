@@ -20,6 +20,7 @@
 ##############################################################################
 from openerp import models, fields, api
 from datetime import datetime
+from . import html_filter
 
 class res_partner(models.Model):
     _inherit = 'res.partner'
@@ -39,12 +40,16 @@ class res_partner(models.Model):
             [('default_code', '=', default_code)])
         data = producto.info_curso_html_data()
         data = data or {}
-        html = self.env['html_filter']
-        return html.info_curso(data)
+        html = html_filter.html_filter()
+
+        ret = html.default_header(data)
+        ret += html.info_curso(data)
+        ret += html.inicios_curso(data)
+        return ret
 
     @api.multi
     def get_mail_footer_html(self):
-        html = self.env['html_filter']
+        html = html_filter.html_filter()
         return html.default_footer()
 
     @api.multi

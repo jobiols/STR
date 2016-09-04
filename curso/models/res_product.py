@@ -23,7 +23,7 @@ from datetime import datetime
 import markdown
 from openerp import models, fields, api
 from openerp.exceptions import ValidationError, Warning
-
+from . import html_filter
 
 class product_template(models.Model):
     _inherit = 'product.template'
@@ -188,7 +188,7 @@ class product_product(models.Model):
     @api.multi
     def button_generate_doc(self):
         """ Generate html data for curso """
-        html = self.env['html_filter']
+        html = html_filter.html_filter()
         for prod in self:
             data = self._get_wordpress_data()
             if not data:
@@ -313,6 +313,14 @@ class product_product(models.Model):
                     print 'valor            ', data['valor']
                     print '-------------------------------------------------'
 
+        print '----------------------------------------------------'
+        print data
+        for g in data['grid']:
+            print g
+        print '----------------------------------------------------'
+        for d in data:
+            print d
+        print '----------------------------------------------------'
         return data
 
     def find_schedule(self, list, data):

@@ -19,6 +19,7 @@
 #
 # -----------------------------------------------------------------------------------
 from datetime import datetime, timedelta
+from . import html_filter
 
 from openerp.exceptions import Warning
 from openerp import models, fields, api
@@ -220,7 +221,7 @@ class curso_registration(models.Model):
 
     @api.multi
     def get_mail_footer_html(self):
-        html = self.env['html_filter']
+        html = html_filter.html_filter()
         return html.default_footer()
 
     @api.multi
@@ -272,7 +273,7 @@ class curso_registration(models.Model):
     @api.multi
     def diary_table_html(self):
         """ Calendario de clases """
-        html = self.env['html_filter']
+        html = html_filter.html_filter()
         return html.diary_table()
 
     # TODO poner los descuentos en una tabla de configuracion DUPLICADO!!

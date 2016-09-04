@@ -18,13 +18,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # -----------------------------------------------------------------------------------
-from openerp import models, fields
 
-
-class html_filter(models.TransientModel):
+class html_filter:
     """ genera html para varios propositos """
 
-    dummy = fields.Char()
+    def default_header(self, data):
+        ret = u"""
+        <br/>
+        <h2>{} <a href="{}" style="font-size: 13px;" >Conocer más</a> </h2>
+        """.format(data.get('name'), data.get('product_url'))
+        ret += u"""
+        <div style="width: 550px;">{}</div>""".format(data.get('description'))
+        return ret
 
     def default_footer(self):
         """ Devuelve el footer default para los mails """
@@ -44,14 +49,6 @@ class html_filter(models.TransientModel):
 
     def info_curso(self, data):
         ret = u"""
-        <br/>
-        <h2>{} <a href="{}" style="font-size: 13px;" >Conocer másaaaaaaa</a> </h2>
-        """.format(data.get('name'), data.get('product_url'))
-
-        ret += u"""
-        <div style="width: 550px;">{}</div>""".format(data.get('description'))
-
-        ret += u"""
         <table style="width: 550px;">
             <tbody>
                 <tr>
@@ -77,8 +74,10 @@ class html_filter(models.TransientModel):
         </table>
         <br/>
         """
+        return ret
 
-        ret += u'<h2><br/>&nbsp;Nuevos Inicios</h2><br/>'
+    def inicios_curso(self,data):
+        ret = u'<h2><br/>&nbsp;Nuevos Inicios</h2><br/>'
 
         for instance in data.get('instances', []):
             ret += u"""
