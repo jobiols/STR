@@ -109,7 +109,7 @@
     I check curso name the last time
 -
     !assert {model: curso.curso, id: curso_curso_2, severity: error, string: name is ill formed.}:
-        - name == u'[PSK/02] Mon 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso'
+        - name == u'[PSK/02] Lun 11/01/16 (12:00 15:00) - Curso de maquillaje Social Profesional rafañuso'
 -
     I check curso classes per weeek
 -
