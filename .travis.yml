@@ -34,10 +34,10 @@ virtualenv:
   system_site_packages: true
 
 install:
-# upgrade pip from 6.0.7
+  # upgrade pip from 6.0.7
   - pip install --upgrade pip
 
-# aeroo reports
+  # aeroo reports
   - pip install git+https://github.com/aeroo/aeroolib.git@master pycups==1.9.68
 
   # repository requirements
@@ -47,9 +47,18 @@ install:
   - git clone --depth 1 https://github.com/jobiols/Python-Markdown.git ${HOME}/python-markdown
   - cd ${HOME}/python-markdown && python setup.py install
 
+  # Generate locale (es_AR for right odoo es_AR language config, and C.UTF-8 for postgres and general locale data)
+  apt-get update -qq && apt-get install -y locales -qq
+  echo 'es_AR.UTF-8 UTF-8' >> /etc/locale.gen && locale-gen
+  echo 'es_US.UTF-8 UTF-8' >> /etc/locale.gen && locale-gen
+  echo 'C.UTF-8 UTF-8' >> /etc/locale.gen && locale-gen
+  dpkg-reconfigure locales && /usr/sbin/update-locale LANG=C.UTF-8
+
   - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
   - export PATH=$HOME/maintainer-quality-tools/travis:$PATH
   - travis_install_nightly
+
+
 
 script:
   - travis_run_tests

@@ -5,15 +5,15 @@
         name: Juana Perez Alumna
         customer: False
 -
+    !assert {model: res.partner, id: curso_student_1, severity: error, string: Must not be a client}:
+        - customer == False
+-
     I create a Teacher
 -
     !record {model: res.partner, id: curso_teacher_1}:
         name: Juana Molina Profesora
         customer: False
         teacher: True
--
-    !assert {model: res.partner, id: curso_student_1, severity: error, string: Must not be a client}:
-        - customer == False
 -
     I create a product / 3 classes
 -
@@ -160,4 +160,3 @@
 -
     !python {model: curso.registration}: |
         self.button_reg_sign(cr, uid, [ref("curso_registration_1")],context=context)
--
