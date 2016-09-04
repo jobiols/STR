@@ -48,11 +48,11 @@ install:
   - cd ${HOME}/python-markdown && python setup.py install
 
   # Generate locale (es_AR for right odoo es_AR language config, and C.UTF-8 for postgres and general locale data)
-  apt-get update -qq && apt-get install -y locales -qq
-  echo 'es_AR.UTF-8 UTF-8' >> /etc/locale.gen && locale-gen
-  echo 'es_US.UTF-8 UTF-8' >> /etc/locale.gen && locale-gen
-  echo 'C.UTF-8 UTF-8' >> /etc/locale.gen && locale-gen
-  dpkg-reconfigure locales && /usr/sbin/update-locale LANG=C.UTF-8
+  - apt-get update -qq && apt-get install -y locales -qq
+  - echo 'es_AR.UTF-8 UTF-8' >> /etc/locale.gen && locale-gen
+  - echo 'es_US.UTF-8 UTF-8' >> /etc/locale.gen && locale-gen
+  - echo 'C.UTF-8 UTF-8' >> /etc/locale.gen && locale-gen
+  - dpkg-reconfigure locales && /usr/sbin/update-locale LANG=C.UTF-8
 
   - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
   - export PATH=$HOME/maintainer-quality-tools/travis:$PATH
