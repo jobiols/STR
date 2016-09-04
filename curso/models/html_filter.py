@@ -127,7 +127,8 @@ class html_filter:
                                     {}
                                 </div>
                                 <div style="font-size:30px;min-height:35px;font-weight:bold;
-                                text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 100px;">
+                                line-height: 35px;text-align:center;color: #5F5F5F;
+                                background-color: #E1E2F8;width: 100px;">
                                     {}
                                 </div>
                                 <div style="font-size:11px;text-align:center;font-weight:bold;
@@ -145,7 +146,7 @@ class html_filter:
                                        style="margin-top: 15px; margin-left: 10px;">
                                     <tbody>
                                     <tr>
-                                        <td style="vertical-align:top;">Se cursa los días {} en el
+                                        <td style="vertical-align:top;">Días de cursada {} en el
                                             horario de {}
                                         </td>
                                     </tr>

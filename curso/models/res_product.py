@@ -147,7 +147,7 @@ class product_product(models.Model):
             if vac <= 2:
                 return ret.format('orange', 'Pocas vacantes!')
             if vac > 2:
-                return ret.format('green', 'Hay vacantes')
+                return ret.format('green', 'Vacantes disponibles')
 
         def get_schedule(curso):
             try:
