@@ -5,6 +5,13 @@
         name: Juana Perez Alumna
         customer: False
 -
+    I create a Teacher
+-
+    !record {model: res.partner, id: curso_teacher_1}:
+        name: Juana Molina Profesora
+        customer: False
+        teacher: True
+-
     !assert {model: res.partner, id: curso_student_1, severity: error, string: Must not be a client}:
         - customer == False
 -
@@ -30,6 +37,7 @@
 -
     !record {model: curso.curso, id: curso_curso_1}:
         product: curso_product_1
+        main_speaker_id: curso_teacher_1
 -
     I check that state instance and name
 -
@@ -42,6 +50,7 @@
 -
     !record {model: curso.curso, id: curso_curso_2}:
         product: curso_product_1
+        main_speaker_id: curso_teacher_1
 -
   I check instance on second curso
 -
