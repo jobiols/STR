@@ -45,7 +45,8 @@ class curso_daily_report(osv.osv_memory):
 
         return ret
 
-    def generate_html(self, data):
+    #TODO Refactorizar esto
+    def generate_local_html(self, data):
 
         ret = ""
         for dict in data:
@@ -126,7 +127,7 @@ class curso_daily_report(osv.osv_memory):
 
         new_page = {
             'name': report_name,
-            'content': self.generate_html(data),
+            'content': self.generate_local_html(data),
         }
 
         # Borrar el documento si es que existe

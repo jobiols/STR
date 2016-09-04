@@ -109,6 +109,9 @@ class product_product(models.Model):
 
     @api.multi
     def info_curso_html_data(self, debug=False):
+        """ informacion para armar el html
+        """
+
         def get_quote_price(dur_weeks, price):
             if dur_weeks <= 4:
                 return u'<strong>Valor ${}</strong>'.format(price)
@@ -118,10 +121,11 @@ class product_product(models.Model):
         data = {}
         data['name'] = self.name
         data['code'] = self.default_code
-        data['description'] = self.description
+        data['description'] = markdown.markdown(self.description)
         data['no_lectures'] = self.tot_hs_lecture / self.hs_lecture
         data['hs_lecture'] = self.hs_lecture
         data['product_url'] = self.product_url
+        data['temario'] = markdown.markdown(self.agenda)
 
         data['comercial_data'] = [
             u'Matricula bonificada.',
@@ -186,19 +190,25 @@ class product_product(models.Model):
         return data
 
     @api.multi
+    def build_html_page(self):
+        data = self.info_curso_html_data()
+        html = html_filter.html_filter()
+        ret = html.default_header(data)
+        ret += html.temario_curso(data)
+        ret += html.inicios_curso(data)
+        ret += html.entrega_certificado(data)
+        ret += html.info_curso(data,col=1)
+        return ret
+
+    @api.multi
     def button_generate_doc(self):
-        """ Generate html data for curso """
+        """ Generate html data for curso
+        """
         html = html_filter.html_filter()
         for prod in self:
-            data = self._get_wordpress_data()
-            if not data:
-                raise Warning(
-                    'Error!',
-                    'No hay instancias de cursos para este producto!')
-
             new_page = {
                 'name': prod.name,
-                'content': html.generate_html([data]),
+                'content': self.build_html_page(),
             }
             # Borrar el documento si es que existe
             docs = self.env['document.page']
@@ -206,122 +216,6 @@ class product_product(models.Model):
             records.unlink()
             # Crear el documento
             docs.create(new_page)
-
-    @api.multi
-    def _get_wordpress_data(self):
-        """ Genera los datos para pegar html, trae todas las instancias de cursos
-            basadas en este producto.
-        """
-        self.ensure_one()
-        data = {}
-        for prod in self:
-            curso_obj = self.env['curso.curso']
-            # traer cursos por default code, con fecha de inicio y en estado
-            # draft o confirm
-
-            cursos = curso_obj.search([
-                ('default_code', '=', prod.default_code),
-                ('date_begin', '<>', False),
-                '|',
-                ('state', '=', 'draft'),
-                ('state', '=', 'confirm')
-            ])
-            grid = []
-            data = False
-            for curso in cursos:
-                formatted_diary = self._get_formatted_diary(curso.id)
-                for idx, fdline in enumerate(formatted_diary):
-                    if idx == 0:
-                        grid.append(
-                            {'inicio': datetime.strptime(
-                                curso.date_begin, '%Y-%m-%d').strftime('%d/%m/%Y'),
-                             'instancia': curso.get_formatted_instance(curso.id),
-                             'dias': fdline['dias'],
-                             'horario': fdline['horario'],
-                             })
-                    else:
-                        grid.append(
-                            {'inicio': '',
-                             'instancia': '',
-                             'dias': fdline['dias'],
-                             'horario': fdline['horario'],
-                             })
-                grid.append(
-                    {'inicio': '&nbsp;',
-                     'instancia': '&nbsp;',
-                     'dias': '&nbsp;',
-                     'horario': '&nbsp;',
-                     })
-                try:
-                    weeks = \
-                        (prod.tot_hs_lecture / prod.hs_lecture) / curso.classes_per_week
-                except:
-                    weeks = "error!"
-
-                # si está vacio trae False y da una excepcion en mark_down
-                if not prod.agenda:
-                    prod.agenda = ''
-                if not prod.description:
-                    prod.description = ''
-
-                if weeks > 1:
-                    duracion = u'Duración %s semanas, (%s hs)' % (
-                        weeks, prod.tot_hs_lecture)
-                    if curso.classes_per_week > 1:
-                        modalidad = u'Modalidad: %s clases de %s hs por semana' % (
-                            curso.classes_per_week, prod.hs_lecture)
-                    else:
-                        modalidad = u'Modalidad: una clase de %s horas por semana' % (
-                            prod.hs_lecture)
-                else:
-                    duracion = ''
-                    if curso.classes_per_week > 1:
-                        modalidad = u'Modalidad: %s clases de %s hs' % (
-                            curso.classes_per_week, prod.hs_lecture)
-                    else:
-                        modalidad = u'Modalidad: una clase de %s horas' % (
-                            prod.hs_lecture)
-
-                data = {
-                    'titulo': prod.name,
-                    'codigo': prod.default_code,
-                    'description': markdown.markdown(prod.description),
-                    'duracion': duracion,
-                    'modalidad': modalidad,
-                    'grid': grid,
-                    'temario': markdown.markdown(prod.agenda),
-                    'matricula': 'Bonificada',
-                    'cuotas': str(prod.no_quotes),
-                    'valor': str(prod.list_price),
-                    'vacantes': 3
-                }
-
-                if False:
-                    print '-------------------------------------------------'
-                    print data
-                    print '-------------------------------------------------'
-                    print 'titulo           ', data['titulo']
-                    print 'codigo           ', data['codigo']
-                    print 'description      ', data['description']
-                    print 'duracion         ', data['duracion']
-                    print 'modalidad        ', data['modalidad']
-                    for dd in data['grid']:
-                        print 'grid-data    ', dd
-                    print 'temario          ', data['temario']
-                    print 'matricula        ', data['matricula']
-                    print 'cuotas           ', data['cuotas']
-                    print 'valor            ', data['valor']
-                    print '-------------------------------------------------'
-
-        print '----------------------------------------------------'
-        print data
-        for g in data['grid']:
-            print g
-        print '----------------------------------------------------'
-        for d in data:
-            print d
-        print '----------------------------------------------------'
-        return data
 
     def find_schedule(self, list, data):
         for l in list:

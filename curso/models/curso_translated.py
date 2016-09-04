@@ -419,42 +419,6 @@ class curso_curso(models.Model):
         self.country_id = self.address_id.country_id
 
     @api.one
-    def get_calendar(self):
-        # extrae los datos de calendario de la data, ahi estań todas las instancias
-        # se trae la linea que coincide con la instancia del curso. si el curso tiene
-        # mas de una linea esto no va a funcionar ie distintos horarios en una semana.
-        def extract(data, curso_instance):
-            res = []
-            for dic in data:
-                if dic.get('instancia', 'nada') == curso_instance:
-                    res.append(dic)
-            return res
-
-        data = self.product._get_wordpress_data(self.default_code)
-        calendar = extract(data['grid'], self.curso_instance)
-        avail = data['vacantes']
-
-        res = []
-        for dict in calendar:
-            new = {}
-            if dict.get('horario', '&nbsp;') != '&nbsp;':
-                new['schedule'] = dict.get('horario')
-
-            if dict.get('instancia', '&nbsp;') != '&nbsp;':
-                new['code'] = dict.get('instancia')
-
-            if dict.get('dias', '&nbsp;') != '&nbsp;':
-                new['days'] = dict.get('dias')
-
-            if dict.get('inicio', '&nbsp;') != '&nbsp;':
-                new['begin'] = dict.get('inicio')
-            if len(new) > 0:
-                new['avail'] = avail
-            res.append(new)
-
-        return res
-
-    @api.one
     def button_generate_lectures(self):
         """ Generar las clases que correspondan a este curso
         """

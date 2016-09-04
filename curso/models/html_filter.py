@@ -20,9 +20,12 @@
 # -----------------------------------------------------------------------------------
 
 class html_filter:
-    """ genera html para varios propositos """
+    """ genera html para varios propositos
+    """
 
     def default_header(self, data):
+        """ Header de la pagina
+        """
         ret = u"""
         <br/>
         <h2>{} <a href="{}" style="font-size: 13px;" >Conocer más</a> </h2>
@@ -32,7 +35,8 @@ class html_filter:
         return ret
 
     def default_footer(self):
-        """ Devuelve el footer default para los mails """
+        """ Footer de la página
+        """
         return u"""
                 <br/>
                 <p><span style="font-family:lucida sans unicode,lucida grande,sans-serif;
@@ -47,36 +51,66 @@ class html_filter:
                 <a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a></p>
                 """
 
-    def info_curso(self, data):
-        ret = u"""
-        <table style="width: 550px;">
-            <tbody>
-                <tr>
-                    <td valign="top">
-                        <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
+    def info_curso(self, data, col=2):
+        """ datos comerciales del curso
         """
-        for itm in data.get('comercial_data'):
-            ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
-        ret += u"""
-                        </p>
-                    </td>
-                    <td>&nbsp;&nbsp;</td>
-                    <td valign="top">
-                        <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
-        """
-        for itm in data.get('curso_data'):
-            ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
-        ret += u"""
-                        </p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <br/>
-        """
+        if col==2:
+            ret = u"""
+            <table style="width: 550px;">
+                <tbody>
+                    <tr>
+                        <td valign="top">
+                            <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
+            """
+            for itm in data.get('comercial_data'):
+                ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
+            ret += u"""
+                            </p>
+                        </td>
+                        <td>&nbsp;&nbsp;</td>
+                        <td valign="top">
+                            <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
+            """
+            for itm in data.get('curso_data'):
+                ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
+            ret += u"""
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            """
+        else:
+            ret = u"""
+            <table style="width: 550px;">
+                <tbody>
+                    <tr>
+                        <td valign="top">
+                            <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
+            """
+            for itm in data.get('comercial_data'):
+                ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
+            dta = data.get('curso_data')
+            #TODO mejorar esto para no mostrar el precio en el sitio web
+            dta.pop()
+            for itm in dta:
+                ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
+            ret += u"""
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            """
+
         return ret
 
-    def inicios_curso(self,data):
+    def inicios_curso(self, data):
+        """ Inicios de nuevos cursos
+        """
+
         ret = u'<h2><br/>&nbsp;Nuevos Inicios</h2><br/>'
 
         for instance in data.get('instances', []):
@@ -145,86 +179,26 @@ class html_filter:
         """ Genera el calendario de clases en html """
         return False
 
-    def generate_html(self, dict):
-        for data in dict:
-            ret = u"""
-            <table border='0' cellpadding='0' cellspacing='0'>
-                <tbody>
-                    <tr>
-                        <td><h2>%s</h2>
-                        </td>
-                        <td><h5><sub>&nbsp;cod %s</sub></h5>
-                        </td>
-                    </tr>
-               </tbody>
-            </table>
-            <div style="text-align: justify;">%s</div>
-            <p>%s<br/>%s</p>
+    def temario_curso(self, data):
+        if data['temario']:
+            ret = '<br/>'
+            ret += "<h2>Temario</h2>"
+            ret += data['temario']
+        return ret
 
-            <table  border='0' cellpadding='0' cellspacing='0' style='width: 500px;'>
+    def entrega_certificado(self, data):
+        return """
+        <table border="0" cellpadding="1" cellspacing="1" style="width: 100%;">
             <tbody>
                 <tr>
-                    <td><strong>Inicio</strong></td>
-                    <td><strong>Cód</strong></td>
-                    <td><strong>Días de cursada</strong></td>
-                    <td><strong>Horario</strong></td>
+                    <td>
+                    <h3 style="text-align: left;">Se entrega certificado</h3>
+                    <p style="text-align: center;"><img alt="diploma" src="http://makeoverlab.com.ar/wp-content/uploads/2015/09/diplomas_final_curvas-e1469584463484.jpg" style="width: 300px; height: 212px;" /></p>
+                    </td>
                 </tr>
-
-                """ % (
-                data['titulo'], data['codigo'],
-                data['description'],
-                data['modalidad'], data['duracion'])
-
-            for line in data['grid']:
-                ret += "        <tr bgcolor='#E0ECF8'> "
-                ret += "            <td><span>" + line['inicio'] + "</span></td> "
-                ret += "            <td><span>" + line['instancia'] + "</span></td> "
-                ret += "            <td><span>" + line['dias'] + "</span></td> "
-                ret += "            <td><span>" + line['horario'] + "</span></td> "
-                ret += "        </tr> "
-
-            ret += u"""
-
-            </tbody>
-            </table>
-
-            <br>
-
-            """
-            if data['temario']:
-                ret += "<h2>Temario</h2>"
-                ret += data['temario']
-
-            ret += "<hr/>"
-
-            ret += '\n\n\n\n'
-
-            if False:
-                ret += '<h3 style="text-align: left;">Aranceles</h3>'
-                for data in dict:
-                    if data['cuotas'] == '1':
-                        ss = data['cuotas'] + " cuota de $" + data['valor']
-                    else:
-                        ss = data['cuotas'] + " cuotas de $" + data['valor'] + " c/u"
-
-                    ret += u'<p><strong>Matrícula: ' + data[
-                        'matricula'] + '</strong><br />'
-                    ret += '<strong>Pagos: ' + ss + '</strong></p>'
-
-            ret += """
-            <table border="0" cellpadding="1" cellspacing="1" style="width: 100%;">
-                <tbody>
-                    <tr>
-                        <td>
-                        <h3 style="text-align: left;">Se entrega certificado</h3>
-                        <p style="text-align: center;"><img alt="" src="https://d3njjcbhbojbot.cloudfront.net/web/images/promos/cdp_cert_logo.png" style="width: 110px; height: 110px;" /></p>
-                        <p style="text-align: center;">Materiales inclu&iacute;dos en el costo del curso.</p>
-                        </td>
-                    </tr>
-            </tbody>
-            </table>
-            <br>
-            """
-            return ret
+        </tbody>
+        </table>
+        <br>
+        """
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

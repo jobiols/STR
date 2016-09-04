@@ -35,7 +35,6 @@ class mail_confirm(models.TransientModel):
         ])
 
         for reg in reg_obj:
-            print reg.partner_id.name
             reg.try_send_mail_by_lecture()
 
 
