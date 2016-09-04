@@ -126,7 +126,7 @@ class html_filter:
                                 border-color:#ffffff;background:#8a89ba;padding-top: 3px;">
                                     {}
                                 </div>
-                                <div style="font-size:30px;min-height:auto;font-weight:bold;
+                                <div style="font-size:30px;min-height:35px;font-weight:bold;
                                 text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 100px;">
                                     {}
                                 </div>
@@ -188,17 +188,17 @@ class html_filter:
 
     def entrega_certificado(self, data):
         return """
+        <br/><br/>
         <table border="0" cellpadding="1" cellspacing="1" style="width: 100%;">
             <tbody>
                 <tr>
                     <td>
-                    <h3 style="text-align: left;">Se entrega certificado</h3>
+                    <h4 style="text-align: center;">Se entrega certificado</h4>
                     <p style="text-align: center;"><img alt="diploma" src="http://makeoverlab.com.ar/wp-content/uploads/2015/09/diplomas_final_curvas-e1469584463484.jpg" style="width: 300px; height: 212px;" /></p>
                     </td>
                 </tr>
         </tbody>
         </table>
-        <br>
         """
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
