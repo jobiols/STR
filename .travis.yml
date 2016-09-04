@@ -49,9 +49,9 @@ install:
 
   # Generate locale (es_AR for right odoo es_AR language config, and C.UTF-8 for postgres and general locale data)
   - sudo apt-get install -y locales -qq
-  - sudo echo 'es_AR.UTF-8 UTF-8' >> /etc/locale.gen
-  - sudo echo 'es_US.UTF-8 UTF-8' >> /etc/locale.gen
-  - sudo echo 'C.UTF-8 UTF-8' >> /etc/locale.gen
+#  - sudo echo 'es_AR.UTF-8 UTF-8' >> /etc/locale.gen
+#  - sudo echo 'es_US.UTF-8 UTF-8' >> /etc/locale.gen
+#  - sudo echo 'C.UTF-8 UTF-8' >> /etc/locale.gen
   - sudo locale-gen
   - sudo dpkg-reconfigure locales && /usr/sbin/update-locale LANG=C.UTF-8
 
