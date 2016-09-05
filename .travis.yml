@@ -52,7 +52,7 @@ install:
 #  - sudo echo 'es_AR.UTF-8 UTF-8' >> /etc/locale.gen
 #  - sudo echo 'es_US.UTF-8 UTF-8' >> /etc/locale.gen
 #  - sudo echo 'C.UTF-8 UTF-8' >> /etc/locale.gen
-  - sudo locale-gen
+  - sudo locale-gen es_AR
   - sudo dpkg-reconfigure locales
   - sudo /usr/sbin/update-locale LANG=es_AR.UTF-8 LC_MESSAGES=POSIX
 
