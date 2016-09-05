@@ -336,7 +336,7 @@ class TestCurso(TransactionCase):
                          u'[SPX/00] Lun 01/08/16 (12:00 16:00) - Maquillaje Social Profesional','error 12')
         self.assertEqual(instance['weekday'], u'Lunes','error 13')
         self.assertEqual(instance['schedule'], u'12:00 - 16:00 (4hs)','error 14')
-        self.assertEqual(instance['vacancy'], u'<p style="color:green;">Hay vacantes</p>', 'error 15')
+        self.assertEqual(instance['vacancy'], u'<p style="color:green;">Vacantes disponibles</p>', 'error 15')
 
         instance = data['instances'][1]
         self.assertEqual(instance['month'], u'Agosto 2016','error 16')
@@ -345,6 +345,6 @@ class TestCurso(TransactionCase):
                          '[SPX/00] Mar 09/08/16 (15:00 19:00) - Maquillaje Social Profesional','error 18')
         self.assertEqual(instance['weekday'], u'Martes','error 19')
         self.assertEqual(instance['schedule'], u'15:00 - 19:00 (4hs)','error 20')
-        self.assertEqual(instance['vacancy'], u'<p style="color:green;">Hay vacantes</p>','error 21')
+        self.assertEqual(instance['vacancy'], u'<p style="color:green;">Vacantes disponibles</p>','error 21')
 
         # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
