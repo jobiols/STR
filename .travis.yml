@@ -54,7 +54,8 @@ install:
 #  - sudo echo 'C.UTF-8 UTF-8' >> /etc/locale.gen
   - sudo locale-gen
   - sudo dpkg-reconfigure locales
-  - sudo /usr/sbin/update-locale LANG=C.UTF-8
+  - sudo /usr/sbin/update-locale LANG=es_AR.UTF-8 LC_MESSAGES=POSIX
+
 
   - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
   - export PATH=$HOME/maintainer-quality-tools/travis:$PATH
