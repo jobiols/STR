@@ -163,7 +163,8 @@ class product_product(models.Model):
         else:
             domain = [('next', '=', True),
                       ('product', '=', self.id),
-                      ('date_begin', '!=', False)]
+                      ('date_begin', '!=', False),
+                      ('state','!=','cancel')]
 
         for curso in self.curso_instances.search(domain):
             # trae cursos en el futuro, con fecha
