@@ -14,9 +14,9 @@
                     <attribute name="invisible">1</attribute>
                 </field>
 
-                <field name="date" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </field>
+                <!-- este campo no lo pongo invisible sino que lo elimino porque estoy
+                usandolo para el cumpleaños y lo pongo en otro lado.-->
+                <field name="date" position="replace"/>
 
                 <field name="fax" position="attributes">
                     <attribute name="invisible">1</attribute>

@@ -18,8 +18,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api
 from datetime import datetime
+
+from openerp import models, fields, api
 from . import html_filter
 
 class res_partner(models.Model):
@@ -35,7 +36,7 @@ class res_partner(models.Model):
     curso_registration_ids = fields.One2many(
         'curso.registration', 'partner_id')
 
-    def info_curso_html(self,default_code):
+    def info_curso_html(self, default_code):
         producto = self.env['product.product'].search(
             [('default_code', '=', default_code)])
         data = producto.info_curso_html_data()
@@ -54,7 +55,7 @@ class res_partner(models.Model):
 
     @api.multi
     def get_birthdate(self):
-        return datetime.strptime(self.date, '%Y-%m-%d').strftime('%d/%m/%Y')
-
+        return datetime.strptime(
+            self.date, '%Y-%m-%d').strftime('%d/%m/%Y') if self.date else False
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
