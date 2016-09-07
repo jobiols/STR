@@ -25,8 +25,10 @@ from openerp.tests.common import TransactionCase
 
 class TestCurso(TransactionCase):
     def setUp(self):
+        """ Setup for test """
+
         super(TestCurso, self).setUp()
-        print 'test curso setup ---------------------------------------------------------'
+
         # creo todos los objetos
         self.partner_obj = self.env['res.partner']
         self.product_obj = self.env['product.product']
@@ -44,7 +46,8 @@ class TestCurso(TransactionCase):
             'name': 'Juana Perez Profesora'})
 
     def test_CreateSchedules_01(self):
-        print 'test curso create schedules ----------------------------------------------'
+        """ test curso create schedules """
+
         # creo tres horarios
         self.schedule1 = self.schedule_obj.create({
             'start_time': 12.5,
@@ -166,7 +169,7 @@ class TestCurso(TransactionCase):
 
 
     def test_generate_html_02(self):
-        print 'generate html 02 ---------------------------------------------------------'
+        """ Chequea generación de html """
         # creo el producto SPX
         ##################################################################################
         self.product1 = self.product_obj.create({
@@ -329,6 +332,8 @@ class TestCurso(TransactionCase):
         self.assertEqual(data['curso_data'][2], u'<strong>Valor $1200.0 por mes</strong>',
                          'error 08')
 
+        self.assertEqual(data['mode'],u'Son 20 clases de 4 horas c/u','error 085')
+
         instance = data['instances'][0]
         self.assertEqual(instance['month'], u'Agosto 2016','error 10')
         self.assertEqual(instance['day'], u'1','error 11')
@@ -346,5 +351,42 @@ class TestCurso(TransactionCase):
         self.assertEqual(instance['weekday'], u'Martes','error 19')
         self.assertEqual(instance['schedule'], u'15:00 - 19:00 (4hs)','error 20')
         self.assertEqual(instance['vacancy'], u'<p style="color:green;">Vacantes disponibles</p>','error 21')
+
+
+    def test_check_one_lecture(self):
+        """ chequea texto cuando hay una o varias clases """
+
+        # creo el producto S23
+        ##################################################################################
+        self.product1 = self.product_obj.create({
+            'tot_hs_lecture': 4,
+            'hs_lecture': 4,
+            'no_quotes': 1,
+            'default_code': 'S23',
+            'list_price': 600,
+            'type': 'curso',
+            'name': 'Glitter',
+            'agenda':
+                """
+                """,
+            'description':
+                """
+                """
+        })
+
+        # creo un curso basado en producto 1
+        ##################################################################################
+        self.curso1 = self.curso_obj.create({
+            'product': self.product1.id,
+            'main_speaker_id': self.partner_prof.id
+        })
+
+        ##################################################################################
+        # Se chequea el producto
+        data = self.product1.info_curso_html_data(debug=True)
+        self.assertEqual(data['mode'], u'Es una clase de 4 horas','error 22')
+
+
+
 
         # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

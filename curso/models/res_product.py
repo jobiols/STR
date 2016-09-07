@@ -22,7 +22,7 @@ from datetime import datetime
 
 import markdown
 from openerp import models, fields, api
-from openerp.exceptions import ValidationError, Warning
+from openerp.exceptions import ValidationError
 from . import html_filter
 
 class product_template(models.Model):
@@ -124,6 +124,14 @@ class product_product(models.Model):
         data['description'] = markdown.markdown(self.description)
         data['no_lectures'] = self.tot_hs_lecture / self.hs_lecture
         data['hs_lecture'] = self.hs_lecture
+        clases = int(self.tot_hs_lecture / self.hs_lecture)
+        horas = self.hs_lecture
+        if clases == 1:
+            str_ = 'Es {} clase de {} horas'
+            clases = 'una'
+        else:
+            str_ = 'Son {} clases de {} horas c/u'
+        data['mode'] = str_.format(clases, horas)
         data['product_url'] = self.product_url
         data['temario'] = markdown.markdown(self.agenda)
 
@@ -164,7 +172,7 @@ class product_product(models.Model):
             domain = [('next', '=', True),
                       ('product', '=', self.id),
                       ('date_begin', '!=', False),
-                      ('state','!=','cancel')]
+                      ('state', '!=', 'cancel')]
 
         for curso in self.curso_instances.search(domain):
             # trae cursos en el futuro, con fecha
@@ -198,7 +206,7 @@ class product_product(models.Model):
         ret += html.temario_curso(data)
         ret += html.inicios_curso(data)
         ret += html.entrega_certificado(data)
-        ret += html.info_curso(data,col=1)
+        ret += html.info_curso(data, col=1)
         return ret
 
     @api.multi

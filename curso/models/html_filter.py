@@ -151,7 +151,7 @@ class html_filter:
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="vertical-align:top;">Son {} clases de {} horas c/u.</td>
+                                        <td style="vertical-align:top;">{}</td>
                                     </tr>
                                     <tr>
                                         <td style="vertical-align:top;">{}</td>
@@ -169,8 +169,7 @@ class html_filter:
                            instance.get('curso_instance'),
                            instance.get('weekday'),
                            instance.get('schedule'),
-                           data.get('no_lectures'),
-                           data.get('hs_lecture'),
+                           data.get('mode'),
                            instance.get('vacancy'),
                            )
         ret += u'<br/>'
