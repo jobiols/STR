@@ -28,7 +28,7 @@
             <field name="name">Cursos</field>
             <field name="model">curso.curso</field>
             <field name="arch" type="xml">
-                <form string="Cursos" version="7.0">
+                <form string="Cursos">
                     <header>
                         <!--- ESTADOS BTN CURSOS -->
                         <button string="Confirmar curso" name="button_curso_confirm"
@@ -57,15 +57,11 @@
                             <field name="product"
                                    on_change="onchange_curso_product(product,context)"/>
                         </group>
-
-
                         <group attrs="{'invisible':[('child', '==', False)]}">
                             <field name="parent_curso_id"/>
                             <field name="first_lecture_id"
                                    domain="[('curso_id','=',parent_curso_id)]"/>
                         </group>
-
-
                         <group>
                             <group>
                                 <field name="date_begin"
@@ -74,7 +70,6 @@
                                 <field name="child"/>
                                 <field name="allow_overclass"
                                        attrs="{'invisible':[('child', '==', True)]}"/>
-
                             </group>
                             <group>
                                 <field name='diary_ids' colspan="4" nolabel="1"
@@ -114,7 +109,6 @@
                                     class="oe_highlight"
                                     attrs="{'invisible':[('child', '==', False)]}"/>
                         </group>
-
 
                         <notebook>
                             <page string="Inscripciones">

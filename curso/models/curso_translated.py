@@ -47,18 +47,16 @@ class curso_curso(models.Model):
         states={'draft': [('readonly', False)]})
 
     register_max = fields.Integer(
-        u'Vacantes max', readonly=True,
+        u'Vacantes max',
         help=u"La cantidd máxima de vacantes del curso. Si la cantidad de "
              u"inscripciones es mayor, no se puede arrancar el curso. (dejar en blanco para "
-             u"ignorar la regla)",
-        states={'draft': [('readonly', False)]})
+             u"ignorar la regla)")
 
     register_min = fields.Integer(
-        u'Vacantes min', readonly=True,
+        u'Vacantes min',
         help=u"La cantidad mínima de inscripciones en el curso. Si no hay "
              u"suficientes inscripcones no se puede arrancar el curso. (poner 0 para "
-             u"ignorar la regla)",
-        states={'draft': [('readonly', False)]})
+             u"ignorar la regla)")
 
     date_begin = fields.Date(
         u'Inicio', readonly=True,
