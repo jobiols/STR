@@ -36,6 +36,8 @@ class res_partner(models.Model):
     curso_registration_ids = fields.One2many(
         'curso.registration', 'partner_id')
 
+    groupon = fields.Boolean('Validado')
+
     def info_curso_html(self, default_code):
         producto = self.env['product.product'].search(
             [('default_code', '=', default_code)])
