@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <!-- con esto aparece en el boton MAS -->
+
+        <act_window name="Marcar alumnas con etiqueta"
+                    res_model="curso.prepare.mass.mail"
+                    src_model="curso.registration"
+                    key2="client_action_multi"
+                    view_mode="form" target="new"
+                    view_type="form"
+                    id="act_new_sub_menu"/>
+
+
+        <record model="ir.ui.view" id="view_curso_prepare_mass_mail_wizard_form">
+            <field name="name">Poner etiquetas para mail masivo</field>
+            <field name="model">curso.prepare.mass.mail</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Facturacion de cursos">
+
+                    <p>Seleccioná la etiqueta que le vas a poner al conjunto de alumnas.
+                    </p>
+                    <group>
+                        <field name="category_id" string="Etiqueta"/>
+                    </group>
+                    <footer>
+                        <button string="Poner etiquetas" name="button_prepare"
+                                type="object" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>
