@@ -16,9 +16,11 @@
                                     <td>
                                         Documento
                                     </td>
+<!--
                                     <td>
                                         Teléfono
                                     </td>
+-->
                                     <td>
                                         Celular
                                     </td>
@@ -37,9 +39,11 @@
                                         <td>
                                             <p><span t-field="r.partner_id.document_number"/></p>
                                         </td>
+<!--
                                         <td>
                                             <p><span t-field="r.partner_id.phone"/></p>
                                         </td>
+-->
                                         <td>
                                             <p><span t-field="r.partner_id.mobile"/></p>
                                         </td>
