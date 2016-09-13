@@ -212,7 +212,7 @@ class curso_curso(models.Model):
         help=u"La cantidad de clases por semana")
 
     curso_instance = fields.Char(
-        compute='_get_instance_', string='Instancia del curso')
+        compute='_get_instance', string='Instancia del curso')
 
     name = fields.Char(
         compute='_get_name_',
@@ -269,7 +269,7 @@ class curso_curso(models.Model):
             self.error = 'No alcanza mínimo de alumnas'
             return
 
-        if (self.register_max and self.register_max <= self.register_current):
+        if (self.register_max and self.register_max < self.register_current):
             self.error = 'Supera maximo de vacantes'
             return
 
@@ -364,8 +364,8 @@ class curso_curso(models.Model):
 
     @api.one
     @api.depends('default_code', 'instance')
-    def _get_instance_(self):
-        self.curso_instance = self.get_formatted_instance(self.id)
+    def _get_instance(self):
+        self.curso_instance = '{}/{:0>2d}'.format(self.default_code, self.instance)
 
     @api.one
     @api.onchange('diary_ids')

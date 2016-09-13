@@ -101,11 +101,6 @@ class curso_curso(osv.osv):
                 self._current_date += timedelta(
                     days=7 - (self._gwd(ix_1) - self._gwd(ix)))
 
-    def get_formatted_instance(self, cr, uid, curso_id, context=None):
-        for curso in self.browse(cr, uid, curso_id, context=context):
-            return '{}/{:0>2d}'.format(curso.default_code, curso.instance)
-        return False
-
     def generate_doc_curso_html(self, dict):
         ret = ""
         ret += "  	<style type=\"text/css\">th"
