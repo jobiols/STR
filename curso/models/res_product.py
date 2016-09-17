@@ -91,6 +91,32 @@ class product_product(models.Model):
         help=u"Definición de las plantillas de mail a enviar después de cada clase",
     )
 
+    public_price = fields.Float(
+        u'Precio púb',
+        compute='_compute_prices'
+    )
+
+    pro_price = fields.Float(
+        u'Precio pro',
+        compute='_compute_prices'
+    )
+
+    @api.one
+    @api.depends('lst_price','standard_price')
+    def _compute_prices(self):
+        #TODO poner ensto en una configuracion
+        public_pricelist_id = 1
+        pro_pricelist_id = 3
+
+        # calcular el precios basado en la lista de precios
+        self.public_price = self.pool.get('product.pricelist').price_get(
+            self.env.cr, self.env.uid, [public_pricelist_id], self.id, 1.0,
+            context=None)[public_pricelist_id]
+
+        self.pro_price = self.pool.get('product.pricelist').price_get(
+            self.env.cr, self.env.uid, [pro_pricelist_id], self.id, 1.0,
+            context=None)[pro_pricelist_id]
+
     @api.one
     @api.constrains('default_code', 'type')
     def _curso_unique_default_code(self):

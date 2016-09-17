@@ -63,6 +63,21 @@
                 </notebook>
             </field>
         </record>
+
+        <!--  product inherited tree view -->
+
+        <record id="view_product_tree_curso" model="ir.ui.view">
+            <field name="name">res.product.tree</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_product_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="lst_price" position="after">
+                    <field name="public_price"/>
+                    <field name="pro_price"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 
 </openerp>
