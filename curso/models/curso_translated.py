@@ -97,6 +97,7 @@ class curso_curso(models.Model):
 
     email_registration_id = fields.Many2one(
         'email.template', u'Confirmación de inscripción',
+        required=True,
         help=u'Plantilla de mail que se enviará cada vez que un alumno de este curso '
              u'pase al estado señado.')
 
