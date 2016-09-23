@@ -51,7 +51,7 @@ class html_filter:
                 <a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a></p>
                 """
 
-    def info_curso(self, data, col=2):
+    def info_curso(self, data, col=2, price=True):
         """ datos comerciales del curso
         """
         if col==2:
@@ -71,7 +71,10 @@ class html_filter:
                         <td valign="top">
                             <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
             """
-            for itm in data.get('curso_data'):
+            dta = data.get('curso_data')
+            if not price:
+                dta.pop()
+            for itm in dta:
                 ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
             ret += u"""
                             </p>
@@ -92,8 +95,8 @@ class html_filter:
             for itm in data.get('comercial_data'):
                 ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
             dta = data.get('curso_data')
-            #TODO mejorar esto para no mostrar el precio en el sitio web
-            dta.pop()
+            if not price:
+                dta.pop()
             for itm in dta:
                 ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
             ret += u"""

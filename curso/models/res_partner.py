@@ -38,7 +38,7 @@ class res_partner(models.Model):
 
     groupon = fields.Boolean('Validado')
 
-    def info_curso_html(self, default_code):
+    def info_curso_html(self, default_code, price=True):
         producto = self.env['product.product'].search(
             [('default_code', '=', default_code)])
         data = producto.info_curso_html_data()
@@ -46,7 +46,7 @@ class res_partner(models.Model):
         html = html_filter.html_filter()
 
         ret = html.default_header(data)
-        ret += html.info_curso(data)
+        ret += html.info_curso(data, price=price)
         ret += html.inicios_curso(data)
         return ret
 
