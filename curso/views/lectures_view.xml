@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <!-- Lectures Form View -->
+
+        <record model="ir.ui.view" id="view_curso_lecture_form">
+            <field name="name">Clases</field>
+            <field name="model">curso.lecture</field>
+            <field name="arch" type="xml">
+                <form string="Planilla de clases">
+                    <group col="2">
+                        <field name="date"/>
+                        <field name="curso_id"/>
+                        <field name="schedule_id"/>
+                        <field name="seq"/>
+                    </group>
+                    <group>
+                        <field name="name" nolabel="1"/>
+                    </group>
+                    <group>
+                        <button name="button_generate_assistance"
+                                string="Generar asistencia" type="object" icon="gtk-apply"/>
+                    </group>
+                    <group>
+                        <p style="background-color:#D3D3D3;">Planilla de asistencia</p>
+                    <group>
+                    </group>
+                        <field name="assistance_id" nolabel="1">
+                            <tree string="planilla de asistencia"
+                                  colors="green: present==True"
+                                    >
+                                <field name="partner_id"/>
+                                <field name="present"/>
+                                <field name="recover"/>
+                                <field name="info"/>
+                                <button name="button_present" string="Presente"
+                                        type="object" icon="gtk-apply"/>
+                            </tree>
+                        </field>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!-- Lectures Tree View -->
+
+        <record model="ir.ui.view" id="view_curso_lecture_tree">
+            <field name="name">Lectures</field>
+            <field name="model">curso.lecture</field>
+            <field name="arch" type="xml">
+                <tree string="lista de clases">
+                    <field name="date"/>
+                    <field name="date_start"/>
+                    <field name="date_stop"/>
+                    <field name="weekday" type="string"/>
+                    <field name="schedule_id"/>
+                    <field name="curso_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Lectures Search View -->
+
+        <record model="ir.ui.view" id="view_lecture_search">
+            <field name="name">Clases</field>
+            <field name="model">curso.lecture</field>
+            <field name="arch" type="xml">
+                <search string="Clases">
+                    <filter icon="terp-check" string="clases de hoy" name="today"
+                            domain="[('date','=',datetime.datetime.now().strftime('%%Y-%%m-%%d'))]"
+                            help="Clases de hoy"/>
+
+                    <field name="weekday"/>
+                    <field name="curso_id"/>
+                    <field name="schedule_id"/>
+                    <group expand="0" string="Agrupar por...">
+                        <filter string="Curso" icon="terp-personal" context="{'group_by': 'curso_id'}"/>
+                        <filter string="Horario" icon="terp-stock_effects-object-colorize"
+                                context="{'group_by':'schedule_id'}"/>
+                        <filter string="Fecha de inicio" icon="terp-go-month" domain="[]"
+                                context="{'group_by':'date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Lectures Calendar view -->
+
+        <record model="ir.ui.view" id="view_lecture_calendar">
+            <field name="name">curso.lecture.calendar</field>
+            <field name="model">curso.lecture</field>
+            <field name="arch" type="xml">
+                <calendar color="curso_id" date_start="date_start" date_stop="date_stop"
+                          string="Inscripciones en los cursos">
+                    <field name="curso_id"/>
+                    <field name="name"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Lectures Action View -->
+
+        <record model="ir.actions.act_window" id="action_curso_lecture">
+            <field name="name">Clases</field>
+            <field name="res_model">curso.lecture</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <!-- Lectures Menu -->
+
+        <menuitem name="Clases"
+                  id="menu_curso_lecture" parent="base.menu_curso_main"
+                  action="action_curso_lecture" groups="curso.group_curso_manager,curso.group_curso_user"/>
+
+    </data>
+</openerp>

@@ -67,6 +67,7 @@ faltante en la ficha del alumno
         'views/curso_view.xml',
         'views/registration_view.xml',
         'views/engine_view.xml',
+        'views/lectures_view.xml',
         'views/board_association_view.xml',
         'views/res_product_view.xml',
         'views/email_template.xml',

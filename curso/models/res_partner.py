@@ -30,11 +30,15 @@ class res_partner(models.Model):
         'Profesora',
         help="Poner el tilde si el contacto es una profesora.")
 
+    #TODO Revisar cursos que son de una profesora??
     curso_ids = fields.One2many(
-        'curso.curso', 'main_speaker_id', readonly=True)
+        'curso.curso',
+        'main_speaker_id',
+        readonly=True)
 
     curso_registration_ids = fields.One2many(
-        'curso.registration', 'partner_id')
+        'curso.registration',
+        'partner_id')
 
     groupon = fields.Boolean('Validado')
 
@@ -59,5 +63,23 @@ class res_partner(models.Model):
     def get_birthdate(self):
         return datetime.strptime(
             self.date, '%Y-%m-%d').strftime('%d/%m/%Y') if self.date else False
+
+    @api.multi
+    def get_info(self):
+        for reg in self:
+            ret = []
+            if not reg.document_number:
+                ret.append(u'Documento')
+            if not (reg.mobile or reg.phone):
+                ret.append(u'Teléfono')
+            if not reg.date:
+                ret.append(u'Cumpleaños')
+            if reg.function and not reg.groupon:
+                ret.append(u'Groupon sin validar')
+            if not reg.email:
+                ret.append(u'Email')
+            if reg.credit > 0:
+                ret.append(u'Nos debe ${}'.format(reg.credit))
+            return ', '.join(ret)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

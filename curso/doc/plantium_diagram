@@ -1,0 +1,37 @@
+
+
+class diary {
+weekday
+}
+
+class schedule {
+start_time
+end_time
+}
+
+
+class product {
+default_code
+}
+
+assistance      "m2o" o--           partner
+
+curso           "m2o" o--           lecture: First\nlecture
+curso           "m2o" o--           product
+curso           "o2m" *--o "m2o"    registration: Inscripcion
+curso           "o2m" *--o "m2o"    lecture: Clases
+curso           "o2m" *--o "m2o"    diary: Agenda
+curso           "m2o" o--* "o2m"    partner: alumna
+curso           "m2o" o--           partner: profes
+
+product         "o2m" *--o "m2o"    lecture_template
+registration    "o2m" *--o "m2o"    quota
+
+diary           "m2o" o--  schedule
+lecture         "m2o" o--  schedule
+lecture         "m2o" o--  curso:Curso
+lecture         "o2m" *--o "m2o"  assistance
+
+mail_template   "m2o" o-- product
+
+quota           "m2o" o--  invoice

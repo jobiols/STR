@@ -52,9 +52,28 @@ class curso_lecture(models.Model):
     seq = fields.Integer(
         'Número de clase')
 
+    assistance_id = fields.One2many(
+        'curso.assistance',
+        'lecture_id'
+    )
+
     @api.one
     def _weekday(self):
         ans = datetime.strptime(self.date, '%Y-%m-%d')
         self.weekday = ans.strftime("%A").capitalize()
+
+    @api.one
+    def button_generate_assistance(self):
+        for reg in self.curso_id.registration_ids:
+            if reg.state == 'confirm':
+                try:
+                    self.assistance_id.create({
+                        'lecture_id':self.id,
+                        'present': False,
+                        'recover': False,
+                        'partner_id': reg.partner_id.id
+                    })
+                except:
+                    pass
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
