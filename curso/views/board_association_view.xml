@@ -46,7 +46,7 @@
             <field name="name">board.associations.manager.form</field>
             <field name="model">board.board</field>
             <field name="arch" type="xml">
-                <form string="Association Dashboard" version="7.0">
+                <form string="Association Dashboard">
                     <board style="2-1">
                         <column>
                             <action string="Next Cursos" name="%(act_curso_view)d"/>
