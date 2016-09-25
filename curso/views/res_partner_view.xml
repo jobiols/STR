@@ -15,7 +15,9 @@
                 </xpath>
 
                 <xpath expr="//field[@name='function']" position="after">
-                    <field name="groupon"/>
+                    <field name="groupon"
+                     attrs="{'invisible': [('is_company','=', True)]}"
+                    />
                 </xpath>
 
                 <field name="user_id" position="attributes">
