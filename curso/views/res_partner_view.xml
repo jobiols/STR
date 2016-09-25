@@ -50,7 +50,7 @@
                 </field>
 
                 <field name="title" invisible="True"/>
-                <xpath expr="//page[@string='Internal Notes']" position="inside">
+                <xpath expr="//page[@name='internal_notes']" position="inside">
                     <group name="grp_registration" string="Historial de cursos">
                         <button string="Agregar curso"
                                 name="%(wizard_curso_add_registration)d" type="action"/>
@@ -101,8 +101,7 @@
             <field name="inherit_id" ref="base.view_res_partner_filter"/>
             <field name="arch" type="xml">
                 <!-- agrego el filtro después de proveedore -->
-                <xpath expr="filter[@string='Customers']"
-                       position="after">
+                <xpath expr="filter[@name='customer']" position="after">
                     <filter string="Profesoras" domain="[('teacher', '=', 1)]"/>
                     <field name="email"/>
                     <field name="street"/>
