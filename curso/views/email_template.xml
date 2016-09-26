@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <openerp>
-    <!--
     <data>
+    <!--
         <record id="confirmation_curso" model="email.template">
             <field name="name">Confirmación del the Curso</field>
             <field name="model_id" ref="curso.model_curso_registration"/>
@@ -36,6 +36,6 @@
         <p>Thank you for your participation!</p>
         <p>Best regards</p>]]></field>
         </record>
-    </data>
     -->
+    </data>
 </openerp>
