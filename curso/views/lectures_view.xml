@@ -70,7 +70,7 @@
                     <filter icon="terp-check" string="clases de hoy" name="today"
                             domain="[('date','=',datetime.datetime.now().strftime('%%Y-%%m-%%d'))]"
                             help="Clases de hoy"/>
-
+                    <field name="date"/>
                     <field name="weekday"/>
                     <field name="curso_id"/>
                     <field name="schedule_id"/>
