@@ -65,7 +65,7 @@ class curso_lecture(models.Model):
     @api.one
     def button_generate_assistance(self):
         for reg in self.curso_id.registration_ids:
-            if reg.state == 'confirm':
+            if reg.state in ['signed', 'confirm']:
                 try:
                     self.assistance_id.create({
                         'lecture_id':self.id,
