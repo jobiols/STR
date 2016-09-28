@@ -21,10 +21,10 @@
 from openerp import models, fields, api
 
 
-class mail_template(models.Model):
+class mails_to_send(models.Model):
     """ define los templates de mail para enviar después de cada clase
     """
-    _name = 'mail.template'
+    _name = 'mails.to.send'
     _order = 'class_no'
 
     product_id = fields.Many2one(

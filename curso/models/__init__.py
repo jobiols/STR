@@ -29,7 +29,7 @@ from . import curso
 from . import registration
 from . import res_partner
 from . import lecture_template
-from . import mail_template
+from . import mails_to_send
 from . import curso_translated
 from . import registration_translated
 from . import res_product

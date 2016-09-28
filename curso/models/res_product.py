@@ -85,7 +85,7 @@ class product_product(models.Model):
         help=u'Instancias de este producto cuando es tipo (curso)')
 
     email_classes_ids = fields.One2many(
-        comodel_name='mail.template',
+        comodel_name='mails.to.send',
         inverse_name='product_id',
         string='templates',
         help=u"Definición de las plantillas de mail a enviar después de cada clase",

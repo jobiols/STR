@@ -32,6 +32,6 @@ lecture         "m2o" o--  schedule
 lecture         "m2o" o--  curso:Curso
 lecture         "o2m" *--o "m2o"  assistance
 
-mail_template   "m2o" o-- product
+mails_to_send   "m2o" o-- product
 
 quota           "m2o" o--  invoice
