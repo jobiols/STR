@@ -22,150 +22,183 @@
 class html_filter:
     """ genera html para varios propositos
     """
-
+#-----------------------------------------------------------------------------------------
     def default_header(self, data):
-        """ Header de la pagina
+        """ Header de la pagina de información de curso
         """
+
+        # hacemos que las imagenes sean responsives
         ret = u"""
-        <br/>
-        <h2>{} <a href="{}" style="font-size: 13px;" >Conocer más</a> </h2>
-        """.format(data.get('name'), data.get('product_url'))
+<head>
+    <style>
+          img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+        """
+
+        # título del curso
         ret += u"""
-        <div style="width: 550px;">{}</div>""".format(data.get('description'))
+<br/>
+<h2>{} <a href="{}" style="font-size: 13px;" >Conocer más</a> </h2>
+        """.format(data.get('name'), data.get('product_url'))
+
+        # Descripción del curso
+        ret += u'{}'.format(data.get('description'))
         return ret
 
+#-----------------------------------------------------------------------------------------
     def default_footer(self):
         """ Footer de la página
         """
+
+        #TODO parametrizar esto.
         return u"""
-                <br/>
-                <p><span style="font-family:lucida sans unicode,lucida grande,sans-serif;
-                    font-size:20px;">
-                <span style="color:#FF0000;"><strong>Makeover Lab</strong></span></span><br/>
-                Avda Rivadavia 5259 9&deg; &quot;34&quot;, Caballito<br/>
-                Tel&eacute;fono: 11 4902 4652<br/>
-                Horario de atenci&oacute;n al p&uacute;blico:<br/>
-                Lunes a Viernes de 17 a 20 hs.<br/>
-                S&aacute;bados de 11 a 19 hs<br/>
-                <a href="https://www.facebook.com/MakeoverLabs">face/makeoverlabs</a><br/>
-                <a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a></p>
+<br/>
+<span style="font-family: lucida sans unicode,lucida grande,sans-serif;
+    font-size: 20px;color: #ff0000;">
+    <strong>Makeover Lab</strong>
+</span><br />
+Avda Rivadavia 5259 9° "34", Caballito<br />
+Teléfono: 11 4902 4652<br />
+Horario de atenciónón al público:<br />
+Lunes a Viernes de 17 a 20 hs.<br />
+Sábados de 11 a 19 hs<br />
+<a href="https://www.facebook.com/MakeoverLabs">face/makeoverlabs</a><br />
+<a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a>
                 """
 
-    def info_curso(self, data, col=2, price=True):
+#-----------------------------------------------------------------------------------------
+    def info_curso(self, data, col=2, price=False):
         """ datos comerciales del curso
         """
+        ret = u'<br/>'
+        # para mails, aca puede o no ir el precio
         if col==2:
-            ret = u"""
-            <table style="width: 550px;">
-                <tbody>
-                    <tr>
-                        <td valign="top">
-                            <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
+            ret += u"""
+<table style="width: 100%;">
+    <tbody>
+        <tr>
+            <td valign="top">
+                <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
             """
             for itm in data.get('comercial_data'):
                 ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
             ret += u"""
-                            </p>
-                        </td>
-                        <td>&nbsp;&nbsp;</td>
-                        <td valign="top">
-                            <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
+                </p>
+            </td>
+            <td>&nbsp;&nbsp;</td>
+            <td valign="top">
+                <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
             """
             dta = data.get('curso_data')
-            if not price:
-                dta.pop()
             for itm in dta:
                 ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
             ret += u"""
-                            </p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <br/>
-            """
-        else:
-            ret = u"""
-            <table style="width: 550px;">
-                <tbody>
-                    <tr>
-                        <td valign="top">
-                            <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
-            """
-            for itm in data.get('comercial_data'):
-                ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
-            dta = data.get('curso_data')
-            if not price:
-                dta.pop()
-            for itm in dta:
-                ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
-            ret += u"""
-                            </p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <br/>
-            """
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br/>
 
+
+            """
+            if price:
+                ret += """
+<h2>Valor del curso {} &nbsp;&nbsp; <a href="{}">Pagar ahora con Mercadopago</a></h2>
+                """.format(data.get('curso_price'),data.get('mercadopago_button'))
+
+
+        # para página web donde no entran dos columnas, aca no va el precio nunca
+        else:
+            ret += u"""
+<table style="width: 550px;">
+    <tbody>
+        <tr>
+            <td valign="top">
+                <p style="border-left: 1px solid #8e0000; margin-left: 10px;">
+            """
+            for itm in data.get('comercial_data'):
+                ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
+            dta = data.get('curso_data')
+            for itm in dta:
+                ret += u'       &nbsp;&nbsp;{}<br/>'.format(itm)
+            ret += u"""
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br/>
+            """
+        ret += u"""
+<br />
+<img src="http://makeoverlab.com.ar/wp-content/uploads/2016/10/mercadopago.png"
+alt="Mercadopago"
+width="394" height="200" />
+            """
         return ret
 
+#-----------------------------------------------------------------------------------------
     def inicios_curso(self, data):
         """ Inicios de nuevos cursos
         """
 
-        ret = u'<h2><br/>&nbsp;Nuevos Inicios</h2><br/>'
+        ret = u'<h2>Nuevos Inicios</h2>'
 
         for instance in data.get('instances', []):
             ret += u"""
-                <div style="height: auto;margin-left:12px;margin-top:30px;">
-                    <table>
+    <div style="height: auto;margin-left:12px;margin-top:30px;">
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    <div style="border-top-left-radius:3px;border-top-right-radius:3px;
+                    border-collapse:separate;text-align:center;
+                    font-weight:bold;color:#ffffff;width:100px;min-height: 17px;
+                    border-color:#ffffff;background:#8a89ba;padding-top: 3px;">
+                        {}
+                    </div>
+                    <div style="font-size:30px;min-height:35px;font-weight:bold;
+                    line-height: 35px;text-align:center;color: #5F5F5F;
+                    background-color: #E1E2F8;width: 100px;">
+                        {}
+                    </div>
+                    <div style="font-size:11px;text-align:center;font-weight:bold;
+                    color:#ffffff;background-color:#8a89ba">
+                        {}
+                    </div>
+                    <div style="border-collapse:separate;color:#8a89ba;text-align:center;
+                    width: 98px;font-size:11px;border-bottom-right-radius:3px;
+                    font-weight:bold;border:1px solid;border-bottom-left-radius:3px;">
+                        {}
+                    </div>
+                </td>
+                <td>
+                    <table border="0" cellpadding="0" cellspacing="0"
+                           style="margin-top: 15px; margin-left: 10px;">
                         <tbody>
                         <tr>
-                            <td>
-                                <div style="border-top-left-radius:3px;border-top-right-radius:3px;
-                                border-collapse:separate;text-align:center;
-                                font-weight:bold;color:#ffffff;width:100px;min-height: 17px;
-                                border-color:#ffffff;background:#8a89ba;padding-top: 3px;">
-                                    {}
-                                </div>
-                                <div style="font-size:30px;min-height:35px;font-weight:bold;
-                                line-height: 35px;text-align:center;color: #5F5F5F;
-                                background-color: #E1E2F8;width: 100px;">
-                                    {}
-                                </div>
-                                <div style="font-size:11px;text-align:center;font-weight:bold;
-                                color:#ffffff;background-color:#8a89ba">
-                                    {}
-                                </div>
-                                <div style="border-collapse:separate;color:#8a89ba;text-align:center;
-                                width: 98px;font-size:11px;border-bottom-right-radius:3px;
-                                font-weight:bold;border:1px solid;border-bottom-left-radius:3px;">
-                                    {}
-                                </div>
+                            <td style="vertical-align:top;">Días de cursada {} en el
+                                horario de {}
                             </td>
-                            <td>
-                                <table border="0" cellpadding="0" cellspacing="0"
-                                       style="margin-top: 15px; margin-left: 10px;">
-                                    <tbody>
-                                    <tr>
-                                        <td style="vertical-align:top;">Días de cursada {} en el
-                                            horario de {}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align:top;">{}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align:top;">{}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;">{}</td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;">{}</td>
                         </tr>
                         </tbody>
                     </table>
-                </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
                 """.format(instance.get('weekday'),
                            instance.get('day'),
                            instance.get('month'),
@@ -178,10 +211,12 @@ class html_filter:
         ret += u'<br/>'
         return ret
 
+#-----------------------------------------------------------------------------------------
     def diary_table(self):
         """ Genera el calendario de clases en html """
         return False
 
+#-----------------------------------------------------------------------------------------
     def temario_curso(self, data):
         if data['temario']:
             ret = '<br/>'
@@ -189,19 +224,17 @@ class html_filter:
             ret += data['temario']
         return ret
 
+#-----------------------------------------------------------------------------------------
     def entrega_certificado(self, data):
         return """
-        <br/><br/>
-        <table border="0" cellpadding="1" cellspacing="1" style="width: 100%;">
-            <tbody>
-                <tr>
-                    <td>
-                    <h4 style="text-align: center;">Se entrega certificado</h4>
-                    <p style="text-align: center;"><img alt="diploma" src="http://makeoverlab.com.ar/wp-content/uploads/2015/09/diplomas_final_curvas-e1469584463484.jpg" style="width: 300px; height: 212px;" /></p>
-                    </td>
-                </tr>
-        </tbody>
-        </table>
+<h4 style="text-align: center;">Se entrega certificado</h4>
+
+<p style="text-align: center;">
+    <img src="http://makeoverlab.com.ar/wp-content/uploads/2015/09/diplomas_final_curvas-e1469584463484.jpg"
+    width="300"
+    height="212"
+    alt="Se entrega certificado del curso" />
+</p>
         """
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

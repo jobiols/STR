@@ -59,6 +59,13 @@
                                 </tree>
                             </field>
                         </group>
+                        <!-- boton de mercadopago -->
+                        <div style="background-color:#D3D3D3;">
+                        <p> Boton de pago, de mercadopago que sale en el mail de información </p>
+                        </div>
+                        <group>
+                            <field name="mercadopago_button" nolabel="1"/>
+                        </group>
                     </page>
                 </notebook>
             </field>

@@ -43,6 +43,9 @@ class res_partner(models.Model):
     groupon = fields.Boolean('Validado')
 
     def info_curso_html(self, default_code, price=True):
+        """ Genera página html con la información del curso y si price = True le agrega
+            el precio y el boton de pago.
+        """
         producto = self.env['product.product'].search(
             [('default_code', '=', default_code)])
         data = producto.info_curso_html_data()

@@ -101,6 +101,10 @@ class product_product(models.Model):
         compute='_compute_prices'
     )
 
+    mercadopago_button = fields.Text(
+        u'Boton de mercadopago'
+    )
+
     @api.one
     @api.depends('lst_price','standard_price')
     def _compute_prices(self):
@@ -140,9 +144,9 @@ class product_product(models.Model):
 
         def get_quote_price(dur_weeks, price):
             if dur_weeks <= 4:
-                return u'<strong>Valor ${}</strong>'.format(price)
+                return u'<strong>${}</strong>'.format(int(price))
             else:
-                return u'<strong>Valor ${} por mes</strong>'.format(price)
+                return u'<strong>${} por mes</strong>'.format(int(price))
 
         data = {}
         data['name'] = self.name
@@ -170,9 +174,10 @@ class product_product(models.Model):
         dur_weeks = self.tot_hs_lecture / self.hs_lecture
         data['curso_data'] = [
             u'Carga horaria {} horas.'.format(self.tot_hs_lecture),
-            u'Duración {} semanas.'.format(dur_weeks),
-            get_quote_price(dur_weeks, self.list_price)
+            u'Duración {} semanas.'.format(dur_weeks)
         ]
+        data['curso_price'] = get_quote_price(dur_weeks, self.list_price)
+        data['mercadopago_button'] = self.mercadopago_button
 
         def calc_vacancy(vac):
             ret = u'<p style="color:{};">{}</p>'
