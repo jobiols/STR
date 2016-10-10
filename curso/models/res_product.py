@@ -239,26 +239,18 @@ class product_product(models.Model):
         # para ver si tienen vacantes hacemos: confirmadas + recuperantes < 7
         lectures = self.env['curso.lecture'].search(
             [
-                ('default_code','=',default_code),
-                ('next','=',True)
-             ],order="seq, date")
+                ('default_code', '=', default_code),
+                ('date', '>', datetime.today().strftime('%Y-%m-%d'))
+            ], order="seq, date")
 
         ret = []
         for lecture in lectures:
-            print '>', lecture.curso_id.curso_instance, \
-                       datetime.strptime(lecture.date,'%Y-%m-%d').strftime('%d/%m/%Y'), \
-                       lecture.schedule_id.name, \
-                       lecture.seq, \
-                       'curr',lecture.reg_current, \
-                       'recv',lecture.reg_recover
-
             # valida para recuperar si tiene menos de 7 alumnas en total
-            print '----->', lecture.reg_current + lecture.reg_recover
             if lecture.reg_current + lecture.reg_recover < 7:
-                print 'agregando'
                 ret.append({
                     'code': lecture.curso_id.curso_instance,
-                    'date': datetime.strptime(lecture.date,'%Y-%m-%d').strftime('%d/%m/%Y'),
+                    'date': datetime.strptime(lecture.date, '%Y-%m-%d').strftime(
+                        '%d/%m/%Y'),
                     'day': lecture.weekday,
                     'schedule': lecture.schedule_id.name,
                     'lecture_no': lecture.seq,
