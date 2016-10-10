@@ -329,6 +329,8 @@ class curso_curso(models.Model):
     @api.one
     @api.depends('register_max', 'registration_ids')
     def _get_register(self):
+        """ Calcula las vacantes
+        """
         reg_current = reg_attended = reg_prospect = reg_cancel = 0
 
         for registration in self.registration_ids:

@@ -23,6 +23,7 @@ from datetime import datetime
 from openerp import models, fields, api
 from . import html_filter
 
+
 class res_partner(models.Model):
     _inherit = 'res.partner'
 
@@ -30,7 +31,7 @@ class res_partner(models.Model):
         'Profesora',
         help="Poner el tilde si el contacto es una profesora.")
 
-    #TODO Revisar cursos que son de una profesora??
+    # TODO Revisar cursos que son de una profesora??
     curso_ids = fields.One2many(
         'curso.curso',
         'main_speaker_id',
@@ -42,20 +43,31 @@ class res_partner(models.Model):
 
     groupon = fields.Boolean('Validado')
 
+    @api.model
     def info_curso_html(self, default_code, price=True):
         """ Genera página html con la información del curso y si price = True le agrega
             el precio y el boton de pago.
         """
         producto = self.env['product.product'].search(
             [('default_code', '=', default_code)])
-        data = producto.info_curso_html_data()
-        data = data or {}
+        data = producto.info_curso_html_data() or {}
         html = html_filter.html_filter()
 
         ret = html.default_header(data)
         ret += html.info_curso(data, price=price)
         ret += html.inicios_curso(data)
         return ret
+
+    @api.model
+    def info_recover_html(self, default_code):
+        """ Genera tabla html con la información de recuperatorios para el curso
+            default_code
+        """
+        producto = self.env['product.product'].search(
+            [('default_code', '=', default_code)])
+        data = producto.info_recover_html(default_code) or {}
+        html = html_filter.html_filter()
+        return html.info_recover_html(data)
 
     @api.multi
     def get_mail_footer_html(self):

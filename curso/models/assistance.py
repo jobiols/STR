@@ -58,6 +58,7 @@ class curso_assistance(models.Model):
             reg.present = not reg.present
 
     @api.one
+    @api.depends('partner_id')
     def _get_info(self):
         self.info = self.partner_id.get_info()
 

@@ -147,7 +147,7 @@ width="394" height="200" />
         """ Inicios de nuevos cursos
         """
 
-        ret = u'<h2>Nuevos Inicios</h2>'
+        ret = u'<br/><h2>Nuevos Inicios</h2>'
 
         for instance in data.get('instances', []):
             ret += u"""
@@ -236,5 +236,42 @@ width="394" height="200" />
     alt="Se entrega certificado del curso" />
 </p>
         """
+
+
+#-----------------------------------------------------------------------------------------
+    def info_recover_html(self, data):
+        """ Formatea los datos que vienen en data para generar una tabla que se insertará
+            en una plantilla de mail (recuperatorios)
+        """
+        ret = u"""
+<table border="0" cellpadding="0" cellspacing="0" dir="ltr">
+    <tbody>
+        <tr>
+            <td style="width:55px"><strong>Cód</strong></td>
+            <td style="width:80px"><strong>Fecha</strong></td>
+            <td style="width:65px"><strong>Día</strong></td>
+            <td style="width:125px"><strong>Horario</strong></td>
+            <td><strong>Clase</strong></td>
+        """
+        for line in data:
+            ret += u"""
+        <tr>
+            <td>{}</td>
+            <td>{}</td>
+            <td>{}</td>
+            <td>{}</td>
+            <td>{}</td>
+        </tr>
+            """.format( line['code'],
+                        line['date'],
+                        line['day'],
+                        line['schedule'],
+                        line['lecture_no'])
+        ret += u"""
+		</tr>
+	</tbody>
+</table>
+        """
+        return ret
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

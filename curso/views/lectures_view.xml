@@ -34,8 +34,14 @@
                                 <field name="present"/>
                                 <field name="recover"/>
                                 <field name="info"/>
-                                <button name="button_present" string="Presente"
-                                        type="object" icon="gtk-apply"/>
+                                <button name="button_present" string="Dar el presente"
+                                        type="object" icon="gtk-apply"
+                                        attrs="{'invisible':[('present','=',True)]}"
+                                        />
+                                <button name="button_present" string="Volver a ausente"
+                                        type="object" icon="gtk-cancel"
+                                        attrs="{'invisible':[('present','=',False)]}"
+                                        />
                             </tree>
                         </field>
                     </group>
@@ -51,10 +57,11 @@
             <field name="arch" type="xml">
                 <tree string="lista de clases">
                     <field name="date"/>
-                    <field name="date_start"/>
-                    <field name="date_stop"/>
                     <field name="weekday" type="string"/>
                     <field name="schedule_id"/>
+                    <field name="reg_current"/>
+                    <field name="reg_recover"/>
+                    <field name="seq" string="Clase"/>
                     <field name="curso_id"/>
                 </tree>
             </field>

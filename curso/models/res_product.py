@@ -25,6 +25,7 @@ from openerp import models, fields, api
 from openerp.exceptions import ValidationError
 from . import html_filter
 
+
 class product_template(models.Model):
     _inherit = 'product.template'
     type = fields.Selection(selection_add=[('curso', 'Curso')])
@@ -106,9 +107,9 @@ class product_product(models.Model):
     )
 
     @api.one
-    @api.depends('lst_price','standard_price')
+    @api.depends('lst_price', 'standard_price')
     def _compute_prices(self):
-        #TODO poner ensto en una configuracion
+        # TODO poner ensto en una configuracion
         public_pricelist_id = 1
         pro_pricelist_id = 3
 
@@ -228,6 +229,42 @@ class product_product(models.Model):
                  })
 
         return data
+
+    @api.multi
+    def info_recover_html(self, default_code):
+        """ Genera los datos de las clases de posible recuperatorio para el curso
+            default_code
+        """
+        # obtener las clases futuras para este curso, que tienen vacantes
+        # para ver si tienen vacantes hacemos: confirmadas + recuperantes < 7
+        lectures = self.env['curso.lecture'].search(
+            [
+                ('default_code','=',default_code),
+                ('next','=',True)
+             ],order="seq, date")
+
+        ret = []
+        for lecture in lectures:
+            print '>', lecture.curso_id.curso_instance, \
+                       datetime.strptime(lecture.date,'%Y-%m-%d').strftime('%d/%m/%Y'), \
+                       lecture.schedule_id.name, \
+                       lecture.seq, \
+                       'curr',lecture.reg_current, \
+                       'recv',lecture.reg_recover
+
+            # valida para recuperar si tiene menos de 7 alumnas en total
+            print '----->', lecture.reg_current + lecture.reg_recover
+            if lecture.reg_current + lecture.reg_recover < 7:
+                print 'agregando'
+                ret.append({
+                    'code': lecture.curso_id.curso_instance,
+                    'date': datetime.strptime(lecture.date,'%Y-%m-%d').strftime('%d/%m/%Y'),
+                    'day': lecture.weekday,
+                    'schedule': lecture.schedule_id.name,
+                    'lecture_no': lecture.seq,
+                })
+
+        return ret
 
     @api.multi
     def build_html_page(self):
