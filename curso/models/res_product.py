@@ -106,6 +106,22 @@ class product_product(models.Model):
         u'Boton de mercadopago'
     )
 
+    woo_id = fields.Char(
+        help = u'Identifica el producto en woo'
+    )
+
+    woo_categ = fields.Many2one(
+        'curso.woo.categ',
+        'Categoria de producto',
+        help = u'Categoría de producto en woo'
+    )
+
+    woo_subcateg = fields.Many2one(
+        'curso.woo.categ',
+        'Subcategoria de producto',
+        help = u'Subcategoria de producto en woo'
+    )
+
     @api.one
     @api.depends('lst_price', 'standard_price')
     def _compute_prices(self):

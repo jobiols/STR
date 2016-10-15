@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#-----------------------------------------------------------------------------------
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2016  jeo Software  (http://www.jeo-soft.com.ar)
+#    All Rights Reserved.
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -17,23 +17,18 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#-----------------------------------------------------------------------------------
+from datetime import datetime
+import operator
+from openerp import models, fields, api
 
-from . import lapse
-from . import schedule
-from . import diary
-from . import holiday
-from . import lecture
-from . import quota
-from . import curso
-from . import registration
-from . import res_partner
-from . import lecture_template
-from . import mails_to_send
-from . import curso_translated
-from . import registration_translated
-from . import res_product
-from . import html_filter
-from . import assistance
-from . import woo_categ
+class curso_woo_categ(models.Model):
+    _name = 'curso.woo.categ'
+
+    woo_id = fields.Integer()
+    slug = fields.Char()
+    name = fields.Char()
+
+
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
