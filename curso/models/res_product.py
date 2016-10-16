@@ -112,14 +112,8 @@ class product_product(models.Model):
 
     woo_categ = fields.Many2one(
         'curso.woo.categ',
-        'Categoria de producto',
-        help = u'Categoría de producto en woo'
-    )
-
-    woo_subcateg = fields.Many2one(
-        'curso.woo.categ',
-        'Subcategoria de producto',
-        help = u'Subcategoria de producto en woo'
+        'Categoría de producto',
+        help = u'Categoría de producto'
     )
 
     @api.one

@@ -9,12 +9,12 @@
             <field name='inherit_id' ref='product.product_normal_form_view'/>
             <field name='type'>form</field>
             <field name='arch' type='xml'>
-                <field name="taxed_lst_price" position="after">
-                    <group colspan="2" col="2">
+                <xpath expr="//div[@class='oe_left']" position="after">
+                    <group colspan="4" col="4">
                         <field name="woo_categ"/>
-                        <field name="woo_subcateg"/>
+                        <field name="woo_id" readonly="True"/>
                     </group>
-                </field>
+                </xpath>
                 <notebook position="inside">
                     <page string="Cursos" attrs="{'invisible': [('type', '!=', 'curso')]}">
                         <group name="Cursos" string="Características del curso">

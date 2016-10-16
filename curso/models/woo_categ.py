@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
 #
 #    Copyright (C) 2016  jeo Software  (http://www.jeo-soft.com.ar)
 #    All Rights Reserved.
@@ -17,18 +17,48 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#-----------------------------------------------------------------------------------
-from datetime import datetime
-import operator
+# -----------------------------------------------------------------------------------
 from openerp import models, fields, api
+
 
 class curso_woo_categ(models.Model):
     _name = 'curso.woo.categ'
+    _rec_name = 'path'
 
+    path = fields.Char(
+        compute="get_path"
+    )
     woo_id = fields.Integer()
+    woo_ids = fields.Char(
+        compute="get_woo_ids"
+    )
     slug = fields.Char()
     name = fields.Char()
+    parent = fields.Many2one(
+        'curso.woo.categ',
+        string="Parent"
+    )
 
+    @api.multi
+    def _path(self):
+        for cat in self:
+            if cat.parent:
+                return u'{} / {} '.format(cat.parent._path(), cat.name)
+            else:
+                return cat.name
 
+    @api.one
+    def get_path(self):
+        self.path = self._path()
+
+    @api.one
+    def get_woo_ids(self):
+        ids = []
+        ids.append(self.woo_id)
+        if self.parent:
+            ids.append(self.parent.woo_id)
+            if self.parent.parent:
+                ids.append(self.parent.parent.woo_id)
+        self.woo_ids = ids
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
