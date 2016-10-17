@@ -31,7 +31,9 @@ class curso_lecture(models.Model):
         'Contenido de la clase')
 
     date = fields.Date(
-        'Fecha')
+        'Fecha',
+        store="True",
+        compute="_get_date")
 
     curso_id = fields.Many2one(
         'curso.curso', string='Curso',
@@ -92,6 +94,11 @@ class curso_lecture(models.Model):
                 ('recover', '=', True)
             ]
         )
+
+    @api.one
+    @api.depends('date_start')
+    def _get_date(self):
+        self.date = self.date_start[0:10]
 
     @api.one
     @api.depends('date')

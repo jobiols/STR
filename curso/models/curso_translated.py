@@ -468,7 +468,6 @@ class curso_curso(models.Model):
 
         lecs = []
         for ix, lec in enumerate(lectures):
-            lec['date'] = lectures[ix]['date']
             lec['name'] = lecture_templates[ix]['name']
             lec['curso_id'] = lectures[ix]['curso'].id
             lec['schedule_id'] = lectures[ix]['schedule'].id

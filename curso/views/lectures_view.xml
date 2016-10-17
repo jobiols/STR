@@ -10,7 +10,8 @@
             <field name="arch" type="xml">
                 <form string="Planilla de clases">
                     <group col="2">
-                        <field name="date"/>
+                        <field name="date_start"/>
+                        <field name="date_stop"/>
                         <field name="curso_id"/>
                         <field name="schedule_id"/>
                         <field name="seq"/>
