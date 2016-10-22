@@ -98,8 +98,11 @@ class curso_lecture(models.Model):
     @api.one
     @api.depends('date_start')
     def _get_date(self):
-        dt = datetime.strptime(self.date_start, '%Y-%m-%d %H:%M:%S')
-        self.date = dt.strftime('%Y-%m-%d')
+        if self.date_start:
+            dt = datetime.strptime(self.date_start, '%Y-%m-%d %H:%M:%S')
+            self.date = dt.strftime('%Y-%m-%d')
+        else:
+            self.date = False
 
     @api.one
     @api.depends('date')
