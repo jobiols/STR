@@ -123,23 +123,24 @@ class product_product(models.Model):
     @api.one
     @api.depends('description')
     def _compute_short_wc(self):
-        ix = self.description.find('<mas>')
-        if ix <> -1:
-            # existe el simbolo <mas>
-            if ix < 400:
-                self.description_short_wc = \
-                    u'Total {} caracteres antes del símbolo <mas>'.format(ix)
+        if self.description:
+            ix = self.description.find('<mas>')
+            if ix == -1:
+                # no existe el simbolo <mas>
+                if len(self.description) < 400:
+                    self.description_short_wc = \
+                        u'Total {} caracteres, max 400.'.format(len(self.description))
+                else:
+                    self.description_short_wc = \
+                        u'Debe incluir el simbolo <mas> para reducir la cantidad de caracteres!!'
             else:
-                self.description_short_wc = \
-                    u'Total {} DEMASIADOS CARACTERES ANTES DE <mas>'.format(ix)
-        else:
-            # no existe el simbolo <mas>
-            if len(self.description) < 400:
-                self.description_short_wc = \
-                    u'Total {} caracteres'.format(len(self.description))
-            else:
-                self.description_short_wc = \
-                    u'Debe incluir el simbolo <mas> para reducir la cantidad de caracteres!!'
+                # existe el simbolo <mas>
+                if ix < 400:
+                    self.description_short_wc = \
+                        u'Total {} caracteres antes del símbolo <mas>'.format(ix)
+                else:
+                    self.description_short_wc = \
+                        u'Total {} DEMASIADOS CARACTERES ANTES DE <mas> max 400'.format(ix)
 
     @api.one
     @api.depends('lst_price', 'standard_price')
