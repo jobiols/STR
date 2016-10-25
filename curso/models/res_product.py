@@ -117,7 +117,8 @@ class product_product(models.Model):
     )
 
     description_short_wc = fields.Char(
-        compute="_compute_short_wc"
+        compute="_compute_short_wc",
+        store="True"
     )
 
     @api.one
@@ -129,7 +130,7 @@ class product_product(models.Model):
                 # no existe el simbolo <mas>
                 if len(self.description) < 400:
                     self.description_short_wc = \
-                        u'Total {} caracteres, max 400.'.format(len(self.description))
+                        u'OK Total {} caracteres.'.format(len(self.description))
                 else:
                     self.description_short_wc = \
                         u'Debe incluir el simbolo <mas> para reducir la cantidad de caracteres!!'
@@ -137,7 +138,7 @@ class product_product(models.Model):
                 # existe el simbolo <mas>
                 if ix < 400:
                     self.description_short_wc = \
-                        u'Total {} caracteres antes del símbolo <mas>'.format(ix)
+                        u'OK Total {} caracteres antes del símbolo <mas>'.format(ix)
                 else:
                     self.description_short_wc = \
                         u'Total {} DEMASIADOS CARACTERES ANTES DE <mas> max 400'.format(ix)
