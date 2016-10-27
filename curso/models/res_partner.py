@@ -44,7 +44,7 @@ class res_partner(models.Model):
     groupon = fields.Boolean('Validado')
 
     @api.model
-    def info_curso_html(self, default_code, price=True):
+    def info_curso_html(self, default_code, price=True, discount=False):
         """ Genera página html con la información del curso y si price = True le agrega
             el precio y el boton de pago.
         """
@@ -54,7 +54,7 @@ class res_partner(models.Model):
         html = html_filter.html_filter()
 
         ret = html.default_header(data)
-        ret += html.info_curso(data, price=price)
+        ret += html.info_curso(data, price=price, discount=discount)
         ret += html.inicios_curso(data)
         return ret
 

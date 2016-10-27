@@ -22,7 +22,7 @@
 class html_filter:
     """ genera html para varios propositos
     """
-#-----------------------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------------------
     def default_header(self, data):
         """ Header de la pagina de información de curso
         """
@@ -46,15 +46,17 @@ class html_filter:
         """.format(data.get('name'), data.get('product_url'))
 
         # Descripción del curso
+        ret += '<div style="max-width: 440px;">'
         ret += u'{}'.format(data.get('description'))
+        ret += '</div>'
         return ret
 
-#-----------------------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------------------
     def default_footer(self):
         """ Footer de la página
         """
 
-        #TODO parametrizar esto.
+        # TODO parametrizar esto.
         return u"""
 <br/>
 <span style="font-family: lucida sans unicode,lucida grande,sans-serif;
@@ -70,13 +72,13 @@ Sábados de 11 a 19 hs<br />
 <a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a>
                 """
 
-#-----------------------------------------------------------------------------------------
-    def info_curso(self, data, col=2, price=False):
+    # -----------------------------------------------------------------------------------------
+    def info_curso(self, data, col=2, price=False, discount=False):
         """ datos comerciales del curso
         """
         ret = u'<br/>'
         # para mails, aca puede o no ir el precio
-        if col==2:
+        if col == 2:
             ret += u"""
 <table style="width: 100%;">
     <tbody>
@@ -107,11 +109,28 @@ Sábados de 11 a 19 hs<br />
 
             """
             if price:
-                ret += """
-<h2>Valor del curso {} &nbsp;&nbsp; <a href="{}">Pagar ahora con Mercadopago</a></h2>
-                """.format(data.get('curso_price'),data.get('mercadopago_button'))
-
-
+                if not discount:
+                    ret += """
+<h2>Valor del curso ${} {} &nbsp;&nbsp; <br/>
+<a href="{}">Pagar ahora con Mercadopago</a></h2>
+                    """.format(data.get('curso_price'),
+                               data.get('curso_price_per'),
+                               data.get('mercadopago_button'))
+                else:
+                    print '--------------------------------------'
+                    price = data['curso_price']
+                    discount = data.get('mercadopago_discount')
+                    if discount:
+                        new_price = int(round(price * discount / 100))
+                    else:
+                        new_price = price
+                    print price
+                    print discount
+                    print new_price
+                    ret += """
+<h2>Valor del curso <s>${}</s>&nbsp; <span style="color:#FF0000;">Ahora ${}</span>&nbsp; <br/>
+<a href="{}">Pagar con Mercadopago</a></h2>
+                    """.format(price, new_price, data.get('mercadopago_button_discount'))
         # para página web donde no entran dos columnas, aca no va el precio nunca
         else:
             ret += u"""
@@ -142,7 +161,7 @@ width="394" height="200" />
             """
         return ret
 
-#-----------------------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------------------
     def inicios_curso(self, data):
         """ Inicios de nuevos cursos
         """
@@ -211,12 +230,12 @@ width="394" height="200" />
         ret += u'<br/>'
         return ret
 
-#-----------------------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------------------
     def diary_table(self):
         """ Genera el calendario de clases en html """
         return False
 
-#-----------------------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------------------
     def temario_curso(self, data):
         if data['temario']:
             ret = '<br/>'
@@ -224,7 +243,7 @@ width="394" height="200" />
             ret += data['temario']
         return ret
 
-#-----------------------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------------------
     def entrega_certificado(self, data):
         return """
 <h4 style="text-align: center;">Se entrega certificado</h4>
@@ -238,7 +257,7 @@ width="394" height="200" />
         """
 
 
-#-----------------------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------------------
     def info_recover_html(self, data):
         """ Formatea los datos que vienen en data para generar una tabla que se insertará
             en una plantilla de mail (recuperatorios)
@@ -262,11 +281,11 @@ width="394" height="200" />
             <td>{}</td>
             <td>{}</td>
         </tr>
-            """.format( line['code'],
-                        line['date'],
-                        line['day'],
-                        line['schedule'],
-                        line['lecture_no'])
+            """.format(line['code'],
+                       line['date'],
+                       line['day'],
+                       line['schedule'],
+                       line['lecture_no'])
         ret += u"""
 		</tr>
 	</tbody>

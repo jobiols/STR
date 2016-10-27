@@ -102,8 +102,17 @@ class product_product(models.Model):
         compute='_compute_prices'
     )
 
-    mercadopago_button = fields.Text(
-        u'Boton de mercadopago'
+    mercadopago_button = fields.Char(
+        u'Boton de mercadopago precio normal'
+    )
+
+    mercadopago_button_discount = fields.Char(
+        u'Boton de mercadopago con descuento'
+    )
+
+    mercadopago_discount = fields.Float(
+        u'Descuento mercadopago',
+        digits=(2,8)
     )
 
     woo_id = fields.Char(
@@ -179,13 +188,6 @@ class product_product(models.Model):
     def info_curso_html_data(self, debug=False):
         """ informacion para armar el html
         """
-
-        def get_quote_price(dur_weeks, price):
-            if dur_weeks <= 4:
-                return u'<strong>${}</strong>'.format(int(price))
-            else:
-                return u'<strong>${} por mes</strong>'.format(int(price))
-
         data = {}
         data['name'] = self.name
         data['code'] = self.default_code
@@ -214,8 +216,14 @@ class product_product(models.Model):
             u'Carga horaria {} horas.'.format(self.tot_hs_lecture),
             u'Duración {} semanas.'.format(dur_weeks)
         ]
-        data['curso_price'] = get_quote_price(dur_weeks, self.list_price)
-        data['mercadopago_button'] = self.mercadopago_button
+        data['curso_price'] = self.list_price
+        data['curso_price_per'] = '' if dur_weeks <= 4 else 'por mes'
+        if self.mercadopago_button:
+            data['mercadopago_button'] = self.mercadopago_button
+        if self.mercadopago_button_discount:
+            data['mercadopago_button_discount'] = self.mercadopago_button_discount
+        if self.mercadopago_discount:
+            data['mercadopago_discount'] = self.mercadopago_discount
 
         def calc_vacancy(vac):
             ret = u'<p style="color:{};">{}</p>'
