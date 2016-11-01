@@ -287,8 +287,8 @@ width="394" height="200" />
                        line['schedule'],
                        line['lecture_no'])
         ret += u"""
-		</tr>
-	</tbody>
+        </tr>
+    </tbody>
 </table>
         """
         return ret
