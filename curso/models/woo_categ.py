@@ -23,10 +23,12 @@ from openerp import models, fields, api
 
 class curso_woo_categ(models.Model):
     _name = 'curso.woo.categ'
+    # esto hace que el name del registro sea path
     _rec_name = 'path'
 
     path = fields.Char(
-        compute="get_path"
+        compute="get_path",
+        store=True
     )
     woo_id = fields.Integer()
     woo_ids = fields.Char(
@@ -48,6 +50,7 @@ class curso_woo_categ(models.Model):
                 return cat.name
 
     @api.one
+    @api.depends('parent','name')
     def get_path(self):
         self.path = self._path()
 
