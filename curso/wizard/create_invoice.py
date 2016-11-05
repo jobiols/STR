@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from datetime import datetime, timedelta
+
 from openerp.osv import osv
 
 
@@ -38,9 +39,11 @@ class curso_invoice(osv.osv_memory):
             print('company', invoice_data.get('company_id').name)
 
             print('precio', invoice_data.get('curso_id').list_price)
+            print('descuento', invoice_data.get('discount'))
+            print('razon'), invoice_data.get('disc_desc', 'no hay razon')
             print('producto', invoice_data.get('curso_id').product.name)
             print('instancia', invoice_data.get('curso_id').curso_instance)
-#            print('a facturar', '[{}] {}'.format(invoice_data.get('instance_code')),1)
+            #            print('a facturar', '[{}] {}'.format(invoice_data.get('instance_code')),1)
             print invoice_data.get('instance_code')
 
         product_id = invoice_data.get('curso_id').product
@@ -70,9 +73,10 @@ class curso_invoice(osv.osv_memory):
         invoice_lines.append(invoice_line_id)
 
         if invoice_data.get('discount') != 0:
+            razon = invoice_data.get('disc_desc', 'No hay razón').encode('utf-8')
+            descuento = 100 * invoice_data.get('discount')
             invoice_line = {
-                'name': '{} {}%'.format(invoice_data.get('disc_desc').encode('utf-8'),
-                                        100 * invoice_data.get('discount')),
+                'name': '{} {}%'.format(razon, descuento),
                 'sequence': 5,
                 'invoice_id': False,
                 'account_id': 88,  # venta de cursos
@@ -80,9 +84,8 @@ class curso_invoice(osv.osv_memory):
                 'price_unit': product_id.list_price * invoice_data.get('discount'),
                 'quantity': -1.0,
             }
-            invoice_line_id = self.pool.get('account.invoice.line').create(cr, uid,
-                                                                           invoice_line,
-                                                                           context=context)
+            invoice_line_id = self.pool.get('account.invoice.line').create(
+                cr, uid, invoice_line, context=context)
             invoice_lines.append(invoice_line_id)
 
         new_invoice = {
@@ -104,8 +107,8 @@ class curso_invoice(osv.osv_memory):
             'company_id': invoice_data.get('company_id').id,
             'user_id': uid
         }
-        invoice_id = self.pool.get('account.invoice').create(cr, uid, new_invoice,
-                                                             context=context)
+        invoice_id = self.pool.get('account.invoice').create(
+            cr, uid, new_invoice, context=context)
 
         return invoice_id
 
@@ -128,25 +131,28 @@ class curso_invoice(osv.osv_memory):
         """
         # Revisamos la tabla de cuotas, me traigo las que estan pendientes
         register_pool = self.pool.get('curso.quota')
-        records = register_pool.search(cr, uid, [('invoice_id', '=', False),
-                                                 ('date', '<=', datetime.utcnow())])
+        records = register_pool.search(cr, uid,
+                                       [('invoice_id', '=', False),
+                                        ('date', '<=', datetime.utcnow())])
 
         for quote in register_pool.browse(cr, uid, records, context):
             if quote:
-                invoice_data = {
-                    'date_invoice': quote.date,
-                    'instance_code': quote.curso_inst,
-                    'partner_id': quote.registration_id.partner_id,
-                    'quota': quote.quota,
-                    'curso_id': quote.registration_id.curso_id,
-                    'company_id': quote.registration_id.curso_id.company_id,
-                    'discount': quote.registration_id.discount / 100,
-                    'disc_desc': quote.registration_id.disc_desc,
-                    'historic_price': quote.list_price
-                }
+                # crear invoice data dict
+                id = {}
+                id['date_invoice'] = quote.date
+                id['instance_code'] = quote.curso_inst
+                id['partner_id'] = quote.registration_id.partner_id
+                id['quota'] = quote.quota
+                id['curso_id'] = quote.registration_id.curso_id
+                id['company_id'] = quote.registration_id.curso_id.company_id
+                id['discount'] = quote.registration_id.discount / 100
+                if quote.registration_id.disc_desc:
+                    id['disc_desc'] = quote.registration_id.disc_desc
+                id['historic_price'] = quote.list_price
 
-                invoice_id = self.create_invoice(cr, uid, ids, invoice_data, context=None)
+                invoice_id = self.create_invoice(cr, uid, ids, id, context=None)
                 r = register_pool.search(cr, uid, [('id', '=', quote.id)])
-                register_pool.write(cr, uid, r, {'invoice_id': invoice_id}, context=context)
+                register_pool.write(
+                    cr, uid, r, {'invoice_id': invoice_id}, context=context)
 
         return True
