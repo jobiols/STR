@@ -1,34 +1,33 @@
 -
-    I add some a students
-    Student #1
+    I add some students, Student 1
 -
     !record {model: res.partner, id: res_partner_1}:
         name: Juana molina
         date: '1995-07-01'
         customer: True
 -
-    Student #2
+    Student 2
 -
     !record {model: res.partner, id: res_partner_2}:
         name: Natalia Empanada
         date: '1994-08-01'
         customer: True
 -
-    Student #3
+    Student 3
 -
     !record {model: res.partner, id: res_partner_3}:
         name: Carolina Pijuna
         date: '1996-01-01'
         customer: True
 -
-    Student #4
+    Student 4
 -
     !record {model: res.partner, id: res_partner_4}:
         name: Jarama Pelota
         date: '1997-02-01'
         customer: True
 -
-    Student #5
+    Student 5
 -
     !record {model: res.partner, id: res_partner_5}:
         name: Natalia Mazona

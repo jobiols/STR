@@ -5,9 +5,6 @@
         name: Juana Perez Alumna
         customer: False
 -
-    !assert {model: res.partner, id: curso_student_1, severity: error, string: Must not be a client}:
-        - customer == False
--
     I create a Teacher
 -
     !record {model: res.partner, id: curso_teacher_1}:
