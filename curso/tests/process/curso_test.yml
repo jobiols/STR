@@ -54,6 +54,7 @@
     !record {model: curso.curso, id: curso_curso_2}:
         product: curso_product_1
         main_speaker_id: curso_teacher_1
+        email_registration_id: email_template_1
 -
   I check instance on second curso
 -
