@@ -36,6 +36,7 @@ class TestCurso(TransactionCase):
         self.diary_obj = self.env['curso.diary']
         self.schedule_obj = self.env['curso.schedule']
         self.registration_obj = self.env['curso.registration']
+        self.email_template_obj = self.env['email.template']
 
         # creo un alumno
         self.partner = self.partner_obj.create({
@@ -47,7 +48,7 @@ class TestCurso(TransactionCase):
 
     def test_CreateSchedules_01(self):
         """ test curso create schedules """
-
+        print 'test from test_curso1.py --------------------------------'
         # creo tres horarios
         self.schedule1 = self.schedule_obj.create({
             'start_time': 12.5,
@@ -82,6 +83,11 @@ class TestCurso(TransactionCase):
             'description': 'este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño'
         })
 
+        # creo un template de mail para este producto
+        self.email_template_1 = self.email_template_obj.create({
+            'name': 'plantilla de mail'
+        })
+
         # creo una plantilla de clases para este producto
         self.ids = [self.product.id]
         self.product.button_generate_lecture_templates()
@@ -89,7 +95,8 @@ class TestCurso(TransactionCase):
         # creo un curso basado en este producto
         self.curso1 = self.curso_obj.create({
             'product': self.product.id,
-            'main_speaker_id': self.partner_prof.id
+            'main_speaker_id': self.partner_prof.id,
+            'email_registration_id': self.email_template_1
         })
 
         # chequeo state instance y name
@@ -101,7 +108,8 @@ class TestCurso(TransactionCase):
         # creo otro curso basado en este producto
         self.curso2 = self.curso_obj.create({
             'product': self.product.id,
-            'main_speaker_id': self.partner_prof.id
+            'main_speaker_id': self.partner_prof.id,
+            'email_registration_id': self.email_template_1
         })
 
         # chequeo state instance y name
