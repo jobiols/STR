@@ -390,7 +390,8 @@ class TestCurso(TransactionCase):
         ##################################################################################
         self.curso1 = self.curso_obj.create({
             'product': self.product1.id,
-            'main_speaker_id': self.partner_prof.id
+            'main_speaker_id': self.partner_prof.id,
+            'email_registration_id': self.email_template_1.id
         })
 
         ##################################################################################
