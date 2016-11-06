@@ -96,7 +96,7 @@ class TestCurso(TransactionCase):
         self.curso1 = self.curso_obj.create({
             'product': self.product.id,
             'main_speaker_id': self.partner_prof.id,
-            'email_registration_id': self.email_template_1
+            'email_registration_id': self.email_template_1.id
         })
 
         # chequeo state instance y name
@@ -109,7 +109,7 @@ class TestCurso(TransactionCase):
         self.curso2 = self.curso_obj.create({
             'product': self.product.id,
             'main_speaker_id': self.partner_prof.id,
-            'email_registration_id': self.email_template_1
+            'email_registration_id': self.email_template_1.id
         })
 
         # chequeo state instance y name
@@ -242,28 +242,32 @@ class TestCurso(TransactionCase):
         ##################################################################################
         self.curso1 = self.curso_obj.create({
             'product': self.product1.id,
-            'main_speaker_id': self.partner_prof.id
+            'main_speaker_id': self.partner_prof.id,
+            'email_registration_id': self.email_template_1.id
         })
 
         # creo un curso basado en producto 1
         ##################################################################################
         self.curso2 = self.curso_obj.create({
             'product': self.product1.id,
-            'main_speaker_id': self.partner_prof.id
+            'main_speaker_id': self.partner_prof.id,
+            'email_registration_id': self.email_template_1.id
         })
 
         # creo un curso basado en producto 2
         ##################################################################################
         self.curso3 = self.curso_obj.create({
             'product': self.product2.id,
-            'main_speaker_id': self.partner_prof.id
+            'main_speaker_id': self.partner_prof.id,
+            'email_registration_id': self.email_template_1.id
         })
 
         # creo un curso basado en producto 2
         ##################################################################################
         self.curso4 = self.curso_obj.create({
             'product': self.product2.id,
-            'main_speaker_id': self.partner_prof.id
+            'main_speaker_id': self.partner_prof.id,
+            'email_registration_id': self.email_template_1.id
         })
 
         # creo todos los horarios
