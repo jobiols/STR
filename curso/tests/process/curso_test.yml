@@ -33,11 +33,17 @@
     !python {model: product.product}: |
         self.button_generate_lecture_templates(cr, uid, [ref("curso_product_1")], context=None)
 -
+    I create a email template
+-
+    !record {model: email.template, id: email_template_1}:
+        name: mail para confirmar
+-
     I create a curso based on this product
 -
     !record {model: curso.curso, id: curso_curso_1}:
         product: curso_product_1
         main_speaker_id: curso_teacher_1
+        email_registration_id: email_template_1
 -
     I check that state instance and name
 -
