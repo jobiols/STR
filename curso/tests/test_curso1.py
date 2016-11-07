@@ -46,6 +46,11 @@ class TestCurso(TransactionCase):
         self.partner_prof = self.partner_obj.create({
             'name': 'Juana Perez Profesora'})
 
+        # creo un template de mail para todos los productos
+        self.email_template_1 = self.email_template_obj.create({
+            'name': 'plantilla de mail'
+        })
+
     def test_CreateSchedules_01(self):
         """ test curso create schedules """
         print 'test from test_curso1.py --------------------------------'
@@ -81,11 +86,6 @@ class TestCurso(TransactionCase):
             'name': 'Curso de maquillaje Social Profesional rafañuso',
             'agenda': 'Titulo Cuerpo del texto **negrita** Año 2016',
             'description': 'este es un curso **de prueba** para el test en UTF8 ajá tomá ñoño'
-        })
-
-        # creo un template de mail para este producto
-        self.email_template_1 = self.email_template_obj.create({
-            'name': 'plantilla de mail'
         })
 
         # creo una plantilla de clases para este producto
@@ -368,7 +368,7 @@ class TestCurso(TransactionCase):
     def test_check_one_lecture(self):
         """ chequea texto cuando hay una o varias clases """
 
-        # creo el producto S23
+        """ creo el producto S23 """
         ##################################################################################
         self.product1 = self.product_obj.create({
             'tot_hs_lecture': 4,
