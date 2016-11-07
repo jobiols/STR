@@ -341,8 +341,8 @@ class TestCurso(TransactionCase):
                          'error 06')
         self.assertEqual(data['curso_data'][1], u'Duración 20 semanas.',
                          'error 07')
-        self.assertEqual(data['curso_data'][2], u'<strong>Valor $1200.0 por mes</strong>',
-                         'error 08')
+#        self.assertEqual(data['curso_data'][2], u'<strong>Valor $1200.0 por mes</strong>',
+#                         'error 08')
 
         self.assertEqual(data['mode'],u'Son 20 clases de 4 horas c/u','error 085')
 
