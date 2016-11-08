@@ -13,6 +13,7 @@
             <field name="arch" type="xml">
                 <tree string="lista categorias woo">
                     <field name="woo_ids"/>
+                    <field name="woo_idx"/>
                     <field name="path"/>
                     <field name="name"/>
                     <field name="slug"/>

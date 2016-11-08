@@ -34,6 +34,10 @@ class curso_woo_categ(models.Model):
     woo_ids = fields.Char(
         compute="get_woo_ids"
     )
+    woo_idx = fields.Integer(
+        compute="get_woo_idx",
+        store=True
+    )
     slug = fields.Char()
     name = fields.Char()
     parent = fields.Many2one(
@@ -63,5 +67,11 @@ class curso_woo_categ(models.Model):
             if self.parent.parent:
                 ids.append(self.parent.parent.woo_id)
         self.woo_ids = ids
+
+    @api.one
+    @api.depends('woo_ids')
+    def get_woo_idx(self):
+        ids = eval(self.woo_ids)
+        self.woo_idx = len(ids)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
