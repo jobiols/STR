@@ -48,7 +48,6 @@ class product_product(models.Model):
 
     agenda = fields.Text(
         u'Temario del curso',
-        required=True,
         help=u"Descripción de los temas que abarca el curso, se formatea con markdown, "
              u"esta información se exporta al sitio web y se hace pública.")
 
@@ -133,7 +132,6 @@ class product_product(models.Model):
 
     comercial_data = fields.Char(
         'datos comerciales',
-        required=True,
         help=u"Información que aparece en el sitio y en los mails",
     )
 
