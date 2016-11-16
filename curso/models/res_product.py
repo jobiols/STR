@@ -48,6 +48,7 @@ class product_product(models.Model):
 
     agenda = fields.Text(
         u'Temario del curso',
+        required=True,
         help=u"Descripción de los temas que abarca el curso, se formatea con markdown, "
              u"esta información se exporta al sitio web y se hace pública.")
 
@@ -132,7 +133,8 @@ class product_product(models.Model):
 
     comercial_data = fields.Char(
         'datos comerciales',
-        help=u"Información que aparece en el sitio y en los mails"
+        required=True,
+        help=u"Información que aparece en el sitio y en los mails",
     )
 
     @api.one
@@ -209,7 +211,6 @@ class product_product(models.Model):
         data['mode'] = str_.format(clases, horas)
         data['product_url'] = self.product_url
         data['temario'] = markdown.markdown(self.agenda)
-
         data['comercial_data'] = self.comercial_data.split(',')
         dur_weeks = self.tot_hs_lecture / self.hs_lecture
         data['curso_data'] = [

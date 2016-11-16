@@ -117,16 +117,12 @@ Sábados de 11 a 19 hs<br />
                                data.get('curso_price_per'),
                                data.get('mercadopago_button'))
                 else:
-                    print '--------------------------------------'
                     price = data['curso_price']
                     discount = data.get('mercadopago_discount')
                     if discount:
                         new_price = int(round(price * discount / 100))
                     else:
                         new_price = price
-                    print price
-                    print discount
-                    print new_price
                     ret += """
 <h2>Valor del curso <s>${}</s>&nbsp; <span style="color:#FF0000;">Ahora ${}</span>&nbsp; <br/>
 <a href="{}">Pagar con Mercadopago</a></h2>
