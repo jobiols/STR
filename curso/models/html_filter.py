@@ -73,7 +73,7 @@ Sábados de 11 a 19 hs<br />
                 """
 
     # -----------------------------------------------------------------------------------------
-    def info_curso(self, data, col=2, price=False, discount=False):
+    def info_curso(self, data, col=1, price=False, discount=False):
         """ datos comerciales del curso
         """
         ret = u'<br/>'
@@ -127,7 +127,7 @@ Sábados de 11 a 19 hs<br />
 <h2>Valor del curso <s>${}</s>&nbsp; <span style="color:#FF0000;">Ahora ${}</span>&nbsp; <br/>
 <a href="{}">Pagar con Mercadopago</a></h2>
                     """.format(price, new_price, data.get('mercadopago_button_discount'))
-        # para página web donde no entran dos columnas, aca no va el precio nunca
+        # para página web donde no entran dos columnas
         else:
             ret += u"""
 <table style="width: 550px;">
