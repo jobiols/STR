@@ -77,6 +77,13 @@
                             <field name="mercadopago_button_discount"/>
                             <field name="mercadopago_discount"/>
                         </group>
+                        <!-- datos comerciales -->
+                        <div style="background-color:#D3D3D3;">
+                        <p> Datos comerciales que se muestran en el sitio web y en los mails, (separados por comas)</p>
+                        </div>
+                        <group>
+                            <field name="comercial_data"  nolabel="1"/>
+                        </group>
                     </page>
                 </notebook>
             </field>

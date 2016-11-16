@@ -130,6 +130,11 @@ class product_product(models.Model):
         store="True"
     )
 
+    comercial_data = fields.Char(
+        'datos comerciales',
+        help=u"Información que aparece en el sitio y en los mails"
+    )
+
     @api.one
     @api.depends('description')
     def _compute_short_wc(self):
@@ -186,7 +191,7 @@ class product_product(models.Model):
 
     @api.multi
     def info_curso_html_data(self, debug=False):
-        """ informacion para armar el html
+        """ informacion para armar el html. El debug es para correr los tests!!
         """
         data = {}
         data['name'] = self.name
@@ -205,12 +210,7 @@ class product_product(models.Model):
         data['product_url'] = self.product_url
         data['temario'] = markdown.markdown(self.agenda)
 
-        data['comercial_data'] = [
-            u'Matricula bonificada.',
-            u'No se cobra derecho de examen.',
-            u'Materiales incluidos en el valor del curso.',
-            u'Se entrega certificado digital.',
-        ]
+        data['comercial_data'] = self.comercial_data.split(',')
         dur_weeks = self.tot_hs_lecture / self.hs_lecture
         data['curso_data'] = [
             u'Carga horaria {} horas.'.format(self.tot_hs_lecture),
