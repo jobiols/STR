@@ -127,8 +127,8 @@ class curso_lecture(models.Model):
 
         # Alumnas registradas en el curso
         atendees = self.curso_id.registration_ids.search(
-            [('state','in',['confirm','signed','done']),
-             ('curso_id','=',self.curso_id.id)]
+            [('state', 'in', ['confirm', 'signed', 'done']),
+             ('curso_id', '=', self.curso_id.id)]
         )
 
         # Alumnas en la lista de presentes, que no son recuperantes
