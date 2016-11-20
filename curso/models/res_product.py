@@ -209,7 +209,7 @@ class product_product(models.Model):
         data['mode'] = str_.format(clases, horas)
         data['product_url'] = self.product_url
         data['temario'] = markdown.markdown(self.agenda)
-        data['comercial_data'] = self.comercial_data.split(',')
+        data['comercial_data'] = (self.comercial_data or '').split(',')
         dur_weeks = self.tot_hs_lecture / self.hs_lecture
         data['curso_data'] = [
             u'Carga horaria {} horas.'.format(self.tot_hs_lecture),
