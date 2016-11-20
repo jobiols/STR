@@ -50,6 +50,14 @@ class curso_assistance(models.Model):
         help=u'Información adicional'
     )
 
+    date = fields.Date(
+        related='lecture_id.date'
+    )
+
+    curso_instance = fields.Char(
+        related='lecture_id.curso_id.curso_instance'
+    )
+
     @api.multi
     def button_present(self):
         """ La profesora le pone o le saca el presente a la alumna

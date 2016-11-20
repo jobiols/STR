@@ -45,6 +45,9 @@ class res_partner(models.Model):
     groupon = fields.Boolean('Validado')
 
     assistance_id = fields.One2many(
+        'curso.assistance',
+        'partner_id',
+        'Asistencias'
     )
 
     c_started = fields.Char(

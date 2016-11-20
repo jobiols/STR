@@ -53,31 +53,49 @@
 
                 <field name="title" invisible="True"/>
                 <xpath expr="//page[@name='internal_notes']" position="inside">
-                    <group name="grp_registration" string="Historial de cursos">
-                                <button string="Agregar curso"
-                                        name="%(wizard_curso_add_registration)d" type="action"/>
-                                <field name="curso_registration_ids" colspan="4" nolabel="1">
-                                    <tree string="Inscripciones en Cursos">
-                                        <field name="discount"/>
-                                        <field name="curso_id"/>
-                                        <field name="state"/>
-                                        <!-- ESTADOS -->
-                                        <button name="button_reg_sign" string="Seña el curso"
-                                                states="draft"
-                                                type="object" icon="gtk-apply"/>
-                                        <button name="button_reg_confirm" string="Empezó el curso"
-                                                states="signed"
-                                                type="object" icon="gtk-go-forward"/>
-                                        <button name="button_reg_done" string="Terminó el curso"
-                                                states="confirm"
-                                                type="object" icon="terp-dialog-close"/>
-                                        <button name="button_reg_cancel"
-                                                string="Cancela Inscripción"
-                                                states="draft,signed,confirm" type="object"
-                                                icon="gtk-cancel"/>
+                    <notebook>
+                        <page string="Cursos">
+                            <group name="grp_registration" string="Historial de cursos">
+                                        <button string="Agregar curso"
+                                                name="%(wizard_curso_add_registration)d" type="action"/>
+                                        <field name="curso_registration_ids" colspan="4" nolabel="1">
+                                            <tree string="Inscripciones en Cursos">
+                                                <field name="discount"/>
+                                                <field name="curso_id"/>
+                                                <field name="state"/>
+                                                <!-- ESTADOS -->
+                                                <button name="button_reg_sign" string="Seña el curso"
+                                                        states="draft"
+                                                        type="object" icon="gtk-apply"/>
+                                                <button name="button_reg_confirm" string="Empezó el curso"
+                                                        states="signed"
+                                                        type="object" icon="gtk-go-forward"/>
+                                                <button name="button_reg_done" string="Terminó el curso"
+                                                        states="confirm"
+                                                        type="object" icon="terp-dialog-close"/>
+                                                <button name="button_reg_cancel"
+                                                        string="Cancela Inscripción"
+                                                        states="draft,signed,confirm" type="object"
+                                                        icon="gtk-cancel"/>
+                                            </tree>
+                                        </field>
+                            </group>
+                        </page>
+                        <page string="Asistencias">
+                            <group name="grp_assistance" string="Historial de asistencias">
+                                <field name="assistance_id" nolabel="1">
+                                    <tree string="Asistencia a cursos">
+                                        <field name="curso_instance"/>
+                                        <field name="date"/>
+                                        <field name="present"/>
+                                        <field name="recover"/>
+                                        <field name="info"/>
+                                        <field name="lecture_id"/>
                                     </tree>
                                 </field>
-                    </group>
+                            </group>
+                        </page>
+                    </notebook>
                 </xpath>
             </field>
         </record>
