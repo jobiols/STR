@@ -43,6 +43,50 @@ class res_partner(models.Model):
 
     groupon = fields.Boolean('Validado')
 
+    c_started = fields.Char(
+        'Cursos iniciados',
+        store=True,
+        help=u"Cursos que la alumna inició, señandolo, pero que todavía no terminaron están "
+             u"todavía cursandolos",
+        compute="_compute_curso_assistance"
+    )
+
+    c_finished = fields.Char(
+        'Cursos terminados',
+        store=True,
+        help=u"Cursos que la alumna inició y que ya terminaron. La alumna tuvo asistencia"
+             u"completa en esos cursos",
+        compute="_compute_curso_assistance"
+    )
+
+    c_incomplete = fields.Char(
+        'Cursos incompletos',
+        store=True,
+        help=u"Cursos que la alumna inició y que ya terminaron. La alumna no tuvo asistencia"
+             u"completa en esos cursos",
+        compute="_compute_curso_assistance"
+    )
+
+    @api.one
+    @api.depends('curso_registration_ids')
+    def _compute_curso_assistance(self):
+        """ Calcula los cursos a los que asistió la alumna agrupados en tres categorías
+        """
+        started = []
+        finished = []
+        incomplete = []
+        for reg in self.curso_registration_ids:
+            if reg.state == 'confirm':
+                started.append(reg.curso_id.curso_instance)
+            if reg.state == 'done':
+                finished.append(reg.curso_id.curso_instance)
+            if reg.state == 'cancel':
+                incomplete.append(reg.curso_id.curso_instance)
+
+        self.c_started = ' '.join(started)
+        self.c_finished = ' '.join(finished)
+        self.c_incomplete = ' '.join(incomplete)
+
     @api.model
     def info_curso_html(self, default_code, price=True, discount=False):
         """ Genera página html con la información del curso y si price = True le agrega

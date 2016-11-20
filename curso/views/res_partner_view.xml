@@ -91,6 +91,9 @@
             <field name="arch" type="xml">
                 <field name="phone" position="after">
                     <field name="mobile"/>
+                    <field name="c_started"/>
+                    <field name="c_finished"/>
+                    <field name="c_incomplete"/>
                 </field>
             </field>
         </record>
@@ -110,6 +113,9 @@
                     <field name="comment"/>
                     <field name="document_number" string="DNI/CUIT"/>
                     <field name="function" string="Groupon"/>
+                    <field name="c_started"/>
+                    <field name="c_finished"/>
+                    <field name="c_incomplete"/>
                 </xpath>
             </field>
         </record>
