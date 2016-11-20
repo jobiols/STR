@@ -25,9 +25,18 @@ class lecture_template(models.Model):
     _name = 'curso.lecture_template'
     _order = 'seq'
 
-    product_id = fields.Many2one('product.product', 'Producto')
-    text = fields.Text('Contenido de la clase')
-    seq = fields.Integer('Sec')
+    product_id = fields.Many2one(
+        'product.product',
+        'Producto'
+    )
+
+    text = fields.Text(
+        'Contenido de la clase'
+    )
+
+    seq = fields.Integer(
+        'Sec'
+    )
 
     @api.model
     def create_template(self, prod_id, no_lectures):

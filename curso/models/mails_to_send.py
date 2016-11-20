@@ -29,8 +29,13 @@ class mails_to_send(models.Model):
 
     product_id = fields.Many2one(
         'product.product',
-        'Producto')
-    class_no = fields.Integer('Nro clase')
+        'Producto'
+    )
+
+    class_no = fields.Integer(
+        'Nro clase'
+    )
+
     template_id = fields.Many2one(
         'email.template',
         'Plantilla de mail',

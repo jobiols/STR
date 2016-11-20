@@ -25,10 +25,24 @@ class curso_lapse(models.Model):
     """ Define un lapso de tiempo se usa como clase abstracta """
     _name = 'curso.lapse'
 
-    start_time = fields.Float(string='Desde', required=True)
-    formatted_start_time = fields.Char(compute='_compute_start_time')
-    end_time = fields.Float(string='Hasta', required=True)
-    elapsed_time = fields.Float(compute='_elapsed_time', string='Duración')
+    start_time = fields.Float(
+        string='Desde',
+        required=True
+    )
+
+    formatted_start_time = fields.Char(
+        compute='_compute_start_time'
+    )
+
+    end_time = fields.Float(
+        string='Hasta',
+        required=True
+    )
+
+    elapsed_time = fields.Float(
+        compute='_elapsed_time',
+        string='Duración'
+    )
 
     @api.one
     def _elapsed_time(self):

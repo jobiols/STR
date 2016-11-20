@@ -26,9 +26,20 @@ class curso_holiday(models.Model):
     _name = 'curso.holiday'
     _inherit = 'curso.lapse'
 
-    name = fields.Char(string='Nombre')
-    date = fields.Date(string='Fecha')
-    start_time = fields.Float(default=8)
-    end_time = fields.Float(default=22)
+    name = fields.Char(
+        string='Nombre'
+    )
+
+    date = fields.Date(
+        string='Fecha'
+    )
+
+    start_time = fields.Float(
+        default=8
+    )
+
+    end_time = fields.Float(
+        default=22
+    )
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

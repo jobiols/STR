@@ -28,7 +28,10 @@ class curso_schedule(models.Model):
     _sql_constraints = [
         ('default_code_unique', 'unique (name)', 'Este horario ya existe.')]
 
-    name = fields.Char(compute="_get_name", store=True)
+    name = fields.Char(
+        compute="_get_name",
+        store=True
+    )
 
     @api.one
     def _calc_datetime(self, _date, _time):

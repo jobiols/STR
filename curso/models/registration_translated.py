@@ -19,8 +19,8 @@
 #
 # -----------------------------------------------------------------------------------
 from datetime import datetime, timedelta
-from . import html_filter
 
+from . import html_filter
 from openerp.exceptions import Warning
 from openerp import models, fields, api
 import babel.dates
@@ -33,25 +33,38 @@ class curso_registration(models.Model):
     _description = 'Inscripcion en cursos'
 
     create_date = fields.Date(
-        u'Creación', readonly=True)
+        u'Creación',
+        readonly=True
+    )
 
     date_closed = fields.Date(
-        u'Fecha de cierre', readonly=True)
+        u'Fecha de cierre',
+        readonly=True
+    )
 
     date_open = fields.Date(
-        u'Fecha de inscripción', readonly=True)
+        u'Fecha de inscripción',
+        readonly=True
+    )
 
     discount = fields.Float(
-        u'Descuento (%)', digits=(2, 2))
+        u'Descuento (%)',
+        digits=(2, 2)
+    )
 
     disc_desc = fields.Char(
-        u'Razon del descuento', size=128, select=True)
+        u'Razon del descuento',
+        size=128,
+        select=True
+    )
 
     nb_register = fields.Integer(
-        u'Number of Participants', required=True,
+        u'Number of Participants',
+        required=True,
         readonly=True,
         states={'draft': [('readonly', False)]},
-        default=1)
+        default=1
+    )
 
     state = fields.Selection(
         [('draft', u'Interesada'),
@@ -75,18 +88,24 @@ class curso_registration(models.Model):
 
     curso_id = fields.Many2one(
         'curso.curso',
-        'Curso', required=True, readonly=True,
-        states={'draft': [('readonly', False)]})
+        'Curso',
+        required=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]}
+    )
 
     partner_id = fields.Many2one(
         'res.partner',
         u'Alumna',
         required=True,
-        states={'done': [('readonly', True)]})
+        states={'done': [('readonly', True)]}
+    )
 
     user_id = fields.Many2one(
-        'res.users', 'User',
-        states={'done': [('readonly', True)]})
+        'res.users',
+        'User',
+        states={'done': [('readonly', True)]}
+    )
 
     reply_to = fields.Char(
         related='curso_id.reply_to',
@@ -96,23 +115,38 @@ class curso_registration(models.Model):
 
     curso_begin_date = fields.Date(
         related='curso_id.date_begin',
-        string="Inicio", readonly=True)
+        string="Inicio",
+        readonly=True
+    )
 
     email = fields.Char(
-        related='partner_id.email', string='Email',
-        size=128, readonly=True)
+        related='partner_id.email',
+        string='Email',
+        size=128,
+        readonly=True
+    )
 
     phone = fields.Char(
-        related='partner_id.mobile', string='Telefono',
-        size=128, readonly=True)
+        related='partner_id.mobile',
+        string='Telefono',
+        size=128,
+        readonly=True
+    )
 
     curso_state = fields.Selection(
         related='curso_id.state',
-        string=u'Estado del curso', readonly=True)
+        string=u'Estado del curso',
+        readonly=True
+    )
 
     company_id = fields.Many2one(
-        'res.company', string='Company', related='curso_id.company_id',
-        store=True, readonly=True, states={'draft': [('readonly', False)]})
+        'res.company',
+        string='Company',
+        related='curso_id.company_id',
+        store=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]}
+    )
 
     curso_begin_day = fields.Char(
         compute='_get_weekday',
@@ -123,7 +157,8 @@ class curso_registration(models.Model):
         ('groupon', 'Groupon'),
     ],
         'Origen', required=True,
-        default='none')
+        default='none'
+    )
 
     @api.one
     @api.depends('curso_begin_date')

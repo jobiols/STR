@@ -30,16 +30,25 @@ class curso_woo_categ(models.Model):
         compute="get_path",
         store=True
     )
-    woo_id = fields.Integer()
+
+    woo_id = fields.Integer(
+    )
+
     woo_ids = fields.Char(
         compute="get_woo_ids"
     )
+
     woo_idx = fields.Integer(
         compute="get_woo_idx",
         store=True
     )
-    slug = fields.Char()
-    name = fields.Char()
+
+    slug = fields.Char(
+    )
+
+    name = fields.Char(
+    )
+
     parent = fields.Many2one(
         'curso.woo.categ',
         string="Parent"

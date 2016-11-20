@@ -31,11 +31,12 @@ class res_partner(models.Model):
         'Profesora',
         help="Poner el tilde si el contacto es una profesora.")
 
-    # TODO Revisar cursos que son de una profesora??
+    # TODO Revisar cursos que son de una profesora?? ver si se usa en algun lado...
     curso_ids = fields.One2many(
         'curso.curso',
         'main_speaker_id',
-        readonly=True)
+        readonly=True
+    )
 
     curso_registration_ids = fields.One2many(
         'curso.registration',
