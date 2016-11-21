@@ -51,10 +51,10 @@ class curso_invoice(osv.osv_memory):
         date_due = (date_invoice + timedelta(days=10))
 
 
-        # tomar el mayor precio
-        actual_price = invoice_data.get('historic_price')
-        if product_id.list_price > actual_price:
-            actual_price = product_id.list_price
+        # traer el historico, si no hay historico traer el de lista.
+        actual_price = invoice_data.get('historic_price',False) or product_id.list_price
+#        if product_id.list_price > actual_price:
+#            actual_price = product_id.list_price
 
         invoice_lines = []
         invoice_line = {
