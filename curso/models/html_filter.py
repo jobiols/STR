@@ -108,25 +108,22 @@ Sábados de 11 a 19 hs<br />
 
 
             """
-            if price:
-                if not discount:
-                    ret += """
+        if price:
+            if not discount:
+                ret += """
 <h2>Valor del curso ${} {} &nbsp;&nbsp; <br/>
 <a href="{}">Pagar ahora con Mercadopago</a></h2>
                     """.format(data.get('curso_price'),
                                data.get('curso_price_per'),
                                data.get('mercadopago_button'))
-                else:
-                    price = data['curso_price']
-                    discount = data.get('mercadopago_discount')
-                    if discount:
-                        new_price = int(round(price * discount / 100))
-                    else:
-                        new_price = price
-                    ret += """
+            else:
+                old_price = data['curso_price']
+                discount = data.get('mercadopago_discount')
+                new_price = int(round(old_price * discount / 100))
+                ret += """
 <h2>Valor del curso <s>${}</s>&nbsp; <span style="color:#FF0000;">Ahora ${}</span>&nbsp; <br/>
 <a href="{}">Pagar con Mercadopago</a></h2>
-                    """.format(price, new_price, data.get('mercadopago_button_discount'))
+                    """.format(old_price, new_price, data.get('mercadopago_button_discount'))
         # para página web donde no entran dos columnas
         else:
             ret += u"""
