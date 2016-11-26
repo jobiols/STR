@@ -145,11 +145,8 @@ class curso_curso(osv.osv):
         ret += "		</tr>"
         for alumna in dict['alumnas']:
             ret += "		<tr>"
-            if alumna['state'] <> 'confirm':
-                ret += "			<td>" + alumna['name'] + ' (Sin confirmar)' + "</td>"
-            else:
-                ret += "			<td>" + alumna['name'] + "</td>"
-
+            state = '(Sin Confirmar)' if alumna.get('state') != 'confirm' else ''
+            ret += "			<td>{} {}</td>".format(alumna.get('name'),state)
             for fecha in dict['clases']:
                 ret += "			<td>&nbsp;</td>"
 

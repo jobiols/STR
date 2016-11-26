@@ -42,7 +42,7 @@ class lecture_template(models.Model):
     def create_template(self, prod_id, no_lectures):
         prod_ids = self.search([('product_id', '=', prod_id)])
         if prod_ids:
-            raise except_orm,(
+            raise except_orm(
                 'Error!', u"ya existe una plantilla de clases hay que borrarla primero")
 
         for seq in range(no_lectures):

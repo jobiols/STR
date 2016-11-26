@@ -76,7 +76,7 @@ class curso_daily_report(osv.osv_memory):
 
         for dict in data:
             for alumna in dict['alumnas']:
-                if self.missing_data(alumna) or alumna.partner_id.credit <> 0:
+                if self.missing_data(alumna) or alumna.partner_id.credit != 0:
                     ret += '<tr>'
                     ret += '    <td>' + alumna.partner_id.name + '</td>'
                     ret += '    <td>' + str(alumna.partner_id.credit) + '</td>'
