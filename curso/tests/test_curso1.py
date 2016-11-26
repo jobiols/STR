@@ -18,6 +18,8 @@
 #
 #####################################################################################
 from openerp.tests.common import TransactionCase
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
 
 # testear con
 # ./odooenv.py -Q cursos test_curso1.py -c makeover -d makeover_test -m curso
@@ -53,7 +55,6 @@ class TestCurso(TransactionCase):
 
     def test_CreateSchedules_01(self):
         """ test curso create schedules """
-        print 'test from test_curso1.py --------------------------------'
         # creo tres horarios
         self.schedule1 = self.schedule_obj.create({
             'start_time': 12.5,
@@ -217,7 +218,8 @@ class TestCurso(TransactionCase):
     ambiente cálido y humano. Con sólidos contenidos teóricos que fundamentan la carrera dando una base para que luego el
     estudiante pueda canalizar su arte. El estudio de la estructura facial, la teoría del color y las características de
     cada tipo de piel, son algunas de las herramientas que el estudiante podrá obtener.
-                """
+                """,
+            'comercial_data': 'Matricula bonificada.,Materiales incluidos en el valor del curso.,Se entrega certificado digital.'
         })
 
         # creo el producto QBX
@@ -326,24 +328,12 @@ class TestCurso(TransactionCase):
 
         data = self.product1.info_curso_html_data(debug=True)
         self.assertEqual(data['name'], u'Maquillaje Social Profesional', 'error 01')
-
         self.assertEqual(data['comercial_data'][0], u'Matricula bonificada.',
                          'error 02')
-        self.assertEqual(data['comercial_data'][1], u'No se cobra derecho de examen.',
+        self.assertEqual(data['comercial_data'][1], u'Materiales incluidos en el valor del curso.',
                          'error 03')
-        self.assertEqual(data['comercial_data'][2],
-                         u'Materiales incluidos en el valor del curso.',
+        self.assertEqual(data['comercial_data'][2], u'Se entrega certificado digital.',
                          'error 04')
-        self.assertEqual(data['comercial_data'][3],
-                         u'Se entrega certificado digital.',
-                         'error 05')
-        self.assertEqual(data['curso_data'][0], u'Carga horaria 80 horas.',
-                         'error 06')
-        self.assertEqual(data['curso_data'][1], u'Duración 20 semanas.',
-                         'error 07')
-#        self.assertEqual(data['curso_data'][2], u'<strong>Valor $1200.0 por mes</strong>',
-#                         'error 08')
-
         self.assertEqual(data['mode'],u'Son 20 clases de 4 horas c/u','error 085')
 
         instance = data['instances'][0]
@@ -383,6 +373,12 @@ class TestCurso(TransactionCase):
                 """,
             'description':
                 """
+                """,
+            'comercial_data':
+                """
+                Matricula bonificada.,
+                Materiales incluidos en el valor del curso.,
+                Se entrega certificado digital.
                 """
         })
 
@@ -398,8 +394,6 @@ class TestCurso(TransactionCase):
         # Se chequea el producto
         data = self.product1.info_curso_html_data(debug=True)
         self.assertEqual(data['mode'], u'Es una clase de 4 horas','error 22')
-
-
 
 
         # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

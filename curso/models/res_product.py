@@ -191,7 +191,11 @@ class product_product(models.Model):
 
     @api.multi
     def info_curso_html_data(self, debug=False):
-        """ informacion para armar el html. El debug es para correr los tests!!
+        """ informacion para armar el html.
+            El debug es para correr los tests!!
+            resulta que debe traer cursos futuros, y las fechas de las cosas
+            en los tests estan harcodeadas y fué mas facil aunque dirty
+            harcodearlas que hacerlas dinamicas.
         """
         data = {}
         data['name'] = self.name
