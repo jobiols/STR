@@ -275,34 +275,6 @@ class product_product(models.Model):
         return data
 
     @api.multi
-    def info_recover_html(self, default_code):
-        """ Genera los datos de las clases de posible recuperatorio para el curso
-            default_code
-        """
-        # obtener las clases futuras para este curso, que tienen vacantes
-        # para ver si tienen vacantes hacemos: confirmadas + recuperantes < 7
-        lectures = self.env['curso.lecture'].search(
-            [
-                ('default_code', '=', default_code),
-                ('date', '>', datetime.today().strftime('%Y-%m-%d'))
-            ], order="seq, date")
-
-        ret = []
-        for lecture in lectures:
-            # valida para recuperar si tiene menos de 7 alumnas en total
-            if lecture.reg_current + lecture.reg_recover < 7:
-                ret.append({
-                    'code': lecture.curso_id.curso_instance,
-                    'date': datetime.strptime(lecture.date, '%Y-%m-%d').strftime(
-                        '%d/%m/%Y'),
-                    'day': lecture.weekday,
-                    'schedule': lecture.schedule_id.name,
-                    'lecture_no': lecture.seq,
-                })
-
-        return ret
-
-    @api.multi
     def build_html_page(self):
         data = self.info_curso_html_data()
         html = html_filter.html_filter()

@@ -113,10 +113,30 @@ class res_partner(models.Model):
     def info_recover_html(self, default_code):
         """ Genera tabla html con la información de recuperatorios para el curso
             default_code
+            Es llamada desde la plantilla con el curso como parámetro
         """
-        producto = self.env['product.product'].search(
-            [('default_code', '=', default_code)])
-        data = producto.info_recover_html(default_code) or {}
+
+        # obtener las clases futuras para este curso, que tienen vacantes
+        # para ver si tienen vacantes hacemos: confirmadas + recuperantes < maximo permitido
+        lectures = self.env['curso.lecture'].search(
+            [
+                ('default_code', '=', default_code),
+                ('date', '>', datetime.today().strftime('%Y-%m-%d'))
+            ], order="seq, date")
+
+        data = []
+        for lecture in lectures:
+            # valida para recuperar si tiene menos del maximo permitido
+            if lecture.reg_current + lecture.reg_recover < lecture.curso_id.product.default_registration_max:
+                data.append({
+                    'code': lecture.curso_id.curso_instance,
+                    'date': datetime.strptime(lecture.date, '%Y-%m-%d').strftime(
+                        '%d/%m/%Y'),
+                    'day': lecture.weekday,
+                    'schedule': lecture.schedule_id.name,
+                    'lecture_no': lecture.seq,
+                })
+
         html = html_filter.html_filter()
         return html.info_recover_html(data)
 
