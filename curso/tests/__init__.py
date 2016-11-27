@@ -18,5 +18,5 @@
 ######################################################################################
 
 from . import test_curso1
-
+from . import test_curso2
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

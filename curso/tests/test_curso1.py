@@ -22,7 +22,7 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 # testear con
-# ./odooenv.py -Q cursos test_curso1.py -c makeover -d makeover_test -m curso
+# ./odooenv.py -Q cursos test_curso1.py -c makeover -d makeover_travis -m curso
 #
 
 class TestCurso(TransactionCase):
@@ -46,7 +46,7 @@ class TestCurso(TransactionCase):
 
         # creo una profesora
         self.partner_prof = self.partner_obj.create({
-            'name': 'Juana Perez Profesora'})
+            'name': 'Ana Perez Profesora'})
 
         # creo un template de mail para todos los productos
         self.email_template_1 = self.email_template_obj.create({
@@ -179,13 +179,13 @@ class TestCurso(TransactionCase):
 
     def test_generate_html_02(self):
         """ Chequea generación de html """
-        # creo el producto SPX
+        # creo el producto SPR
         ##################################################################################
         self.product1 = self.product_obj.create({
             'tot_hs_lecture': 80,
             'hs_lecture': 4,
             'no_quotes': 5,
-            'default_code': 'SPX',
+            'default_code': 'SPR',
             'list_price': 1200,
             'type': 'curso',
             'name': 'Maquillaje Social Profesional',
@@ -340,7 +340,7 @@ class TestCurso(TransactionCase):
         self.assertEqual(instance['month'], u'Agosto 2016','error 10')
         self.assertEqual(instance['day'], u'1','error 11')
         self.assertEqual(instance['name'],
-                         u'[SPX/00] Lun 01/08/16 (12:00 16:00) - Maquillaje Social Profesional','error 12')
+                         u'[SPR/00] Lun 01/08/16 (12:00 16:00) - Maquillaje Social Profesional','error 12')
         self.assertEqual(instance['weekday'], u'Lunes','error 13')
         self.assertEqual(instance['schedule'], u'12:00 - 16:00 (4hs)','error 14')
         self.assertEqual(instance['vacancy'], u'<p style="color:green;">Vacantes disponibles</p>', 'error 15')
@@ -349,7 +349,7 @@ class TestCurso(TransactionCase):
         self.assertEqual(instance['month'], u'Agosto 2016','error 16')
         self.assertEqual(instance['day'], u'9','error 17')
         self.assertEqual(instance['name'],
-                         '[SPX/00] Mar 09/08/16 (15:00 19:00) - Maquillaje Social Profesional','error 18')
+                         '[SPR/00] Mar 09/08/16 (15:00 19:00) - Maquillaje Social Profesional','error 18')
         self.assertEqual(instance['weekday'], u'Martes','error 19')
         self.assertEqual(instance['schedule'], u'15:00 - 19:00 (4hs)','error 20')
         self.assertEqual(instance['vacancy'], u'<p style="color:green;">Vacantes disponibles</p>','error 21')

@@ -184,8 +184,16 @@ class curso_registration(models.Model):
             # generarle las cuotas
             reg.button_gen_quotes()
 
+            # si no tiene clases las creamos
+            if len(reg.curso_id.lecture_ids) == 0:
+                reg.curso_id.button_generate_lectures()
+
             # señar la inscripción pasando al estado señada
             res = reg.sign_registration()
+
+            # generar las asistencias
+            for lec in self.curso_id.lecture_ids:
+                lec.button_generate_assistance()
 
             context = self._context.copy()
             context['template'] = reg.curso_id.email_registration_id.id
