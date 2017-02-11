@@ -329,12 +329,16 @@ class curso_curso(models.Model):
             self.error = 'Debería estar en estado cursando'
             return
 
-        if (self.register_min and self.register_min >= self.register_current):
+        if self.register_min and self.register_min >= self.register_current:
             self.error = 'No alcanza mínimo de alumnas'
             return
 
-        if (self.register_max and self.register_max < self.register_current):
+        if self.register_max and self.register_max < self.register_current:
             self.error = 'Supera maximo de vacantes'
+            return
+
+        if self.register_max and self.register_max == self.register_current:
+            self.error = 'El curso está completo'
             return
 
         if self.state in ['in_process', 'done', 'cancel']:
