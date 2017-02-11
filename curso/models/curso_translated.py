@@ -18,11 +18,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # -----------------------------------------------------------------------------------
-from datetime import datetime
 import operator
+from datetime import datetime
 
-from openerp.exceptions import ValidationError
 from openerp import models, fields, api
+from openerp.exceptions import ValidationError
 from openerp.exceptions import Warning
 
 
@@ -30,148 +30,148 @@ class curso_curso(models.Model):
     _inherit = 'curso.curso'
 
     child = fields.Boolean(
-        u'Curso Hijo',
-        readonly=True,
-        states={'draft': [('readonly', False)]},
-        help=u"Tildar si el curso es hijo, es decir debe estar insertado en un curso "
-             u"mas grande"
+            u'Curso Hijo',
+            readonly=True,
+            states={'draft': [('readonly', False)]},
+            help=u"Tildar si el curso es hijo, es decir debe estar insertado en un curso "
+                 u"mas grande"
     )
 
     allow_overclass = fields.Boolean(
-        u'Permitir sobreclases', readonly=True,
-        states={'draft': [('readonly', False)]},
-        help=u"Tildar si cuando se generan clases se puede permitir que la clase "
-             u"comparta el aula con otra en el mismo horario tener en cuenta que pasará "
-             u"lo mismo con los feriados"
+            u'Permitir sobreclases', readonly=True,
+            states={'draft': [('readonly', False)]},
+            help=u"Tildar si cuando se generan clases se puede permitir que la clase "
+                 u"comparta el aula con otra en el mismo horario tener en cuenta que pasará "
+                 u"lo mismo con los feriados"
     )
 
     instance = fields.Integer(
-        u'Instancia',
-        readonly=True,
-        states={'draft': [('readonly', False)]}
+            u'Instancia',
+            readonly=True,
+            states={'draft': [('readonly', False)]}
     )
 
     register_max = fields.Integer(
-        u'Vacantes max',
-        help=u"La cantidd máxima de vacantes del curso. Si la cantidad de "
-             u"inscripciones es mayor, no se puede arrancar el curso. (dejar en blanco para "
-             u"ignorar la regla)"
+            u'Vacantes max',
+            help=u"La cantidd máxima de vacantes del curso. Si la cantidad de "
+                 u"inscripciones es mayor, no se puede arrancar el curso. (dejar en blanco para "
+                 u"ignorar la regla)"
     )
 
     register_min = fields.Integer(
-        u'Vacantes min',
-        help=u"La cantidad mínima de inscripciones en el curso. Si no hay "
-             u"suficientes inscripcones no se puede arrancar el curso. (poner 0 para "
-             u"ignorar la regla)"
+            u'Vacantes min',
+            help=u"La cantidad mínima de inscripciones en el curso. Si no hay "
+                 u"suficientes inscripcones no se puede arrancar el curso. (poner 0 para "
+                 u"ignorar la regla)"
     )
 
     date_begin = fields.Date(
-        u'Inicio', readonly=True,
-        help=u"La fecha en la que inicia el curso, se puede dejar en blanco si no "
-             u"está definida todavia pero se debe ingresar para confirmar el curso",
-        states={'draft': [('readonly', False)]}
+            u'Inicio', readonly=True,
+            help=u"La fecha en la que inicia el curso, se puede dejar en blanco si no "
+                 u"está definida todavia pero se debe ingresar para confirmar el curso",
+            states={'draft': [('readonly', False)]}
     )
 
     reply_to = fields.Char(
-        u'Mail de respuesta', size=64,
-        states={'done': [('readonly', True)]},
-        help=u"La dirección de mail del que organiza los cursos, cuando el alumno "
-             u"responde el mail que se le envia en automático responderá a esta dirección."
-             u"si se deja en blanco la respuesta va a la dirección por defecto"
+            u'Mail de respuesta', size=64,
+            states={'done': [('readonly', True)]},
+            help=u"La dirección de mail del que organiza los cursos, cuando el alumno "
+                 u"responde el mail que se le envia en automático responderá a esta dirección."
+                 u"si se deja en blanco la respuesta va a la dirección por defecto"
     )
 
     note = fields.Text(
-        u'Descripción',
-        states={'done': [('readonly', True)]}
+            u'Descripción',
+            states={'done': [('readonly', True)]}
     )
 
     parent_curso_id = fields.Many2one(
-        'curso.curso',
-        u'Curso padre donde se inserta este'
+            'curso.curso',
+            u'Curso padre donde se inserta este'
     )
 
     first_lecture_id = fields.Many2one(
-        'curso.lecture',
-        u'Clase inicial de este curso'
+            'curso.lecture',
+            u'Clase inicial de este curso'
     )
 
     user_id = fields.Many2one(
-        'res.users',
-        string=u'Responsable',
-        default=lambda self: self.env.user,
-        readonly=False, states={'done': [('readonly', True)]}
+            'res.users',
+            string=u'Responsable',
+            default=lambda self: self.env.user,
+            readonly=False, states={'done': [('readonly', True)]}
     )
 
     product = fields.Many2one(
-        'product.product', u'Producto',
-        required=True,
-        readonly=True,
-        domain="[('tot_hs_lecture','!=','0')]",
-        states={'draft': [('readonly', False)]},
-        help=u'Producto de donde este curso fue generado'
+            'product.product', u'Producto',
+            required=True,
+            readonly=True,
+            domain="[('tot_hs_lecture','!=','0')]",
+            states={'draft': [('readonly', False)]},
+            help=u'Producto de donde este curso fue generado'
     )
 
     email_registration_id = fields.Many2one(
-        'email.template',
-        u'Confirmación de inscripción',
-        required=True,
-        help=u'Plantilla de mail que se enviará cada vez que un alumno de este curso '
-             u'pase al estado señado.'
+            'email.template',
+            u'Confirmación de inscripción',
+            required=True,
+            help=u'Plantilla de mail que se enviará cada vez que un alumno de este curso '
+                 u'pase al estado señado.'
     )
 
     email_confirmation_id = fields.Many2one(
-        'email.template',
-        u'Confirmación curso',
-        help=u"Si definis una plantilla de mail, cada participante recibirá este "
-             u"mail anunciando la confirmación del curso."
+            'email.template',
+            u'Confirmación curso',
+            help=u"Si definis una plantilla de mail, cada participante recibirá este "
+                 u"mail anunciando la confirmación del curso."
     )
 
     main_speaker_id = fields.Many2one(
-        'res.partner',
-        u'Profesora',
-        required=True,
-        states={'done': [('readonly', True)]},
-        help=u"La profesora que va a dar el curso."
+            'res.partner',
+            u'Profesora',
+            required=True,
+            states={'done': [('readonly', True)]},
+            help=u"La profesora que va a dar el curso."
     )
 
     secondary_speaker_id = fields.Many2one(
-        'res.partner', u'Asistente',
-        states={'done': [('readonly', True)]},
-        help=u"La asistente del curso."
+            'res.partner', u'Asistente',
+            states={'done': [('readonly', True)]},
+            help=u"La asistente del curso."
     )
 
     company_id = fields.Many2one(
-        'res.company',
-        string='Company',
-        change_default=True,
-        default=lambda self: self.env['res.company']._company_default_get('curso.curso'),
-        required=False,
-        readonly=False,
-        states={'done': [('readonly', True)]}
+            'res.company',
+            string='Company',
+            change_default=True,
+            default=lambda self: self.env['res.company']._company_default_get('curso.curso'),
+            required=False,
+            readonly=False,
+            states={'done': [('readonly', True)]}
     )
 
     registration_ids = fields.One2many(
-        'curso.registration',
-        'curso_id',
-        u'Inscripciones',
-        states={'done': [('readonly', True)],
-                'cancel': [('readonly', True)]}
+            'curso.registration',
+            'curso_id',
+            u'Inscripciones',
+            states={'done': [('readonly', True)],
+                    'cancel': [('readonly', True)]}
     )
 
     lecture_ids = fields.One2many(
-        'curso.lecture',
-        'curso_id',
-        u'Clases',
-        help='Las clases que componen este curso'
+            'curso.lecture',
+            'curso_id',
+            u'Clases',
+            help='Las clases que componen este curso'
     )
 
     diary_ids = fields.One2many(
-        'curso.diary',
-        'curso_id',
-        u'Agenda',
-        readonly=True,
-        states={'draft': [('readonly', False)]},
-        help='Define los dias y horarios en los que se da el curso'
+            'curso.diary',
+            'curso_id',
+            u'Agenda',
+            readonly=True,
+            states={'draft': [('readonly', False)]},
+            help='Define los dias y horarios en los que se da el curso'
     )
 
     state = fields.Selection([
@@ -181,126 +181,126 @@ class curso_curso(models.Model):
         ('done', 'Cumplido'),  # está cumpllido verifica fechas fin
         ('cancel', 'Cancelado')  # está cancelado no se publica
     ],
-        'Estado', readonly=True, required=True,
-        default='draft',
-        help=u"Borrador:   Está recién creado\n"
-             u"Confirmado: Se publica en el sitio\n"
-             u"Cursando:   Está activo, se verifica que con las fechas de primera y ultima clase\n"
-             u"Cumplido:   Terminó la fecha es posterior a la de la ultima clase\n'."
-             u"Cancelado:  Desaparece de la publicacion'.")
+            'Estado', readonly=True, required=True,
+            default='draft',
+            help=u"Borrador:   Está recién creado\n"
+                 u"Confirmado: Se publica en el sitio\n"
+                 u"Cursando:   Está activo, se verifica que con las fechas de primera y ultima clase\n"
+                 u"Cumplido:   Terminó la fecha es posterior a la de la ultima clase\n'."
+                 u"Cancelado:  Desaparece de la publicacion'.")
 
     tot_hs_lecture = fields.Integer(
-        related='product.tot_hs_lecture',
-        readonly=True,
-        string=u'Tot Hs',
-        help=u'Cantidad total de horas cátedra del curso'
+            related='product.tot_hs_lecture',
+            readonly=True,
+            string=u'Tot Hs',
+            help=u'Cantidad total de horas cátedra del curso'
     )
 
     list_price = fields.Float(
-        related='product.list_price',
-        readonly=True,
-        string='Cuota',
-        help=u'Es el valor de la cuota, o el total si es solo un pago.'
+            related='product.list_price',
+            readonly=True,
+            string='Cuota',
+            help=u'Es el valor de la cuota, o el total si es solo un pago.'
     )
 
     hs_lecture = fields.Integer(
-        related='product.hs_lecture',
-        readonly=True,
-        string=u'Hs')
+            related='product.hs_lecture',
+            readonly=True,
+            string=u'Hs')
 
     default_code = fields.Char(
-        related='product.default_code',
-        readonly=True,
-        string=u'Código',
-        help=u'Código por defecto del producto'
+            related='product.default_code',
+            readonly=True,
+            string=u'Código',
+            help=u'Código por defecto del producto'
     )
 
     no_quotes = fields.Integer(
-        related='product.no_quotes',
-        readonly=True,
-        string='#cuotas',
-        help=u'Cantidad de cuotas para pagar el curso'
+            related='product.no_quotes',
+            readonly=True,
+            string='#cuotas',
+            help=u'Cantidad de cuotas para pagar el curso'
     )
 
     country_id = fields.Many2one(
-        'res.country',
-        string='Country',
-        store=True, compute='_compute_country'
+            'res.country',
+            string='Country',
+            store=True, compute='_compute_country'
     )
 
     register_attended = fields.Integer(
-        compute='_get_register',
-        string='Egresadas',
-        help=u"Cantidad de alumnas que termino el curso con exito."
+            compute='_get_register',
+            string='Egresadas',
+            help=u"Cantidad de alumnas que termino el curso con exito."
     )
 
     register_current = fields.Integer(
-        compute='_get_register',
-        string='Confirmadas',
-        help=u"La cantidad de alumnas que confirmaron pagando (al menos una seña)"
+            compute='_get_register',
+            string='Confirmadas',
+            help=u"La cantidad de alumnas que confirmaron pagando (al menos una seña)"
     )
 
     register_avail = fields.Integer(
-        compute='_get_register',
-        string='Vacantes',
-        help=u"La cantidad de vacantes que le queda al curso"
+            compute='_get_register',
+            string='Vacantes',
+            help=u"La cantidad de vacantes que le queda al curso"
     )
 
     register_prospect = fields.Integer(
-        compute='_get_register',
-        string='Interesadas',
-        help=u"La cantidad de alumnas interesadas que todavía no concretaron"
+            compute='_get_register',
+            string='Interesadas',
+            help=u"La cantidad de alumnas interesadas que todavía no concretaron"
     )
 
     register_cancel = fields.Integer(
-        compute='_get_register',
-        string='Canceladas',
-        help=u"La cantidad de alumnas que cancelaron el curso"
+            compute='_get_register',
+            string='Canceladas',
+            help=u"La cantidad de alumnas que cancelaron el curso"
     )
 
     is_subscribed = fields.Boolean(
-        compute='_subscribe_fnc_',
-        string='Subscribed'
+            compute='_subscribe_fnc_',
+            string='Subscribed'
     )
 
     classes_per_week = fields.Integer(
-        compute='_get_classes_per_week_',
-        string='Clases por semana',
-        help=u"La cantidad de clases por semana"
+            compute='_get_classes_per_week_',
+            string='Clases por semana',
+            help=u"La cantidad de clases por semana"
     )
 
     curso_instance = fields.Char(
-        compute='_get_instance', string='Instancia del curso'
+            compute='_get_instance', string='Instancia del curso'
     )
 
     name = fields.Char(
-        compute='_get_name_',
-        store=True,
-        string='Nombre del curso'
+            compute='_get_name_',
+            store=True,
+            string='Nombre del curso'
     )
 
     no_lectures = fields.Char(
-        compute='_get_no_lectures_',
-        string='Clases',
-        help=u"La cantidad de clases que tiene el curso"
+            compute='_get_no_lectures_',
+            string='Clases',
+            help=u"La cantidad de clases que tiene el curso"
     )
 
     address_id = fields.Many2one(
-        'res.partner',
-        string='Location',
-        default=lambda self: self.env.user.company_id.partner_id,
-        readonly=False, states={'done': [('readonly', True)]}
+            'res.partner',
+            string='Location',
+            default=lambda self: self.env.user.company_id.partner_id,
+            readonly=False, states={'done': [('readonly', True)]}
     )
 
     next = fields.Boolean(
-        compute='_get_next',
-        search='_search_next',
-        help='curso por venir'
+            compute='_get_next',
+            search='_search_next',
+            help='curso por venir'
     )
 
     error = fields.Char(
-        compute='_get_error',
-        help='Indica si el curso tiene un error',
+            compute='_get_error',
+            help='Indica si el curso tiene un error',
     )
 
     @api.one
@@ -341,7 +341,7 @@ class curso_curso(models.Model):
             for reg in self.registration_ids.search([('curso_id', '=', self.id)]):
                 if reg.state == 'signed':
                     self.error = 'La alumna ({}) no puede estar en estado señada'.format(
-                        reg.partner_id.name)
+                            reg.partner_id.name)
                     return
 
     def _search_next(self, operator, value):
@@ -374,9 +374,9 @@ class curso_curso(models.Model):
 
         if int(wd_date_no) != int(wd_diary_no):
             raise ValidationError(
-                u"No se puede salvar el curso porque la fecha de inicio ({}) cae en {}"
-                u" y el primer dia de la agenda es {}.".format(
-                    date_begin, date_begin_day, weekday))
+                    u"No se puede salvar el curso porque la fecha de inicio ({}) cae en {}"
+                    u" y el primer dia de la agenda es {}.".format(
+                            date_begin, date_begin_day, weekday))
 
     @api.one
     @api.depends('registration_ids.user_id', 'registration_ids.state')
@@ -384,8 +384,8 @@ class curso_curso(models.Model):
         """ Determine whether the current user is already subscribed to any event in `self` """
         user = self.env.user
         self.is_subscribed = any(
-            reg.user_id == user and reg.state in ('open', 'done')
-            for reg in self.registration_ids
+                reg.user_id == user and reg.state in ('open', 'done')
+                for reg in self.registration_ids
         )
 
     @api.one
@@ -459,12 +459,12 @@ class curso_curso(models.Model):
 
         # https://docs.python.org/2/library/datetime.html#datetime-objects
         self.name = u'[{}] {} {}/{}/{} ({:0>2d}:{:0>2d} {:0>2d}:{:0>2d}) - {}'.format(
-            self.curso_instance,
-            # Codigo de producto, Nro de instancia
-            unicode(weekday.capitalize(), 'utf-8'),  # dia de la semana en letras
-            day_n, month_n, year_n,  # dia , mes, anio en numeros
-            hhs, mms, hhe, mme,  # hora de inicio hora de fin
-            self.product.name)  # nombre del producto
+                self.curso_instance,
+                # Codigo de producto, Nro de instancia
+                unicode(weekday.capitalize(), 'utf-8'),  # dia de la semana en letras
+                day_n, month_n, year_n,  # dia , mes, anio en numeros
+                hhs, mms, hhe, mme,  # hora de inicio hora de fin
+                self.product.name)  # nombre del producto
 
     @api.one
     @api.depends('tot_hs_lecture', 'hs_lecture')
@@ -491,8 +491,8 @@ class curso_curso(models.Model):
         #        default_code = self.default_code
         if (operator.mod(tot_hs_lecture, hs_lecture) != 0):
             raise Warning(
-                'Error!',
-                u"la cantidad de horas catedra no es divisible por las horas de clase!.")
+                    'Error!',
+                    u"la cantidad de horas catedra no es divisible por las horas de clase!.")
 
         no_lectures = int(tot_hs_lecture // hs_lecture)
         weekload = self.get_weekload()
@@ -510,23 +510,23 @@ class curso_curso(models.Model):
                 self.weekdays(weekload, date_begin), no_lectures):
             if not self.lecture_overlaps(date, schedule, room):
                 lectures.append(
-                    {'date': date,
-                     'schedule': schedule,
-                     #                         'room': room,
-                     'curso': self,
-                     'seq': seq}
+                        {'date': date,
+                         'schedule': schedule,
+                         #                         'room': room,
+                         'curso': self,
+                         'seq': seq}
                 )
                 seq += 1
             else:
                 raise Warning(
-                    'Error!',
-                    u'La clase del %s en el horario %s y en el aula %s se superpone con una ya existente',
-                    date, schedule.name, room)
+                        'Error!',
+                        u'La clase del %s en el horario %s y en el aula %s se superpone con una ya existente',
+                        date, schedule.name, room)
 
         if len(lectures) != len(lecture_templates):
             raise Warning(
-                'Error!',
-                u'La cantidad de clases no coincide con la cantidad de contenidos.')
+                    'Error!',
+                    u'La cantidad de clases no coincide con la cantidad de contenidos.')
 
         lecs = []
         for ix, lec in enumerate(lectures):
@@ -568,7 +568,7 @@ class curso_curso(models.Model):
         if self.email_confirmation_id:
             # send reminder that will confirm the event for all the people that were already confirmed
             regs = self.registration_ids.filtered(
-                lambda reg: reg.state not in ('draft', 'cancel'))
+                    lambda reg: reg.state not in ('draft', 'cancel'))
         # regs.mail_user_confirm()
         self.state = 'confirm'
 
