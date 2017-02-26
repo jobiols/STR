@@ -21,6 +21,7 @@
 from datetime import datetime
 
 from openerp import models, fields, api
+
 from . import html_filter
 
 
@@ -28,50 +29,50 @@ class res_partner(models.Model):
     _inherit = 'res.partner'
 
     teacher = fields.Boolean(
-        'Profesora',
-        help="Poner el tilde si el contacto es una profesora.")
+            'Profesora',
+            help="Poner el tilde si el contacto es una profesora.")
 
     # TODO Revisar cursos que son de una profesora?? ver si se usa en algun lado...
     curso_ids = fields.One2many(
-        'curso.curso',
-        'main_speaker_id',
-        readonly=True
+            'curso.curso',
+            'main_speaker_id',
+            readonly=True
     )
 
     curso_registration_ids = fields.One2many(
-        'curso.registration',
-        'partner_id')
+            'curso.registration',
+            'partner_id')
 
     groupon = fields.Boolean('Validado')
 
     assistance_id = fields.One2many(
-        'curso.assistance',
-        'partner_id',
-        'Asistencias'
+            'curso.assistance',
+            'partner_id',
+            'Asistencias'
     )
 
     c_started = fields.Char(
-        'Cursos iniciados',
-        store=True,
-        help=u"Cursos que la alumna inició, señandolo, pero que todavía no terminaron están "
-             u"todavía cursandolos",
-        compute="_compute_curso_assistance"
+            'Cursos iniciados',
+            store=True,
+            help=u"Cursos que la alumna inició, señandolo, pero que todavía no terminaron están "
+                 u"todavía cursandolos",
+            compute="_compute_curso_assistance"
     )
 
     c_finished = fields.Char(
-        'Cursos terminados',
-        store=True,
-        help=u"Cursos que la alumna inició y que ya terminaron. La alumna tuvo asistencia"
-             u"completa en esos cursos",
-        compute="_compute_curso_assistance"
+            'Cursos terminados',
+            store=True,
+            help=u"Cursos que la alumna inició y que ya terminaron. La alumna tuvo asistencia"
+                 u"completa en esos cursos",
+            compute="_compute_curso_assistance"
     )
 
     c_incomplete = fields.Char(
-        'Cursos incompletos',
-        store=True,
-        help=u"Cursos que la alumna inició y que ya terminaron. La alumna no tuvo asistencia"
-             u"completa en esos cursos",
-        compute="_compute_curso_assistance"
+            'Cursos incompletos',
+            store=True,
+            help=u"Cursos que la alumna inició y que ya terminaron. La alumna no tuvo asistencia"
+                 u"completa en esos cursos",
+            compute="_compute_curso_assistance"
     )
 
     @api.one
@@ -100,7 +101,7 @@ class res_partner(models.Model):
             el precio y el boton de pago.
         """
         producto = self.env['product.product'].search(
-            [('default_code', '=', default_code)])
+                [('default_code', '=', default_code)])
         data = producto.info_curso_html_data() or {}
         html = html_filter.html_filter()
 
@@ -119,10 +120,10 @@ class res_partner(models.Model):
         # obtener las clases futuras para este curso, que tienen vacantes
         # para ver si tienen vacantes hacemos: confirmadas + recuperantes < maximo permitido
         lectures = self.env['curso.lecture'].search(
-            [
-                ('default_code', '=', default_code),
-                ('date', '>', datetime.today().strftime('%Y-%m-%d'))
-            ], order="seq, date")
+                [
+                    ('default_code', '=', default_code),
+                    ('date', '>', datetime.today().strftime('%Y-%m-%d'))
+                ], order="seq, date")
 
         data = []
         for lecture in lectures:
@@ -131,7 +132,7 @@ class res_partner(models.Model):
                 data.append({
                     'code': lecture.curso_id.curso_instance,
                     'date': datetime.strptime(lecture.date, '%Y-%m-%d').strftime(
-                        '%d/%m/%Y'),
+                            '%d/%m/%Y'),
                     'day': lecture.weekday,
                     'schedule': lecture.schedule_id.name,
                     'lecture_no': lecture.seq,
@@ -146,9 +147,23 @@ class res_partner(models.Model):
         return html.default_footer()
 
     @api.multi
+    def get_product_price_html(self, default_code_list):
+        products = []
+        for default_code in default_code_list:
+            product = self.env['product.product'].search([('default_code', '=', default_code)])
+            products.append({
+                'default_code': product.default_code or '',
+                'name': product.name or 'No existe el producto',
+                'list_price': product.list_price}
+            )
+
+        html = html_filter.html_filter()
+        return html.get_product_price(products)
+
+    @api.multi
     def get_birthdate(self):
         return datetime.strptime(
-            self.date, '%Y-%m-%d').strftime('%d/%m/%Y') if self.date else False
+                self.date, '%Y-%m-%d').strftime('%d/%m/%Y') if self.date else False
 
     @api.multi
     def get_info(self):

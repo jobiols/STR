@@ -67,7 +67,7 @@ Avda Rivadavia 5259 9° "34", Caballito<br />
 Teléfono: 11 4902 4652<br />
 Horario de atenciónón al público:<br />
 Lunes a Viernes de 17 a 20 hs.<br />
-Sábados de 11 a 19 hs<br />
+Sábados de 11 a 18 hs<br />
 <a href="https://www.facebook.com/MakeoverLabs">face/makeoverlabs</a><br />
 <a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a>
                 """
@@ -285,5 +285,31 @@ width="394" height="200" />
 </table>
         """
         return ret
+
+    def get_product_price(self, products):
+        """ Formatea una linea de producto para hacer un pequeño catalogo
+        """
+        ret = u"""
+<table>
+"""
+        for product in products:
+            ret += u"""
+    <tr>
+            <td>
+                {}&nbsp;&nbsp;
+            </td>
+            <td>
+                {}&nbsp;&nbsp;
+            </td>
+            <td>
+                ${:.2f}
+            </td>
+    </tr>
+""".format(product['default_code'], product['name'], product['list_price'])
+        ret += u"""
+</table>
+"""
+        return ret
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
