@@ -1,0 +1,34 @@
+<!-- Pinceles combos -->
+${object.get_product_price_html([
+'Set MINI',
+'COMBO OJOS'
+]) | safe}
+
+<!-- Pinceles de a uno -->
+${object.get_product_price_html([
+'P90',
+'BROCHA LUSTRE TRADICIONAL',
+'S11.3',
+'S22.2',
+'TK96',
+'P86',
+'P84',
+'P85 TF'
+]) | safe}
+
+
+<!-- Farmacia once -->
+${object.get_product_price_html([
+'583/50',
+'67/100 LIMP/100',
+'MAND GEL LIMP/50',
+'73/50',
+'73/100',
+'PYTOCELL 40',
+'8521/50 E',
+'8521/100 E',
+'586/50', '586/100',
+'483/50 SPF 35/50',
+'RFRM CONT 15',
+'S/SEBO50'
+]) | safe}
