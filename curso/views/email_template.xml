@@ -1,41 +1,41 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-    <!--
-        <record id="confirmation_curso" model="email.template">
-            <field name="name">Confirmación del the Curso</field>
-            <field name="model_id" ref="curso.model_curso_registration"/>
-            <field name="email_from">
-                ${(object.user_id.email or object.company_id.email or 'noreply@' + object.company_id.name + '.com')|safe}
-            </field>
-            <field name="email_to">${object.email|safe}</field>
-            <field name="subject">Your registration at ${object.curso_id.name}</field>
-            <field name="body_html"><![CDATA[
-        <p>Hello ${object.name},</p>
-        <p>The curso ${object.curso_id.name} that you registered for is confirmed and will be held from ${object.curso_id.date_begin} to ${object.curso_id.date_end}.
-        For any further information please contact our curso department.</p>
-        <p>Thank you for your participation!</p>
-        <p>Best regards</p>]]></field>
-        </record>
+        <!--
+            <record id="confirmation_curso" model="email.template">
+                <field name="name">Confirmación del the Curso</field>
+                <field name="model_id" ref="curso.model_curso_registration"/>
+                <field name="email_from">
+                    ${(object.user_id.email or object.company_id.email or 'noreply@' + object.company_id.name + '.com')|safe}
+                </field>
+                <field name="email_to">${object.email|safe}</field>
+                <field name="subject">Your registration at ${object.curso_id.name}</field>
+                <field name="body_html"><![CDATA[
+            <p>Hello ${object.name},</p>
+            <p>The curso ${object.curso_id.name} that you registered for is confirmed and will be held from ${object.curso_id.date_begin} to ${object.curso_id.date_end}.
+            For any further information please contact our curso department.</p>
+            <p>Thank you for your participation!</p>
+            <p>Best regards</p>]]></field>
+            </record>
 
-    </data>
-    <data>
+        </data>
+        <data>
 
-        <record id="confirmation_registration" model="email.template">
-            <field name="name">Confirmación de la inscripción</field>
-            <field name="model_id" ref="curso.model_curso_registration"/>
-            <field name="email_from">
-                ${(object.user_id.email or object.company_id.email or 'noreply@' + object.company_id.name + '.com')|safe}
-            </field>
-            <field name="email_to">${object.email|safe}</field>
-            <field name="subject">Your registration at ${object.curso_id.name}</field>
-            <field name="body_html"><![CDATA[
-        <p>Hello ${object.name},</p>
-        <p>We confirm that your registration to the curso ${object.curso_id.name} has been recorded.
-        You will automatically receive an email providing you more practical information (such as the schedule, the agenda...) as soon as the curso is confirmed.</p>
-        <p>Thank you for your participation!</p>
-        <p>Best regards</p>]]></field>
-        </record>
-    -->
+            <record id="confirmation_registration" model="email.template">
+                <field name="name">Confirmación de la inscripción</field>
+                <field name="model_id" ref="curso.model_curso_registration"/>
+                <field name="email_from">
+                    ${(object.user_id.email or object.company_id.email or 'noreply@' + object.company_id.name + '.com')|safe}
+                </field>
+                <field name="email_to">${object.email|safe}</field>
+                <field name="subject">Your registration at ${object.curso_id.name}</field>
+                <field name="body_html"><![CDATA[
+            <p>Hello ${object.name},</p>
+            <p>We confirm that your registration to the curso ${object.curso_id.name} has been recorded.
+            You will automatically receive an email providing you more practical information (such as the schedule, the agenda...) as soon as the curso is confirmed.</p>
+            <p>Thank you for your participation!</p>
+            <p>Best regards</p>]]></field>
+            </record>
+        -->
     </data>
 </openerp>

@@ -6,16 +6,16 @@
             <field name="name">Confirmación de mails</field>
             <field name="model">curso.mail.confirm</field>
             <field name="arch" type="xml">
-              <form string="Confirmar los mails">
-                <label string="Se van a enviar mails a todas las alumnas que estan cursando"/>
-                  <footer>
-                      <button name="reset" string="Resetear" type="object" class="oe_highlight"/>
-                      or
-                      <button name="confirm" string="Confirmar" type="object" class="oe_highlight"/>
-                      or
-                      <button string="Cancelar" class="oe_link" special="cancel" />
-                  </footer>
-              </form>
+                <form string="Confirmar los mails">
+                    <label string="Se van a enviar mails a todas las alumnas que estan cursando"/>
+                    <footer>
+                        <button name="reset" string="Resetear" type="object" class="oe_highlight"/>
+                        or
+                        <button name="confirm" string="Confirmar" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
             </field>
         </record>
 

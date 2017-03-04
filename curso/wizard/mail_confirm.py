@@ -18,7 +18,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # -----------------------------------------------------------------------------------
-from openerp import fields, models, api
+from openerp import models, api
+
 
 class mail_confirm(models.TransientModel):
     """Mail Confirmation"""
@@ -31,12 +32,10 @@ class mail_confirm(models.TransientModel):
         curso_id = self._context.get('curso_id', False)
         reg_obj = self.env['curso.registration'].search([
             ('curso_id', '=', curso_id),
-            ('state','=','confirm')
+            ('state', '=', 'confirm')
         ])
 
         for reg in reg_obj:
             reg.try_send_mail_by_lecture()
-
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

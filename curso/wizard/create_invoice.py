@@ -50,11 +50,10 @@ class curso_invoice(osv.osv_memory):
         date_invoice = datetime.strptime(invoice_data.get('date_invoice'), '%Y-%m-%d')
         date_due = (date_invoice + timedelta(days=10))
 
-
         # traer el historico, si no hay historico traer el de lista.
-        actual_price = invoice_data.get('historic_price',False) or product_id.list_price
-#        if product_id.list_price > actual_price:
-#            actual_price = product_id.list_price
+        actual_price = invoice_data.get('historic_price', False) or product_id.list_price
+        #        if product_id.list_price > actual_price:
+        #            actual_price = product_id.list_price
 
         invoice_lines = []
         invoice_line = {
@@ -68,7 +67,7 @@ class curso_invoice(osv.osv_memory):
             'quantity': 1.0,
         }
         invoice_line_id = self.pool.get(
-            'account.invoice.line').create(cr, uid, invoice_line, context=context)
+                'account.invoice.line').create(cr, uid, invoice_line, context=context)
 
         invoice_lines.append(invoice_line_id)
 
@@ -85,7 +84,7 @@ class curso_invoice(osv.osv_memory):
                 'quantity': -1.0,
             }
             invoice_line_id = self.pool.get('account.invoice.line').create(
-                cr, uid, invoice_line, context=context)
+                    cr, uid, invoice_line, context=context)
             invoice_lines.append(invoice_line_id)
 
         new_invoice = {
@@ -103,12 +102,12 @@ class curso_invoice(osv.osv_memory):
             'currency_id': 20,  # commission.invoice.currency_id.id,
             'comment': 'generado automáticamente',
             'fiscal_position': invoice_data.get(
-                'partner_id').property_account_position.id,
+                    'partner_id').property_account_position.id,
             'company_id': invoice_data.get('company_id').id,
             'user_id': uid
         }
         invoice_id = self.pool.get('account.invoice').create(
-            cr, uid, new_invoice, context=context)
+                cr, uid, new_invoice, context=context)
 
         return invoice_id
 
@@ -153,6 +152,6 @@ class curso_invoice(osv.osv_memory):
                 invoice_id = self.create_invoice(cr, uid, ids, id, context=None)
                 r = register_pool.search(cr, uid, [('id', '=', quote.id)])
                 register_pool.write(
-                    cr, uid, r, {'invoice_id': invoice_id}, context=context)
+                        cr, uid, r, {'invoice_id': invoice_id}, context=context)
 
         return True

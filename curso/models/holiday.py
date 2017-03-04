@@ -20,26 +20,27 @@
 ##############################################################################
 from openerp import models, fields
 
+
 class curso_holiday(models.Model):
-    #class curso_holiday(models.Model):
+    # class curso_holiday(models.Model):
     """ define los periodos donde estamos en vacaciones, puede ser parte de un dia """
     _name = 'curso.holiday'
     _inherit = 'curso.lapse'
 
     name = fields.Char(
-        string='Nombre'
+            string='Nombre'
     )
 
     date = fields.Date(
-        string='Fecha'
+            string='Fecha'
     )
 
     start_time = fields.Float(
-        default=8
+            default=8
     )
 
     end_time = fields.Float(
-        default=22
+            default=22
     )
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -24,7 +24,7 @@
             <field eval="1" name="priority"/>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <field name="lang" position="replace" />
+                <field name="lang" position="replace"/>
             </field>
         </record>
 

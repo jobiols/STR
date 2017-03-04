@@ -18,18 +18,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
-from datetime import datetime, timedelta, date
-import operator
-from openerp import api
-
-from openerp.osv import fields, osv
-from openerp import SUPERUSER_ID
 import locale
+from datetime import datetime, timedelta
+
+from openerp import SUPERUSER_ID
+from openerp import api
+from openerp.osv import osv
 
 try:
     locale.setlocale(locale.LC_ALL, 'es_AR.utf8')
 except:
     a = 1
+
 
 class curso_information(osv.osv_memory):
     """ Wizard para generar documentacion de los cursos
@@ -99,7 +99,7 @@ class curso_curso(osv.osv):
                 self._current_date += timedelta(days=self._gwd(ix) - self._gwd(ix_1))
             else:
                 self._current_date += timedelta(
-                    days=7 - (self._gwd(ix_1) - self._gwd(ix)))
+                        days=7 - (self._gwd(ix_1) - self._gwd(ix)))
 
     def generate_doc_curso_html(self, dict):
         ret = ""
@@ -146,7 +146,7 @@ class curso_curso(osv.osv):
         for alumna in dict['alumnas']:
             ret += "		<tr>"
             state = '(Sin Confirmar)' if alumna.get('state') != 'confirm' else ''
-            ret += "			<td>{} {}</td>".format(alumna.get('name'),state)
+            ret += "			<td>{} {}</td>".format(alumna.get('name'), state)
             for fecha in dict['clases']:
                 ret += "			<td>&nbsp;</td>"
 
@@ -180,27 +180,27 @@ class curso_curso(osv.osv):
             reg_pool = self.pool.get('curso.registration')
             # mostrar las alumnas confirmada y señadas
             records = reg_pool.search(
-                cr,
-                uid,
-                [
-                    ('curso_id', '=', curso.id),
-                    '|', ('state', '=', 'confirm'), ('state', '=', 'signed')
-                ])
+                    cr,
+                    uid,
+                    [
+                        ('curso_id', '=', curso.id),
+                        '|', ('state', '=', 'confirm'), ('state', '=', 'signed')
+                    ])
             for reg in reg_pool.browse(cr, uid, records, context=context):
                 alumnas.append(
-                    {'name': reg.partner_id.name,
-                     'credit': reg.partner_id.credit,
-                     'state': reg.state})
+                        {'name': reg.partner_id.name,
+                         'credit': reg.partner_id.credit,
+                         'state': reg.state})
 
             clases = []
             lect_pool = self.pool.get('curso.lecture')
             records = lect_pool.search(
-                cr, uid, [('curso_id', '=', curso.id)], order="date")
+                    cr, uid, [('curso_id', '=', curso.id)], order="date")
             for lect in lect_pool.browse(cr, uid, records, context=context):
                 # TODO   chequear esto!!!
                 d = {
                     'fecha': datetime.strptime(
-                        lect.date, "%Y-%m-%d").strftime("%d/%m/%y"),
+                            lect.date, "%Y-%m-%d").strftime("%d/%m/%y"),
                     'name': lect.name,
                 }
                 clases.append(d)
@@ -250,14 +250,14 @@ class curso_curso(osv.osv):
             'registration_ids': False,
         })
         return super(curso_curso, self).copy(
-            cr, uid, id, default=default, context=context)
+                cr, uid, id, default=default, context=context)
 
     def get_weekload(self, cr, uid, ids, context=None):
         ret = []
         for curso in self.browse(cr, uid, ids, context=context):
             diary_obj = self.pool.get('curso.diary')
             diary_ids = diary_obj.search(
-                cr, uid, [('curso_id', '=', curso.id)], context=context)
+                    cr, uid, [('curso_id', '=', curso.id)], context=context)
             for day in diary_obj.browse(cr, uid, diary_ids):
                 ret.append({
                     'weekday': int(day.weekday),
@@ -284,9 +284,9 @@ class curso_curso(osv.osv):
                                   ], context=context)
         if reg_ids:
             raise osv.except_osv(
-                'Error!',
-                u"Para terminar el curso las alumnas deben estar en estado \
-                cumplido, o cancelado.")
+                    'Error!',
+                    u"Para terminar el curso las alumnas deben estar en estado \
+                    cumplido, o cancelado.")
 
         # si existen interesadas hay que proponer moverlas a otro curso
         for curso_reg in reg_obj.browse(cr, uid, reg_ids, context=context):
@@ -296,10 +296,10 @@ class curso_curso(osv.osv):
                         (curso_reg.state == 'draft')
             ):
                 raise osv.except_osv(
-                    'Error!',
-                    u"Para terminar el curso las alumnas deben estar en estado cumplido, \
-                    cancelado o interesada. Usá el menú Mover / Copiar para pasarlas a otro \
-                    curso")
+                        'Error!',
+                        u"Para terminar el curso las alumnas deben estar en estado cumplido, \
+                        cancelado o interesada. Usá el menú Mover / Copiar para pasarlas a otro \
+                        curso")
 
         return self.write(cr, uid, ids, {'state': 'done'}, context=context)
 
@@ -315,16 +315,16 @@ class curso_curso(osv.osv):
         reg_obj = self.pool.get('curso.registration')
         reg_ids = reg_obj.search(cr, uid, [('curso_id', 'in', ids)], context=context)
         for curso_reg in reg_obj.browse(cr, uid, reg_ids, context=context):
-            if (curso_reg.state in ['confirm','done','signed']):
+            if (curso_reg.state in ['confirm', 'done', 'signed']):
                 raise osv.except_osv(
-                    'Error!',
-                    u'No se puede cancelar el curso si hay alumnas en estado Señado, '
-                    u'cumplido o cursando')
+                        'Error!',
+                        u'No se puede cancelar el curso si hay alumnas en estado Señado, '
+                        u'cumplido o cursando')
 
         # borrar todas las clases
         lecture_obj = self.pool['curso.lecture']
-        class_ids = lecture_obj.search(cr,uid,[('curso_id','=',ids)])
-        lecture_obj.unlink(cr,uid,class_ids)
+        class_ids = lecture_obj.search(cr, uid, [('curso_id', '=', ids)])
+        lecture_obj.unlink(cr, uid, class_ids)
 
         return self.write(cr, uid, ids, {'state': 'cancel'}, context=context)
 
@@ -347,7 +347,7 @@ class curso_curso(osv.osv):
                 weekdays.get_room()))
             weekdays.next_class()
 
-        #        print '------------------------------------------------------------------'
+        # print '------------------------------------------------------------------'
         #        for date, schedule, room in ret:
         #            print date, schedule.name, room
         #        print '------------------------------------------------------------------'
@@ -360,7 +360,7 @@ class curso_curso(osv.osv):
     def get_lecture_templates(self, cr, uid, ids, product_id, context=None):
         template_obj = self.pool['curso.lecture_template']
         ids = template_obj.search(
-            cr, uid, [('product_id', '=', product_id)], context=context)
+                cr, uid, [('product_id', '=', product_id)], context=context)
         ret = []
         ii = 0
         for rec in template_obj.browse(cr, uid, ids):
@@ -385,8 +385,8 @@ class curso_curso(osv.osv):
 
             r_pool = self.pool.get('curso.curso')
             records = r_pool.search(
-                cr, uid, [('default_code', '=', type_info.default_code)],
-                context=context)
+                    cr, uid, [('default_code', '=', type_info.default_code)],
+                    context=context)
 
             instance = 0
             for item in r_pool.browse(cr, uid, records, context):
@@ -432,8 +432,7 @@ class curso_curso(osv.osv):
             for lecture in lecture_obj.browse(cr, uid, ids):
                 #                print lecture.name
                 res['date_begin'] = lecture.date
-            #                print res
-
+                #                print res
 
     def subscribe_to_curso(self, cr, uid, ids, context=None):
         register_pool = self.pool.get('curso.registration')
@@ -455,7 +454,6 @@ class curso_curso(osv.osv):
                                 context=context)
         return register_pool.confirm_registration(cr, SUPERUSER_ID, curr_reg_ids,
                                                   context=context)
-
 
     def unsubscribe_to_curso(self, cr, uid, ids, context=None):
         register_pool = self.pool.get('curso.registration')

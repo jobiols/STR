@@ -20,30 +20,31 @@
 # -----------------------------------------------------------------------------------
 from openerp import models, fields, api
 
+
 class add_registration(models.TransientModel):
     """ Wizard para agregar una inscripción de una clienta a un curso """
     _name = 'curso.add_registration'
     _description = "Inscribir alumna en curso"
 
     curso_id = fields.Many2one(
-        'curso.curso',
-        string="Curso",
-        required=True,
-        domain="[('next','=',True)]"
+            'curso.curso',
+            string="Curso",
+            required=True,
+            domain="[('next','=',True)]"
     )
 
     discount = fields.Float(
-        'Descuento (%)', digits=(2, 2))
+            'Descuento (%)', digits=(2, 2))
 
     disc_desc = fields.Char(
-        'Razon del descuento', size=128, select=True)
+            'Razon del descuento', size=128, select=True)
 
     source = fields.Selection([
         ('none', 'Sin descuento'),
         ('groupon', 'Groupon'),
-        ],
-        'Origen', required=True,
-        default='none')
+    ],
+            'Origen', required=True,
+            default='none')
 
     @api.one
     def button_add_curso(self):
@@ -62,7 +63,7 @@ class add_registration(models.TransientModel):
         }
         self.env['curso.registration'].create(vals)
 
-    #TODO poner los descuentos en una tabla de configuracion DUPLICADO!!
+    # TODO poner los descuentos en una tabla de configuracion DUPLICADO!!
     @api.onchange('source')
     def _compute_source(self):
         for rec in self:

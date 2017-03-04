@@ -22,6 +22,7 @@
 class html_filter:
     """ genera html para varios propositos
     """
+
     # -----------------------------------------------------------------------------------------
     def default_header(self, data):
         """ Header de la pagina de información de curso
@@ -249,7 +250,6 @@ width="394" height="200" />
 </p>
         """
 
-
     # -----------------------------------------------------------------------------------------
     def info_recover_html(self, data):
         """ Formatea los datos que vienen en data para generar una tabla que se insertará
@@ -310,6 +310,5 @@ width="394" height="200" />
 </table>
 """
         return ret
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

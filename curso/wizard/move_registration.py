@@ -20,6 +20,7 @@
 ##############################################################################
 from openerp.osv import osv, fields
 
+
 class curso_move_registration(osv.osv_memory):
     def button_move_registration(self, cr, uid, ids, context=None):
         reg_pool = self.pool['curso.registration']
@@ -105,8 +106,6 @@ class curso_move_registration(osv.osv_memory):
                                'tot_hs_lecture': int(reg.tot_hs_lecture)
                                })
             self.create_grid_report(cr, uid, ids, cursos, context)
-
-
 
     _name = "curso.move.registration"
     _description = "Mover inscripciones entre cursos"

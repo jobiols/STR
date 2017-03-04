@@ -16,7 +16,7 @@
                     </group>
                 </xpath>
                 <xpath expr="//field[@name='description']" position="after">
-                        <field name="description_short_wc" readonly="True"/>
+                    <field name="description_short_wc" readonly="True"/>
                 </xpath>
                 <notebook position="inside">
                     <page string="Cursos" attrs="{'invisible': [('type', '!=', 'curso')]}">
@@ -29,15 +29,15 @@
                                 <field name="product_url" widget="url"/>
                                 <field name="no_quotes"/>
                             </group>
-                                <button name="button_generate_doc" string="Generar documentación" type="object"
-                                        class="oe_highlight"/>
-                                <button name="button_generate_lecture_templates"
-                                        string="Generar plantilla de clases" type="object"
-                                        class="oe_highlight"/>
+                            <button name="button_generate_doc" string="Generar documentación" type="object"
+                                    class="oe_highlight"/>
+                            <button name="button_generate_lecture_templates"
+                                    string="Generar plantilla de clases" type="object"
+                                    class="oe_highlight"/>
                         </group>
                         <!-- temario del curso -->
                         <div style="background-color:#D3D3D3;">
-                        <p>Este es el temario del curso, es lo que se publica en el sitio</p>
+                            <p>Este es el temario del curso, es lo que se publica en el sitio</p>
                         </div>
                         <group col='1'>
                             <field name="agenda" placeholder="Temario del curso"
@@ -45,7 +45,7 @@
                         </group>
                         <!-- contenido de cada clase -->
                         <div style="background-color:#D3D3D3;">
-                        <p> Aquí se definen los temas que se ven en cada clase</p>
+                            <p>Aquí se definen los temas que se ven en cada clase</p>
                         </div>
                         <group>
                             <field name="lecture_template_ids" colspan="4" nolabel="1">
@@ -57,8 +57,9 @@
                         </group>
                         <!-- mails que salen despues de cada clase -->
                         <div style="background-color:#D3D3D3;">
-                        <p> Aquí se define que mail sale para cada alumna del curso después
-                            de cada clase</p>
+                            <p>Aquí se define que mail sale para cada alumna del curso después
+                                de cada clase
+                            </p>
                         </div>
                         <group>
                             <field name="email_classes_ids" nolabel="1">
@@ -70,7 +71,7 @@
                         </group>
                         <!-- boton de mercadopago -->
                         <div style="background-color:#D3D3D3;">
-                        <p> Boton de pago, de mercadopago que sale en el mail de información</p>
+                            <p>Boton de pago, de mercadopago que sale en el mail de información</p>
                         </div>
                         <group>
                             <field name="mercadopago_button"/>
@@ -79,10 +80,11 @@
                         </group>
                         <!-- datos comerciales -->
                         <div style="background-color:#D3D3D3;">
-                        <p> Datos comerciales que se muestran en el sitio web y en los mails, (separados por comas)</p>
+                            <p>Datos comerciales que se muestran en el sitio web y en los mails, (separados por comas)
+                            </p>
                         </div>
                         <group>
-                            <field name="comercial_data"  nolabel="1"/>
+                            <field name="comercial_data" nolabel="1"/>
                         </group>
                     </page>
                 </notebook>

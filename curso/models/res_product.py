@@ -23,6 +23,7 @@ from datetime import datetime
 import markdown
 from openerp import models, fields, api
 from openerp.exceptions import ValidationError
+
 from . import html_filter
 
 

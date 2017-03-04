@@ -27,15 +27,15 @@ class send_mail(models.TransientModel):
     _description = "Validar el envio de un mail"
 
     template = fields.Many2one(
-        'email.template', u'Confirmación de inscripción',
-        help=u'Plantilla de mail que se enviará',
+            'email.template', u'Confirmación de inscripción',
+            help=u'Plantilla de mail que se enviará',
     )
 
     @api.one
     @api.onchange('template')
     def _get_default_template(self):
         template = self.env['email.template'].search(
-            [('id', '=', self._context.get('template'))]
+                [('id', '=', self._context.get('template'))]
         )
         self.template = template
 

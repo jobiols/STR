@@ -34,21 +34,7 @@
 
         <menuitem name="Categorias"
                   id="menu_woo_categ" parent="base.menu_curso_main"
-                  action="action_woo_categ" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                  action="action_woo_categ"/>
 
 
     </data>

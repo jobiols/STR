@@ -27,20 +27,20 @@ class curso_woo_categ(models.Model):
     _rec_name = 'path'
 
     path = fields.Char(
-        compute="get_path",
-        store=True
+            compute="get_path",
+            store=True
     )
 
     woo_id = fields.Integer(
     )
 
     woo_ids = fields.Char(
-        compute="get_woo_ids"
+            compute="get_woo_ids"
     )
 
     woo_idx = fields.Integer(
-        compute="get_woo_idx",
-        store=True
+            compute="get_woo_idx",
+            store=True
     )
 
     slug = fields.Char(
@@ -50,8 +50,8 @@ class curso_woo_categ(models.Model):
     )
 
     parent = fields.Many2one(
-        'curso.woo.categ',
-        string="Parent"
+            'curso.woo.categ',
+            string="Parent"
     )
 
     @api.multi
@@ -63,7 +63,7 @@ class curso_woo_categ(models.Model):
                 return cat.name
 
     @api.one
-    @api.depends('parent','name')
+    @api.depends('parent', 'name')
     def get_path(self):
         self.path = self._path()
 

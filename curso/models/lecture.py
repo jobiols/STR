@@ -28,58 +28,58 @@ class curso_lecture(models.Model):
     _name = 'curso.lecture'
 
     name = fields.Text(
-        'Contenido de la clase')
+            'Contenido de la clase')
 
     date = fields.Date(
-        'Fecha',
-        store="True",
-        compute="_get_date")
+            'Fecha',
+            store="True",
+            compute="_get_date")
 
     curso_id = fields.Many2one(
-        'curso.curso', string='Curso',
-        required=True,
-        help='Curso al que pertenece esta clase',
+            'curso.curso', string='Curso',
+            required=True,
+            help='Curso al que pertenece esta clase',
     )
 
     schedule_id = fields.Many2one(
-        'curso.schedule', string='Horario programado',
-        required=True,
-        help='Horario original de la clase')
+            'curso.schedule', string='Horario programado',
+            required=True,
+            help='Horario original de la clase')
 
     weekday = fields.Char(
-        compute="_get_weekday", string="Dia")
+            compute="_get_weekday", string="Dia")
 
     date_start = fields.Datetime(
-        string="Inicio de clase")
+            string="Inicio de clase")
 
     date_stop = fields.Datetime(
-        string="Fin de clase")
+            string="Fin de clase")
 
     seq = fields.Integer(
-        'Número de clase')
+            'Número de clase')
 
     assistance_id = fields.One2many(
-        'curso.assistance',
-        'lecture_id'
+            'curso.assistance',
+            'lecture_id'
     )
 
     default_code = fields.Char(
-        related="curso_id.default_code"
+            related="curso_id.default_code"
     )
 
     next = fields.Boolean(
-        related="curso_id.next"
+            related="curso_id.next"
     )
 
     reg_current = fields.Integer(
-        'Conf',
-        related="curso_id.register_current",
-        help=u"La cantidad de alumnas que confirmaron pagando (al menos una seña)"
+            'Conf',
+            related="curso_id.register_current",
+            help=u"La cantidad de alumnas que confirmaron pagando (al menos una seña)"
     )
     reg_recover = fields.Integer(
-        'Recu',
-        compute="get_reg_recover",
-        help=u"La cantidad de alumnas anotadas en esta clase para recuperar)"
+            'Recu',
+            compute="get_reg_recover",
+            help=u"La cantidad de alumnas anotadas en esta clase para recuperar)"
     )
 
     @api.one
@@ -89,10 +89,10 @@ class curso_lecture(models.Model):
         """
         #        self.reg_recover = self.env['curso.assistance'].search_count(
         self.reg_recover = self.assistance_id.search_count(
-            [
-                ('lecture_id', '=', self.id),
-                ('recover', '=', True)
-            ]
+                [
+                    ('lecture_id', '=', self.id),
+                    ('recover', '=', True)
+                ]
         )
 
     @api.one
@@ -127,14 +127,14 @@ class curso_lecture(models.Model):
 
         # Alumnas registradas en el curso
         atendees = self.curso_id.registration_ids.search(
-            [('state', 'in', ['confirm', 'signed', 'done']),
-             ('curso_id', '=', self.curso_id.id)]
+                [('state', 'in', ['confirm', 'signed', 'done']),
+                 ('curso_id', '=', self.curso_id.id)]
         )
 
         # Alumnas en la lista de presentes, que no son recuperantes
         presents = self.assistance_id.search(
-            [('lecture_id', '=', self.id),
-             ('recover', '=', False)])
+                [('lecture_id', '=', self.id),
+                 ('recover', '=', False)])
 
         for atendee in atendees:
             # Si el atendee no está en los presentes, incluirlo.

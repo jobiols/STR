@@ -18,8 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>...
 #
 ##############################################################################
-from openerp import models, fields, api
 from datetime import datetime, timedelta
+
+from openerp import models, fields, api
+
 
 class curso_schedule(models.Model):
     """ horarios que puede tener un curso """
@@ -29,8 +31,8 @@ class curso_schedule(models.Model):
         ('default_code_unique', 'unique (name)', 'Este horario ya existe.')]
 
     name = fields.Char(
-        compute="_get_name",
-        store=True
+            compute="_get_name",
+            store=True
     )
 
     @api.one
@@ -49,10 +51,10 @@ class curso_schedule(models.Model):
 
         return b
 
-    def start_datetime(self,date):
+    def start_datetime(self, date):
         return self._calc_datetime(date, self.start_time)
 
-    def stop_datetime(self,date):
+    def stop_datetime(self, date):
         return self._calc_datetime(date, self.end_time)
 
     def _f2h(self, t):
@@ -71,7 +73,7 @@ class curso_schedule(models.Model):
         return res
 
     @api.one
-    @api.depends('start_time','end_time')
+    @api.depends('start_time', 'end_time')
     def _get_name(self):
         aa = self._f2h(self.start_time)
         bb = self._f2h(self.end_time)
@@ -79,4 +81,4 @@ class curso_schedule(models.Model):
         self.name = "{} - {} ({})".format(aa, bb, cc)
 
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+        # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

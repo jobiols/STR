@@ -19,27 +19,22 @@
 #
 ##############################################################################
 
-from datetime import datetime, timedelta
-
 from openerp.osv import fields, osv
-import babel.dates
 
 
 class curso_registration(osv.osv):
     _name = 'curso.registration'
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
-
     def confirm_registration(self, cr, uid, ids, context=None):
         for reg in self.browse(cr, uid, ids, context=context or {}):
             self.pool.get('curso.curso').message_post(cr, uid, [reg.curso_id.id],
                                                       body=(
-                                                            u'Nuevo inicio de curso: %s.') % (
-                                                            reg.partner_id.name or '',),
+                                                               u'Nuevo inicio de curso: %s.') % (
+                                                               reg.partner_id.name or '',),
                                                       subtype="curso.mt_curso_registration",
                                                       context=context)
         return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
-
 
     def button_reg_confirm(self, cr, uid, ids, context=None):
         """ Boton empezo el curso
@@ -58,12 +53,12 @@ class curso_registration(osv.osv):
         """
         for reg in self.browse(cr, uid, ids, context=context or {}):
             self.pool.get('curso.curso').message_post(
-                cr, uid, [reg.curso_id.id],
-                body=(
-                         u'Vuelve a interesarse: %s.') % (
-                         reg.partner_id.name or '',),
-                subtype="curso.mt_curso_registration",
-                context=context)
+                    cr, uid, [reg.curso_id.id],
+                    body=(
+                             u'Vuelve a interesarse: %s.') % (
+                             reg.partner_id.name or '',),
+                    subtype="curso.mt_curso_registration",
+                    context=context)
         return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
 
     def button_reg_done(self, cr, uid, ids, context=None):
@@ -76,8 +71,8 @@ class curso_registration(osv.osv):
         for registration in self.browse(cr, uid, ids, context=context):
             register_pool = self.pool.get('curso.quota')
             records = register_pool.search(
-                cr, uid, [('registration_id', '=', registration.id),
-                          ('list_price', '=', 0)])
+                    cr, uid, [('registration_id', '=', registration.id),
+                              ('list_price', '=', 0)])
             if len(records) != 0:
                 raise osv.except_osv(('Error!'),
                                      u"No puede terminar el curso porque tiene cuotas pendientes. \
@@ -88,9 +83,9 @@ class curso_registration(osv.osv):
                 self.write(cr, uid, ids, values)
             else:
                 raise osv.except_osv(
-                    'Error!',
-                    u"Hay que esperar al dia de inicio del curso para decir que lo \
-                    terminó.")
+                        'Error!',
+                        u"Hay que esperar al dia de inicio del curso para decir que lo \
+                        terminó.")
 
         return True
 

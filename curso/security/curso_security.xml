@@ -29,21 +29,24 @@
             <field name="name">curso multi-company</field>
             <field name="model_id" ref="model_curso_curso"/>
             <field name="global" eval="True"/>
-            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]
+            </field>
         </record>
 
         <record model="ir.rule" id="curso_registration_comp_rule">
             <field name="name">Curso Registration multi-company</field>
             <field name="model_id" ref="model_curso_registration"/>
             <field name="global" eval="True"/>
-            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]
+            </field>
         </record>
 
         <record model="ir.rule" id="report_curso_registration_comp_rule">
             <field name="name">Report Curso Registration multi-company</field>
             <field name="model_id" ref="model_report_curso_registration"/>
             <field name="global" eval="True"/>
-            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]
+            </field>
         </record>
 
     </data>

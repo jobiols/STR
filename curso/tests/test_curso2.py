@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
 #
 #    Copyright (C) 2016  jeo Software  (http://www.jeo-soft.com.ar)
 #    All Rights Reserved.
@@ -17,11 +17,14 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#-----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
+
+import pprint
 
 from openerp.tests.common import TransactionCase
-import pprint
+
 pp = pprint.PrettyPrinter(indent=4)
+
 
 # testear con
 # ./odooenv.py -Q cursos test_curso2.py -c makeover -d makeover_travis -m curso
@@ -104,7 +107,7 @@ class TestCurso(TransactionCase):
         })
 
         # agrego la registracion
-        wiz.with_context({'active_ids':[partner.id]}).button_add_curso()
+        wiz.with_context({'active_ids': [partner.id]}).button_add_curso()
 
         reginstration = self.registration_obj.search([])
         for reg in reginstration:
@@ -114,12 +117,11 @@ class TestCurso(TransactionCase):
         # chequear el nombre de las clases
         for ix, lec in enumerate(curso.lecture_ids):
             # chequear el nombre de la clase
-            self.assertEqual(lec.name,'Clase nro {}'.format(ix+1),'nombre de la clase')
+            self.assertEqual(lec.name, 'Clase nro {}'.format(ix + 1), 'nombre de la clase')
             # verificar que tenga registros de asistencia
-            self.assertNotEqual(len(lec.assistance_id),0,'la clase no tiene asistentes')
+            self.assertNotEqual(len(lec.assistance_id), 0, 'la clase no tiene asistentes')
             for ass in lec.assistance_id:
                 # verificar que la asistente sea Juana
-                self.assertEqual(ass.partner_id.name,'Juana Perez Alumna')
-
+                self.assertEqual(ass.partner_id.name, 'Juana Perez Alumna')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -45,7 +45,7 @@ class curso_daily_report(osv.osv_memory):
 
         return ret
 
-    #TODO Refactorizar esto
+    # TODO Refactorizar esto
     def generate_local_html(self, data):
 
         ret = ""
@@ -116,14 +116,14 @@ class curso_daily_report(osv.osv_memory):
                 alumnas.append(alumna)
 
             data.append(
-                {'curso': lecture.curso_id.name,
-                 'tema': lecture.name or 'Clase no definida',
-                 'alumnas': alumnas
-                 }
+                    {'curso': lecture.curso_id.name,
+                     'tema': lecture.name or 'Clase no definida',
+                     'alumnas': alumnas
+                     }
             )
 
         report_name = "Reporte Diario " + datetime.strftime(
-            datetime.strptime(date, '%Y-%m-%d'), '%d/%m/%Y')
+                datetime.strptime(date, '%Y-%m-%d'), '%d/%m/%Y')
 
         new_page = {
             'name': report_name,

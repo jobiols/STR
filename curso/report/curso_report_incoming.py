@@ -19,6 +19,7 @@
 # -----------------------------------------------------------------------------------
 from openerp import api, models
 
+
 class CursoReportIncoming(models.AbstractModel):
     _name = 'report.curso.curso_report_incoming'
 
@@ -30,16 +31,16 @@ class CursoReportIncoming(models.AbstractModel):
             'doc_ids': self._ids,
             'doc_model': report.model,
             'docs': self,
-            'get_products':self._get_products
+            'get_products': self._get_products
         }
         return report_obj.render('curso.curso_report_incoming', docargs)
 
     @api.one
     def _get_products(self):
-        prod = self.env['product.product'].search([('type','=','curso')])
-#        print 'cantidad de cursos', len(prod.curso_instances)
-#        for curs in prod.curso_instances:
-#            print curs.name
+        prod = self.env['product.product'].search([('type', '=', 'curso')])
+        #        print 'cantidad de cursos', len(prod.curso_instances)
+        #        for curs in prod.curso_instances:
+        #            print curs.name
 
-#        print 'cantidad productos', len(prod)
+        #        print 'cantidad productos', len(prod)
         return prod

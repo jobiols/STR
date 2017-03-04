@@ -17,9 +17,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #####################################################################################
-from openerp.tests.common import TransactionCase
 import pprint
+
+from openerp.tests.common import TransactionCase
+
 pp = pprint.PrettyPrinter(indent=4)
+
 
 # testear con
 # ./odooenv.py -Q cursos test_curso1.py -c makeover -d makeover_travis -m curso
@@ -334,26 +337,25 @@ class TestCurso(TransactionCase):
                          'error 03')
         self.assertEqual(data['comercial_data'][2], u'Se entrega certificado digital.',
                          'error 04')
-        self.assertEqual(data['mode'],u'Son 20 clases de 4 horas c/u','error 085')
+        self.assertEqual(data['mode'], u'Son 20 clases de 4 horas c/u', 'error 085')
 
         instance = data['instances'][0]
-        self.assertEqual(instance['month'], u'Agosto 2016','error 10')
-        self.assertEqual(instance['day'], u'1','error 11')
+        self.assertEqual(instance['month'], u'Agosto 2016', 'error 10')
+        self.assertEqual(instance['day'], u'1', 'error 11')
         self.assertEqual(instance['name'],
-                         u'[SPR/00] Lun 01/08/16 (12:00 16:00) - Maquillaje Social Profesional','error 12')
-        self.assertEqual(instance['weekday'], u'Lunes','error 13')
-        self.assertEqual(instance['schedule'], u'12:00 - 16:00 (4hs)','error 14')
+                         u'[SPR/00] Lun 01/08/16 (12:00 16:00) - Maquillaje Social Profesional', 'error 12')
+        self.assertEqual(instance['weekday'], u'Lunes', 'error 13')
+        self.assertEqual(instance['schedule'], u'12:00 - 16:00 (4hs)', 'error 14')
         self.assertEqual(instance['vacancy'], u'<p style="color:green;">Vacantes disponibles</p>', 'error 15')
 
         instance = data['instances'][1]
-        self.assertEqual(instance['month'], u'Agosto 2016','error 16')
-        self.assertEqual(instance['day'], u'9','error 17')
+        self.assertEqual(instance['month'], u'Agosto 2016', 'error 16')
+        self.assertEqual(instance['day'], u'9', 'error 17')
         self.assertEqual(instance['name'],
-                         '[SPR/00] Mar 09/08/16 (15:00 19:00) - Maquillaje Social Profesional','error 18')
-        self.assertEqual(instance['weekday'], u'Martes','error 19')
-        self.assertEqual(instance['schedule'], u'15:00 - 19:00 (4hs)','error 20')
-        self.assertEqual(instance['vacancy'], u'<p style="color:green;">Vacantes disponibles</p>','error 21')
-
+                         '[SPR/00] Mar 09/08/16 (15:00 19:00) - Maquillaje Social Profesional', 'error 18')
+        self.assertEqual(instance['weekday'], u'Martes', 'error 19')
+        self.assertEqual(instance['schedule'], u'15:00 - 19:00 (4hs)', 'error 20')
+        self.assertEqual(instance['vacancy'], u'<p style="color:green;">Vacantes disponibles</p>', 'error 21')
 
     def test_check_one_lecture(self):
         """ chequea texto cuando hay una o varias clases """
@@ -393,7 +395,7 @@ class TestCurso(TransactionCase):
         ##################################################################################
         # Se chequea el producto
         data = self.product1.info_curso_html_data(debug=True)
-        self.assertEqual(data['mode'], u'Es una clase de 4 horas','error 22')
+        self.assertEqual(data['mode'], u'Es una clase de 4 horas', 'error 22')
 
 
         # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

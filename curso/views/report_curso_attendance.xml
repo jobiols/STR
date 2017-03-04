@@ -7,8 +7,10 @@
                     <t t-call="report.external_layout">
                         <div class="page">
                             <h2>Chequeo de datos</h2>
-                            <p><span t-field="o.name"/></p>
-                            <table class="table table-condensed"  style="font-size:12px">
+                            <p>
+                                <span t-field="o.name"/>
+                            </p>
+                            <table class="table table-condensed" style="font-size:12px">
                                 <tr>
                                     <td>
                                         Nombre
@@ -16,11 +18,11 @@
                                     <td>
                                         Documento
                                     </td>
-<!--
-                                    <td>
-                                        Teléfono
-                                    </td>
--->
+                                    <!--
+                                                                        <td>
+                                                                            Teléfono
+                                                                        </td>
+                                    -->
                                     <td>
                                         Celular
                                     </td>
@@ -34,24 +36,34 @@
                                 <t t-foreach="o.registration_ids" t-as="r">
                                     <tr>
                                         <td>
-                                            <p><span t-field="r.partner_id.name"/></p>
+                                            <p>
+                                                <span t-field="r.partner_id.name"/>
+                                            </p>
                                         </td>
                                         <td>
-                                            <p><span t-field="r.partner_id.document_number"/></p>
+                                            <p>
+                                                <span t-field="r.partner_id.document_number"/>
+                                            </p>
                                         </td>
-<!--
+                                        <!--
+                                                                                <td>
+                                                                                    <p><span t-field="r.partner_id.phone"/></p>
+                                                                                </td>
+                                        -->
                                         <td>
-                                            <p><span t-field="r.partner_id.phone"/></p>
+                                            <p>
+                                                <span t-field="r.partner_id.mobile"/>
+                                            </p>
                                         </td>
--->
                                         <td>
-                                            <p><span t-field="r.partner_id.mobile"/></p>
+                                            <p>
+                                                <span t-field="r.partner_id.date"/>
+                                            </p>
                                         </td>
                                         <td>
-                                            <p><span t-field="r.partner_id.date"/></p>
-                                        </td>
-                                        <td>
-                                            <p><span t-field="r.partner_id.email"/></p>
+                                            <p>
+                                                <span t-field="r.partner_id.email"/>
+                                            </p>
                                         </td>
                                     </tr>
                                 </t>

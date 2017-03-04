@@ -124,9 +124,9 @@
                                     </group>
                                     <group>
                                         <field name="register_prospect" class="oe_inline"/>
-                                        <field name="register_current"  class="oe_inline"/>
+                                        <field name="register_current" class="oe_inline"/>
                                         <field name="register_attended" class="oe_inline"/>
-                                        <field name="register_cancel"   class="oe_inline"/>
+                                        <field name="register_cancel" class="oe_inline"/>
                                     </group>
                                 </group>
                                 <field name="registration_ids" colspan="4" nolabel="1"
@@ -194,7 +194,7 @@
                                     <group>
                                         <field name="reply_to"/>
                                         <field name="email_registration_id"/>
-<!--                                        <field name="email_confirmation_id"/> -->
+                                        <!--                                        <field name="email_confirmation_id"/> -->
                                     </group>
                                 </group>
                             </page>
@@ -234,7 +234,7 @@
             <field name="model">curso.curso</field>
             <field name="arch" type="xml">
                 <tree string="Cursos"
-                       fonts="bold:  no_lectures==1"
+                      fonts="bold:  no_lectures==1"
                       colors="black: state=='draft';
                               green: state=='confirm';
                               blue:  state=='in_progress';
@@ -245,17 +245,17 @@
                     <field name="hs_lecture"/>
                     <field name="tot_hs_lecture"/>
                     <field name="list_price"/>
-<!--
-                    <field name="no_quotes"/>
--->
+                    <!--
+                                        <field name="no_quotes"/>
+                    -->
                     <field name="register_prospect" string="Int"/>
                     <field name="register_current" string="Conf"/>
-<!--
-                    <field name="register_cancel" string="Canc"/>
-                    <field name="register_attended" string="Cump"/>
--->
-                    <field name="register_min" string="V.min" />
-                    <field name="register_max" string="V.max" />
+                    <!--
+                                        <field name="register_cancel" string="Canc"/>
+                                        <field name="register_attended" string="Cump"/>
+                    -->
+                    <field name="register_min" string="V.min"/>
+                    <field name="register_max" string="V.max"/>
                     <field name="main_speaker_id"/>
                     <field name="secondary_speaker_id"/>
                     <field name="error"/>

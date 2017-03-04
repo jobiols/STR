@@ -17,8 +17,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ########################################################################################
 from openerp import models, fields, api
-from openerp.osv import osv
 from openerp.exceptions import except_orm
+
 
 class lecture_template(models.Model):
     """ define los contenidos de las clases de cada producto curso """
@@ -26,16 +26,16 @@ class lecture_template(models.Model):
     _order = 'seq'
 
     product_id = fields.Many2one(
-        'product.product',
-        'Producto'
+            'product.product',
+            'Producto'
     )
 
     text = fields.Text(
-        'Contenido de la clase'
+            'Contenido de la clase'
     )
 
     seq = fields.Integer(
-        'Sec'
+            'Sec'
     )
 
     @api.model
@@ -43,7 +43,7 @@ class lecture_template(models.Model):
         prod_ids = self.search([('product_id', '=', prod_id)])
         if prod_ids:
             raise except_orm(
-                'Error!', u"ya existe una plantilla de clases hay que borrarla primero")
+                    'Error!', u"ya existe una plantilla de clases hay que borrarla primero")
 
         for seq in range(no_lectures):
             new_rec = {

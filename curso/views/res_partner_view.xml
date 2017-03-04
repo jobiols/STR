@@ -16,7 +16,7 @@
 
                 <xpath expr="//field[@name='function']" position="after">
                     <field name="groupon"
-                     attrs="{'invisible': [('is_company','=', True)]}"
+                           attrs="{'invisible': [('is_company','=', True)]}"
                     />
                 </xpath>
 
@@ -56,29 +56,29 @@
                     <notebook>
                         <page string="Cursos">
                             <group name="grp_registration" string="Historial de cursos">
-                                        <button string="Agregar curso"
-                                                name="%(wizard_curso_add_registration)d" type="action"/>
-                                        <field name="curso_registration_ids" colspan="4" nolabel="1">
-                                            <tree string="Inscripciones en Cursos">
-                                                <field name="discount"/>
-                                                <field name="curso_id"/>
-                                                <field name="state"/>
-                                                <!-- ESTADOS -->
-                                                <button name="button_reg_sign" string="Seña el curso"
-                                                        states="draft"
-                                                        type="object" icon="gtk-apply"/>
-                                                <button name="button_reg_confirm" string="Empezó el curso"
-                                                        states="signed"
-                                                        type="object" icon="gtk-go-forward"/>
-                                                <button name="button_reg_done" string="Terminó el curso"
-                                                        states="confirm"
-                                                        type="object" icon="terp-dialog-close"/>
-                                                <button name="button_reg_cancel"
-                                                        string="Cancela Inscripción"
-                                                        states="draft,signed,confirm" type="object"
-                                                        icon="gtk-cancel"/>
-                                            </tree>
-                                        </field>
+                                <button string="Agregar curso"
+                                        name="%(wizard_curso_add_registration)d" type="action"/>
+                                <field name="curso_registration_ids" colspan="4" nolabel="1">
+                                    <tree string="Inscripciones en Cursos">
+                                        <field name="discount"/>
+                                        <field name="curso_id"/>
+                                        <field name="state"/>
+                                        <!-- ESTADOS -->
+                                        <button name="button_reg_sign" string="Seña el curso"
+                                                states="draft"
+                                                type="object" icon="gtk-apply"/>
+                                        <button name="button_reg_confirm" string="Empezó el curso"
+                                                states="signed"
+                                                type="object" icon="gtk-go-forward"/>
+                                        <button name="button_reg_done" string="Terminó el curso"
+                                                states="confirm"
+                                                type="object" icon="terp-dialog-close"/>
+                                        <button name="button_reg_cancel"
+                                                string="Cancela Inscripción"
+                                                states="draft,signed,confirm" type="object"
+                                                icon="gtk-cancel"/>
+                                    </tree>
+                                </field>
                             </group>
                         </page>
                         <page string="Asistencias">

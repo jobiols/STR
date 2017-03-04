@@ -20,10 +20,11 @@
 # -----------------------------------------------------------------------------------
 from datetime import datetime, timedelta
 
-from . import html_filter
-from openerp.exceptions import Warning
-from openerp import models, fields, api
 import babel.dates
+from openerp import models, fields, api
+from openerp.exceptions import Warning
+
+from . import html_filter
 
 
 class curso_registration(models.Model):
@@ -33,131 +34,131 @@ class curso_registration(models.Model):
     _description = 'Inscripcion en cursos'
 
     create_date = fields.Date(
-        u'Creación',
-        readonly=True
+            u'Creación',
+            readonly=True
     )
 
     date_closed = fields.Date(
-        u'Fecha de cierre',
-        readonly=True
+            u'Fecha de cierre',
+            readonly=True
     )
 
     date_open = fields.Date(
-        u'Fecha de inscripción',
-        readonly=True
+            u'Fecha de inscripción',
+            readonly=True
     )
 
     discount = fields.Float(
-        u'Descuento (%)',
-        digits=(2, 2)
+            u'Descuento (%)',
+            digits=(2, 2)
     )
 
     disc_desc = fields.Char(
-        u'Razon del descuento',
-        size=128,
-        select=True
+            u'Razon del descuento',
+            size=128,
+            select=True
     )
 
     nb_register = fields.Integer(
-        u'Number of Participants',
-        required=True,
-        readonly=True,
-        states={'draft': [('readonly', False)]},
-        default=1
+            u'Number of Participants',
+            required=True,
+            readonly=True,
+            states={'draft': [('readonly', False)]},
+            default=1
     )
 
     state = fields.Selection(
-        [('draft', u'Interesada'),
-         ('cancel', u'Cancelado'),
-         ('confirm', u'Cursando'),
-         ('done', u'Cumplido'),
-         ('signed', u'Señado')], 'Estado',
-        track_visibility='onchange',
-        size=16, readonly=True, default='draft')
+            [('draft', u'Interesada'),
+             ('cancel', u'Cancelado'),
+             ('confirm', u'Cursando'),
+             ('done', u'Cumplido'),
+             ('signed', u'Señado')], 'Estado',
+            track_visibility='onchange',
+            size=16, readonly=True, default='draft')
 
     quota_id = fields.One2many(
-        'curso.quota',
-        'registration_id',
-        'Cuotas')
+            'curso.quota',
+            'registration_id',
+            'Cuotas')
 
     log_ids = fields.One2many(
-        'mail.message',
-        'res_id',
-        'Logs',
-        domain=[('model', '=', _name)])
+            'mail.message',
+            'res_id',
+            'Logs',
+            domain=[('model', '=', _name)])
 
     curso_id = fields.Many2one(
-        'curso.curso',
-        'Curso',
-        required=True,
-        readonly=True,
-        states={'draft': [('readonly', False)]}
+            'curso.curso',
+            'Curso',
+            required=True,
+            readonly=True,
+            states={'draft': [('readonly', False)]}
     )
 
     partner_id = fields.Many2one(
-        'res.partner',
-        u'Alumna',
-        required=True,
-        states={'done': [('readonly', True)]}
+            'res.partner',
+            u'Alumna',
+            required=True,
+            states={'done': [('readonly', True)]}
     )
 
     user_id = fields.Many2one(
-        'res.users',
-        'User',
-        states={'done': [('readonly', True)]}
+            'res.users',
+            'User',
+            states={'done': [('readonly', True)]}
     )
 
     reply_to = fields.Char(
-        related='curso_id.reply_to',
-        string='Reply-to Email',
-        size=128,
-        readonly=True)
+            related='curso_id.reply_to',
+            string='Reply-to Email',
+            size=128,
+            readonly=True)
 
     curso_begin_date = fields.Date(
-        related='curso_id.date_begin',
-        string="Inicio",
-        readonly=True
+            related='curso_id.date_begin',
+            string="Inicio",
+            readonly=True
     )
 
     email = fields.Char(
-        related='partner_id.email',
-        string='Email',
-        size=128,
-        readonly=True
+            related='partner_id.email',
+            string='Email',
+            size=128,
+            readonly=True
     )
 
     phone = fields.Char(
-        related='partner_id.mobile',
-        string='Telefono',
-        size=128,
-        readonly=True
+            related='partner_id.mobile',
+            string='Telefono',
+            size=128,
+            readonly=True
     )
 
     curso_state = fields.Selection(
-        related='curso_id.state',
-        string=u'Estado del curso',
-        readonly=True
+            related='curso_id.state',
+            string=u'Estado del curso',
+            readonly=True
     )
 
     company_id = fields.Many2one(
-        'res.company',
-        string='Company',
-        related='curso_id.company_id',
-        store=True,
-        readonly=True,
-        states={'draft': [('readonly', False)]}
+            'res.company',
+            string='Company',
+            related='curso_id.company_id',
+            store=True,
+            readonly=True,
+            states={'draft': [('readonly', False)]}
     )
 
     curso_begin_day = fields.Char(
-        compute='_get_weekday',
-        string='Dia')
+            compute='_get_weekday',
+            string='Dia')
 
     source = fields.Selection([
         ('none', 'Sin descuento'),
         ('groupon', 'Groupon'),
     ],
-        'Origen', required=True,
-        default='none'
+            'Origen', required=True,
+            default='none'
     )
 
     @api.one
@@ -169,7 +170,7 @@ class curso_registration(models.Model):
             weekday = '???'
         else:
             weekday = babel.dates.format_datetime(
-                init, format='EEE', locale=self.env.context['lang'])
+                    init, format='EEE', locale=self.env.context['lang'])
 
         self.curso_begin_day = weekday.capitalize()
 
@@ -211,9 +212,9 @@ class curso_registration(models.Model):
     @api.one
     def sign_registration(self):
         self.curso_id.message_post(
-            body=(u'Nueva seña para el curso: %s.') % (
-                self.partner_id.name or '',),
-            subtype="curso.mt_curso_registration"
+                body=(u'Nueva seña para el curso: %s.') % (
+                    self.partner_id.name or '',),
+                subtype="curso.mt_curso_registration"
         )
         self.state = 'signed'
 

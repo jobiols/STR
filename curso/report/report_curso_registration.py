@@ -19,8 +19,8 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
 from openerp import tools
+from openerp.osv import fields, osv
 
 
 class report_curso_registration(osv.osv):
@@ -40,11 +40,12 @@ class report_curso_registration(osv.osv):
         'register_max': fields.integer('Máximo de Inscripciones'),
         'nbcurso': fields.integer('Number Of cursos'),
         'registration_state': fields.selection(
-            [('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Attended'), ('cancel', 'Cancelled')],
-            'Registration State', readonly=True, required=True),
+                [('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Attended'), ('cancel', 'Cancelled')],
+                'Registration State', readonly=True, required=True),
         'curso_state': fields.selection(
-            [('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Done'), ('cancel', 'Cancelled')], 'curso State',
-            readonly=True, required=True),
+                [('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Done'), ('cancel', 'Cancelled')],
+                'curso State',
+                readonly=True, required=True),
         'user_id': fields.many2one('res.users', 'curso Responsible', readonly=True),
         'user_id_registration': fields.many2one('res.users', 'Register', readonly=True),
         'speaker_id': fields.many2one('res.partner', 'Speaker', readonly=True),

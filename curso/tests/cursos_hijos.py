@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
 #
 #    Copyright (C) 2016  jeo Software  (http://www.jeo-soft.com.ar)
 #    All Rights Reserved.
@@ -17,11 +17,11 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#-----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
 from openerp.tests.common import SingleTransactionCase
 
-class TestCurso(SingleTransactionCase):
 
+class TestCurso(SingleTransactionCase):
     def setUp(self):
         super(TestCurso, self).setUp()
 
@@ -56,8 +56,8 @@ class TestCurso(SingleTransactionCase):
 
         # creo el horario
         self.schedule_1 = self.schedule_obj.create({
-            'start_time':12,
-            'end_time':16
+            'start_time': 12,
+            'end_time': 16
         })
 
         # creamos la instancia del curso padre
@@ -97,8 +97,8 @@ class TestCurso(SingleTransactionCase):
 
         # creo el horario
         self.schedule_1 = self.schedule_obj.create({
-            'start_time':12,
-            'end_time':16
+            'start_time': 12,
+            'end_time': 16
         })
 
         # creamos la instancia del curso hijo
@@ -109,11 +109,7 @@ class TestCurso(SingleTransactionCase):
             'first_lecture_id': 1
         })
 
-
-
-
         print '= configuración lista =========================='
 
         print '= testeando 1 =================================='
         self.curso_1.button_curso_confirm()
-

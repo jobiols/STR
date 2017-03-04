@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
 #
 #    Copyright (C) 2016  jeo Software  (http://www.jeo-soft.com.ar)
 #    All Rights Reserved.
@@ -17,8 +17,8 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#-----------------------------------------------------------------------------------
-from openerp import models, fields, api
+# -----------------------------------------------------------------------------------
+from openerp import models, fields
 
 
 class mails_to_send(models.Model):
@@ -28,18 +28,18 @@ class mails_to_send(models.Model):
     _order = 'class_no'
 
     product_id = fields.Many2one(
-        'product.product',
-        'Producto'
+            'product.product',
+            'Producto'
     )
 
     class_no = fields.Integer(
-        'Nro clase'
+            'Nro clase'
     )
 
     template_id = fields.Many2one(
-        'email.template',
-        'Plantilla de mail',
-        domain="[('model_id','=','curso.registration')]"
+            'email.template',
+            'Plantilla de mail',
+            domain="[('model_id','=','curso.registration')]"
     )
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

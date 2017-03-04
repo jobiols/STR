@@ -26,50 +26,50 @@ class curso_quota(models.Model):
     _order = 'date desc'
 
     registration_id = fields.Many2one(
-        'curso.registration',
-        'Inscripcion',
-        required= True
+            'curso.registration',
+            'Inscripcion',
+            required=True
     )
 
     date = fields.Date(
-        'Fecha factura'
+            'Fecha factura'
     )
 
     list_price = fields.Float(
-        'Precio'
+            'Precio'
     )
 
     quota = fields.Integer(
-        '#cuota',
-        readonly=False
+            '#cuota',
+            readonly=False
     )
 
     invoice_id = fields.Many2one(
-        'account.invoice',
-        'Factura',
-        required=False
+            'account.invoice',
+            'Factura',
+            required=False
     )
 
     amount = fields.Char(
-        compute="_get_amount_paid",
-        string='Facturado'
+            compute="_get_amount_paid",
+            string='Facturado'
     )
 
     state = fields.Char(
-        compute="_get_state",
-        string='Estado Factura'
+            compute="_get_state",
+            string='Estado Factura'
     )
 
     curso_inst = fields.Char(
-        related='registration_id.curso_id.curso_instance',
-        string='Instancia',
-        readonly=True
+            related='registration_id.curso_id.curso_instance',
+            string='Instancia',
+            readonly=True
     )
 
     partner_id = fields.Char(
-        related='registration_id.partner_id.name',
-        string='Alumna',
-        readonly=True
+            related='registration_id.partner_id.name',
+            string='Alumna',
+            readonly=True
     )
 
     @api.one
