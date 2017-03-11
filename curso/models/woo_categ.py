@@ -34,6 +34,9 @@ class curso_woo_categ(models.Model):
     woo_id = fields.Integer(
     )
 
+    nube_id = fields.Integer(
+    )
+
     woo_ids = fields.Char(
             compute="get_woo_ids"
     )

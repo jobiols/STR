@@ -136,6 +136,10 @@ class product_product(models.Model):
         help=u"Información que aparece en el sitio y en los mails",
     )
 
+    nube_id = fields.Integer(
+        help=u'Identifica el producto en tienda nube'
+    )
+
     @api.one
     @api.depends('description')
     def _compute_short_wc(self):
