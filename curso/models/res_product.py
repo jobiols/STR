@@ -29,7 +29,9 @@ from . import html_filter
 
 class product_template(models.Model):
     _inherit = 'product.template'
-    type = fields.Selection(selection_add=[('curso', 'Curso')])
+    type = fields.Selection(selection_add=[('curso', 'Curso'),
+                                           ('card', 'Tarjeta')
+                                           ])
 
 
 class product_product(models.Model):
