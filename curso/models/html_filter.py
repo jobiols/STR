@@ -59,19 +59,30 @@ class html_filter:
 
         # TODO parametrizar esto.
         return u"""
-<br/>
-<span style="font-family: lucida sans unicode,lucida grande,sans-serif;
-    font-size: 20px;color: #ff0000;">
-    <strong>Makeover Lab</strong>
-</span><br />
-Avda Rivadavia 5259 9° "34", Caballito<br />
-Teléfono: 11 4902 4652<br />
-Horario de atenciónón al público:<br />
-Lunes a Viernes de 17 a 20 hs.<br />
-Sábados de 11 a 18 hs<br />
-<a href="https://www.facebook.com/MakeoverLabs">face/makeoverlabs</a><br />
-<a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a>
-                """
+<p><span style="font-size: 16px;"><a href="http://makeoverlab.com.ar/wp-content/uploads/2017/03/Cat&aacute;logo-precios-mila.pdf">Cat&aacute;logo Mila Marzi / Pro</a><br /><a href="http://makeoverlab.com.ar/wp-content/uploads/2017/03/Cat&aacute;logo-precios-visage.pdf">Cat&aacute;logo Pinceles Visage</a><br /><a href="http://makeoverlab.com.ar/wp-content/uploads/2017/03/Cat&aacute;logo-precios-once.pdf">Cat&aacute;logo Laboratorio Once</a><br /></span></p>
+<table>
+<tbody>
+<tr>
+<td><a href="https://www.facebook.com/MakeoverLabs/"><img src="http://makeoverlab.com.ar/wp-content/uploads/2017/02/social-facebook.png" alt="facebook" width="26" height="26" />&nbsp;Facebook</a>&nbsp;&nbsp;</td>
+<td><a href="https://twitter.com/MakeoverLabs?lang=es"><img src="http://makeoverlab.com.ar/wp-content/uploads/2017/02/social-tweeter.png" alt="tweeter" width="26" height="26" />&nbsp;Tweeter</a>&nbsp;&nbsp;</td>
+<td><a href="https://www.instagram.com/makeoverlabnavarre/"><img src="http://makeoverlab.com.ar/wp-content/uploads/2017/02/social-instagram.png" alt="instagram" width="26" height="26" />&nbsp;Instagram</a>&nbsp;&nbsp;</td>
+<td><a href="https://ar.linkedin.com/in/analianavarre"><img src="http://makeoverlab.com.ar/wp-content/uploads/2017/02/social-linkedin.png" alt="linkedin" width="26" height="26" />&nbsp;Linkedin</a>&nbsp;&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table>
+<tbody>
+<tr>
+<td><a href="makeoverlab.mitiendanube.com"><img src="http://makeoverlab.com.ar/wp-content/uploads/2017/02/social-tienda.png" alt="sitio web" width="26" height="26" />&nbsp;Nuestra tienda virtual</a>&nbsp;</td>
+<td><a href="http://www.makeoverlab.com.ar"><img src="http://makeoverlab.com.ar/wp-content/uploads/2017/02/social-web.png" alt="sitio web" width="26" height="26" />&nbsp;Nuestro Sitio web</a>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p><br /> <span style="font-family: lucida sans unicode,lucida grande,sans-serif; font-size: 20px; color: #ff0000;"> <strong>Makeover Lab</strong> </span><br /><a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a></p>
+<p>Call center de 9 a 20Hs 11 4902 4652</p>
+<p>Horario de atenci&oacute;n personalizada:<br />Lunes a Viernes de 17 a 20 hs y S&aacute;bado de 11 a 18 hs.<br />Av. Rivadavia 5259 Piso 9&deg; "34", Caballito</p>
+<p>Consultas y pedidos:<br /><a href="mailto:info@makeoverlab.com.ar">info@makeoverlab.com.ar</a></p>
+            """
 
     # -----------------------------------------------------------------------------------------
     def info_curso(self, data, col=1, price=False, discount=False):
