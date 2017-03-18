@@ -22,10 +22,13 @@ from openerp import models, fields, api
 
 
 class curso_assistance(models.Model):
+    """ Modelo para manejar asistencias a clase """
+
     _name = 'curso.assistance'
+    _description = __doc__
     _sql_constraints = [
-        ('unique_partner_per_class', 'unique (lecture_id, partner_id)',
-         'No puede estar dos veces la misma alumna en la clase')]
+        ('unique_partner_per_class', 'unique (lecture_id, partner_id, date)',
+         'Una alumna no puede aparecer dos veces en una clase')]
 
     lecture_id = fields.Many2one(
             'curso.lecture',
@@ -35,10 +38,18 @@ class curso_assistance(models.Model):
     partner_id = fields.Many2one(
             'res.partner',
             required=True,
-            string=u'Alumna'
+            string=u'Alumna',
+            help=u'Alumna a la que pertenece este registro de asistencia'
     )
+    state = fields.Selection([
+        ('programmed', 'Programado'),
+        ('absent', 'Ausente'),
+        ('present', 'Presente'),
+        ('abandoned', 'Abandonado')
+    ])
     present = fields.Boolean(
             'Presente',
+            compute='_get_present',
             help=u'Tildado si la alumna estuvo presente en la clase'
     )
     recover = fields.Boolean(
@@ -61,14 +72,20 @@ class curso_assistance(models.Model):
 
     @api.multi
     def button_present(self):
-        """ La profesora le pone o le saca el presente a la alumna
-        """
+        """ La profesora le pone o le saca el presente a la alumna """
         for reg in self:
             reg.present = not reg.present
 
-    @api.one
+    @api.multi
     @api.depends('partner_id')
     def _get_info(self):
-        self.info = self.partner_id.get_info()
+        for rec in self:
+            rec.info = rec.partner_id.get_info()
+
+    @api.multi
+    @api.depends('state')
+    def _get_present(self):
+        for rec in self:
+            rec.present = rec.state == 'present'
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

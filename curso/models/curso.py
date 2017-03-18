@@ -28,7 +28,7 @@ from openerp.osv import osv
 try:
     locale.setlocale(locale.LC_ALL, 'es_AR.utf8')
 except:
-    a = 1
+    pass
 
 
 class curso_information(osv.osv_memory):
