@@ -19,13 +19,12 @@
 #
 ##############################################################################
 
-from . import add_registration
-from . import create_invoice
 from . import daily_report
-from . import mail_confirm
+from . import create_invoice
+from . import add_registration
 from . import move_registration
-from . import prepare_mass_mail
+from . import mail_confirm
 from . import send_mail
-
+from . import prepare_mass_mail
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

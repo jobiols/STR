@@ -38,108 +38,108 @@ class product_product(models.Model):
     _inherit = 'product.product'
 
     product_url = fields.Char(
-            u'URL del producto', size=200,
-            help=u'URL del curso original que se muestar en el sitio web')
+        u'URL del producto', size=200,
+        help=u'URL del curso original que se muestar en el sitio web')
 
     tot_hs_lecture = fields.Integer(
-            u'Horas catedra',
-            help=u"Cantidad de horas que tiene el curso en total.")
+        u'Horas catedra',
+        help=u"Cantidad de horas que tiene el curso en total.")
 
     hs_lecture = fields.Integer(
-            u'Horas de clase',
-            help=u"Duración de cada una de las clases.")
+        u'Horas de clase',
+        help=u"Duración de cada una de las clases.")
 
     agenda = fields.Text(
-            u'Temario del curso',
-            help=u"Descripción de los temas que abarca el curso, se formatea con markdown, "
-                 u"esta información se exporta al sitio web y se hace pública.")
+        u'Temario del curso',
+        help=u"Descripción de los temas que abarca el curso, se formatea con markdown, "
+             u"esta información se exporta al sitio web y se hace pública.")
 
     no_quotes = fields.Integer(
-            u'Cantidad de cuotas', default=1,
-            help=u'Cantidad de cuotas que tiene que pagar la aluman')
+        u'Cantidad de cuotas', default=1,
+        help=u'Cantidad de cuotas que tiene que pagar la aluman')
 
     default_registration_min = fields.Integer(
-            u'Mínimo de alumnas en el curso', default=1,
-            help=u"define la cantidad minima de alumnas para arrancar el curso. (Poner cero "
-                 u"para no tener en cuenta la regla)")
+        u'Mínimo de alumnas en el curso', default=1,
+        help=u"define la cantidad minima de alumnas para arrancar el curso. (Poner cero "
+             u"para no tener en cuenta la regla)")
 
     default_registration_max = fields.Integer(
-            u'Máximo de alumnas en el curso', default=9,
-            help="Define la cantidad maxima de alumnas que puede tener el curso. (Poner cero "
-                 "para no tener en cuenta la regla)")
+        u'Máximo de alumnas en el curso', default=9,
+        help="Define la cantidad maxima de alumnas que puede tener el curso. (Poner cero "
+             "para no tener en cuenta la regla)")
 
     default_email_registration = fields.Many2one(
-            'email.template',
-            u'Mail de inscripción',
-            help=u"Selecciona el mail de inscripcion que se le enviara a la alumna")
+        'email.template',
+        u'Mail de inscripción',
+        help=u"Selecciona el mail de inscripcion que se le enviara a la alumna")
 
     default_email_curso = fields.Many2one(
-            'email.template',
-            u'Mail de confirmacion',
-            help=u"Selecciona el mail de confirmacion que se enviara a la alumna en el momento "
-                 u"de la confirmacion, esto es cuando paga o seña el curso")
+        'email.template',
+        u'Mail de confirmacion',
+        help=u"Selecciona el mail de confirmacion que se enviara a la alumna en el momento "
+             u"de la confirmacion, esto es cuando paga o seña el curso")
 
     lecture_template_ids = fields.One2many(
-            'curso.lecture_template', 'product_id', 'Clases',
-            help=u"Contenido de cada clase, esto se usará de plantilla para copiar a cada "
-                 u"instancia de curso cuando esta se genere")
+        'curso.lecture_template', 'product_id', 'Clases',
+        help=u"Contenido de cada clase, esto se usará de plantilla para copiar a cada "
+             u"instancia de curso cuando esta se genere")
 
     curso_instances = fields.One2many(
-            'curso.curso', 'product', 'Instancias',
-            help=u'Instancias de este producto cuando es tipo (curso)')
+        'curso.curso', 'product', 'Instancias',
+        help=u'Instancias de este producto cuando es tipo (curso)')
 
     email_classes_ids = fields.One2many(
-            comodel_name='mails.to.send',
-            inverse_name='product_id',
-            string='templates',
-            help=u"Definición de las plantillas de mail a enviar después de cada clase",
+        comodel_name='mails.to.send',
+        inverse_name='product_id',
+        string='templates',
+        help=u"Definición de las plantillas de mail a enviar después de cada clase",
     )
 
     public_price = fields.Float(
-            u'Precio púb',
-            compute='_compute_prices'
+        u'Precio púb',
+        compute='_compute_prices'
     )
 
     pro_price = fields.Float(
-            u'Precio pro',
-            compute='_compute_prices'
+        u'Precio pro',
+        compute='_compute_prices'
     )
 
     mercadopago_button = fields.Char(
-            u'Boton de mercadopago precio normal'
+        u'Boton de mercadopago precio normal'
     )
 
     mercadopago_button_discount = fields.Char(
-            u'Boton de mercadopago con descuento'
+        u'Boton de mercadopago con descuento'
     )
 
     mercadopago_discount = fields.Float(
-            u'Descuento mercadopago',
-            digits=(2, 8)
+        u'Descuento mercadopago',
+        digits=(2,8)
     )
 
     woo_id = fields.Char(
-            help=u'Identifica el producto en woo'
+        help=u'Identifica el producto en woo'
     )
 
     woo_categ = fields.Many2one(
-            'curso.woo.categ',
-            'Categoría de producto',
-            help=u'Categoría de producto'
+        'curso.woo.categ',
+        'Categoría de producto',
+        help=u'Categoría de producto'
     )
 
     description_short_wc = fields.Char(
-            compute="_compute_short_wc",
-            store="True"
+        compute="_compute_short_wc",
+        store="True"
     )
 
     comercial_data = fields.Char(
-            'datos comerciales',
-            help=u"Información que aparece en el sitio y en los mails",
+        'datos comerciales',
+        help=u"Información que aparece en el sitio y en los mails",
     )
 
     nube_id = fields.Integer(
-            help=u'Identifica el producto en tienda nube'
+        help=u'Identifica el producto en tienda nube'
     )
 
     @api.one
@@ -173,12 +173,12 @@ class product_product(models.Model):
 
         # calcular el precios basado en la lista de precios
         self.public_price = self.pool.get('product.pricelist').price_get(
-                self.env.cr, self.env.uid, [public_pricelist_id], self.id, 1.0,
-                context=None)[public_pricelist_id]
+            self.env.cr, self.env.uid, [public_pricelist_id], self.id, 1.0,
+            context=None)[public_pricelist_id]
 
         self.pro_price = self.pool.get('product.pricelist').price_get(
-                self.env.cr, self.env.uid, [pro_pricelist_id], self.id, 1.0,
-                context=None)[pro_pricelist_id]
+            self.env.cr, self.env.uid, [pro_pricelist_id], self.id, 1.0,
+            context=None)[pro_pricelist_id]
 
     @api.one
     @api.constrains('default_code', 'type')
@@ -187,8 +187,8 @@ class product_product(models.Model):
             recordset = self.search([('default_code', '=', self.default_code)])
             if len(recordset) > 1:
                 raise ValidationError(
-                        'El curso {} {} ya está ingresado'.format(self.default_code,
-                                                                  self.name))
+                    'El curso {} {} ya está ingresado'.format(self.default_code,
+                                                              self.name))
 
     @api.one
     def button_generate_lecture_templates(self):
@@ -274,14 +274,14 @@ class product_product(models.Model):
             wee = dt.strftime('%A').decode('utf-8', 'ignore') if dt else '?'
             year = dt.strftime('%Y')
             data['instances'].append(
-                    {'month': mon.capitalize() + ' ' + year,
-                     'day': day,
-                     'name': curso.name,
-                     'weekday': wee.capitalize(),
-                     'schedule': get_schedule(curso),
-                     'vacancy': calc_vacancy(curso.register_avail),
-                     'curso_instance': curso.curso_instance
-                     })
+                {'month': mon.capitalize() + ' ' + year,
+                 'day': day,
+                 'name': curso.name,
+                 'weekday': wee.capitalize(),
+                 'schedule': get_schedule(curso),
+                 'vacancy': calc_vacancy(curso.register_avail),
+                 'curso_instance': curso.curso_instance
+                 })
 
         return data
 
@@ -347,9 +347,9 @@ class product_product(models.Model):
             else:
                 # no existe el horario agrego la linea
                 formatted_diary.append(
-                        {'list_dias': [diary_line['weekday_name']],
-                         'horario': diary_line['schedule']
-                         })
+                    {'list_dias': [diary_line['weekday_name']],
+                     'horario': diary_line['schedule']
+                     })
 
         # hacer la lista de dias formateada
         for fdl in formatted_diary:

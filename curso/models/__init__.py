@@ -19,22 +19,21 @@
 #
 ##############################################################################
 
-from . import assistance
-from . import curso
-from . import curso_translated
+from . import lapse
+from . import schedule
 from . import diary
 from . import holiday
-from . import html_filter
-from . import lapse
 from . import lecture
+from . import quota
+from . import curso
+from . import registration
+from . import res_partner
 from . import lecture_template
 from . import mails_to_send
-from . import quota
-from . import registration
+from . import curso_translated
 from . import registration_translated
-from . import res_partner
 from . import res_product
-from . import schedule
+from . import html_filter
+from . import assistance
 from . import woo_categ
-
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

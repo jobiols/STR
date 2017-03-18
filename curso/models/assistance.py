@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# -----------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------
 #
 #    Copyright (C) 2016  jeo Software  (http://www.jeo-soft.com.ar)
 #    All Rights Reserved.
@@ -17,9 +17,8 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# -----------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------
 from openerp import models, fields, api
-
 
 class curso_assistance(models.Model):
     _name = 'curso.assistance'
@@ -28,35 +27,35 @@ class curso_assistance(models.Model):
          'No puede estar dos veces la misma alumna en la clase')]
 
     lecture_id = fields.Many2one(
-            'curso.lecture',
-            string='Clase',
-            help=u'Clase a la que pertenece este registro de asistencia'
+        'curso.lecture',
+        string='Clase',
+        help=u'Clase a la que pertenece este registro de asistencia'
     )
     partner_id = fields.Many2one(
-            'res.partner',
-            required=True,
-            string=u'Alumna'
+        'res.partner',
+        required=True,
+        string=u'Alumna'
     )
     present = fields.Boolean(
-            'Presente',
-            help=u'Tildado si la alumna estuvo presente en la clase'
+        'Presente',
+        help=u'Tildado si la alumna estuvo presente en la clase'
     )
     recover = fields.Boolean(
-            'Recupera',
-            help=u'Tildado si la alumna está recuperando'
+        'Recupera',
+        help=u'Tildado si la alumna está recuperando'
     )
     info = fields.Char(
-            'Detalles',
-            compute="_get_info",
-            help=u'Información adicional'
+        'Detalles',
+        compute="_get_info",
+        help=u'Información adicional'
     )
 
     date = fields.Date(
-            related='lecture_id.date'
+        related='lecture_id.date'
     )
 
     curso_instance = fields.Char(
-            related='lecture_id.curso_id.curso_instance'
+        related='lecture_id.curso_id.curso_instance'
     )
 
     @api.multi
@@ -70,6 +69,5 @@ class curso_assistance(models.Model):
     @api.depends('partner_id')
     def _get_info(self):
         self.info = self.partner_id.get_info()
-        print 'nola'
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
