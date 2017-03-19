@@ -32,51 +32,52 @@ class curso_lecture(models.Model):
     name_list = fields.Char(
             compute='_get_name_list'
     )
-
     name = fields.Text(
-            'Contenido de la clase')
-
+            'Contenido de la clase'
+    )
     date = fields.Date(
             'Fecha',
             store="True",
-            compute="_get_date")
-
-    curso_id = fields.Many2one(
-            'curso.curso', string='Curso',
-            required=True,
-            help='Curso al que pertenece esta clase',
+            compute="_get_date"
     )
-
+    curso_id = fields.Many2one(
+            'curso.curso',
+            string='Curso',
+            help='Curso al que pertenece esta clase',
+            required=True
+    )
     schedule_id = fields.Many2one(
-            'curso.schedule', string='Horario programado',
-            required=True,
-            help='Horario original de la clase')
-
+            'curso.schedule',
+            string='Horario programado',
+            help='Horario original de la clase',
+            required=True
+    )
     weekday = fields.Char(
-            compute="_get_weekday", string="Dia")
-
+            compute="_get_weekday",
+            string="Dia"
+    )
     date_start = fields.Datetime(
-            string="Inicio de clase")
-
+            string="Inicio de clase",
+            required=True
+    )
     date_stop = fields.Datetime(
-            string="Fin de clase")
-
+            string="Fin de clase",
+            required=True
+    )
     seq = fields.Integer(
-            'Número de clase')
-
+            'Número de clase',
+            required=True
+    )
     assistance_id = fields.One2many(
             'curso.assistance',
             'lecture_id'
     )
-
     default_code = fields.Char(
             related="curso_id.default_code"
     )
-
     next = fields.Boolean(
             related="curso_id.next"
     )
-
     reg_current = fields.Integer(
             'Conf',
             related="curso_id.register_current",
@@ -111,20 +112,19 @@ class curso_lecture(models.Model):
                 ]
         )
 
-    @api.one
+    @api.multi
     @api.depends('date_start')
     def _get_date(self):
-        if self.date_start:
-            dt = datetime.strptime(self.date_start, '%Y-%m-%d %H:%M:%S')
-            self.date = dt.strftime('%Y-%m-%d')
-        else:
-            self.date = False
+        for rec in self:
+            dt = datetime.strptime(rec.date_start, '%Y-%m-%d %H:%M:%S')
+            rec.date = dt.strftime('%Y-%m-%d')
 
-    @api.one
+    @api.multi
     @api.depends('date')
     def _get_weekday(self):
-        ans = datetime.strptime(self.date, '%Y-%m-%d')
-        self.weekday = ans.strftime("%A").capitalize()
+        for rec in self:
+            ans = datetime.strptime(rec.date, '%Y-%m-%d')
+            rec.weekday = ans.strftime("%A").capitalize()
 
     @api.one
     def button_generate_assistance(self):

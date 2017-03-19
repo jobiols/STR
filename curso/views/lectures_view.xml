@@ -29,12 +29,17 @@
                         </group>
                         <field name="assistance_id" nolabel="1">
                             <tree string="planilla de asistencia"
-                                  colors="green: present==True"
-                            >
+                                          font="bold"
+                                          colors="green:  state=='programmed';
+                                                  red:    state=='absent' and future == True;
+                                                  orange: state=='absent' and future == False;
+                                                  blue:   state=='present';
+                                                  brown:  state=='abandoned';" >
                                 <field name="partner_id"/>
                                 <field name="present"/>
                                 <field name="recover"/>
                                 <field name="info"/>
+                                <field name="state" invisible="1"/>
                                 <button name="button_present" string="Dar el presente"
                                         type="object" icon="gtk-apply"
                                         attrs="{'invisible':[('present','=',True)]}"

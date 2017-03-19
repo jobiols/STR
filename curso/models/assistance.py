@@ -40,25 +40,28 @@ class curso_assistance(models.Model):
     lecture_id = fields.Many2one(
             'curso.lecture',
             string='Clase',
-            help=u'Clase a la que pertenece este registro de asistencia'
+            help=u'Clase a la que pertenece este registro de asistencia',
+            required=True,
     )
     seq = fields.Integer(
             'Clase',
             related='lecture_id.seq',
-            store=False)
-
+            store=False
+    )
     partner_id = fields.Many2one(
             'res.partner',
-            required=True,
             string=u'Alumna',
-            help=u'Alumna a la que pertenece este registro de asistencia'
+            help=u'Alumna a la que pertenece este registro de asistencia',
+            required=True
     )
     state = fields.Selection([
-        ('programmed', 'Programado'),
-        ('absent', 'Ausente'),
-        ('present', 'Presente'),
-        ('abandoned', 'Abandonado')
-    ])
+            ('programmed', 'Programado'),
+            ('absent', 'Ausente'),
+            ('present', 'Presente'),
+            ('abandoned', 'Abandonado')],
+            default='programmed',
+            required=True
+    )
     present = fields.Boolean(
             'Presente',
             compute='_get_present',
@@ -73,11 +76,9 @@ class curso_assistance(models.Model):
             compute="_get_info",
             help=u'Información adicional'
     )
-
     date = fields.Date(
             related='lecture_id.date'
     )
-
     curso_instance = fields.Char(
             related='lecture_id.curso_id.curso_instance'
     )
@@ -86,7 +87,6 @@ class curso_assistance(models.Model):
     def add_atendee(self, partner_id, lecture_id, recover=False):
         """ Agrega una alumna a una clase """
 
-        print 'about to create', partner_id, lecture_id
         self.create(
                 {   'partner_id': partner_id,
                     'lecture_id': lecture_id.id,
@@ -97,8 +97,12 @@ class curso_assistance(models.Model):
     @api.multi
     def button_present(self):
         """ La profesora le pone o le saca el presente a la alumna """
+
         for reg in self:
-            reg.present = not reg.present
+            if reg.present:
+                reg.state = 'programmed'
+            else:
+                reg.state = 'present'
 
     @api.multi
     @api.depends('partner_id')
@@ -137,7 +141,6 @@ class curso_assistance(models.Model):
         # averiguar a que clases faltó esta alumna
         absent_lectures = self.search([('partner_id', '=', partner_id),
                                        ('state', '=', 'absent')])
-        for al in absent_lectures:
 
         # obtener los cursos y clases que necesita recuperar
         lectures_obj = self.env['curso.lecture']
