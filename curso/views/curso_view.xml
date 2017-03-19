@@ -462,7 +462,7 @@
             <field name="model">curso.information</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Información de cursos" version="7.0">
+                <form string="Información de cursos">
                     <div>
                         <p>
                             Este es el asistente para generar la información de los

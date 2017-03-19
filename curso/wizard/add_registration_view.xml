@@ -5,7 +5,7 @@
             <field name="name">Agregar Inscripcion a curso</field>
             <field name="model">curso.add_registration</field>
             <field name="arch" type="xml">
-                <form string="Anotar como interesada" version="7.0">
+                <form string="Anotar como interesada">
                     <group>
                         <label string="Seleccione el curso en el que está interesada esta alumna."/>
                     </group>

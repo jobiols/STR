@@ -26,7 +26,7 @@
             <field name="model">curso.invoice</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Facturacion de cursos" version="7.0">
+                <form string="Facturacion de cursos">
                     <div>
                         <p>
                             Este es el asistente para generar facturas.

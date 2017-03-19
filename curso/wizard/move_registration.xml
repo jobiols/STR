@@ -23,7 +23,7 @@
             <field name="model">curso.move.registration</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Facturacion de cursos" version="7.0">
+                <form string="Facturacion de cursos">
 
                     <p>Seleccioná el curso al que querés mover o copiar
                         el conjunto de alumnas inscriptas que marcaste previamente.

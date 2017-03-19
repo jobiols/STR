@@ -11,7 +11,7 @@
             <field name="name">Feriados</field>
             <field name="model">curso.holiday</field>
             <field name="arch" type="xml">
-                <form string="Planilla de feriados" version="7.0">
+                <form string="Planilla de feriados">
                     <group col="2">
                         <div class="oe_title">
                             <h1>

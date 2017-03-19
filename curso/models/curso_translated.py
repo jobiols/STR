@@ -270,7 +270,7 @@ class curso_curso(models.Model):
     )
 
     curso_instance = fields.Char(
-            compute='_get_instance', string='Instancia del curso'
+            compute='_get_instance', string='Curso'
     )
 
     name = fields.Char(
