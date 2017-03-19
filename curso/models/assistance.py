@@ -18,6 +18,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # -----------------------------------------------------------------------------------
+from datetime import datetime
+
 from openerp import models, fields, api
 
 
@@ -30,11 +32,21 @@ class curso_assistance(models.Model):
         ('unique_partner_per_class', 'unique (lecture_id, partner_id, date)',
          'Una alumna no puede aparecer dos veces en una clase')]
 
+    future = fields.Boolean(
+            'Futuro',
+            help=u'La fecha de la clase está en el futuro',
+            compute='_get_future'
+    )
     lecture_id = fields.Many2one(
             'curso.lecture',
             string='Clase',
             help=u'Clase a la que pertenece este registro de asistencia'
     )
+    seq = fields.Integer(
+            'Clase',
+            related='lecture_id.seq',
+            store=False)
+
     partner_id = fields.Many2one(
             'res.partner',
             required=True,
@@ -87,5 +99,23 @@ class curso_assistance(models.Model):
     def _get_present(self):
         for rec in self:
             rec.present = rec.state == 'present'
+
+    @api.multi
+    def button_go_absent(self):
+        """ La alumna informa que no va a venir a esta clase """
+        for rec in self:
+            rec.state = 'absent'
+
+    @api.multi
+    def button_go_programmed(self):
+        """ La alumna informa que no va a venir a esta clase """
+        for rec in self:
+            rec.state = 'programmed'
+
+    @api.multi
+    @api.depends('date')
+    def _get_future(self):
+        for rec in self:
+            rec.future = datetime.today() < datetime.strptime(rec.date, '%Y-%m-%d')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -83,14 +83,38 @@
                         </page>
                         <page string="Asistencias">
                             <group name="grp_assistance" string="Historial de asistencias">
-                                <field name="assistance_id" nolabel="1">
-                                    <tree string="Asistencia a cursos">
+                                <button string="Agregar recuperatorio"
+                                        name="%(wizard_curso_add_recover)d" type="action"/>
+                                <field name="assistance_id" colspan="4" nolabel="1">
+                                    <tree string="Asistencia a cursos"
+                                          font="bold"
+                                          colors="green:  state=='programmed';
+                                                  red:    state=='absent' and future == True;
+                                                  orange: state=='absent' and future == False;
+                                                  blue:   state=='present';
+                                                  brown:  state=='abandoned';" >
                                         <field name="curso_instance"/>
+                                        <field name="seq"/>
                                         <field name="date"/>
+                                        <field name="recover"
+                                               string="Rec"/>
                                         <field name="present"/>
-                                        <field name="recover"/>
                                         <field name="info"/>
-                                        <field name="lecture_id"/>
+                                        <field name="lecture_id"
+                                               string="Tema de la clase"/>
+                                        <button name="button_go_absent"
+                                                string="No va a tomar esta clase"
+                                                states="programmed"
+                                                type="object"
+                                                icon="gtk-cancel"/>
+                                        <button name="button_go_programmed"
+                                                string="Pasar a programado"
+                                                states="absent"
+                                                type="object"
+                                                icon="gtk-undo"/>
+                                        <field name="state" string="Estado"/>
+                                        <field name="future"
+                                               invisible="True"/>
                                     </tree>
                                 </field>
                             </group>
