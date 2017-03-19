@@ -27,17 +27,29 @@ class add_recover(models.TransientModel):
     _name = 'curso.add_recover'
     _description = __doc__
 
-    test = fields.Integer(
-        default=7874
+    # este campo sirve solo para disparar el onchange
+    # para que funcione tiene que estar en la vista (con invisible =1 para que no se vea )
+    dummy = fields.Integer(
     )
 
     lecture_id = fields.Many2one(
             'curso.lecture',
             required=True,
-            domain="[('id','=',test)]"
     )
 
+    @api.multi
+    @api.onchange('dummy')
+    def onchange_dummy(self):
+        """ Esta funcion se dispara al crearse este modelo transitorio """
 
+        # traer del contexto la id de la alumna
+        alumna_ids = self._context.get('active_ids')
+
+        # obtener una lista de ids de clases a recuperar
+        assistance_obj = self.env['curso.assistance']
+        recover_ids = assistance_obj.get_recover_ids(alumna_ids[0])
+
+        return {'domain': {'lecture_id': [('id', 'in', recover_ids)]}}
 
     @api.one
     def button_add_recover(self):
@@ -58,6 +70,11 @@ class add_recover(models.TransientModel):
             La proxima vez que se abra esta vista se verá la leyenda "Nos debe $100"
         """
 
+        # product_obj = self.pool.get('product.product')
+        # product_ids = product_obj.search(cr, uid, [('type', '=', type)])
+
+        """
+
         #  obtener el id de la alumna que viene en el contexto
         partner_ids = self._context.get('active_ids')
 
@@ -70,8 +87,6 @@ class add_recover(models.TransientModel):
             'disc_desc': self.disc_desc,
         }
         self.env['curso.registration'].create(vals)
-
-
-
+        """
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

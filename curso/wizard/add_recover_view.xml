@@ -10,7 +10,7 @@
                         <label string="Seleccione la clase a la que va a asistir la alumna para recuperar."/>
                     </group>
                     <group>
-                        <field name="test"/>
+                        <field name="dummy" invisible="1"/>
                         <field name="lecture_id"/>
                     </group>
                     <footer>

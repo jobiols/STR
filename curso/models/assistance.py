@@ -118,4 +118,44 @@ class curso_assistance(models.Model):
         for rec in self:
             rec.future = datetime.today() < datetime.strptime(rec.date, '%Y-%m-%d')
 
+    @api.multi
+    def get_recover_ids(self, partner_id):
+        """ dada una alumna devolver los ids de las clases de recuperatorio """
+
+        print '-----------------------------------------------------------------------------------'
+
+        # averiguar a que clases faltó esta alumna
+        absent_lectures = self.search([('partner_id', '=', partner_id),
+                                       ('state', '=', 'absent')])
+
+        for al in absent_lectures:
+            print 'falto a ',al.lecture_id.default_code, al.seq
+
+        print '-----------------------------------------------------------------------------------'
+
+
+        # obtener los cursos y clases que necesita recuperar
+        lectures_obj = self.env['curso.lecture']
+        ret = []
+        for al in absent_lectures:
+            default_code = al.lecture_id.curso_id.default_code  # que curso tiene que recuperar
+            seq = al.lecture_id.seq  # que numero de clase tiene que recuperar
+
+            print 'necesita recuperar', default_code, seq
+
+
+            # averiguar que clases hay para ese curso y numero de clase
+            candidate_lectures = lectures_obj.search([('default_code', '=', default_code),
+                                                      ('seq', '=', seq),
+                                                      ('next', '=', True)])
+
+
+            for cl in candidate_lectures:
+                print 'candidatos', cl.id, cl.default_code, cl.seq, cl.name
+                ret.append(cl.id)
+
+        print 'devolviendo',ret
+
+        return ret
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

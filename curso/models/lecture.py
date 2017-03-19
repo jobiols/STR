@@ -24,14 +24,13 @@ from openerp import models, fields, api
 
 
 class curso_lecture(models.Model):
-    """ Representa las clases del curso """
+    """ Representa las clases de una instancia curso """
 
     _name = 'curso.lecture'
     _rec_name = 'name_list'
 
-
     name_list = fields.Char(
-        compute='_get_name_list'
+            compute='_get_name_list'
     )
 
     name = fields.Text(
@@ -92,10 +91,10 @@ class curso_lecture(models.Model):
     @api.multi
     def _get_name_list(self):
         for rec in self:
-            rec.name_list = '{} {} {} {}'.format(
+            rec.name_list = '{} [{}]  clase {} --  {}'.format(
+                    datetime.strptime(rec.date, '%Y-%m-%d').strftime('%d/%m/%Y'),
                     rec.curso_id.default_code,
                     rec.seq,
-                    rec.date,
                     rec.name
             )
 
