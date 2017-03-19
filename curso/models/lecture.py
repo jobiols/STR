@@ -25,7 +25,14 @@ from openerp import models, fields, api
 
 class curso_lecture(models.Model):
     """ Representa las clases del curso """
+
     _name = 'curso.lecture'
+    _rec_name = 'name_list'
+
+
+    name_list = fields.Char(
+        compute='_get_name_list'
+    )
 
     name = fields.Text(
             'Contenido de la clase')
@@ -81,6 +88,16 @@ class curso_lecture(models.Model):
             compute="get_reg_recover",
             help=u"La cantidad de alumnas anotadas en esta clase para recuperar)"
     )
+
+    @api.multi
+    def _get_name_list(self):
+        for rec in self:
+            rec.name_list = '{} {} {} {}'.format(
+                    rec.curso_id.default_code,
+                    rec.seq,
+                    rec.date,
+                    rec.name
+            )
 
     @api.one
     @api.depends('assistance_id')

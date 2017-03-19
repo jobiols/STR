@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_curso_add_registration" model="ir.ui.view">
+            <field name="name">Agregar un recuperatorio</field>
+            <field name="model">curso.add_recover</field>
+            <field name="arch" type="xml">
+                <form string="Agregar un recuperatorio a una alumna">
+                    <group>
+                        <label string="Seleccione la clase a la que va a asistir la alumna para recuperar."/>
+                    </group>
+                    <group>
+                        <field name="test"/>
+                        <field name="lecture_id"/>
+                    </group>
+                    <footer>
+                        <button name="button_add_recover" string="Confirmar" type="object"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- action -->
+
+        <record id="wizard_curso_add_recover" model="ir.actions.act_window">
+            <field name="name">Agregar recuperatorio</field>
+            <field name="res_model">curso.add_recover</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>
