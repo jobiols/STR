@@ -83,6 +83,18 @@ class curso_assistance(models.Model):
     )
 
     @api.multi
+    def add_atendee(self, partner_id, lecture_id, recover=False):
+        """ Agrega una alumna a una clase """
+
+        print 'about to create', partner_id, lecture_id
+        self.create(
+                {   'partner_id': partner_id,
+                    'lecture_id': lecture_id.id,
+                    'state': 'programmed',
+                    'recover': recover}
+        )
+
+    @api.multi
     def button_present(self):
         """ La profesora le pone o le saca el presente a la alumna """
         for reg in self:
@@ -122,17 +134,10 @@ class curso_assistance(models.Model):
     def get_recover_ids(self, partner_id):
         """ dada una alumna devolver los ids de las clases de recuperatorio """
 
-        print '-----------------------------------------------------------------------------------'
-
         # averiguar a que clases faltó esta alumna
         absent_lectures = self.search([('partner_id', '=', partner_id),
                                        ('state', '=', 'absent')])
-
         for al in absent_lectures:
-            print 'falto a ',al.lecture_id.default_code, al.seq
-
-        print '-----------------------------------------------------------------------------------'
-
 
         # obtener los cursos y clases que necesita recuperar
         lectures_obj = self.env['curso.lecture']
@@ -141,21 +146,12 @@ class curso_assistance(models.Model):
             default_code = al.lecture_id.curso_id.default_code  # que curso tiene que recuperar
             seq = al.lecture_id.seq  # que numero de clase tiene que recuperar
 
-            print 'necesita recuperar', default_code, seq
-
-
             # averiguar que clases hay para ese curso y numero de clase
             candidate_lectures = lectures_obj.search([('default_code', '=', default_code),
                                                       ('seq', '=', seq),
                                                       ('next', '=', True)])
-
-
             for cl in candidate_lectures:
-                print 'candidatos', cl.id, cl.default_code, cl.seq, cl.name
                 ret.append(cl.id)
-
-        print 'devolviendo',ret
-
         return ret
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -53,9 +53,7 @@ class add_recover(models.TransientModel):
 
     @api.one
     def button_add_recover(self):
-        """ Agrega un curso a la ficha de la alumna, y la pone como interesada
-
-            En la ficha de la alumna se oprime el botón agregar recuperatorio y se
+        """ En la ficha de la alumna se oprime el botón agregar recuperatorio y se
             le agrega una clase que se elige de una lista, aparecerán solo las clases
             que la alumna deba recuperar. Para generar esta lista se analizan las
             clases que están en estado absent y se buscan las clases de posible
@@ -70,23 +68,10 @@ class add_recover(models.TransientModel):
             La proxima vez que se abra esta vista se verá la leyenda "Nos debe $100"
         """
 
-        # product_obj = self.pool.get('product.product')
-        # product_ids = product_obj.search(cr, uid, [('type', '=', type)])
-
-        """
-
         #  obtener el id de la alumna que viene en el contexto
-        partner_ids = self._context.get('active_ids')
+        partner_id = self._context.get('active_ids')[0]
+        assistance_obj = self.env['curso.assistance']
+        assistance_obj.add_atendee(partner_id, self.lecture_id, recover=True)
 
-        # Crear la inscripcion y agregarla
-        vals = {
-            'curso_id': self.curso_id.id,
-            'partner_id': partner_ids[0],
-            'user_id': self._uid,
-            'discount': self.discount,
-            'disc_desc': self.disc_desc,
-        }
-        self.env['curso.registration'].create(vals)
-        """
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
