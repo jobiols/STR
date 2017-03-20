@@ -112,6 +112,10 @@
                                                 states="absent"
                                                 type="object"
                                                 icon="gtk-undo"/>
+                                        <button name="do_run_housekeeping"
+                                                string="TEST"
+                                                type="object"
+                                                icon="gtk-undo"/>
                                         <field name="state" string="Estado"/>
                                         <field name="future"
                                                invisible="True"/>

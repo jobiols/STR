@@ -62,7 +62,7 @@ class add_recover(models.TransientModel):
             La clase agregada aparecerá en color verde en estado programmed y
             funcionará como una clase original a los efectos de dar el presente,
             Salvo que tendrá tildada la casilla Recuperatorio. La clase original
-            que estaba en estado absent se pasa a estado recovered
+            que estaba en estado absent se pasa a estado to_recover
 
             Se genera una factura por $ 100 para el cobro de la clase de recuperatorio.
             La proxima vez que se abra esta vista se verá la leyenda "Nos debe $100"
@@ -72,6 +72,15 @@ class add_recover(models.TransientModel):
         partner_id = self._context.get('active_ids')[0]
         assistance_obj = self.env['curso.assistance']
         assistance_obj.add_atendee(partner_id, self.lecture_id, recover=True)
+
+        partner_id = self.env['res.partner'].browse(partner_id)
+
+        # generar la factura
+        self.lecture_id.curso_id.do_invoice(
+                100,
+                self.lecture_id.curso_id.curso_instance,
+                self.lecture_id.seq,
+                partner_id)
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

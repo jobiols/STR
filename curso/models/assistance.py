@@ -29,13 +29,16 @@ class curso_assistance(models.Model):
     _name = 'curso.assistance'
     _description = __doc__
     _sql_constraints = [
-        ('unique_partner_per_class', 'unique (lecture_id, partner_id, date)',
+        ('unique_partner_per_class', 'unique (partner_id, lecture_id)',
          'Una alumna no puede aparecer dos veces en una clase')]
 
     future = fields.Boolean(
             'Futuro',
             help=u'La fecha de la clase está en el futuro',
             compute='_get_future'
+    )
+    notifications = fields.Integer(
+            help=u'Cantidad de veces que se la notificó para que recupere esta clase'
     )
     lecture_id = fields.Many2one(
             'curso.lecture',
@@ -55,12 +58,18 @@ class curso_assistance(models.Model):
             required=True
     )
     state = fields.Selection([
-            ('programmed', 'Programado'),
-            ('absent', 'Ausente'),
-            ('present', 'Presente'),
-            ('abandoned', 'Abandonado')],
+        ('programmed', 'Programado'),
+        ('absent', 'Ausente'),
+        ('to_recover', 'Prog para recup'),
+        ('present', 'Presente'),
+        ('abandoned', 'Abandonado')],
             default='programmed',
-            required=True
+            required=True,
+            help='Programado - La alumna debe concurrir a esta clase\n' +\
+                 'Ausente    - La alumna no concurrió a la clase o informó que no va a concurrir\n' +\
+                 'Prog para recup - Se programó una clase de recuperatorio para esta\n' +\
+                 'Presente   - La alumna concurrió a la clase\n' +\
+                 'Abandonado - La alumna abandonó el curso, el sistema deja de informarle fechas de recuperatorios\n'
     )
     present = fields.Boolean(
             'Presente',
@@ -77,7 +86,8 @@ class curso_assistance(models.Model):
             help=u'Información adicional'
     )
     date = fields.Date(
-            related='lecture_id.date'
+            related='lecture_id.date',
+            help="Fecha de la clase",
     )
     curso_instance = fields.Char(
             related='lecture_id.curso_id.curso_instance'
@@ -85,13 +95,33 @@ class curso_assistance(models.Model):
 
     @api.multi
     def add_atendee(self, partner_id, lecture_id, recover=False):
-        """ Agrega una alumna a una clase """
+        """ Agrega una alumna a una clase puede ser de recuperatorio o no """
+
+        print '-------------------------------------------------------------------------'
+
+        if recover:
+            # si es recuperatorio debe haber una clase del mismo
+            # curso y misma secuencia que esté en estado absent,
+            # esa sería la clase que estamos recuperando, buscamos
+            # esa clase y le cambiamos el estado a to_recover.
+
+            to_recover = self.search([('partner_id','=',partner_id),
+                                      ('curso_instance','=',lecture_id.curso_id.curso_instance),
+                                      ('seq','=',lecture_id.seq)])
+
+            for rec in to_recover:
+                print 'encontramos esto para recuperar ', rec.partner_id.name
+
+            assert len(to_recover) == 1 , 'ERROR: Debe haber solo una clase a recuperar'
+
+            for rec in to_recover:
+                rec.state = 'to_recover'
 
         self.create(
-                {   'partner_id': partner_id,
-                    'lecture_id': lecture_id.id,
-                    'state': 'programmed',
-                    'recover': recover}
+                {'partner_id': partner_id,
+                 'lecture_id': lecture_id.id,
+                 'state': 'programmed',
+                 'recover': recover}
         )
 
     @api.multi
@@ -124,7 +154,7 @@ class curso_assistance(models.Model):
 
     @api.multi
     def button_go_programmed(self):
-        """ La alumna informa que no va a venir a esta clase """
+        """ volvemos el registro a programado """
         for rec in self:
             rec.state = 'programmed'
 
@@ -132,7 +162,8 @@ class curso_assistance(models.Model):
     @api.depends('date')
     def _get_future(self):
         for rec in self:
-            rec.future = datetime.today() < datetime.strptime(rec.date, '%Y-%m-%d')
+            # si la fecha viene en false pongo una en el pasado para que no reviente.
+            rec.future = datetime.today() < datetime.strptime(rec.date or '2000-01-01', '%Y-%m-%d')
 
     @api.multi
     def get_recover_ids(self, partner_id):
@@ -154,7 +185,52 @@ class curso_assistance(models.Model):
                                                       ('seq', '=', seq),
                                                       ('next', '=', True)])
             for cl in candidate_lectures:
-                ret.append(cl.id)
+                # verificar que quedan vacantes
+                if cl.reg_vacancy > 0:
+                    ret.append(cl.id)
         return ret
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    @api.multi
+    def send_notification_mail(self, partner_id):
+        """ Arma el mail para recuperatorios """
+
+        print 'send notification mail'
+
+        ids = self.get_recover_ids(partner_id)
+        for lec in self.env['curso.lecture'].browse(ids):
+            print lec.name
+
+
+    @api.multi
+    def do_run_housekeeping(self):
+        print 'do_run_houskeeping --------------------------------------------'
+
+        # obtener las que faltaron y ponerles ausente
+        # no se puede poner future en el dominio porque no puede ser stored=True
+        assistance = self.env['curso.assistance'].search([('state','=','programmed')])
+
+        for rec in assistance:
+            if not rec.future:
+                rec.state = 'absent'
+
+        # Buscar los ausentes para mandarles mail de recuperatorio
+        assistance = self.env['curso.assistance'].search([('state','=','absent')])
+        for rec in assistance:
+            # anotar que se la notificó otra vez
+            rec.notifications += 1
+            self.send_notification_mail(rec.partner_id.id)
+            # si mandamos + 20 abandonamos
+            if rec.notifications > 20:
+                self.state = 'abandoned'
+
+
+    def run_housekeeping(self, cr, uid, context=None):
+        """ Chequea los ausentes y manda mails """
+
+        print 'housekeeping ---------------------------------------------',cr,uid
+        print 'testing estoy con parametros self=', self
+
+        #self.do_run_housekeeping(cr, uid, context)
+
+
+        return True

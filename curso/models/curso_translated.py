@@ -19,7 +19,7 @@
 #
 # -----------------------------------------------------------------------------------
 import operator
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from openerp import models, fields, api
 from openerp.exceptions import ValidationError
@@ -270,7 +270,8 @@ class curso_curso(models.Model):
     )
 
     curso_instance = fields.Char(
-            compute='_get_instance', string='Curso'
+            compute='_get_instance',
+            string='Curso'
     )
 
     name = fields.Char(
@@ -579,3 +580,44 @@ class curso_curso(models.Model):
     @api.one
     def button_curso_draft(self):
         self.state = 'draft'
+
+    @api.one
+    def do_invoice(self, actual_price, instance_code, seq, partner_id):
+        """ Genera una factura relacionada con este curso """
+
+        date_invoice = datetime.today()
+        date_due = (date_invoice + timedelta(days=10))
+
+        invoice_lines = []
+        invoice_line = {
+            'name': u'Recuperación clase {} del curso {}'.format(seq, instance_code),
+            'sequence': 5,
+            'invoice_id': False,
+            'account_id': 88,  # venta de cursos
+            'price_unit': actual_price,
+            'quantity': 1.0,
+        }
+        invoice_line = self.env['account.invoice.line'].create(invoice_line)
+
+        invoice_lines.append(invoice_line.id)
+
+        new_invoice = {
+            'date_due': date_due.strftime('%Y-%m-%d'),
+            'date_invoice': date_invoice.strftime('%Y-%m-%d'),
+            'name': '{} C{:.0f}'.format(instance_code, seq),
+            'type': 'out_invoice',
+            'reference': '{} recuperatorio C{:.0f}'.format(instance_code, seq),
+            'account_id': 11,
+            'partner_id': partner_id.id,
+            'journal_id': 29,
+            'invoice_line': [(6, 0, invoice_lines)],
+            'currency_id': 20,  # commission.invoice.currency_id.id,
+            'comment': 'generado automáticamente',
+            'fiscal_position': partner_id.property_account_position.id,
+            'company_id': self.company_id.id,
+            'user_id': self._uid
+        }
+
+        invoice = self.env['account.invoice'].create(new_invoice)
+        invoice.invoice_validate()
+
