@@ -165,13 +165,14 @@ class curso_assistance(models.Model):
             # si la fecha viene en false pongo una en el pasado para que no reviente.
             rec.future = datetime.today() < datetime.strptime(rec.date or '2000-01-01', '%Y-%m-%d')
 
-    @api.multi
+    @api.one
     def get_recover_ids(self, partner_id):
         """ dada una alumna devolver los ids de las clases de recuperatorio """
 
         # averiguar a que clases faltó esta alumna
-        absent_lectures = self.search([('partner_id', '=', partner_id),
-                                       ('state', '=', 'absent')])
+        absent_lectures = self.env['curso.assistance'].search(
+                [('partner_id', '=', partner_id),
+                 ('state', '=', 'absent')])
 
         # obtener los cursos y clases que necesita recuperar
         lectures_obj = self.env['curso.lecture']
@@ -179,12 +180,14 @@ class curso_assistance(models.Model):
         for al in absent_lectures:
             default_code = al.lecture_id.curso_id.default_code  # que curso tiene que recuperar
             seq = al.lecture_id.seq  # que numero de clase tiene que recuperar
+            print 'tiene que recuperar ',default_code, seq
 
             # averiguar que clases hay para ese curso y numero de clase
             candidate_lectures = lectures_obj.search([('default_code', '=', default_code),
                                                       ('seq', '=', seq),
                                                       ('next', '=', True)])
             for cl in candidate_lectures:
+                print 'estado de la clase',cl.reg_vacancy, cl.reg_current
                 # verificar que quedan vacantes
                 if cl.reg_vacancy > 0:
                     ret.append(cl.id)
@@ -194,9 +197,11 @@ class curso_assistance(models.Model):
     def send_notification_mail(self, partner_id):
         """ Arma el mail para recuperatorios """
 
-        print 'send notification mail'
+        print 'send notification mail ---------------> ',partner_id.name
 
-        ids = self.get_recover_ids(partner_id)
+        ids = self.env['curso.assistance'].get_recover_ids(partner_id)
+        print 'estos son los ids', ids
+
         for lec in self.env['curso.lecture'].browse(ids):
             print lec.name
 
