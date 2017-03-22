@@ -69,7 +69,7 @@ class curso_assistance(models.Model):
                  'Ausente    - La alumna no concurrió a la clase o informó que no va a concurrir\n' +\
                  'Prog para recup - Se programó una clase de recuperatorio para esta\n' +\
                  'Presente   - La alumna concurrió a la clase\n' +\
-                 'Abandonado - La alumna abandonó el curso, el sistema deja de informarle fechas de recuperatorios\n'
+                 'Abandonado - La alumna abandonó el curso, el sistema deja de informarle fechas de recuperatorios.'
     )
     present = fields.Boolean(
             'Presente',

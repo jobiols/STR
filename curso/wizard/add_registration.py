@@ -23,6 +23,7 @@ from openerp import models, fields, api
 
 class add_registration(models.TransientModel):
     """ Wizard para agregar una inscripción de una clienta a un curso """
+
     _name = 'curso.add_registration'
     _description = "Inscribir alumna en curso"
 

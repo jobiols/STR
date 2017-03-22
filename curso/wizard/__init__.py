@@ -22,6 +22,7 @@
 from . import daily_report
 from . import create_invoice
 from . import add_registration
+from . import add_recover
 from . import move_registration
 from . import mail_confirm
 from . import send_mail
