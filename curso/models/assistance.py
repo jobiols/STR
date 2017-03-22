@@ -180,19 +180,19 @@ class curso_assistance(models.Model):
                 [('partner_id', '=', partner_id),
                  ('state', '=', 'absent')])
 
-        # obtener los cursos y clases que necesita recuperar
+        # obtener los cursos y clases para proponer recuperatorio
         lectures_obj = self.env['curso.lecture']
         ret = []
         for al in absent_lectures:
             default_code = al.lecture_id.curso_id.default_code  # que curso tiene que recuperar
             seq = al.lecture_id.seq  # que numero de clase tiene que recuperar
 
-            # averiguar que clases hay para ese curso y numero de clase
+            # averiguar que clases hay para ese curso y numero de clase y que estan en el futuro
             candidate_lectures = lectures_obj.search([('default_code', '=', default_code),
                                                       ('seq', '=', seq),
                                                       ('next', '=', True)])
             for cl in candidate_lectures:
-                # verificar que quedan vacantes
+                # verificar que queda al menos una vacante antes de agregarla
                 if cl.reg_vacancy > 0:
                     ret.append(cl.id)
         return ret
