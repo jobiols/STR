@@ -169,7 +169,7 @@ class curso_assistance(models.Model):
     def _get_future(self):
         for rec in self:
             # si la fecha viene en false pongo una en el pasado para que no reviente.
-            rec.future = datetime.today() < datetime.strptime(rec.date or '2000-01-01', '%Y-%m-%d')
+            rec.future = datetime.today().date() < datetime.strptime(rec.date or '2000-01-01', '%Y-%m-%d')
 
     @api.multi
     def get_recover_ids(self, partner_id):
@@ -206,10 +206,10 @@ class curso_assistance(models.Model):
             print 'este es el partner', par.name
 
         ids = self.env['curso.assistance'].get_recover_ids(partner_id)
-        print 'estos son los ids de las clases a recuperar', ids
+#        print 'estos son los ids de las clases a recuperar', ids
 
-        for lec in self.env['curso.lecture'].browse(ids):
-            print 'estas son las clases a recuperar', lec.date, lec.seq
+#        for lec in self.env['curso.lecture'].browse(ids):
+#            print 'estas son las clases a recuperar', lec.date, lec.seq
 
 
     @api.multi
