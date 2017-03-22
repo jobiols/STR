@@ -171,5 +171,4 @@ class curso_lecture(models.Model):
                 if not contains(presents, atendee):
                     rec.assistance_id.add_atendee(atendee.partner_id.id, rec)
 
-
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
