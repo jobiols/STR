@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        <record id="view_curso_add_registration" model="ir.ui.view">
+
+        <record id="view_curso_add_recover" model="ir.ui.view">
             <field name="name">Agregar un recuperatorio</field>
             <field name="model">curso.add_recover</field>
             <field name="arch" type="xml">
