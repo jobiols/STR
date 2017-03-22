@@ -258,6 +258,12 @@ class curso_curso(models.Model):
             help=u"La cantidad de alumnas que cancelaron el curso"
     )
 
+    register_virtual = fields.Integer(
+            compute='_get_register',
+            string='Virtuales',
+            help=u"La cantidad de alumnas que hay en la clase con mas alumnas"
+    )
+
     is_subscribed = fields.Boolean(
             compute='_subscribe_fnc_',
             string='Subscribed'
@@ -400,6 +406,15 @@ class curso_curso(models.Model):
         """
         reg_current = reg_attended = reg_prospect = reg_cancel = 0
 
+        # cada clase de este curso puede tener distinta cantidad de
+        # alumnas porque puede haber gente que recupera, aqui calculamos
+        # la cantidad más grande de alumnas que puede haber en alguna clase
+        # a eso le llamamos la cantidad virtual
+        reg_virtual = 0
+        for lec in self.lecture_ids:
+            reg_virtual = max([lec.reg_current + lec.reg_recover, reg_virtual])
+
+
         for registration in self.registration_ids:
             # las que señaron o pagaron o estan cursando
             if registration.state == 'confirm' or registration.state == 'signed':
@@ -414,6 +429,7 @@ class curso_curso(models.Model):
             elif registration.state == 'cancel':
                 reg_cancel += registration.nb_register
 
+        self.register_virtual = reg_virtual
         self.register_current = reg_current
         self.register_attended = reg_attended
         self.register_prospect = reg_prospect

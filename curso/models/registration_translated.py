@@ -185,7 +185,8 @@ class curso_registration(models.Model):
             # generarle las cuotas
             reg.button_gen_quotes()
 
-            # si no tiene clases las creamos
+            # si el curso no tiene clases las creamos
+            # TODO esto habria que chequearlo en otro lado y antes
             if len(reg.curso_id.lecture_ids) == 0:
                 reg.curso_id.button_generate_lectures()
 
@@ -193,7 +194,7 @@ class curso_registration(models.Model):
             res = reg.sign_registration()
 
             # generar las asistencias
-            for lec in self.curso_id.lecture_ids:
+            for lec in reg.curso_id.lecture_ids:
                 lec.button_generate_assistance()
 
             context = self._context.copy()
@@ -247,6 +248,8 @@ class curso_registration(models.Model):
             }
             self.env['curso.quota'].create(quota_data)
 
+
+    # TODO Aca estan los mails después de cada clase. Hay que arreglarlo
     @api.one
     def try_send_mail_by_lecture(self):
         # en que clase estoy

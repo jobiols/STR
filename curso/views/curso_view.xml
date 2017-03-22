@@ -97,12 +97,12 @@
                             <button name="button_generate_doc_curso"
                                     string="Generar hoja de asistencia" type="object"
                                     class="oe_highlight"/>
-
+<!--
                             <button name="%(action_mail_confirm)d"
                                     string="Enviar mails" type="action"
                                     context="{'curso_id': id}"
                                     class="oe_highlight"/>
-
+-->
                             <button name="button_update_child_from_parent"
                                     string="Actualizar datos"
                                     type="object"

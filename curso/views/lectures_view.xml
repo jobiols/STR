@@ -37,6 +37,7 @@
                                                   brown:  state=='abandoned';" >
                                 <field name="partner_id"/>
                                 <field name="present"/>
+                                <field name="future" invisible="1"/>
                                 <field name="recover"/>
                                 <field name="info"/>
                                 <field name="state" invisible="1"/>

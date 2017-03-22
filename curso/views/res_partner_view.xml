@@ -112,6 +112,14 @@
                                                 states="absent"
                                                 type="object"
                                                 icon="gtk-undo"/>
+                                        <button name="button_go_to_recover"
+                                                string="Pasar a para recuperar"
+                                                type="object"
+                                                icon="gtk-undo"/>
+                                        <button name="button_go_abandoned"
+                                                string="Pasar a abandonado"
+                                                type="object"
+                                                icon="gtk-cancel"/>
                                         <button name="do_run_housekeeping"
                                                 string="TEST"
                                                 type="object"

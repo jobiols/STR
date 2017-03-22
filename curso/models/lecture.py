@@ -102,7 +102,8 @@ class curso_lecture(models.Model):
     @api.multi
     @api.depends('reg_max', 'reg_current', 'reg_recover')
     def _get_reg_vacancy(self):
-        self.reg_vacancy = self.reg_max - self.reg_current - self.reg_recover
+        for rec in self:
+            rec.reg_vacancy = rec.reg_max - rec.reg_current - rec.reg_recover
 
     @api.multi
     def _get_name_list(self):
@@ -117,13 +118,11 @@ class curso_lecture(models.Model):
     @api.one
     @api.depends('assistance_id')
     def _get_reg_recover(self):
-        """ Calcular la cantidad de alumnas que recuperan en esta clase
-        """
+        """ Calcula la cantidad de alumnas que recuperan en esta clase """
+
         self.reg_recover = self.assistance_id.search_count(
-                [
-                    ('lecture_id', '=', self.id),
-                    ('recover', '=', True)
-                ]
+                [('lecture_id', '=', self.id),
+                 ('recover', '=', True)]
         )
 
     @api.multi
@@ -140,7 +139,7 @@ class curso_lecture(models.Model):
             ans = datetime.strptime(rec.date, '%Y-%m-%d')
             rec.weekday = ans.strftime("%A").capitalize()
 
-    @api.one
+    @api.multi
     def button_generate_assistance(self):
         """ Pone en el registro de asistencia las alumnas que están cursando, que van a
             cursar o por las dudas también las que cumplieron en curso.
@@ -155,25 +154,22 @@ class curso_lecture(models.Model):
                     ret = True
             return ret
 
-        # Alumnas registradas en el curso
-        atendees = self.curso_id.registration_ids.search(
-                [('state', 'in', ['confirm', 'signed', 'done']),
-                 ('curso_id', '=', self.curso_id.id)]
-        )
+        for rec in self:
+            # Alumnas registradas en el curso
+            atendees = rec.curso_id.registration_ids.search(
+                    [('state', 'in', ['confirm', 'signed', 'done']),
+                     ('curso_id', '=', rec.curso_id.id)]
+            )
 
-        # Alumnas en la lista de presentes, que no son recuperantes
-        presents = self.assistance_id.search(
-                [('lecture_id', '=', self.id),
-                 ('recover', '=', False)])
+            # Alumnas en la lista de presentes, que no son recuperantes
+            presents = rec.assistance_id.search(
+                    [('lecture_id', '=', rec.id),
+                     ('recover', '=', False)])
 
-        for atendee in atendees:
-            # Si el atendee no está en los presentes, incluirlo.
-            if not contains(presents, atendee):
-                self.assistance_id.create({
-                    'lecture_id': self.id,
-                    'present': False,
-                    'recover': False,
-                    'partner_id': atendee.partner_id.id
-                })
+            for atendee in atendees:
+                # Si el atendee no está en los presentes, incluirlo.
+                if not contains(presents, atendee):
+                    rec.assistance_id.add_atendee(atendee.partner_id.id, rec)
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

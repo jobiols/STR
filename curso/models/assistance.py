@@ -97,8 +97,6 @@ class curso_assistance(models.Model):
     def add_atendee(self, partner_id, lecture_id, recover=False):
         """ Agrega una alumna a una clase puede ser de recuperatorio o no """
 
-        print '-------------------------------------------------------------------------'
-
         if recover:
             # si es recuperatorio debe haber una clase del mismo
             # curso y misma secuencia que esté en estado absent,
@@ -109,20 +107,18 @@ class curso_assistance(models.Model):
                                       ('curso_instance','=',lecture_id.curso_id.curso_instance),
                                       ('seq','=',lecture_id.seq)])
 
-            for rec in to_recover:
-                print 'encontramos esto para recuperar ', rec.partner_id.name
-
             assert len(to_recover) == 1 , 'ERROR: Debe haber solo una clase a recuperar'
 
             for rec in to_recover:
                 rec.state = 'to_recover'
 
-        self.create(
+        self.env['curso.assistance'].create(
                 {'partner_id': partner_id,
                  'lecture_id': lecture_id.id,
                  'state': 'programmed',
                  'recover': recover}
         )
+
 
     @api.multi
     def button_present(self):
@@ -153,10 +149,20 @@ class curso_assistance(models.Model):
             rec.state = 'absent'
 
     @api.multi
+    def button_go_to_recover(self):
+        for rec in self:
+            rec.state = 'to_recover'
+
+    @api.multi
     def button_go_programmed(self):
         """ volvemos el registro a programado """
         for rec in self:
             rec.state = 'programmed'
+
+    @api.multi
+    def button_go_abandoned(self):
+        for rec in self:
+            rec.state = 'abandoned'
 
     @api.multi
     @api.depends('date')
@@ -165,7 +171,7 @@ class curso_assistance(models.Model):
             # si la fecha viene en false pongo una en el pasado para que no reviente.
             rec.future = datetime.today() < datetime.strptime(rec.date or '2000-01-01', '%Y-%m-%d')
 
-    @api.one
+    @api.multi
     def get_recover_ids(self, partner_id):
         """ dada una alumna devolver los ids de las clases de recuperatorio """
 
@@ -180,14 +186,12 @@ class curso_assistance(models.Model):
         for al in absent_lectures:
             default_code = al.lecture_id.curso_id.default_code  # que curso tiene que recuperar
             seq = al.lecture_id.seq  # que numero de clase tiene que recuperar
-            print 'tiene que recuperar ',default_code, seq
 
             # averiguar que clases hay para ese curso y numero de clase
             candidate_lectures = lectures_obj.search([('default_code', '=', default_code),
                                                       ('seq', '=', seq),
                                                       ('next', '=', True)])
             for cl in candidate_lectures:
-                print 'estado de la clase',cl.reg_vacancy, cl.reg_current
                 # verificar que quedan vacantes
                 if cl.reg_vacancy > 0:
                     ret.append(cl.id)
@@ -196,14 +200,16 @@ class curso_assistance(models.Model):
     @api.multi
     def send_notification_mail(self, partner_id):
         """ Arma el mail para recuperatorios """
-
-        print 'send notification mail ---------------> ',partner_id.name
+        print '------------------------------------------------------------'
+        partner = self.env['res.partner'].search([('id','=',partner_id)])
+        for par in partner:
+            print 'este es el partner', par.name
 
         ids = self.env['curso.assistance'].get_recover_ids(partner_id)
-        print 'estos son los ids', ids
+        print 'estos son los ids de las clases a recuperar', ids
 
         for lec in self.env['curso.lecture'].browse(ids):
-            print lec.name
+            print 'estas son las clases a recuperar', lec.date, lec.seq
 
 
     @api.multi
