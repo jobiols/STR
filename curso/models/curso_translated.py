@@ -119,6 +119,13 @@ class curso_curso(models.Model):
                  u'pase al estado señado.'
     )
 
+    email_recovery_id = fields.Many2one(
+            'email.template',
+            u'Recuperatorios de clases',
+            required=True,
+            help=u'Plantilla de mail que se enviará cada vez que un alumno este ausente para permitir recuperar la clase.'
+    )
+
     email_confirmation_id = fields.Many2one(
             'email.template',
             u'Confirmación curso',

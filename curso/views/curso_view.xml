@@ -194,7 +194,8 @@
                                     <group>
                                         <field name="reply_to"/>
                                         <field name="email_registration_id"/>
-                                        <!--                                        <field name="email_confirmation_id"/> -->
+                                        <field name="email_recovery_id"/>
+                                        <!--         <field name="email_confirmation_id"/> -->
                                     </group>
                                 </group>
                             </page>

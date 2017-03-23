@@ -169,7 +169,7 @@ class curso_assistance(models.Model):
     def _get_future(self):
         for rec in self:
             # si la fecha viene en false pongo una en el pasado para que no reviente.
-            rec.future = datetime.today().date() < datetime.strptime(rec.date or '2000-01-01', '%Y-%m-%d')
+            rec.future = datetime.today().date() < datetime.strptime(rec.date or '2000-01-01', '%Y-%m-%d').date()
 
     @api.multi
     def get_recover_ids(self, partner_id):
@@ -205,11 +205,22 @@ class curso_assistance(models.Model):
         for par in partner:
             print 'este es el partner', par.name
 
+        lectures_to_recover = []
         ids = self.env['curso.assistance'].get_recover_ids(partner_id)
-#        print 'estos son los ids de las clases a recuperar', ids
+        for lec in self.env['curso.lecture'].browse(ids):
+            lectures_to_recover.append(lec.seq)
+            print 'estas son las clases a recuperar', lec.date, lec.seq, lec.name
 
-#        for lec in self.env['curso.lecture'].browse(ids):
-#            print 'estas son las clases a recuperar', lec.date, lec.seq
+
+        print 'enviando mails'
+        template = self.lecture_id.curso_id.email_registration_id
+        if template:
+            print 'template >>',template
+            print template.name
+            mail_message = template.send_mail(partner.id)
+
+
+
 
 
     @api.multi
@@ -225,14 +236,22 @@ class curso_assistance(models.Model):
                 rec.state = 'absent'
 
         # Buscar los ausentes para mandarles mail de recuperatorio
+        partners_to_notify = []
         assistance = self.env['curso.assistance'].search([('state','=','absent')])
         for rec in assistance:
             # anotar que se la notificó otra vez
             rec.notifications += 1
-            self.send_notification_mail(rec.partner_id.id)
-            # si mandamos + 20 abandonamos
+
+            # acopiar los partners sin repetir
+            if rec.partner_id.id not in partners_to_notify:
+                partners_to_notify.append(rec.partner_id.id)
+
+            # si mandamos + 20 por una clase lo abandonamos
             if rec.notifications > 20:
-                self.state = 'abandoned'
+                rec.state = 'abandoned'
+
+        for partner_id in partners_to_notify:
+            self.send_notification_mail(partner_id)
 
 
     def run_housekeeping(self, cr, uid, context=None):
