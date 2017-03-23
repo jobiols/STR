@@ -55,7 +55,7 @@ class res_partner(models.Model):
             'Cursos iniciados',
             store=True,
             help=u"Cursos que la alumna inició, señandolo, pero que todavía no terminaron están "
-                 u"todavía cursandolos",
+                 u"todavía cursándolos",
             compute="_compute_curso_assistance"
     )
 
