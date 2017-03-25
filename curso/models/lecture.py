@@ -83,27 +83,46 @@ class curso_lecture(models.Model):
             related="curso_id.register_current",
             help=u"La cantidad de alumnas que confirmaron pagando (al menos una seña)"
     )
-    reg_recover = fields.Integer(
-            'Recu',
-            compute="_get_reg_recover",
-            help=u"La cantidad de alumnas anotadas en esta clase para recuperar"
-    )
     reg_max = fields.Integer(
             'Max',
             related="curso_id.register_max",
             help=u"La cantidad máxima alumnas que puede contener esta clase"
     )
+    reg_recover = fields.Integer(
+            'Recuperatorio',
+            compute="_get_reg_vacancy",
+            help=u"La cantidad de alumnas anotadas en esta clase para recuperar"
+    )
+    reg_absent = fields.Integer(
+            'Ausente',
+            compute="_get_reg_vacancy",
+            help=u"La cantidad de alumnas que sabemos que no van a venir porque lo informaron"
+    )
     reg_vacancy = fields.Integer(
-            'Recu',
+            'Vacantes',
             compute="_get_reg_vacancy",
             help=u"La cantidad de vacantes reales teniendo en cuenta las que recuperan"
     )
 
     @api.multi
-    @api.depends('reg_max', 'reg_current', 'reg_recover')
+    @api.depends('reg_max', 'reg_current', 'assistance_id')
     def _get_reg_vacancy(self):
         for rec in self:
-            rec.reg_vacancy = rec.reg_max - rec.reg_current - rec.reg_recover
+            reg_recover = rec.assistance_id.search_count([
+                     ('lecture_id', '=', rec.id),
+                     ('recover', '=', True)]
+            )
+            reg_absent = rec.assistance_id.search_count([
+                     ('lecture_id', '=', rec.id),
+                     ('state', '=', 'absent')]
+            )
+            rec.reg_recover = reg_recover
+            rec.reg_absent = reg_absent
+
+            rec.reg_vacancy = rec.reg_max - rec.reg_current - reg_recover + reg_absent
+            print '{} max:{} rec:{} abs:{} vac:{} -- {}'.format(
+                    rec.date, rec.reg_max, rec.reg_recover, rec.reg_absent, rec.reg_vacancy, rec.name)
+
 
     @api.multi
     def _get_name_list(self):
@@ -114,16 +133,6 @@ class curso_lecture(models.Model):
                     rec.seq,
                     rec.name
             )
-
-    @api.one
-    @api.depends('assistance_id')
-    def _get_reg_recover(self):
-        """ Calcula la cantidad de alumnas que recuperan en esta clase """
-
-        self.reg_recover = self.assistance_id.search_count(
-                [('lecture_id', '=', self.id),
-                 ('recover', '=', True)]
-        )
 
     @api.multi
     @api.depends('date_start')

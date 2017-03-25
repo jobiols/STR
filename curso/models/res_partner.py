@@ -118,7 +118,6 @@ class res_partner(models.Model):
         """
 
         # obtener las clases futuras para este curso, que tienen vacantes
-        # para ver si tienen vacantes hacemos: confirmadas + recuperantes < maximo permitido
         lectures = self.env['curso.lecture'].search(
                 [
                     ('default_code', '=', default_code),
@@ -127,8 +126,8 @@ class res_partner(models.Model):
 
         data = []
         for lecture in lectures:
-            # valida para recuperar si tiene menos del maximo permitido
-            if lecture.reg_current + lecture.reg_recover < lecture.curso_id.product.default_registration_max:
+            # valida para recuperar si tiene al menos una vacante
+            if lecture.reg_vacancy > 0:
                 data.append({
                     'code': lecture.curso_id.curso_instance,
                     'date': datetime.strptime(lecture.date, '%Y-%m-%d').strftime(
@@ -136,6 +135,7 @@ class res_partner(models.Model):
                     'day': lecture.weekday,
                     'schedule': lecture.schedule_id.name,
                     'lecture_no': lecture.seq,
+                    'vacancy': lecture.reg_vacancy,
                 })
 
         html = html_filter.html_filter()

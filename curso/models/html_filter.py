@@ -274,11 +274,13 @@ width="394" height="200" />
             <td style="width:80px"><strong>Fecha</strong></td>
             <td style="width:65px"><strong>Día</strong></td>
             <td style="width:125px"><strong>Horario</strong></td>
-            <td><strong>Clase</strong></td>
+            <td><strong>Clase&nbsp;</strong></td>
+            <td><strong>Vac</strong></td>
         """
         for line in data:
             ret += u"""
         <tr>
+            <td>{}</td>
             <td>{}</td>
             <td>{}</td>
             <td>{}</td>
@@ -289,7 +291,8 @@ width="394" height="200" />
                        line['date'],
                        line['day'],
                        line['schedule'],
-                       line['lecture_no'])
+                       line['lecture_no'],
+                       line['vacancy'])
         ret += u"""
         </tr>
     </tbody>
