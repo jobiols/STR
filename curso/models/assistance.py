@@ -105,7 +105,8 @@ class curso_assistance(models.Model):
 
             to_recover = self.search([('partner_id','=',partner_id),
                                       ('curso_instance','=',lecture_id.curso_id.curso_instance),
-                                      ('seq','=',lecture_id.seq)])
+                                      ('seq','=',lecture_id.seq),
+                                      ('state','=','absent') ])
 
             assert len(to_recover) == 1 , 'ERROR: Debe haber solo una clase a recuperar'
 
