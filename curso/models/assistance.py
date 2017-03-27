@@ -32,6 +32,8 @@ class curso_assistance(models.Model):
         ('unique_partner_per_class', 'unique (partner_id, lecture_id)',
          'Una alumna no puede aparecer dos veces en una clase')]
 
+    _order = 'curso_instance,seq'
+
     future = fields.Boolean(
             'Futuro',
             help=u'La fecha de la clase está en el futuro',
@@ -49,7 +51,7 @@ class curso_assistance(models.Model):
     seq = fields.Integer(
             'Clase',
             related='lecture_id.seq',
-            store=False
+            store=True
     )
     partner_id = fields.Many2one(
             'res.partner',
@@ -90,7 +92,8 @@ class curso_assistance(models.Model):
             help="Fecha de la clase",
     )
     curso_instance = fields.Char(
-            related='lecture_id.curso_id.curso_instance'
+            related='lecture_id.curso_id.curso_instance',
+            store=True
     )
 
     @api.multi
@@ -235,7 +238,9 @@ class curso_assistance(models.Model):
         for rec in assistance:
             if not rec.future:
                 rec.state = 'absent'
+                print '------------Pasar a Ausente!!! ',rec.partner_id.name
 
+        """
         # Buscar los ausentes para mandarles mail de recuperatorio
         partners_to_notify = []
         assistance = self.env['curso.assistance'].search([('state','=','absent')])
@@ -253,15 +258,17 @@ class curso_assistance(models.Model):
 
         for partner_id in partners_to_notify:
             self.send_notification_mail(partner_id)
+        """
 
 
     def run_housekeeping(self, cr, uid, context=None):
-        """ Chequea los ausentes y manda mails """
+        """ Chequea los ausentes y manda mails (si no le pongo
+            esta firma no lo llama desde el cron)
+        """
 
-        print 'housekeeping ---------------------------------------------',cr,uid
-        print 'testing estoy con parametros self=', self
+        print 'housekeeping ---------------------------------------------'
 
-        #self.do_run_housekeeping(cr, uid, context)
+        self.do_run_housekeeping(cr, uid, context)
 
 
         return True

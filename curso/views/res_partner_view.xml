@@ -102,6 +102,7 @@
                                         <field name="info"/>
                                         <field name="lecture_id"
                                                string="Tema de la clase"/>
+<!--
                                         <button name="button_go_absent"
                                                 string="No va a tomar esta clase"
                                                 states="programmed"
@@ -124,6 +125,7 @@
                                                 string="TEST"
                                                 type="object"
                                                 icon="gtk-undo"/>
+-->
                                         <field name="state" string="Estado"/>
                                         <field name="future"
                                                invisible="True"/>
