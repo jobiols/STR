@@ -79,7 +79,7 @@ class html_filter:
 </tbody>
 </table>
 <p><br /> <span style="font-family: lucida sans unicode,lucida grande,sans-serif; font-size: 20px; color: #ff0000;"> <strong>Makeover Lab</strong> </span><br /><a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a></p>
-<p>Call center de 9 a 20Hs 11 4902 4652</p>
+<p>Call center de 11 a 20Hs 11 4902 4652</p>
 <p>Horario de atenci&oacute;n personalizada:<br />Lunes a Viernes de 17 a 20 hs y S&aacute;bado de 11 a 18 hs.<br />Av. Rivadavia 5259 Piso 9&deg; "34", Caballito</p>
 <p>Consultas y pedidos:<br /><a href="mailto:info@makeoverlab.com.ar">info@makeoverlab.com.ar</a></p>
             """
