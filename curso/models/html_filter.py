@@ -19,6 +19,7 @@
 #
 # -----------------------------------------------------------------------------------
 
+
 class html_filter:
     """ genera html para varios propositos
     """
@@ -275,7 +276,7 @@ width="394" height="200" />
             <td style="width:65px"><strong>Día</strong></td>
             <td style="width:125px"><strong>Horario</strong></td>
             <td><strong>Clase&nbsp;</strong></td>
-            <td><strong>Vac</strong></td>
+            <td><strong>Vacantes</strong></td>
         """
         for line in data:
             ret += u"""
@@ -298,7 +299,7 @@ width="394" height="200" />
     </tbody>
 </table>
         """
-        return ret
+        return ret if data else u"""<strong>Lamentablemente no disponemos de vacantes en este momento.</strong>"""
 
     def get_product_price(self, products):
         """ Formatea una linea de producto para hacer un pequeño catalogo

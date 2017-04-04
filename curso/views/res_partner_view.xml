@@ -102,12 +102,12 @@
                                         <field name="info"/>
                                         <field name="lecture_id"
                                                string="Tema de la clase"/>
-<!--
                                         <button name="button_go_absent"
                                                 string="No va a tomar esta clase"
                                                 states="programmed"
                                                 type="object"
                                                 icon="gtk-cancel"/>
+<!--
                                         <button name="button_go_programmed"
                                                 string="Pasar a programado"
                                                 states="absent"
@@ -121,11 +121,12 @@
                                                 string="Pasar a abandonado"
                                                 type="object"
                                                 icon="gtk-cancel"/>
+-->
                                         <button name="do_run_housekeeping"
                                                 string="TEST"
                                                 type="object"
                                                 icon="gtk-undo"/>
--->
+
                                         <field name="state" string="Estado"/>
                                         <field name="future"
                                                invisible="True"/>

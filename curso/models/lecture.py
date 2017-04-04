@@ -120,9 +120,6 @@ class curso_lecture(models.Model):
             rec.reg_absent = reg_absent
 
             rec.reg_vacancy = rec.reg_max - rec.reg_current - reg_recover + reg_absent
-            print '{} max:{} rec:{} abs:{} vac:{} -- {}'.format(
-                    rec.date, rec.reg_max, rec.reg_recover, rec.reg_absent, rec.reg_vacancy, rec.name)
-
 
     @api.multi
     def _get_name_list(self):

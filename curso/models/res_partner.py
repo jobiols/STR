@@ -141,6 +141,36 @@ class res_partner(models.Model):
         html = html_filter.html_filter()
         return html.info_recover_html(data)
 
+    @api.model
+    def info_recover_html1(self):
+        """ Genera tabla html con la información de recuperatorios para la alumna
+            Es llamada desde la plantilla con el curso como parámetro
+        """
+
+        for rec in self:
+
+            # ids de las clases en las que puede recuperar
+            ids = self.env['curso.assistance'].get_recover_ids(rec.id)
+
+            # obtener el recordset con las clases
+            lectures = self.env['curso.lecture'].browse(ids)
+
+            data = []
+            for lecture in lectures:
+                data.append({
+                    'code': lecture.curso_id.curso_instance,
+                    'date': datetime.strptime(lecture.date, '%Y-%m-%d').strftime(
+                            '%d/%m/%Y'),
+                    'day': lecture.weekday,
+                    'schedule': lecture.schedule_id.name,
+                    'lecture_no': lecture.seq,
+                    'vacancy': lecture.reg_vacancy,
+                })
+
+            html = html_filter.html_filter()
+            return html.info_recover_html(data)
+
+
     @api.multi
     def get_mail_footer_html(self):
         html = html_filter.html_filter()
