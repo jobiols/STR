@@ -32,7 +32,7 @@ class curso_assistance(models.Model):
         ('unique_partner_per_class', 'unique (partner_id, lecture_id)',
          'Una alumna no puede aparecer dos veces en una clase')]
 
-    _order = 'curso_instance,seq'
+    _order = 'curso_instance, seq'
 
     future = fields.Boolean(
             'Futuro',
@@ -107,7 +107,7 @@ class curso_assistance(models.Model):
             # esa clase y le cambiamos el estado a to_recover.
 
             to_recover = self.search([('partner_id','=',partner_id),
-                                      ('curso_instance','=',lecture_id.curso_id.curso_instance),
+#                                      ('curso_instance','=',lecture_id.curso_id.curso_instance),
                                       ('seq','=',lecture_id.seq),
                                       ('state','=','absent') ])
 
@@ -204,27 +204,32 @@ class curso_assistance(models.Model):
     @api.multi
     def send_notification_mail(self, partner_id):
         """ Arma el mail para recuperatorios """
-        print '------------------------------------------------------------'
+        print ' send notification mail ------------------------------------------------------------'
         partner = self.env['res.partner'].search([('id','=',partner_id)])
         for par in partner:
-            print 'este es el partner', par.name
-
-        lectures_to_recover = []
-        ids = self.env['curso.assistance'].get_recover_ids(partner_id)
-        for lec in self.env['curso.lecture'].browse(ids):
-            lectures_to_recover.append(lec.seq)
-            print 'estas son las clases a recuperar', lec.date, lec.seq, lec.name
+            print 'a este partner', par.name
 
 
-        print 'enviando mails'
-        template = self.lecture_id.curso_id.email_registration_id
-        if template:
-            print 'template >>',template
-            print template.name
+        # Obtener el template para mandarle el mail,
+        # En assistance estan los ausentes, me traigo los ausentes de este partner
+        assistance = self.env['curso.assistance'].search([
+            ('partner_id','=',partner_id),
+            ('state','=','absent')])
+
+        # Anoto todos los templates que hay que mandarle, habrá uno por cada curso
+        templates = []
+        print 'ausencia en estas clases -----------------------------------------'
+        for rec in assistance:
+            print ' >>> ',rec.curso_instance, rec.seq, rec.lecture_id.name
+            if rec.lecture_id.curso_id.email_recovery_id not in templates:
+                templates.append(rec.lecture_id.curso_id.email_recovery_id)
+
+        # por cada template, mandar un mail
+        for template in templates:
+            print 'template name [{}] mail from [{}] mail to [{}]'.format(
+                    template.name, template.email_from, template.email_to)
             mail_message = template.send_mail(partner.id)
-
-
-
+            print 'enviado>', mail_message
 
 
     @api.multi
@@ -240,7 +245,6 @@ class curso_assistance(models.Model):
                 rec.state = 'absent'
                 print '------------Pasar a Ausente!!! ',rec.partner_id.name
 
-        """
         # Buscar los ausentes para mandarles mail de recuperatorio
         partners_to_notify = []
         assistance = self.env['curso.assistance'].search([('state','=','absent')])
@@ -258,7 +262,6 @@ class curso_assistance(models.Model):
 
         for partner_id in partners_to_notify:
             self.send_notification_mail(partner_id)
-        """
 
 
     def run_housekeeping(self, cr, uid, context=None):
@@ -269,6 +272,5 @@ class curso_assistance(models.Model):
         print 'housekeeping ---------------------------------------------'
 
         self.do_run_housekeeping(cr, uid, context)
-
 
         return True
