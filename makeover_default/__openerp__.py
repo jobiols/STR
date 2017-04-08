@@ -32,6 +32,7 @@ Customización Makeover Lab
     'depends': [
         'sale_order_recalculate_prices',
         'web_widget_text_markdown',
+        'account_clean_cancelled_invoice_number',
         'stock',
         'purchase',
         'curso',

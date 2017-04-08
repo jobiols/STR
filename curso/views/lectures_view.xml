@@ -41,11 +41,11 @@
                                 <field name="recover"/>
                                 <field name="info"/>
                                 <field name="state" invisible="1"/>
-                                <button name="button_present" string="Dar el presente"
+                                <button name="button_toggle_present" string="Dar el presente"
                                         type="object" icon="gtk-apply"
                                         attrs="{'invisible':[('present','=',True)]}"
                                 />
-                                <button name="button_present" string="Volver a ausente"
+                                <button name="button_toggle_present" string="Volver a ausente"
                                         type="object" icon="gtk-cancel"
                                         attrs="{'invisible':[('present','=',False)]}"
                                 />

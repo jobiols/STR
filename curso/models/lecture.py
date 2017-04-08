@@ -175,6 +175,6 @@ class curso_lecture(models.Model):
             for atendee in atendees:
                 # Si el atendee no está en los presentes, incluirlo.
                 if not contains(presents, atendee):
-                    rec.assistance_id.add_atendee(atendee.partner_id.id, rec)
+                    rec.assistance_id.add_atendee(atendee.partner_id, rec)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

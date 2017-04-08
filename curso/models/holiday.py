@@ -22,8 +22,8 @@ from openerp import models, fields
 
 
 class curso_holiday(models.Model):
-    # class curso_holiday(models.Model):
     """ define los periodos donde estamos en vacaciones, puede ser parte de un dia """
+
     _name = 'curso.holiday'
     _inherit = 'curso.lapse'
 

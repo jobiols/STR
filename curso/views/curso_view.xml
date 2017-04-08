@@ -255,7 +255,7 @@
                                         <field name="register_cancel" string="Canc"/>
                                         <field name="register_attended" string="Cump"/>
                     -->
-                    <field name="register_min" string="V.min"/>
+                    <field name="register_avail" string="Vac"/>
                     <field name="register_max" string="V.max"/>
                     <field name="main_speaker_id"/>
                     <field name="secondary_speaker_id"/>

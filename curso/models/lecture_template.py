@@ -22,6 +22,7 @@ from openerp.exceptions import except_orm
 
 class lecture_template(models.Model):
     """ define los contenidos de las clases de cada producto curso """
+
     _name = 'curso.lecture_template'
     _order = 'seq'
 

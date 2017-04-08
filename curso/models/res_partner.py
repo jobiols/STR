@@ -74,6 +74,11 @@ class res_partner(models.Model):
                  u"completa en esos cursos",
             compute="_compute_curso_assistance"
     )
+    recover_ids = fields.Char(
+            'ids a recuperar',
+            help=u'Ids de las clases que podría recuperar esta alumna, y que le mandamos por mail, para'
+                 u'evitar mandarle mails con informacion repetida'
+    )
 
     @api.one
     @api.depends('curso_registration_ids')
@@ -150,7 +155,7 @@ class res_partner(models.Model):
         for rec in self:
 
             # ids de las clases en las que puede recuperar
-            ids = self.env['curso.assistance'].get_recover_ids(rec.id)
+            ids = self.env['curso.assistance'].get_recover_ids(rec)
 
             # obtener el recordset con las clases
             lectures = self.env['curso.lecture'].browse(ids)
@@ -169,7 +174,6 @@ class res_partner(models.Model):
 
             html = html_filter.html_filter()
             return html.info_recover_html(data)
-
 
     @api.multi
     def get_mail_footer_html(self):
@@ -212,5 +216,39 @@ class res_partner(models.Model):
             if reg.credit > 0:
                 ret.append(u'Nos debe ${}'.format(reg.credit))
             return ', '.join(ret)
+
+    @api.multi
+    def check_changed_info(self, recover_ids):
+        """
+            Ver si cambió la información a mandarle, si no cambió o tengo una lista vacia o sea no hay
+            información que mandar, retorno falso para que no mande el mail.
+
+        :param recover_ids: Lista con los ids de las clases donde puede recuperar
+        :return: True si hay que mandarle el mail
+        """
+        self.ensure_one()
+        ret = False
+
+        for rec in self:
+            print 'check changed info >>>>>>>>>>>', rec.name
+            print '---------- {} --> {}'.format(rec.recover_ids, recover_ids)
+
+        # si no hay info que mandarle devuelvo false
+        if not recover_ids:
+            return False
+
+        # pasar la lista a string para compararla con la guardada
+        for rec in self:
+            ri = ','.join(str(e) for e in recover_ids)
+            if ri != rec.recover_ids:
+                rec.recover_ids = ri
+                print 'info changed!!!'
+                # hay nueva información que mandar
+                ret = True
+            else:
+                # no hay nueva información para mandar
+                ret = False
+
+        return ret
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

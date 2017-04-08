@@ -43,11 +43,12 @@ class add_recover(models.TransientModel):
         """ Esta funcion se dispara al crearse este modelo transitorio """
 
         # traer del contexto la id de la alumna
-        alumna_ids = self._context.get('active_ids')
+        alumna_id = self._context.get('active_ids')[0]
+        partner_id = self.env['res.partner'].browse(alumna_id)
 
         # obtener una lista de ids de clases a recuperar
         assistance_obj = self.env['curso.assistance']
-        recover_ids = assistance_obj.get_recover_ids(alumna_ids[0])
+        recover_ids = assistance_obj.get_recover_ids(partner_id)
 
         return {'domain': {'lecture_id': [('id', 'in', recover_ids)]}}
 
@@ -59,17 +60,18 @@ class add_recover(models.TransientModel):
             clases que están en estado absent y se buscan las clases de posible
             recuperatorio para dichas clases.
 
-            La clase agregada aparecerá en color verde en estado programmed y
+            La clase aregada aparecerá en color verde en estado programmed y
             funcionará como una clase original a los efectos de dar el presente,
             Salvo que tendrá tildada la casilla Recuperatorio. La clase original
             que estaba en estado absent se pasa a estado to_recover
 
-            Se genera una factura por $ 100 para el cobro de la clase de recuperatorio.
+            Se genera una factura por $100 para el cobro de la clase de recuperatorio.
             La proxima vez que se abra esta vista se verá la leyenda "Nos debe $100"
         """
 
         #  obtener el id de la alumna que viene en el contexto
-        partner_id = self._context.get('active_ids')[0]
+        ids = self._context.get('active_ids')
+        partner_id = self.env['res.partner'].browse(ids[0])
         assistance_obj = self.env['curso.assistance']
         assistance_obj.add_atendee(partner_id, self.lecture_id, recover=True)
 
@@ -81,6 +83,5 @@ class add_recover(models.TransientModel):
                 self.lecture_id.curso_id.curso_instance,
                 self.lecture_id.seq,
                 partner_id)
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -250,6 +250,7 @@ class curso_curso(models.Model):
     register_avail = fields.Integer(
             compute='_get_register',
             string='Vacantes',
+            store=True,
             help=u"La cantidad de vacantes que le queda al curso"
     )
 
@@ -407,21 +408,11 @@ class curso_curso(models.Model):
         )
 
     @api.one
-    @api.depends('register_max', 'registration_ids')
+    @api.depends('register_max', 'registration_ids', 'lecture_ids')
     def _get_register(self):
         """ Calcula las vacantes
         """
-        reg_current = reg_attended = reg_prospect = reg_cancel = 0
-
-        # cada clase de este curso puede tener distinta cantidad de
-        # alumnas porque puede haber gente que recupera, aqui calculamos
-        # la cantidad más grande de alumnas que puede haber en alguna clase
-        # a eso le llamamos la cantidad virtual
-        reg_virtual = 0
-        for lec in self.lecture_ids:
-            reg_virtual = max([lec.reg_current + lec.reg_recover, reg_virtual])
-
-
+        reg_virtual = reg_current = reg_attended = reg_prospect = reg_cancel = 0
         for registration in self.registration_ids:
             # las que señaron o pagaron o estan cursando
             if registration.state == 'confirm' or registration.state == 'signed':
@@ -436,15 +427,22 @@ class curso_curso(models.Model):
             elif registration.state == 'cancel':
                 reg_cancel += registration.nb_register
 
+        # cada clase de este curso puede tener distinta cantidad de alumnas porque
+        # puede haber gente que recupera, aqui calculamos la cantidad más grande de
+        # alumnas que puede haber en alguna clase a eso le llamamos la cantidad virtual
+        for lec in self.lecture_ids:
+            reg_virtual = max([reg_current + lec.reg_recover, reg_virtual])
+
         self.register_virtual = reg_virtual
         self.register_current = reg_current
         self.register_attended = reg_attended
         self.register_prospect = reg_prospect
         self.register_cancel = reg_cancel
+
         # the number of vacants is unlimited if the curso.register_max field is not set.
         # In that case we arbitrary set it to 9999, it is used in the
         # kanban view to special case the display of the 'subscribe' button
-        self.register_avail = self.register_max - reg_current if self.register_max != 0 else 9999
+        self.register_avail = self.register_max - reg_virtual if self.register_max != 0 else 9999
 
     @api.one
     def _get_classes_per_week_(self):

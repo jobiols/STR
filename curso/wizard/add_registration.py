@@ -31,7 +31,7 @@ class add_registration(models.TransientModel):
             'curso.curso',
             string="Curso",
             required=True,
-            domain="[('next','=',True)]"
+            domain="[('register_avail','>','0'), ('next','=',True)]"
     )
 
     discount = fields.Float(
