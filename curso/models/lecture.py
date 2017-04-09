@@ -136,13 +136,14 @@ class curso_lecture(models.Model):
     @api.multi
     def _get_name_list(self):
         for rec in self:
-            rec.name_list = '{} [{}] - clase {} - conf {} - recu {} - ause {} -- {}'.format(
+            rec.name_list = '{} [{}] - clase {} - conf {} - recu {} - ause {} - vac {} -- {}'.format(
                     datetime.strptime(rec.date, '%Y-%m-%d').strftime('%d/%m/%Y'),
                     rec.curso_id.curso_instance,
                     rec.seq,
                     rec.reg_current,
                     rec.reg_recover,
                     rec.reg_absent,
+                    rec.reg_vacancy,
                     rec.name
             )
 

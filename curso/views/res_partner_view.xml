@@ -103,15 +103,17 @@
 
                                         <button name="button_go_absent"
                                                 string="No va a tomar esta clase"
-                                                states="programmed"
+                                                states="programmed,abandoned"
                                                 type="object"
-                                                icon="gtk-cancel"/>
+                                                icon="gtk-apply"/>
 
                                         <button name="button_go_abandoned"
                                                 string="Pasar a abandonado"
+                                                states="absent"
                                                 type="object"
                                                 icon="gtk-cancel"/>
-<!--
+
+                                        <!--
                                         <button name="button_go_programmed"
                                                 string="Pasar a programado"
                                                 states="absent"
@@ -138,7 +140,7 @@
                                 <button string="Reenviar mail con recuperatorios"
                                         name="button_resend_recover_mail"
                                         type="object"/>
-                                <field name="recover_ids"/>
+                                <field name="recover_ids" nolabel="1"/>
                             </group>
                         </page>
                     </notebook>

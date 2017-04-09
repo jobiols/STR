@@ -605,6 +605,8 @@ class curso_curso(models.Model):
     def do_invoice(self, actual_price, instance_code, seq, partner_id):
         """ Genera una factura relacionada con este curso """
 
+        print '------------------------ do invoice'
+        print partner_id
         date_invoice = datetime.today()
         date_due = (date_invoice + timedelta(days=10))
 

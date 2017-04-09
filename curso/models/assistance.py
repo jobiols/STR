@@ -151,6 +151,8 @@ class curso_assistance(models.Model):
         """ La alumna informa que no va a venir a esta clase """
         for rec in self:
             rec.state = 'absent'
+            # resetear el contador de mails enviados.
+            rec.notifications = 0
 
     @api.multi
     def button_go_to_recover(self):
@@ -205,7 +207,7 @@ class curso_assistance(models.Model):
     @api.multi
     def send_notification_mail(self, partner_id):
         """ Arma el mail para recuperatorios """
-        print 'send notification mail -------------------------------',
+        print '3) send notification mail -------------------------------',
         print 'a este partner', partner_id.name
 
         # Obtener el template para mandarle el mail,
@@ -228,11 +230,12 @@ class curso_assistance(models.Model):
             print 'template name [{}]'.format(template.name)
 #            mail_message = template.send_mail(partner_id.id)
             print 'mail enviado ==========================='
+            partner_id.info_recover_html1()
             print ' '
 
     @api.multi
     def do_run_housekeeping(self):
-        print 'do_run_houskeeping -------------------------------------------'
+        print '1) do_run_houskeeping -------------------------------------------'
 
         # obtener las que faltaron y ponerles ausente
         # no se puede poner future en el dominio porque no puede ser stored=True
@@ -247,9 +250,9 @@ class curso_assistance(models.Model):
             if rec.partner_id.check_changed_info(self.get_recover_ids(rec.partner_id)):
                 self.send_notification_mail(rec.partner_id)
 
-                # anotar que se la notificó otra vez para abandonar si pasa los 20
+                # anotar que se la notificó otra vez para abandonar si pasa los 2
                 rec.notifications += 1
-                if rec.notifications > 20:
+                if rec.notifications > 2:
                     rec.state = 'abandoned'
 
     def run_housekeeping(self, cr, uid, context=None):

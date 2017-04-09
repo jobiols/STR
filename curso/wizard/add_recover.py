@@ -75,8 +75,6 @@ class add_recover(models.TransientModel):
         assistance_obj = self.env['curso.assistance']
         assistance_obj.add_atendee(partner_id, self.lecture_id, recover=True)
 
-        partner_id = self.env['res.partner'].browse(partner_id)
-
         # generar la factura
         self.lecture_id.curso_id.do_invoice(
                 100,
