@@ -76,9 +76,13 @@ class res_partner(models.Model):
     )
     recover_ids = fields.Char(
             'ids a recuperar',
-            help=u'Ids de las clases que podría recuperar esta alumna, y que le mandamos por mail, para'
-                 u'evitar mandarle mails con informacion repetida'
+            help=u'Ids de las clases que podría recuperar esta alumna, y que le mandamos por mail,'
+                 u'se guarda aqui para evitar mandarle mails con informacion repetida'
     )
+
+    @api.one
+    def button_resend_recover_mail(self):
+        self.recover_ids = 'Programado para reenviar mail de recuperatorios'
 
     @api.one
     @api.depends('curso_registration_ids')
@@ -229,10 +233,6 @@ class res_partner(models.Model):
         self.ensure_one()
         ret = False
 
-        for rec in self:
-            print 'check changed info >>>>>>>>>>>', rec.name
-            print '---------- {} --> {}'.format(rec.recover_ids, recover_ids)
-
         # si no hay info que mandarle devuelvo false
         if not recover_ids:
             return False
@@ -242,7 +242,6 @@ class res_partner(models.Model):
             ri = ','.join(str(e) for e in recover_ids)
             if ri != rec.recover_ids:
                 rec.recover_ids = ri
-                print 'info changed!!!'
                 # hay nueva información que mandar
                 ret = True
             else:

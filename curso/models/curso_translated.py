@@ -51,20 +51,6 @@ class curso_curso(models.Model):
             states={'draft': [('readonly', False)]}
     )
 
-    register_max = fields.Integer(
-            u'Vacantes max',
-            help=u"La cantidd máxima de vacantes del curso. Si la cantidad de "
-                 u"inscripciones es mayor, no se puede arrancar el curso. (dejar en blanco para "
-                 u"ignorar la regla)"
-    )
-
-    register_min = fields.Integer(
-            u'Vacantes min',
-            help=u"La cantidad mínima de inscripciones en el curso. Si no hay "
-                 u"suficientes inscripcones no se puede arrancar el curso. (poner 0 para "
-                 u"ignorar la regla)"
-    )
-
     date_begin = fields.Date(
             u'Inicio', readonly=True,
             help=u"La fecha en la que inicia el curso, se puede dejar en blanco si no "
@@ -235,6 +221,18 @@ class curso_curso(models.Model):
             store=True, compute='_compute_country'
     )
 
+    register_max = fields.Integer(
+            u'Vacantes max',
+            help=u"La cantidd máxima de vacantes del curso."
+    )
+
+    register_min = fields.Integer(
+            u'Vacantes min',
+            help=u"La cantidad mínima de inscripciones en el curso. Si no hay "
+                 u"suficientes inscripcones no se puede arrancar el curso. (poner 0 para "
+                 u"ignorar la regla)"
+    )
+
     register_attended = fields.Integer(
             compute='_get_register',
             string='Egresadas',
@@ -250,8 +248,8 @@ class curso_curso(models.Model):
     register_avail = fields.Integer(
             compute='_get_register',
             string='Vacantes',
-            store=True,
-            help=u"La cantidad de vacantes que le queda al curso"
+            help=u"La cantidad de vacantes que le queda al curso, teniendo en cuenta las "
+                 u"alumnas que se anotan para recuperar en alguna de las clases"
     )
 
     register_prospect = fields.Integer(
@@ -269,7 +267,8 @@ class curso_curso(models.Model):
     register_virtual = fields.Integer(
             compute='_get_register',
             string='Virtuales',
-            help=u"La cantidad de alumnas que hay en la clase con mas alumnas"
+            help=u"La cantidad de alumnas que hay en la clase con mas alumnas",
+            store=True
     )
 
     is_subscribed = fields.Boolean(
@@ -346,10 +345,6 @@ class curso_curso(models.Model):
 
         if self.register_min and self.register_min >= self.register_current:
             self.error = 'No alcanza mínimo de alumnas'
-            return
-
-        if self.register_max and self.register_max < self.register_current:
-            self.error = 'Supera maximo de vacantes'
             return
 
         if self.register_max and self.register_max == self.register_current:
@@ -431,7 +426,7 @@ class curso_curso(models.Model):
         # puede haber gente que recupera, aqui calculamos la cantidad más grande de
         # alumnas que puede haber en alguna clase a eso le llamamos la cantidad virtual
         for lec in self.lecture_ids:
-            reg_virtual = max([reg_current + lec.reg_recover, reg_virtual])
+            reg_virtual = max([reg_current + lec.reg_recover - lec.reg_absent, reg_virtual])
 
         self.register_virtual = reg_virtual
         self.register_current = reg_current
@@ -524,7 +519,8 @@ class curso_curso(models.Model):
         weekload = self.get_weekload()
 
         if (weekload == []):
-            raise Warning('Error!', u"No se definió la agenda!.")
+            raise Warning(
+                    'Error!', u"No se definió la agenda!.")
 
         # get lecture templates
         lecture_templates = self.get_lecture_templates(self.product.id)
@@ -573,9 +569,12 @@ class curso_curso(models.Model):
             lectures.create(lec)
 
     @api.one
-    @api.constrains('register_max', 'register_avail')
+    @api.constrains('register_max', 'register_virtual')
     def _check_seats_limit(self):
-        if self.register_max and self.register_avail < 0:
+        """ Verifica que no se pase el máximo de vacantes, tiene en cuenta el register_virtual
+            que es la cantidad de alumnas en la clase que tiene mas alumnas.
+        """
+        if self.register_max - self.register_virtual < 0:
             raise Warning('No hay mas vacantes.')
 
     @api.one
@@ -641,4 +640,3 @@ class curso_curso(models.Model):
 
         invoice = self.env['account.invoice'].create(new_invoice)
         invoice.invoice_validate()
-

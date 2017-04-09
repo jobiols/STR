@@ -97,14 +97,18 @@
                                         <field name="seq"/>
                                         <field name="date"/>
                                         <field name="recover"
-                                               string="Rec"/>
-                                        <field name="present"/>
-                                        <field name="info"/>
+                                               string="Recup"/>
                                         <field name="lecture_id"
                                                string="Tema de la clase"/>
+
                                         <button name="button_go_absent"
                                                 string="No va a tomar esta clase"
                                                 states="programmed"
+                                                type="object"
+                                                icon="gtk-cancel"/>
+
+                                        <button name="button_go_abandoned"
+                                                string="Pasar a abandonado"
                                                 type="object"
                                                 icon="gtk-cancel"/>
 <!--
@@ -117,21 +121,24 @@
                                                 string="Pasar a para recuperar"
                                                 type="object"
                                                 icon="gtk-undo"/>
-                                        <button name="button_go_abandoned"
-                                                string="Pasar a abandonado"
-                                                type="object"
-                                                icon="gtk-cancel"/>
--->
                                         <button name="do_run_housekeeping"
                                                 string="TEST"
                                                 type="object"
                                                 icon="gtk-undo"/>
+-->
 
                                         <field name="state" string="Estado"/>
-                                        <field name="future"
-                                               invisible="True"/>
+                                        <field name="future" invisible="True"/>
                                     </tree>
                                 </field>
+                            </group>
+                        </page>
+                        <page string="Recuperatorios">
+                            <group name="grp_recover" string="Información sobre recuperatorios">
+                                <button string="Reenviar mail con recuperatorios"
+                                        name="button_resend_recover_mail"
+                                        type="object"/>
+                                <field name="recover_ids"/>
                             </group>
                         </page>
                     </notebook>

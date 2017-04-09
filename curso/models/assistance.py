@@ -102,7 +102,6 @@ class curso_assistance(models.Model):
 
         # chequear que haya una vacante
 
-
         if recover:
             # si es recuperatorio debe haber una clase del mismo
             # curso y misma secuencia que esté en estado absent,
@@ -179,7 +178,7 @@ class curso_assistance(models.Model):
     @api.multi
     def get_recover_ids(self, partner_id):
         """ dada una alumna devolver los ids de las clases de recuperatorio """
-        print 'get recover ids ---------------------------------------------------------'
+
         # averiguar a que clases faltó esta alumna
         absent_lectures = self.env['curso.assistance'].search(
                 [('partner_id', '=', partner_id.id),
@@ -196,32 +195,29 @@ class curso_assistance(models.Model):
             candidate_lectures = lectures_obj.search([('default_code', '=', default_code),
                                                       ('seq', '=', seq),
                                                       ('next', '=', True)])
-            print 'date, vacancy, current, max, recover'
             for cl in candidate_lectures:
-                # verificar que queda al menos una vacante antes de agregarla
-                print 'candidate', cl.date, cl.reg_vacancy, cl.reg_current, cl.reg_max, cl.reg_recover
+                # agregar solo clases que tengan al menos una vacante
                 if cl.reg_vacancy > 0:
                     ret.append(cl.id)
 
-        print 'para', partner_id.name,
-        print ' clases a recuperar ', ret
         return ret
 
     @api.multi
     def send_notification_mail(self, partner_id):
         """ Arma el mail para recuperatorios """
-        print ' send notification mail -------------------------------',
+        print 'send notification mail -------------------------------',
         print 'a este partner', partner_id.name
 
         # Obtener el template para mandarle el mail,
         # En assistance estan los ausentes, me traigo los ausentes de este partner
+        # Si encuentro ausentes en el futuro también valen y les busco recuperatorio.
         assistance = self.env['curso.assistance'].search([
             ('partner_id', '=', partner_id.id),
             ('state', '=', 'absent')])
 
         # Anoto todos los templates que hay que mandarle, habrá uno por cada curso
         template_ids = []
-        print 'ausencia en estas clases -----------------------------------------'
+        print 'detecto ausencia en estas clases -----------------------------------------'
         for rec in assistance:
             print ' >>> ', rec.curso_instance, rec.seq, rec.lecture_id.name
             if rec.lecture_id.curso_id.email_recovery_id not in template_ids:
@@ -230,27 +226,24 @@ class curso_assistance(models.Model):
         # por cada template, mandar un mail
         for template in template_ids:
             print 'template name [{}]'.format(template.name)
-            mail_message = template.send_mail(partner_id.id)
-            print 'enviado>', mail_message
+#            mail_message = template.send_mail(partner_id.id)
+            print 'mail enviado ==========================='
             print ' '
 
     @api.multi
     def do_run_housekeeping(self):
-        print 'do_run_houskeeping -------------------------------------------- records=', len(self)
+        print 'do_run_houskeeping -------------------------------------------'
 
         # obtener las que faltaron y ponerles ausente
         # no se puede poner future en el dominio porque no puede ser stored=True
         assistance = self.env['curso.assistance'].search([('state', '=', 'programmed')])
-
         for rec in assistance:
             if not rec.future:
                 rec.state = 'absent'
-                print '------------Pasar a Ausente!!! ', rec.partner_id.name
 
         # Buscar los ausentes para mandarles mail de recuperatorio
         assistance = self.env['curso.assistance'].search([('state', '=', 'absent')])
         for rec in assistance:
-
             if rec.partner_id.check_changed_info(self.get_recover_ids(rec.partner_id)):
                 self.send_notification_mail(rec.partner_id)
 
@@ -258,7 +251,6 @@ class curso_assistance(models.Model):
                 rec.notifications += 1
                 if rec.notifications > 20:
                     rec.state = 'abandoned'
-                    print 'abandonado', rec.partner_id.name
 
     def run_housekeeping(self, cr, uid, context=None):
         """ Chequea los ausentes y manda mails (si no le pongo esta firma no lo llama

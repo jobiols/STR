@@ -101,20 +101,32 @@ class curso_lecture(models.Model):
     reg_vacancy = fields.Integer(
             'Vacantes',
             compute="_get_reg_vacancy",
-            help=u"La cantidad de vacantes reales teniendo en cuenta las que recuperan"
+            help=u"La cantidad de vacantes reales teniendo en cuenta las que recuperan y las que "
+                 u"avisan que no van a venir"
     )
 
     @api.multi
     @api.depends('reg_max', 'reg_current', 'assistance_id')
     def _get_reg_vacancy(self):
+        """ Calcula cantidades de alumnas
+
+            Las que recuperan son las que tienen el tilde de recover y estan en programmed.
+            si no están en programmed es porque avisaron que no van a vernir y las pasamos
+            a absent.
+
+            Las que estan absent son las que estan en estado absent.
+
+        """
         for rec in self:
             reg_recover = rec.assistance_id.search_count([
-                     ('lecture_id', '=', rec.id),
-                     ('recover', '=', True)]
+                ('lecture_id', '=', rec.id),
+                ('recover', '=', True),
+                ('state', '=', 'programmed')
+            ]
             )
             reg_absent = rec.assistance_id.search_count([
-                     ('lecture_id', '=', rec.id),
-                     ('state', '=', 'absent')]
+                ('lecture_id', '=', rec.id),
+                ('state', '=', 'absent')]
             )
             rec.reg_recover = reg_recover
             rec.reg_absent = reg_absent
@@ -124,10 +136,13 @@ class curso_lecture(models.Model):
     @api.multi
     def _get_name_list(self):
         for rec in self:
-            rec.name_list = '{} [{}]  clase {} --  {}'.format(
+            rec.name_list = '{} [{}] - clase {} - conf {} - recu {} - ause {} -- {}'.format(
                     datetime.strptime(rec.date, '%Y-%m-%d').strftime('%d/%m/%Y'),
-                    rec.curso_id.default_code,
+                    rec.curso_id.curso_instance,
                     rec.seq,
+                    rec.reg_current,
+                    rec.reg_recover,
+                    rec.reg_absent,
                     rec.name
             )
 

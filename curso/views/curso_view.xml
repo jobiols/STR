@@ -207,11 +207,11 @@
                                     <tree string="Clases">
                                         <field name="date"/>
                                         <field name="weekday" type="string"/>
-                                        <!--     <field name="start_time" widget="float_time"/>
-                                                 <field name="end_time" widget="float_time"/> -->
                                         <field name="schedule_id"/>
-                                        <field name="seq"/>
-                                        <!--     <field name="elapsed_time" widget="float_time"/> -->
+                                        <field name="reg_current"/>
+                                        <field name="reg_recover" string="Rec"/>
+                                        <field name="reg_vacancy" string="Vac"/>
+                                        <field name="seq" string="Clase"/>
                                         <field name="name"/>
                                     </tree>
                                 </field>
@@ -235,12 +235,14 @@
             <field name="model">curso.curso</field>
             <field name="arch" type="xml">
                 <tree string="Cursos"
-                      fonts="bold:  no_lectures==1"
                       colors="black: state=='draft';
                               green: state=='confirm';
                               blue:  state=='in_progress';
                               brown: state=='done';
                               grey:  state=='cancel';">
+
+                     <button readonly="True" class="oe_inline oe_stat_button" icon="STOCK_DIALOG_WARNING"
+                             attrs="{'invisible': [('register_avail', '!=', 0)]}"/>
                     <field name="name"/>
                     <field name="no_lectures"/>
                     <field name="hs_lecture"/>
@@ -256,10 +258,11 @@
                                         <field name="register_attended" string="Cump"/>
                     -->
                     <field name="register_avail" string="Vac"/>
-                    <field name="register_max" string="V.max"/>
+                    <field name="register_virtual" string="Vir"/>
+                    <field name="register_max" string="Max"/>
                     <field name="main_speaker_id"/>
-                    <field name="secondary_speaker_id"/>
-                    <field name="error"/>
+<!--                    <field name="secondary_speaker_id"/> -->
+                    <field name="error" string="Observaciones"/>
                     <field name="state"/>
                 </tree>
             </field>

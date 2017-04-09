@@ -9,48 +9,79 @@
             <field name="model">curso.lecture</field>
             <field name="arch" type="xml">
                 <form string="Planilla de clases">
-                    <group col="2">
-                        <field name="date_start"/>
-                        <field name="date_stop"/>
-                        <field name="curso_id"/>
-                        <field name="schedule_id"/>
-                        <field name="seq"/>
-                    </group>
-                    <group>
-                        <field name="name" nolabel="1"/>
-                    </group>
+
                     <group>
                         <button name="button_generate_assistance"
                                 string="Generar asistencia" type="object" icon="gtk-apply"/>
                     </group>
-                    <group>
-                        <p style="background-color:#D3D3D3;">Planilla de asistencia</p>
+
+                    <group col="2">
                         <group>
+                            <field name="assistance_id" nolabel="1">
+                                <tree string="planilla de asistencia"
+                                              font="bold"
+                                              colors="green:  state=='programmed';
+                                                      red:    state=='absent' and future == True;
+                                                      orange: state=='absent' and future == False;
+                                                      blue:   state=='present';
+                                                      brown:  state=='abandoned';" >
+                                    <button name="button_toggle_present" string="Dar el presente"
+                                            type="object" icon="gtk-apply"
+                                            attrs="{'invisible':[('present','=',True)]}"
+                                    />
+                                    <field name="partner_id"/>
+                                    <field name="present"/>
+                                    <field name="future" invisible="1"/>
+                                    <field name="recover"/>
+                                    <field name="info"/>
+                                    <field name="state" invisible="1"/>
+                                    <button name="button_toggle_present" string="Volver a ausente"
+                                            type="object" icon="gtk-cancel"
+                                            attrs="{'invisible':[('present','=',False)]}"
+                                    />
+                                </tree>
+                            </field>
                         </group>
-                        <field name="assistance_id" nolabel="1">
-                            <tree string="planilla de asistencia"
-                                          font="bold"
-                                          colors="green:  state=='programmed';
-                                                  red:    state=='absent' and future == True;
-                                                  orange: state=='absent' and future == False;
-                                                  blue:   state=='present';
-                                                  brown:  state=='abandoned';" >
-                                <field name="partner_id"/>
-                                <field name="present"/>
-                                <field name="future" invisible="1"/>
-                                <field name="recover"/>
-                                <field name="info"/>
-                                <field name="state" invisible="1"/>
-                                <button name="button_toggle_present" string="Dar el presente"
-                                        type="object" icon="gtk-apply"
-                                        attrs="{'invisible':[('present','=',True)]}"
-                                />
-                                <button name="button_toggle_present" string="Volver a ausente"
-                                        type="object" icon="gtk-cancel"
-                                        attrs="{'invisible':[('present','=',False)]}"
-                                />
-                            </tree>
-                        </field>
+
+                        <group col="2">
+                            <group colspan="4">
+                                <h1>
+                                    <center>
+                                       <label string="Clase" />
+                                    </center>
+                                </h1>
+                            </group>
+                            <group colspan="4">
+                                <h1>
+                                    <center>
+                                       <field name="seq" readonly="1"/>
+                                    </center>
+                                </h1>
+                            </group>
+                            <group colspan="4">
+                                <h1>
+                                    <center>
+                                        <field name="date" readonly="1"/>
+                                    </center>
+                                </h1>
+                            </group>
+                            <group colspan = "4">
+                                <h1>
+                                    <center>
+                                        <field name="schedule_id" nolabel="0" readonly="1"/>
+                                    </center>
+                                </h1>
+                            </group>
+                            <group col ="4">
+
+                                <field name="reg_max"     string="Capacidad máxima" readonly="1"/>
+                                <field name="reg_current" string="Confirmadas con seña" readonly="1"/>
+                                <field name="reg_recover" string="Alumnas que recuperan" readonly="1"/>
+                                <field name="reg_absent"  string="Ausentes" readonly="1"/>
+                                <field name="reg_vacancy" string="Vacantes" readonly="1"/>
+
+                            </group>
+                        </group>
                     </group>
                 </form>
             </field>
@@ -67,7 +98,8 @@
                     <field name="weekday" type="string"/>
                     <field name="schedule_id"/>
                     <field name="reg_current"/>
-                    <field name="reg_recover"/>
+                    <field name="reg_recover" string="Rec"/>
+                    <field name="reg_vacancy" string="Vac"/>
                     <field name="seq" string="Clase"/>
                     <field name="curso_id"/>
                 </tree>
