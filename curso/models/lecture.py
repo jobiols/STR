@@ -121,7 +121,6 @@ class curso_lecture(models.Model):
             a absent.
 
             Las que estan absent son las que estan en estado absent.
-
         """
         for rec in self:
             reg_recover = rec.assistance_id.search_count([
@@ -134,10 +133,10 @@ class curso_lecture(models.Model):
                 ('lecture_id', '=', rec.id),
                 ('state', '=', 'absent')]
             )
+
             rec.reg_recover = reg_recover
             rec.reg_absent = reg_absent
             rec.reg_virtual = rec.reg_current + reg_recover - reg_absent
-
             rec.reg_vacancy = rec.reg_max - rec.reg_current - reg_recover + reg_absent
 
     @api.multi

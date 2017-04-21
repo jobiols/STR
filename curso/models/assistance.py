@@ -185,7 +185,9 @@ class curso_assistance(models.Model):
 
     @api.multi
     def get_recover_ids(self, partner_id):
-        """ dada una alumna devolver los ids de las clases de recuperatorio """
+        """ dada una alumna devolver los ids de las clases de recuperatorio
+            permitimos solo dos alumnas que recuperen en cada clase.
+        """
 
         # averiguar a que clases faltó esta alumna
         absent_lectures = self.env['curso.assistance'].search(
@@ -204,8 +206,9 @@ class curso_assistance(models.Model):
                                                       ('seq', '=', seq),
                                                       ('next', '=', True)])
             for cl in candidate_lectures:
-                # agregar solo clases que tengan al menos una vacante
-                if cl.reg_vacancy > 0:
+                # agregar solo clases que tengan al menos una vacante y menos de dos alumnas
+                # que estén recuperando.
+                if cl.reg_vacancy > 0 and cl.reg_recover < 2:
                     ret.append(cl.id)
 
         return ret
@@ -234,6 +237,8 @@ class curso_assistance(models.Model):
         # por cada template, mandar un mail
         for template in template_ids:
             print 'template name [{}]'.format(template.name)
+
+#           Hasta que no este estable no mandamos mails
 #            mail_message = template.send_mail(partner_id.id)
             print 'mail enviado ==========================='
             partner_id.info_recover_html1()

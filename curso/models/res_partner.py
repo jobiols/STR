@@ -177,7 +177,7 @@ class res_partner(models.Model):
                 })
 
             for da in data:
-                print da['code'],da['lecture_no'],da['date'],da['vacancy']
+                print da['code'], da['lecture_no'], da['date'], da['vacancy']
 
             html = html_filter.html_filter()
             return html.info_recover_html(data)
@@ -245,7 +245,7 @@ class res_partner(models.Model):
 
         # pasar la lista a string para compararla con la guardada
         for rec in self:
-            print '2.2 ------------------------------------------------------------------'#, rec.name
+            print '2.2 ------------------------------------------------------------------'  # , rec.name
             ri = ','.join(str(e) for e in recover_ids)
             print '2.3 {} -> {}'.format(ri, rec.recover_ids)
             if ri != rec.recover_ids:
