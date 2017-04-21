@@ -58,6 +58,12 @@ class curso_curso(models.Model):
             states={'draft': [('readonly', False)]}
     )
 
+    date_end = fields.Date(
+            u'Fin', readonly=True,
+            help=u"La fecha en la que termina el curso, es un campo que se calcula con la fecha de"
+                 u"la última clase",
+            compute="_get_date_end"
+    )
     reply_to = fields.Char(
             u'Mail de respuesta', size=64,
             states={'done': [('readonly', True)]},
@@ -236,7 +242,7 @@ class curso_curso(models.Model):
     register_attended = fields.Integer(
             compute='_get_register',
             string='Egresadas',
-            help=u"Cantidad de alumnas que termino el curso con exito."
+            help=u"Cantidad de alumnas que terminó el curso con éxito."
     )
 
     register_current = fields.Integer(
@@ -318,6 +324,14 @@ class curso_curso(models.Model):
     )
 
     @api.one
+    @api.depends('lecture_ids')
+    def _get_date_end(self):
+        """ obtener la fecha de la ultima clase, cuando termina el curso, si no tiene clases es false """
+
+        lects = self.lecture_ids.search([('curso_id', '=', self.id)], order='date desc', limit=1)
+        self.date_end = lects[0].date if lects else False
+
+    @api.one
     @api.depends('register_min', 'register_current', 'register_max', 'next', 'state',
                  'registration_ids', 'lecture_ids')
     def _get_error(self):
@@ -326,16 +340,12 @@ class curso_curso(models.Model):
             self.error = ''
             return
 
-        # obtener la fecha de la ultima clase, es cuando termina el curso
-        lects = self.lecture_ids.search([('curso_id', '=', self.id)], order='date desc')
-        date_end = lects[0].date if lects else False
-
-        if self.state not in ['cancel'] and not date_end:
+        if self.state not in ['cancel'] and not self.date_end:
             self.error = 'El curso no tiene clases'
             return
 
         if self.state not in ['cancel', 'done'] \
-                and date_end < datetime.today().strftime('%Y-%m-%d'):
+                and self.date_end < datetime.today().strftime('%Y-%m-%d'):
             self.error = 'Hay que terminar o cancelar este curso'
             return
 
@@ -600,6 +610,39 @@ class curso_curso(models.Model):
     @api.one
     def button_curso_draft(self):
         self.state = 'draft'
+
+    @api.multi
+    def do_curso_done(self):
+        """ Poner las alumnas del curso en estado cumplido si estan en cursando y tienen todas las clases """
+        for rec in self:
+            print 'curso done --------------------------------------------'
+            # recorrer las alumnas del curso
+            for registration in rec.registration_ids:
+                # las que estan cursando (confirm)
+                if registration.state in 'confirm':
+                    print registration.state, registration.partner_id.name
+                    # recorro las asistencias
+                    for assist in registration.partner_id.assistance_id:
+                        # verificar que hizo todas las clases
+                        if assist.state not in 'programmed,absent,abandoned':
+                            registration.state = 'done'
+
+    @api.multi
+    def button_curso_done(self):
+        """ Terminar el curso """
+
+        for rec in self:
+
+            # chequear que el curso se puede terminar
+            if rec.date_end >= datetime.today().strftime('%Y-%m-%d'):
+                raise Warning(
+                        'Error!',
+                        u"El curso todavia no termina.")
+
+            # terminar el curso en cada alumna
+            rec.do_curso_done()
+
+        rec.write({'state': 'done'})
 
     @api.one
     def do_invoice(self, actual_price, instance_code, seq, partner_id):
