@@ -72,10 +72,10 @@ class curso_assistance(models.Model):
         ('abandoned', 'Abandonado')],
             default='programmed',
             required=True,
-            help='Programado - La alumna debe concurrir a esta clase\n' + \
-                 'Ausente    - La alumna no concurrió a la clase o informó que no va a concurrir\n' + \
-                 'Prog para recup. - Se programó una clase de recuperatorio para esta\n' + \
-                 'Presente   - La alumna concurrió a la clase\n' + \
+            help='Programado - La alumna debe concurrir a esta clase.\n' + \
+                 'Ausente    - La alumna no concurrió a la clase o informó que no va a concurrir.\n' + \
+                 'Prog para recup. - Se programó una clase de recuperatorio para reemplazar a esta, que no la va a tomar.\n' + \
+                 'Presente   - La alumna concurrió a la clase.\n' + \
                  'Abandonado - La alumna abandonó el curso, el sistema deja de informarle fechas de recuperatorios.'
     )
     present = fields.Boolean(

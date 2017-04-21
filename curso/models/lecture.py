@@ -134,10 +134,15 @@ class curso_lecture(models.Model):
                 ('state', '=', 'absent')]
             )
 
+            reg_present = rec.assistance_id.search_count([
+                ('lecture_id', '=', rec.id),
+                '|', ('state', '=', 'programmed'), ('state', '=', 'present')
+            ])
+
             rec.reg_recover = reg_recover
             rec.reg_absent = reg_absent
-            rec.reg_virtual = rec.reg_current + reg_recover - reg_absent
-            rec.reg_vacancy = rec.reg_max - rec.reg_current - reg_recover + reg_absent
+            rec.reg_virtual = reg_present
+            rec.reg_vacancy = rec.reg_max - reg_present
 
     @api.multi
     def _get_name_list(self):

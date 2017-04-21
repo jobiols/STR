@@ -223,8 +223,7 @@ class curso_registration(models.Model):
     @api.constrains('curso_id', 'state', 'nb_register')
     def _check_seats_limit(self):
         if self.curso_id.register_max and \
-                        self.curso_id.register_avail < (
-                        self.nb_register if self.state == 'draft' else 0):
+                        self.curso_id.register_avail < (self.nb_register if self.state == 'draft' else 0):
             raise Warning('No hay mas vacantes.!')
 
         if self.curso_id.state == 'cancel':
