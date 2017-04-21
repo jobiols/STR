@@ -436,7 +436,7 @@ class curso_curso(models.Model):
         # puede haber gente que recupera, aqui calculamos la cantidad más grande de
         # alumnas que puede haber en alguna clase a eso le llamamos la cantidad virtual
         for lec in self.lecture_ids:
-            reg_virtual = max([reg_current + lec.reg_recover - lec.reg_absent, reg_virtual])
+            reg_virtual = max([lec.reg_virtual, reg_virtual])
 
         self.register_virtual = reg_virtual
         self.register_current = reg_current
@@ -583,9 +583,11 @@ class curso_curso(models.Model):
     def _check_seats_limit(self):
         """ Verifica que no se pase el máximo de vacantes, tiene en cuenta el register_virtual
             que es la cantidad de alumnas en la clase que tiene mas alumnas.
+            Además si register_max = 0 no se valida.
         """
-        if self.register_max - self.register_virtual < 0:
-            raise Warning('No hay mas vacantes.')
+        if self.register_max and self.register_virtual > self.register_max:
+            print 'No hay mas vacantes en el curso {}'.format(self.curso_instance)
+#            raise Warning('No hay mas vacantes en el curso {}'.format(self.curso_instance))
 
     @api.one
     def button_curso_confirm(self):
