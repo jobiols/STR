@@ -28,6 +28,7 @@ class curso_lecture(models.Model):
 
     _name = 'curso.lecture'
     _rec_name = 'name_list'
+    _order = 'date_start'
 
     name_list = fields.Char(
             compute='_get_name_list'
@@ -104,6 +105,11 @@ class curso_lecture(models.Model):
             help=u"La cantidad de vacantes reales teniendo en cuenta las que recuperan y las que "
                  u"avisan que no van a venir"
     )
+    reg_virtual = fields.Integer(
+            'Total real',
+            compute="_get_reg_vacancy",
+            help=u"La cantidad total de alumnas reales que hay"
+    )
 
     @api.multi
     @api.depends('reg_max', 'reg_current', 'assistance_id')
@@ -130,6 +136,7 @@ class curso_lecture(models.Model):
             )
             rec.reg_recover = reg_recover
             rec.reg_absent = reg_absent
+            rec.reg_virtual = rec.reg_current + reg_recover - reg_absent
 
             rec.reg_vacancy = rec.reg_max - rec.reg_current - reg_recover + reg_absent
 
