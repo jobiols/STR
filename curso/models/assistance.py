@@ -37,7 +37,12 @@ class curso_assistance(models.Model):
     future = fields.Boolean(
             'Futuro',
             help=u'La fecha de la clase está en el futuro',
-            compute='_get_future'
+            compute='_get_time_status'
+    )
+    past = fields.Boolean(
+            'Pasado',
+            help=u'La fecha de la clase está en el pasado',
+            compute='_get_time_status'
     )
     notifications = fields.Integer(
             help=u'Cantidad de veces que se la notificó para que recupere esta clase'
@@ -172,10 +177,11 @@ class curso_assistance(models.Model):
 
     @api.multi
     @api.depends('date')
-    def _get_future(self):
+    def _get_time_status(self):
         for rec in self:
             # si la fecha viene en false pongo una en el pasado para que no reviente.
             rec.future = datetime.today().date() < datetime.strptime(rec.date or '2000-01-01', '%Y-%m-%d').date()
+            rec.past = datetime.today().date() > datetime.strptime(rec.date or '2000-01-01', '%Y-%m-%d').date()
 
     @api.multi
     def get_recover_ids(self, partner_id):
@@ -238,10 +244,10 @@ class curso_assistance(models.Model):
         print '1) do_run_houskeeping -------------------------------------------'
 
         # obtener las que faltaron y ponerles ausente
-        # no se puede poner future en el dominio porque no puede ser stored=True
+        # no se puede poner past en el dominio porque no puede ser stored=True
         assistance = self.env['curso.assistance'].search([('state', '=', 'programmed')])
         for rec in assistance:
-            if not rec.future:
+            if rec.past:
                 rec.state = 'absent'
 
         # Buscar los ausentes para mandarles mail de recuperatorio
@@ -252,7 +258,7 @@ class curso_assistance(models.Model):
 
                 # anotar que se la notificó otra vez para abandonar si pasa los 2
                 rec.notifications += 1
-                if rec.notifications > 2:
+                if rec.notifications > 2000:
                     rec.state = 'abandoned'
 
     def run_housekeeping(self, cr, uid, context=None):
