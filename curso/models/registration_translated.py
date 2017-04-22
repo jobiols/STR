@@ -305,7 +305,9 @@ class curso_registration(models.Model):
 
     @api.multi
     def button_reg_cancel(self):
-        """ Cancela un curso
+        """ Cancela un curso,
+            Elimina todas las cuotas
+            Elimina todas las asistencias, poniendo en Abandonado.
         """
         # Eliminar todas las cuotas pendientes para no seguir cobrandole
         for reg in self:

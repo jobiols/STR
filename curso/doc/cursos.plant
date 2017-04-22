@@ -1,0 +1,55 @@
+@startuml
+Title Curso Class Diagram
+
+class mail.thread
+class ir.needaction_mixin
+class res.partner
+class res.users
+class res.company
+class account.invoice
+account.invoice o-- "invoice_id" quota
+
+class email.template
+email.template o-- "template_id" mails_to_send
+class product.product
+product.product o-- "product_id" mails_to_send
+product.product o-- "product_id" lecture_template
+
+class diary
+
+curso -u--> ir.needaction_mixin
+curso -u--> mail.thread
+class curso
+curso "registration_ids" *-r- "curso_id" registration
+curso "diary_ids" *-l- "curso_id" diary
+curso "lecture_ids" *--- "curso_id" lecture
+
+class registration
+registration "quota_id" *--- "registration_id" quota
+
+class lecture
+lecture "assistance_id" *--- "lecture_id" assistance
+
+class lecture_template
+class quota
+
+schedule -u-> lapse
+class schedule
+schedule o--- "schedule" diary
+schedule o-- "schedule_id" lecture
+
+partner -u-> res.partner
+class partner
+partner "assistance_id" *-- "partner_id" assistance
+partner "curso_registration_ids" *-- "partner_id" registration
+
+class assistance
+class mails_to_send
+class html_filter
+
+lapse -u-> holiday
+class lapse
+
+class holiday
+
+@enduml
