@@ -105,6 +105,11 @@ class curso_lecture(models.Model):
             help=u"La cantidad de vacantes reales teniendo en cuenta las que recuperan y las que "
                  u"avisan que no van a venir"
     )
+    reg_vacancy_rec = fields.Integer(
+            'Vacantes para las que recuperan',
+            compute="_get_reg_vacancy",
+            help=u"La cantidad de vacantes que pueden usar las que recuperan."
+    )
     reg_virtual = fields.Integer(
             'Total real',
             compute="_get_reg_vacancy",
@@ -139,10 +144,18 @@ class curso_lecture(models.Model):
                 '|', ('state', '=', 'programmed'), ('state', '=', 'present')
             ])
 
+            reg_recover = rec.assistance_id.search_count([
+                ('lecture_id', '=', rec.id),
+                ('state', '=', 'programmed'),
+                ('recover', '=', True)
+            ])
+
             rec.reg_recover = reg_recover
             rec.reg_absent = reg_absent
             rec.reg_virtual = reg_present
             rec.reg_vacancy = rec.reg_max - reg_present
+            reg_vacancy_rec = 2 - reg_recover
+            rec.reg_vacancy_rec = reg_vacancy_rec if reg_vacancy_rec >= 0 else 0
 
     @api.multi
     def _get_name_list(self):

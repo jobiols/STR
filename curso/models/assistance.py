@@ -206,9 +206,10 @@ class curso_assistance(models.Model):
                                                       ('seq', '=', seq),
                                                       ('next', '=', True)])
             for cl in candidate_lectures:
-                # agregar solo clases que tengan al menos una vacante y menos de dos alumnas
-                # que estén recuperando.
-                if cl.reg_vacancy > 0 and cl.reg_recover < 2:
+                # agregar solo clases que tengan al menos una vacante para recuperatorio
+                # las vacantes para recperatorio no son las mismas que las vacantes normales
+                # por defecto son solo dos por clase
+                if cl.reg_vacancy_rec > 0:
                     ret.append(cl.id)
 
         return ret
@@ -263,7 +264,7 @@ class curso_assistance(models.Model):
 
                 # anotar que se la notificó otra vez para abandonar si pasa los 2
                 rec.notifications += 1
-                if rec.notifications > 2000:
+                if rec.notifications > 20000:
                     rec.state = 'abandoned'
 
     def run_housekeeping(self, cr, uid, context=None):

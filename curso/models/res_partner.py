@@ -154,6 +154,7 @@ class res_partner(models.Model):
     def info_recover_html1(self):
         """ Genera tabla html con la información de recuperatorios para la alumna
             Es llamada desde la plantilla
+            Las vacantes que muestra son solo para recuperacion.
         """
 
         for rec in self:
@@ -173,7 +174,7 @@ class res_partner(models.Model):
                     'day': lecture.weekday,
                     'schedule': lecture.schedule_id.name,
                     'lecture_no': lecture.seq,
-                    'vacancy': lecture.reg_vacancy,
+                    'vacancy': lecture.reg_vacancy_rec,
                 })
 
             for da in data:
