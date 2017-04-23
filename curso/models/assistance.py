@@ -263,9 +263,9 @@ class curso_assistance(models.Model):
                 self.send_notification_mail(rec.partner_id)
 
                 # anotar que se la notificó otra vez para abandonar si pasa los 2
-                rec.notifications += 1
-                if rec.notifications > 20000:
-                    rec.state = 'abandoned'
+#                rec.notifications += 1
+#                if rec.notifications > 20000:
+#                    rec.state = 'abandoned'
 
     def run_housekeeping(self, cr, uid, context=None):
         """ Chequea los ausentes y manda mails (si no le pongo esta firma no lo llama
