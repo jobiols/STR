@@ -308,7 +308,6 @@ class curso_registration(models.Model):
                 ('state', '=', 'programmed')
             ])
             for assist in assists:
-                print '>>>>>>>>', assist.state, assist.date, assist.partner_id.name
                 assist.state = 'abandoned'
 
             # cambiar el estado a cancelado
