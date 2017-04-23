@@ -305,7 +305,7 @@ class curso_curso(osv.osv):
 
     def button_curso_cancel(self, cr, uid, ids, context=None):
         """
-        Canelar el curso
+        Cancelar el curso.
         """
         # si existe al menos una en estado signed no se puede cancelar el curso
         # si existe al menos una en estado confirm no se puede cancelar el curso

@@ -37,28 +37,23 @@ class curso_registration(models.Model):
             u'Creación',
             readonly=True
     )
-
     date_closed = fields.Date(
             u'Fecha de cierre',
             readonly=True
     )
-
     date_open = fields.Date(
             u'Fecha de inscripción',
             readonly=True
     )
-
     discount = fields.Float(
             u'Descuento (%)',
             digits=(2, 2)
     )
-
     disc_desc = fields.Char(
             u'Razon del descuento',
             size=128,
             select=True
     )
-
     nb_register = fields.Integer(
             u'Number of Participants',
             required=True,
@@ -66,7 +61,6 @@ class curso_registration(models.Model):
             states={'draft': [('readonly', False)]},
             default=1
     )
-
     state = fields.Selection(
             [('draft', u'Interesada'),
              ('cancel', u'Cancelado'),
@@ -74,19 +68,47 @@ class curso_registration(models.Model):
              ('done', u'Cumplido'),
              ('signed', u'Señado')], 'Estado',
             track_visibility='onchange',
-            size=16, readonly=True, default='draft')
-
-    quota_id = fields.One2many(
-            'curso.quota',
-            'registration_id',
-            'Cuotas')
-
-    log_ids = fields.One2many(
-            'mail.message',
-            'res_id',
-            'Logs',
-            domain=[('model', '=', _name)])
-
+            size=16, readonly=True, default='draft'
+    )
+    reply_to = fields.Char(
+            related='curso_id.reply_to',
+            string='Reply-to Email',
+            size=128,
+            readonly=True
+    )
+    curso_begin_date = fields.Date(
+            related='curso_id.date_begin',
+            string="Inicio",
+            readonly=True
+    )
+    email = fields.Char(
+            related='partner_id.email',
+            string='Email',
+            size=128,
+            readonly=True
+    )
+    phone = fields.Char(
+            related='partner_id.mobile',
+            string='Telefono',
+            size=128,
+            readonly=True
+    )
+    curso_state = fields.Selection(
+            related='curso_id.state',
+            string=u'Estado del curso',
+            readonly=True
+    )
+    curso_begin_day = fields.Char(
+            compute='_get_weekday',
+            string='Dia'
+    )
+    source = fields.Selection([
+        ('none', 'Sin descuento'),
+        ('groupon', 'Groupon'),
+    ],
+            'Origen', required=True,
+            default='none'
+    )
     curso_id = fields.Many2one(
             'curso.curso',
             'Curso',
@@ -94,52 +116,17 @@ class curso_registration(models.Model):
             readonly=True,
             states={'draft': [('readonly', False)]}
     )
-
     partner_id = fields.Many2one(
             'res.partner',
             u'Alumna',
             required=True,
             states={'done': [('readonly', True)]}
     )
-
     user_id = fields.Many2one(
             'res.users',
             'User',
             states={'done': [('readonly', True)]}
     )
-
-    reply_to = fields.Char(
-            related='curso_id.reply_to',
-            string='Reply-to Email',
-            size=128,
-            readonly=True)
-
-    curso_begin_date = fields.Date(
-            related='curso_id.date_begin',
-            string="Inicio",
-            readonly=True
-    )
-
-    email = fields.Char(
-            related='partner_id.email',
-            string='Email',
-            size=128,
-            readonly=True
-    )
-
-    phone = fields.Char(
-            related='partner_id.mobile',
-            string='Telefono',
-            size=128,
-            readonly=True
-    )
-
-    curso_state = fields.Selection(
-            related='curso_id.state',
-            string=u'Estado del curso',
-            readonly=True
-    )
-
     company_id = fields.Many2one(
             'res.company',
             string='Company',
@@ -148,17 +135,16 @@ class curso_registration(models.Model):
             readonly=True,
             states={'draft': [('readonly', False)]}
     )
-
-    curso_begin_day = fields.Char(
-            compute='_get_weekday',
-            string='Dia')
-
-    source = fields.Selection([
-        ('none', 'Sin descuento'),
-        ('groupon', 'Groupon'),
-    ],
-            'Origen', required=True,
-            default='none'
+    quota_id = fields.One2many(
+            'curso.quota',
+            'registration_id',
+            'Cuotas'
+    )
+    log_ids = fields.One2many(
+            'mail.message',
+            'res_id',
+            'Logs',
+            domain=[('model', '=', _name)]
     )
 
     @api.one
@@ -247,7 +233,6 @@ class curso_registration(models.Model):
             }
             self.env['curso.quota'].create(quota_data)
 
-
     # TODO Aca estan los mails después de cada clase. Hay que arreglarlo
     @api.one
     def try_send_mail_by_lecture(self):
@@ -305,17 +290,28 @@ class curso_registration(models.Model):
 
     @api.multi
     def button_reg_cancel(self):
-        """ Cancela un curso,
+        """ Cancela una inscripción de una alumna a un curso,
             Elimina todas las cuotas
-            Elimina todas las asistencias, poniendo en Abandonado.
+            Elimina todas las asistencias, poniendolas en Abandonado.
         """
         # Eliminar todas las cuotas pendientes para no seguir cobrandole
         for reg in self:
             quota_obj = self.env['curso.quota']
             quotas = quota_obj.search([('invoice_id', '=', None),
                                        ('registration_id', '=', reg.id)])
-            for reg in quotas:
-                reg.unlink()
+            for rg in quotas:
+                rg.unlink()
+
+            # Poner las asistencias en Abandonado
+            assists = self.env['curso.assistance'].search([
+                ('partner_id', '=', reg.partner_id.id),
+                ('state', '=', 'programmed')
+            ])
+            for assist in assists:
+                print '>>>>>>>>', assist.state, assist.date, assist.partner_id.name
+                assist.state = 'abandoned'
+
+            # cambiar el estado a cancelado
             self.state = 'cancel'
 
     @api.multi

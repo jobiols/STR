@@ -4,8 +4,13 @@ Title Curso Class Diagram
 class mail.thread
 class ir.needaction_mixin
 class res.partner
+
 class res.users
+res.users o-- "user_id" registration
+
 class res.company
+res.company o-- "company_id" registration
+
 class account.invoice
 account.invoice o-- "invoice_id" quota
 
@@ -19,13 +24,62 @@ class diary
 
 curso -u--> ir.needaction_mixin
 curso -u--> mail.thread
-class curso
+class curso {
+
+    child:Boolean
+    allow_overclass:Boolean
+    instance:Integer
+    date_begin:Date
+    date_end:Date
+    reply_to:Char
+    note:Text
+    register_max:Integer
+    register_min:Integer
+    register_attended:Integer
+    register_current:Integer
+    register_avail:Integer
+    register_prospect:Integer
+    register_cancel:Integer
+    register_virtual:Integer
+    is_subscribed:Boolean
+    classes_per_week:Integer
+    curso_instance:Char
+    name:Char
+    no_lectures:Char
+    state:Selction
+    tot_hs_lecture:Integer
+    list_price:Float
+    hs_lecture:Integer
+    default_code:Char
+    no_quotes:Integer
+    next:Boolean
+    error:Char
+}
 curso "registration_ids" *-r- "curso_id" registration
 curso "diary_ids" *-l- "curso_id" diary
 curso "lecture_ids" *--- "curso_id" lecture
+curso "parent_curso_id" o-- curso
 
-class registration
+registration -u-> mail.thread
+registration -u-> ir.needaction_mixin
+class registration {
+    create_date:Date
+    date_closed:Date
+    date_open:Date
+    discount:Float
+    disc_desc:Char
+    nb_register:Integer
+    state:Selection
+    reply_to:Char
+    curso_begin_date:Date
+    email:Char
+    phone:Char
+    curso_state:Selection
+    curso_begin_day:Char
+    source:fields.Selection
+}
 registration "quota_id" *--- "registration_id" quota
+registration "log_ids" o-- mail.message
 
 class lecture
 lecture "assistance_id" *--- "lecture_id" assistance
@@ -42,6 +96,9 @@ partner -u-> res.partner
 class partner
 partner "assistance_id" *-- "partner_id" assistance
 partner "curso_registration_ids" *-- "partner_id" registration
+
+
+
 
 class assistance
 class mails_to_send
