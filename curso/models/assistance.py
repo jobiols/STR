@@ -267,6 +267,23 @@ class curso_assistance(models.Model):
 #                if rec.notifications > 20000:
 #                    rec.state = 'abandoned'
 
+        """
+            # Buscar cursos para pasar a in_process
+            cursos = self.env['curso.curso'].search(
+                    [('state', '=', 'confirm'),
+                     ('date_begin', '<=', datetime.today().strftime('%Y-%m-%d'))])
+            for curso in cursos:
+                if curso.may_go_in_process(silent=True):
+                    curso.button_curso_in_progress()
+
+            # Buscar cursos para pasar a done
+            cursos = self.env['curso.curso'].search(
+                    [('state', '=', 'in_process')])
+            for curso in cursos:
+                if curso.may_go_done(silent=True):
+                    curso.button_curso_done()
+        """
+
     def run_housekeeping(self, cr, uid, context=None):
         """ Chequea los ausentes y manda mails (si no le pongo esta firma no lo llama
             desde el cron)

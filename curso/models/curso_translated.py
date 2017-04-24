@@ -176,7 +176,7 @@ class curso_curso(models.Model):
     state = fields.Selection([
         ('draft', 'Borrador'),  # estado inicial
         ('confirm', 'Confirmado'),  # se publica
-        ('in_progress', 'Cursando'),  # está activo, verifica fechas inicio - fin
+        ('in_progress', 'En progreso'),  # está activo, verifica fechas inicio - fin
         ('done', 'Cumplido'),  # está cumpllido verifica fechas fin
         ('cancel', 'Cancelado')  # está cancelado no se publica
     ],
@@ -361,7 +361,7 @@ class curso_curso(models.Model):
             self.error = 'El curso está completo'
             return
 
-        if self.state in ['in_process', 'done', 'cancel']:
+        if self.state in ['in_progress', 'done', 'cancel']:
             for reg in self.registration_ids.search([('curso_id', '=', self.id)]):
                 if reg.state == 'signed':
                     self.error = 'La alumna ({}) no puede estar en estado señada'.format(
@@ -587,7 +587,7 @@ class curso_curso(models.Model):
         """
         if self.register_max and self.register_virtual > self.register_max:
             print 'No hay mas vacantes en el curso {}'.format(self.curso_instance)
-#            raise Warning('No hay mas vacantes en el curso {}'.format(self.curso_instance))
+            #            raise Warning('No hay mas vacantes en el curso {}'.format(self.curso_instance))
 
     @api.one
     def button_curso_confirm(self):
@@ -610,6 +610,16 @@ class curso_curso(models.Model):
         self.state = 'confirm'
 
     @api.one
+    def button_curso_in_progress(self):
+        """ Poner el curso en proceso, chequeando antes que las fechas de inicio y fin esten correctas
+        """
+        # levanta excepción si no se puede poner in_process
+        self.may_go_in_process(self)
+
+        self.state = 'in_progress'
+        print 'curso in process', self.curso_instance
+
+    @api.one
     def button_curso_draft(self):
         self.state = 'draft'
 
@@ -617,34 +627,72 @@ class curso_curso(models.Model):
     def do_curso_done(self):
         """ Poner las alumnas del curso en estado cumplido si estan en cursando y tienen todas las clases """
         for rec in self:
-            print 'curso done --------------------------------------------'
             # recorrer las alumnas del curso
             for registration in rec.registration_ids:
                 # las que estan cursando (confirm)
                 if registration.state in 'confirm':
-                    print registration.state, registration.partner_id.name
                     # recorro las asistencias
                     for assist in registration.partner_id.assistance_id:
                         # verificar que hizo todas las clases
                         if assist.state not in 'programmed,absent,abandoned':
                             registration.state = 'done'
 
+    @api.one
+    def may_go_in_process(self, silent=False):
+        print 'may go in process', self.curso_instance
+        # verificar si está confirmado
+        if self.state != 'confirm':
+            if silent:
+                return False
+            else:
+                raise ValidationError(u'Debe estar confirmado para pasarlo a En proceso')
+
+        today = datetime.today().strftime('%Y-%m-%d')
+        # Verificar si la fecha actual es menor que la de inicio.
+        if self.date_begin < today:
+            if silent:
+                return False
+            else:
+                raise Warning(u"No se puede arrancar el curso antes de su fecha de inicio")
+
+        # Verificar si la fecha actual es igual o menor que la fecha de fin.
+        if self.date_end > today:
+            if silent:
+                return False
+            else:
+                raise ValidationError(u"No se puede arrancar el curso, porque ya pasó su fecha de finalización")
+
+        return True
+
+    @api.one
+    def may_go_done(self, silent=False):
+        print 'may go done', self.curso_instance
+        if self.state != 'in_process':
+            if silent:
+                return False
+            else:
+                raise Warning
+
+        today = datetime.today().strftime('%Y-%m-%d')
+        if self.date_end < today:
+            if silent:
+                return False
+            else:
+                raise Warning('Error!', u"El curso todavia no termina.")
+        return True
+
     @api.multi
     def button_curso_done(self):
-        """ Terminar el curso """
+        """ Terminar el curso, y también a las alumnas que cursaron y completaron todas las clases """
 
         for rec in self:
-
-            # chequear que el curso se puede terminar
-            if rec.date_end >= datetime.today().strftime('%Y-%m-%d'):
-                raise Warning(
-                        'Error!',
-                        u"El curso todavia no termina.")
+            # chequear que el curso se puede terminar levanta excepcion si no
+            rec.may_go_done()
 
             # terminar el curso en cada alumna
             rec.do_curso_done()
-
-        rec.write({'state': 'done'})
+            print 'curso terminado', rec.curso_instance
+            rec.state = 'done'
 
     @api.one
     def do_invoice(self, actual_price, instance_code, seq, partner_id):

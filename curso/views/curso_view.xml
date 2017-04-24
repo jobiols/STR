@@ -34,6 +34,9 @@
                         <button string="Confirmar curso" name="button_curso_confirm"
                                 states="draft" type="object"
                                 class="oe_highlight" groups="base.group_user"/>
+                        <button string="Arranca el curso" name="button_curso_in_progress"
+                                states="confirm" type="object"
+                                class="oe_highlight" groups="base.group_user"/>
                         <button string="Terminó el curso" name="button_curso_done"
                                 states="confirm" type="object"
                                 class="oe_highlight" groups="base.group_user"/>
@@ -45,7 +48,7 @@
                                 groups="base.group_user"/>
 
                         <field name="state" widget="statusbar"
-                               statusbar_visible="draft,cancel,confirm,done"/>
+                               statusbar_visible="draft,cancel,confirm,done,in_progress"/>
                     </header>
 
                     <sheet>
@@ -399,8 +402,11 @@
                     <filter icon="terp-check" string="Borrador" name="draft"
                             domain="[('state','=','draft')]"
                             help="Cursos en estado borrador"/>
-                    <filter icon="terp-camera_test" string="Cursando"
+                    <filter icon="terp-camera_test" string="Confirmado"
                             domain="[('state','=','confirm')]"
+                            help="Cursos confirmados"/>
+                    <filter icon="terp-camera_test" string="En progreso"
+                            domain="[('state','=','in_progress')]"
                             help="Cursos actualmente activos"/>
                     <filter icon="terp-camera_test" string="Terminados"
                             domain="[('state','=','done')]"
