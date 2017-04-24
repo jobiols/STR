@@ -154,7 +154,12 @@ class curso_lecture(models.Model):
             rec.reg_absent = reg_absent
             rec.reg_virtual = reg_present
             rec.reg_vacancy = rec.reg_max - reg_present
-            reg_vacancy_rec = 2 - reg_recover
+
+            # calcular las vacantes para recuperar
+            lim_curso = rec.reg_vacancy     # limitacion por el curso
+            lim_vac = 2 - reg_recover       # limitacion por recuperacion
+            reg_vacancy_rec = min([lim_curso, lim_vac])   # elijo el minimo
+
             rec.reg_vacancy_rec = reg_vacancy_rec if reg_vacancy_rec >= 0 else 0
 
     @api.multi
