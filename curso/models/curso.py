@@ -226,20 +226,6 @@ class curso_curso(osv.osv):
 
         return True
 
-    def name_get(self, cr, uid, ids, context=None):
-        if not ids:
-            return []
-
-        if isinstance(ids, (long, int)):
-            ids = [ids]
-
-        res = []
-        for record in self.browse(cr, uid, ids, context=context):
-            curs = record.product.name
-            display_name = record.name
-            res.append((record['id'], display_name))
-        return res
-
     def copy(self, cr, uid, id, default=None, context=None):
         """ Reset the state and the registrations while copying an curso
         """
