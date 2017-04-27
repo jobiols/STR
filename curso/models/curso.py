@@ -56,12 +56,8 @@ class curso_curso(osv.osv):
         _ix = 0
 
         def __init__(self, wl, date):
-            #            print 'weekday constructor ---------------------------------------------------'
             # ordering the weekload by weekday
             wl.sort(key=lambda b: b['weekday'])
-
-            #            for a in wl: print a
-            #            print 'start date', date
 
             self._weekload = wl
             self._start_date = self._current_date = date
@@ -69,7 +65,6 @@ class curso_curso(osv.osv):
             # adjust ix to point the right weekday
             start_weekday = int(self._start_date.strftime('%w'))
             for ix in range(len(wl)):
-                #                print ix, start_weekday, wl[ix]['weekday']
                 if start_weekday == wl[ix]['weekday']:
                     self._ix = ix
 
@@ -323,8 +318,6 @@ class curso_curso(osv.osv):
         return hd
 
     def lectures_list(self, weekdays, no_lectures):
-        #        print 'lectures_list >>>>>>>>>>>>>>>>>>>>>>>>>>>>>', no_lectures
-
         ret = []
         for ix in range(no_lectures):
             ret.append((
@@ -332,11 +325,6 @@ class curso_curso(osv.osv):
                 weekdays.get_schedule(),
                 weekdays.get_room()))
             weekdays.next_class()
-
-        # print '------------------------------------------------------------------'
-        #        for date, schedule, room in ret:
-        #            print date, schedule.name, room
-        #        print '------------------------------------------------------------------'
         return ret
 
     def lecture_overlaps(self, date, schedule, room):
@@ -390,7 +378,6 @@ class curso_curso(osv.osv):
         diary_obj = self.pool['curso.diary']
         ids = diary_obj.search(cr, uid, [('curso_id', '=', curso_from)])
         for diary in diary_obj.browse(cr, uid, ids, context=context):
-            #            print diary.id
             diary_obj.create(cr, uid, {
                 'curso_id': curso_to,
                 'weekday': diary.weekday,
@@ -406,19 +393,15 @@ class curso_curso(osv.osv):
             diary_id: create the same diary as parent
             child: True
         """
-        #        print 'button_update_child_from_parent ', parent_id, class_id
         res = {}
         for curso in self.browse(cr, uid, ids, context=context):
-            #            print curso.name
 
             self.clone_diary(cr, uid, ids, parent_id, curso.id, context=context)
 
             lecture_obj = self.pool['curso.lecture']
             ids = lecture_obj.search(cr, uid, [('id', '=', class_id)])
             for lecture in lecture_obj.browse(cr, uid, ids):
-                #                print lecture.name
                 res['date_begin'] = lecture.date
-                #                print res
 
     def subscribe_to_curso(self, cr, uid, ids, context=None):
         register_pool = self.pool.get('curso.registration')
