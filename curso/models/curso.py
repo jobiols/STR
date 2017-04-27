@@ -368,7 +368,7 @@ class curso_curso(osv.osv):
                     if (instance < item.instance):
                         instance = item.instance
 
-            instance = instance + 1
+            instance += 1
             values.update({
                 'instance': instance,
             })
