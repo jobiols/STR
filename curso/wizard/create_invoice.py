@@ -50,11 +50,6 @@ class curso_invoice(osv.osv_memory):
         date_invoice = datetime.strptime(invoice_data.get('date_invoice'), '%Y-%m-%d')
         date_due = (date_invoice + timedelta(days=10))
 
-        # traer el historico, si no hay historico traer el de lista.
-        actual_price = invoice_data.get('historic_price', False) or product_id.list_price
-        #        if product_id.list_price > actual_price:
-        #            actual_price = product_id.list_price
-
         invoice_lines = []
         invoice_line = {
             'name': '[{}] {}'.format(invoice_data.get('instance_code'),
@@ -63,7 +58,7 @@ class curso_invoice(osv.osv_memory):
             'invoice_id': False,
             'account_id': 88,  # venta de cursos
             #            'account_analytic_id': 4,
-            'price_unit': actual_price,
+            'price_unit': product_id.list_price,
             'quantity': 1.0,
         }
         invoice_line_id = self.pool.get(
