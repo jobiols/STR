@@ -586,8 +586,7 @@ class curso_curso(models.Model):
             Además si register_max = 0 no se valida.
         """
         if self.register_max and self.register_virtual > self.register_max:
-            print 'No hay mas vacantes en el curso {}'.format(self.curso_instance)
-            #            raise Warning('No hay mas vacantes en el curso {}'.format(self.curso_instance))
+            raise Warning('No hay mas vacantes en el curso {}'.format(self.curso_instance))
 
     @api.one
     def button_curso_confirm(self):
