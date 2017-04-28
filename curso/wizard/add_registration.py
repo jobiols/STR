@@ -42,7 +42,8 @@ class add_registration(models.TransientModel):
 
     source = fields.Selection([
         ('none', 'Sin descuento'),
-        ('groupon', 'Groupon'),
+        ('normal', 'Descuento normal'),
+        ('groupon', 'Descuento groupon'),
     ],
             'Origen', required=True,
             default='none')
@@ -71,5 +72,8 @@ class add_registration(models.TransientModel):
             if rec.source == 'groupon':
                 rec.discount = 73.42
                 rec.disc_desc = 'Descuento groupon'
+            if rec.source == 'normal':
+                rec.discount = 33.333333
+                rec.disc_desc = 'Descuento normal'
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
