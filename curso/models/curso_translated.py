@@ -277,6 +277,10 @@ class curso_curso(models.Model):
             store=True
     )
 
+    register_percent = fields.Float(
+            compute='_get_register'
+    )
+
     is_subscribed = fields.Boolean(
             compute='_subscribe_fnc_',
             string='Subscribed'
@@ -443,6 +447,8 @@ class curso_curso(models.Model):
         self.register_attended = reg_attended
         self.register_prospect = reg_prospect
         self.register_cancel = reg_cancel
+        percent = float(reg_virtual) / float(self.register_max) * 100 if self.register_max != 0 else 0
+        self.register_percent = percent
 
         # the number of vacants is unlimited if the curso.register_max field is not set.
         # In that case we arbitrary set it to 9999, it is used in the

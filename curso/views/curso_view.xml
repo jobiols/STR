@@ -263,6 +263,7 @@
                     <field name="register_avail" string="Vac"/>
                     <field name="register_virtual" string="Vir"/>
                     <field name="register_max" string="Max"/>
+                    <field name="register_percent" string="Lleno" widget="progressbar"/>
                     <field name="main_speaker_id"/>
 <!--                    <field name="secondary_speaker_id"/> -->
                     <field name="error" string="Observaciones"/>
