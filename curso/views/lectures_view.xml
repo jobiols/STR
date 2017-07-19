@@ -52,7 +52,7 @@
                                 <h1>
                                     <center>
                                         <field name="weekday" readonly="1"/>
-                                        <field name="date" readonly="1"/>
+                                        <field name="date" readonly="0"/>
                                     </center>
                                 </h1>
                             </group>

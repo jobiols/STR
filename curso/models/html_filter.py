@@ -74,14 +74,23 @@ class html_filter:
 <table>
 <tbody>
 <tr>
+
+<!--
 <td><a href="makeoverlab.mitiendanube.com"><img src="http://makeoverlab.com.ar/wp-content/uploads/2017/02/social-tienda.png" alt="sitio web" width="26" height="26" />&nbsp;Nuestra tienda virtual</a>&nbsp;</td>
+-->
+
 <td><a href="http://www.makeoverlab.com.ar"><img src="http://makeoverlab.com.ar/wp-content/uploads/2017/02/social-web.png" alt="sitio web" width="26" height="26" />&nbsp;Nuestro Sitio web</a>&nbsp;</td>
 </tr>
 </tbody>
 </table>
+
 <p><br /> <span style="font-family: lucida sans unicode,lucida grande,sans-serif; font-size: 20px; color: #ff0000;"> <strong>Makeover Lab</strong> </span><br /><a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a></p>
-<p>Call center de 11 a 20Hs 11 4902 4652</p>
-<p>Horario de atenci&oacute;n personalizada:<br />Lunes a Viernes de 17 a 20 hs y S&aacute;bado de 11 a 18 hs.<br />Av. Rivadavia 5259 Piso 9&deg; "34", Caballito</p>
+<p>Datos de contacto<br/>
+Av Rivadavia 5512 Piso 1 Local "23" Galeria Comercial Caballito<br/>
+Horario de atencion personalizada<br/>
+Lunes a viernes de 16 a 20Hs Sabados 11 a 18Hs<br/>
+
+<p>Telefono 11 3347 7058</p>
 <p>Consultas y pedidos:<br /><a href="mailto:info@makeoverlab.com.ar">info@makeoverlab.com.ar</a></p>
             """
 
