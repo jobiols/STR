@@ -739,4 +739,4 @@ class curso_curso(models.Model):
         }
 
         invoice = self.env['account.invoice'].create(new_invoice)
-        invoice.invoice_validate()
+#        invoice.invoice_validate()
