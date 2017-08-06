@@ -60,7 +60,16 @@ class html_filter:
 
         # TODO parametrizar esto.
         return u"""
-<p><span style="font-size: 16px;"><a href="http://makeoverlab.com.ar/wp-content/uploads/2017/03/Cat&aacute;logo-precios-mila.pdf">Cat&aacute;logo Mila Marzi / Pro</a><br /><a href="http://makeoverlab.com.ar/wp-content/uploads/2017/03/Cat&aacute;logo-precios-visage.pdf">Cat&aacute;logo Pinceles Visage</a><br /><a href="http://makeoverlab.com.ar/wp-content/uploads/2017/03/Cat&aacute;logo-precios-once.pdf">Cat&aacute;logo Laboratorio Once</a><br /></span></p>
+<p><span style="font-size: 16px;">
+
+<a href="http://makeoverlab.com.ar/wp-content/uploads/2017/07/Reporte-de-Catálogo-de-Productos-Mila.pdf">Cat&aacute;logo Mila Marzi / Pro</a>
+<br />
+
+<a href="http://makeoverlab.com.ar/wp-content/uploads/2017/07/Reporte-de-Catálogo-de-Productos-Visage.pdf">Cat&aacute;logo Pinceles Visage</a>
+<br />
+
+<a href="http://makeoverlab.com.ar/wp-content/uploads/2017/08/Catálogo-de-Productos-de-Farmacia-Once.pdf">Cat&aacute;logo Laboratorio Once</a><br /></span></p>
+
 <table>
 <tbody>
 <tr>
