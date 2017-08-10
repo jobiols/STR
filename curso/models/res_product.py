@@ -124,8 +124,8 @@ class product_product(models.Model):
 
     woo_categ = fields.Many2one(
         'curso.woo.categ',
-        'Categoría de producto',
-        help=u'Categoría de producto'
+        'Categoría Tienda Nube',
+        help=u'Categoría Tienda Nube'
     )
 
     description_short_wc = fields.Char(
@@ -140,6 +140,11 @@ class product_product(models.Model):
 
     nube_id = fields.Integer(
         help=u'Identifica el producto en tienda nube'
+    )
+
+    published = fields.Boolean(
+        'Publicado en tienda nube',
+        help=u'Indica si se publica en tienda nube'
     )
 
     @api.one

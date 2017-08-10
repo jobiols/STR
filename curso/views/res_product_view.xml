@@ -10,9 +10,9 @@
             <field name='type'>form</field>
             <field name='arch' type='xml'>
                 <xpath expr="//div[@class='oe_left']" position="after">
-                    <group colspan="4" col="4">
+                    <group colspan="4" col="4" string="Tienda nube">
                         <field name="woo_categ"/>
-                        <field name="woo_id" readonly="True"/>
+                        <field name="published" />
                     </group>
                 </xpath>
                 <xpath expr="//field[@name='description']" position="after">
