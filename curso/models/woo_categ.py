@@ -31,10 +31,6 @@ class curso_woo_categ(models.Model):
             store=True
     )
 
-    """ esto no se usa mas
-    woo_id = fields.Integer(
-    )
-    """
     nube_id = fields.Integer(
     )
 
