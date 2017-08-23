@@ -115,11 +115,7 @@ class product_product(models.Model):
 
     mercadopago_discount = fields.Float(
         u'Descuento mercadopago',
-        digits=(2,8)
-    )
-
-    woo_id = fields.Char(
-        help=u'Identifica el producto en woo'
+        digits=(2, 8)
     )
 
     woo_categ = fields.Many2one(
@@ -142,6 +138,11 @@ class product_product(models.Model):
         help=u'Identifica el producto en tienda nube'
     )
 
+    """ esto no se usa mas
+    woo_id = fields.Char(
+        help=u'Identifica el producto en woo'
+    )
+    """
     published = fields.Boolean(
         'Publicado en tienda nube',
         help=u'Indica si se publica en tienda nube'

@@ -31,9 +31,10 @@ class curso_woo_categ(models.Model):
             store=True
     )
 
+    """ esto no se usa mas
     woo_id = fields.Integer(
     )
-
+    """
     nube_id = fields.Integer(
     )
 
@@ -73,11 +74,11 @@ class curso_woo_categ(models.Model):
     @api.one
     def get_woo_ids(self):
         ids = []
-        ids.append(self.woo_id)
+        ids.append(self.nube_id)
         if self.parent:
-            ids.append(self.parent.woo_id)
+            ids.append(self.parent.nube_id)
             if self.parent.parent:
-                ids.append(self.parent.parent.woo_id)
+                ids.append(self.parent.parent.nube_id)
         self.woo_ids = ids
 
     @api.one
