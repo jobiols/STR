@@ -62,13 +62,13 @@ class html_filter:
         return u"""
 <p><span style="font-size: 16px;">
 
-<a href="http://makeoverlab.com.ar/wp-content/uploads/2017/07/Reporte-de-Catálogo-de-Productos-Mila.pdf">Cat&aacute;logo Mila Marzi / Pro</a>
+<a href="http://makeoverlab.com.ar/wp-content/uploads/2017/09/Catalogo-de-Productos-Mila.pdf">Cat&aacute;logo Mila Marzi / Pro</a>
 <br />
 
-<a href="http://makeoverlab.com.ar/wp-content/uploads/2017/07/Reporte-de-Catálogo-de-Productos-Visage.pdf">Cat&aacute;logo Pinceles Visage</a>
+<a href="http://makeoverlab.com.ar/wp-content/uploads/2017/09/Catalogo-de-Productos-Visage.pdf">Cat&aacute;logo Pinceles Visage</a>
 <br />
 
-<a href="http://makeoverlab.com.ar/wp-content/uploads/2017/08/Catálogo-de-Productos-de-Farmacia-Once.pdf">Cat&aacute;logo Laboratorio Once</a><br /></span></p>
+<a href="http://makeoverlab.com.ar/wp-content/uploads/2017/09/Catalogo-de-Productos-de-Farmacia-Once.pdf">Cat&aacute;logo Laboratorio Once</a><br /></span></p>
 
 <table>
 <tbody>
