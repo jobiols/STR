@@ -196,7 +196,7 @@ class res_partner(models.Model):
             products.append({
                 'default_code': product.default_code or '',
                 'name': product.name or 'No existe el producto',
-                'list_price': product.list_price}
+                'list_price': product.public_price}
             )
 
         html = html_filter.html_filter()
@@ -236,7 +236,7 @@ class res_partner(models.Model):
         """
         self.ensure_one()
         ret = False
-        print '2) check changed info --------------------------------------------------'
+        #print '2) check changed info --------------------------------------------------'
 
         # si no hay info que mandarle devuelvo false
         if not recover_ids:
