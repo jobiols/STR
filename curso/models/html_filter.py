@@ -83,7 +83,7 @@ class html_filter:
 <table>
 <tbody>
     <tr>
-        <td><a href="https://makeoverlab.mitiendanube.com/">
+        <td><a href="https://makeoverlab.mitiendanube.com.ar/">
                 <img src="http://makeoverlab.com.ar/wp-content/uploads/2017/02/social-tienda.png" alt="sitio web" width="26" height="26" />
                 &nbsp;Nuestra tienda virtual
             </a>
