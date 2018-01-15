@@ -17,8 +17,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ########################################################################333###
 {
-    'name': 'Makeover Lab',
-    'version': '8.0.1.0.0',
+    'name': 'Makeover',
+    'version': '8.0.1.0',
     'category': 'Tools',
     'summary': 'Customización Makeover Lab',
     'description': """
@@ -49,6 +49,19 @@ Customización Makeover Lab
     'application': True,
     'auto_install': False,
     'images': [],
+
+    'repos': [
+        {'usr': 'jobiols', 'repo': 'jeo', 'branch': '8.0'},
+        {'usr': 'jobiols', 'repo': 'cursos', 'branch': '8.0'},
+    ],
+    'docker': [
+        {'name': 'aeroo', 'usr': 'jobiols', 'img': 'aeroo-docs'},
+        {'name': 'odoo', 'usr': 'jobiols', 'img': 'odoo-jeo', 'ver': '8.0'},
+        {'name': 'postgres', 'usr': 'postgres', 'ver': '9.5'},
+        {'name': 'backup', 'usr': 'jobiols', 'img': 'backup'},
+    ],
+
+    'port': '8068'
+
 }
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 
