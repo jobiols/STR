@@ -53,6 +53,8 @@ Customización Makeover Lab
     'repos': [
         {'usr': 'jobiols', 'repo': 'jeo', 'branch': '8.0'},
         {'usr': 'jobiols', 'repo': 'cursos', 'branch': '8.0'},
+        {'usr': 'jobiols', 'repo': 'odoomrp-wip', 'branch': '8.0'},
+
     ],
     'docker': [
         {'name': 'aeroo', 'usr': 'jobiols', 'img': 'aeroo-docs'},
