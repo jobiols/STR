@@ -18,7 +18,7 @@
 ########################################################################333###
 {
     'name': 'Makeover',
-    'version': '8.0.1.0',
+    'version': '8.0.1.1.0',
     'category': 'Tools',
     'summary': 'Customización Makeover Lab',
     'description': """
@@ -30,6 +30,7 @@ Customización Makeover Lab
 """,
     'author': 'jeo software',
     'depends': [
+        'base',
         'sale_order_recalculate_prices',
         'web_widget_text_markdown',
         'account_clean_cancelled_invoice_number',
@@ -37,7 +38,6 @@ Customización Makeover Lab
         'purchase',
         'curso',
         'product',
-        'base'
     ],
     'data': [
         'views/partner_view.xml',

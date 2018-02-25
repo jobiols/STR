@@ -35,6 +35,3 @@ from . import registration_translated
 from . import res_product
 from . import html_filter
 from . import assistance
-from . import woo_categ
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
