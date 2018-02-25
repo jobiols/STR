@@ -32,7 +32,6 @@
                 'l10n_ar_invoice',
                 'document_page',
                 'web_widget_text_markdown',
-                'nube_connection',
                 ],
     'data': [
         'security/curso_security.xml',

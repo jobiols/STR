@@ -38,6 +38,7 @@ Customización Makeover Lab
         'purchase',
         'curso',
         'product',
+        'nube_connection',
     ],
     'data': [
         'views/partner_view.xml',
