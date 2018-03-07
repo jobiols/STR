@@ -118,57 +118,10 @@ class product_product(models.Model):
         digits=(2, 8)
     )
 
-    woo_categ = fields.Many2one(
-        'curso.woo.categ',
-        'Categoría Tienda Nube',
-        help=u'Categoría Tienda Nube'
-    )
-
-    description_short_wc = fields.Char(
-        compute="_compute_short_wc",
-        store="True"
-    )
-
     comercial_data = fields.Char(
         'datos comerciales',
         help=u"Información que aparece en el sitio y en los mails",
     )
-
-    nube_id = fields.Integer(
-        help=u'Identifica el producto en tienda nube'
-    )
-
-    """ esto no se usa mas
-    woo_id = fields.Char(
-        help=u'Identifica el producto en woo'
-    )
-    """
-    published = fields.Boolean(
-        'Publicado en tienda nube',
-        help=u'Indica si se publica en tienda nube'
-    )
-
-    @api.one
-    @api.depends('description')
-    def _compute_short_wc(self):
-        if self.description:
-            ix = self.description.find('<mas>')
-            if ix == -1:
-                # no existe el simbolo <mas>
-                if len(self.description) < 400:
-                    self.description_short_wc = \
-                        u'OK Total {} caracteres.'.format(len(self.description))
-                else:
-                    self.description_short_wc = \
-                        u'Debe incluir el simbolo <mas> para reducir la cantidad de caracteres!!'
-            else:
-                # existe el simbolo <mas>
-                if ix < 400:
-                    self.description_short_wc = \
-                        u'OK Total {} caracteres antes del símbolo <mas>'.format(ix)
-                else:
-                    self.description_short_wc = \
-                        u'Total {} DEMASIADOS CARACTERES ANTES DE <mas> max 400'.format(ix)
 
     @api.one
     @api.depends('lst_price', 'standard_price')

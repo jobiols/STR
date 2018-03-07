@@ -15,9 +15,6 @@
                         <field name="published" />
                     </group>
                 </xpath>
-                <xpath expr="//field[@name='description']" position="after">
-                    <field name="description_short_wc" readonly="True"/>
-                </xpath>
                 <notebook position="inside">
                     <page string="Cursos" attrs="{'invisible': [('type', '!=', 'curso')]}">
                         <group name="Cursos" string="Características del curso">
