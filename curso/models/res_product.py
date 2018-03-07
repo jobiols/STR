@@ -114,8 +114,8 @@ class product_product(models.Model):
     )
 
     mercadopago_discount = fields.Float(
-        u'Descuento mercadopago',
-        digits=(2, 8)
+        u'Valor con descuento',
+        digits=(6, 2)
     )
 
     comercial_data = fields.Char(
