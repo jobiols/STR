@@ -272,6 +272,7 @@ class product_product(models.Model):
             # Crear el documento
             docs.create(new_page)
 
+    @staticmethod
     def find_schedule(self, list, data):
         for l in list:
             if l['horario'] == data:
@@ -280,8 +281,9 @@ class product_product(models.Model):
 
     def _get_formatted_diary(self, curso_id):
         """
-        Devuelve una lista con las lineas del diario agrupadas por horario y ordenadas por dia.
-        Si un horario se repite en varios dias pone coma entres los dias.
+        Devuelve una lista con las lineas del diario agrupadas por horario y
+        ordenadas por dia. Si un horario se repite en varios dias pone coma
+        entres los dias.
         """
         formatted_diary = []
         diary = []
@@ -316,4 +318,3 @@ class product_product(models.Model):
 
         return formatted_diary
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
