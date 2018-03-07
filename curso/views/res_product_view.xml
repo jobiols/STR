@@ -9,6 +9,12 @@
             <field name='inherit_id' ref='product.product_normal_form_view'/>
             <field name='type'>form</field>
             <field name='arch' type='xml'>
+                <xpath expr="//div[@class='oe_left']" position="after">
+                    <group colspan="4" col="4" string="Tienda nube">
+                        <field name="woo_categ"/>
+                        <field name="published" />
+                    </group>
+                </xpath>
                 <notebook position="inside">
                     <page string="Cursos" attrs="{'invisible': [('type', '!=', 'curso')]}">
                         <group name="Cursos" string="Características del curso">

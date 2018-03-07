@@ -102,7 +102,7 @@ class html_filter:
 <p>Datos de contacto<br/>
 Av Rivadavia 5512 Piso 1 Local "23" Galeria Comercial Caballito<br/>
 Horario de atencion personalizada<br/>
-Lunes a viernes de 16 a 20Hs Sabados 11 a 18Hs<br/>
+Martes a viernes de 17 a 20Hs Sabados 11 a 18Hs<br/>
 
 <p>Telefono 11 3347 7058</p>
 <p>Consultas y pedidos:<br /><a href="mailto:info@makeoverlab.com.ar">info@makeoverlab.com.ar</a></p>
