@@ -62,14 +62,6 @@ class html_filter:
         return u"""
 <p><span style="font-size: 16px;">
 
-<a href="http://makeoverlab.com.ar/catalogos/catalogo-mila-publico.pdf">Cat&aacute;logo Mila Marzi / Pro</a>
-<br />
-
-<a href="http://makeoverlab.com.ar/catalogos/catalogo-visage.pdf">Cat&aacute;logo Pinceles Visage</a>
-<br />
-
-<a href="http://makeoverlab.com.ar/catalogos/catalogo-once-publico.pdf">Cat&aacute;logo Laboratorio Once</a><br /></span></p>
-
 <table>
 <tbody>
 <tr>
