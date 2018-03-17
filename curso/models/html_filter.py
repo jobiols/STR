@@ -85,13 +85,13 @@ class html_filter:
     <tr>
         <td><a href="https://makeoverlab.mitiendanube.com/">
                 <img src="http://makeoverlab.com.ar/wp-content/uploads/2017/02/social-tienda.png" alt="sitio web" width="26" height="26" />
-                &nbsp;Nuestra tienda virtual
+                &nbsp;Tienda virtual &nbsp;
             </a>
         </td>
         <td>
             <a href="http://www.makeoverlab.com.ar">
                 <img src="http://makeoverlab.com.ar/wp-content/uploads/2017/02/social-web.png" alt="sitio web" width="26" height="26" />
-                &nbsp;Nuestro Sitio web
+                &nbsp;Sitio web
             </a>
         </td>
     </tr>
