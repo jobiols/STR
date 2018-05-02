@@ -65,8 +65,8 @@ class add_recover(models.TransientModel):
             Salvo que tendrá tildada la casilla Recuperatorio. La clase original
             que estaba en estado absent se pasa a estado to_recover
 
-            Se genera una factura por $100 para el cobro de la clase de recuperatorio.
-            La proxima vez que se abra esta vista se verá la leyenda "Nos debe $100"
+            Se genera una factura por $130 para el cobro de la clase de recuperatorio.
+            La proxima vez que se abra esta vista se verá la leyenda "Nos debe $130"
         """
 
         #  obtener el id de la alumna que viene en el contexto
@@ -77,9 +77,8 @@ class add_recover(models.TransientModel):
 
         # generar la factura
         self.lecture_id.curso_id.do_invoice(
-                100,
+                130,
                 self.lecture_id.curso_id.curso_instance,
                 self.lecture_id.seq,
                 partner_id)
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
