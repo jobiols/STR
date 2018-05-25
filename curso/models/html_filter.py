@@ -25,7 +25,7 @@ class html_filter:
     """
 
     # -----------------------------------------------------------------------------------------
-    def default_header(self, data):
+    def default_header(self, data, email=False):
         """ Header de la pagina de información de curso
         """
 
@@ -44,13 +44,13 @@ class html_filter:
         # título del curso
         ret += u"""
 <br/>
-<h2>{} <a href="{}" style="font-size: 13px;" >Conocer más</a> </h2>
-        """.format(data.get('name'), data.get('product_url'))
-
+"""
         # Descripción del curso
-        ret += '<div style="max-width: 440px;">'
-        ret += u'{}'.format(data.get('description'))
-        ret += '</div>'
+        if not email:
+            ret += '<div style="max-width: 440px;">'
+            ret += u'{}'.format(data.get('description'))
+            ret += '</div>'
+
         return ret
 
     # -----------------------------------------------------------------------------------------
@@ -132,15 +132,15 @@ Martes a viernes de 17 a 20Hs Sabados 11 a 18Hs<br/>
         </tr>
     </tbody>
 </table>
-<br/>
-
 
             """
         if price:
             if not discount:
                 ret += """
+<div align="center">
 <h2>Valor del curso ${} {} &nbsp;&nbsp; <br/>
 <a href="{}">Pagar ahora con Mercadopago</a></h2>
+</div>
                     """.format(data.get('curso_price'),
                                data.get('curso_price_per'),
                                data.get('mercadopago_button'))
@@ -149,12 +149,15 @@ Martes a viernes de 17 a 20Hs Sabados 11 a 18Hs<br/>
                 discount = data.get('mercadopago_discount')
                 new_price = discount
                 ret += """
-<h2>Valor del curso <s>${}</s>&nbsp; <span style="color:#FF0000;">Ahora ${}</span>&nbsp; <br/>
-<a href="{}">Pagar con Mercadopago</a></h2>
-                    """.format(old_price, new_price, data.get('mercadopago_button_discount'))
+<div align="center">
+<h2>Megaoferta <span style="color:#FF0000;">Ahora ${}</span>&nbsp; <s>${}</s>&nbsp; <br/>
+<a href="{}">Comprá con Mercadopago</a></h2>
+</div>
+                    """.format(new_price, old_price,  data.get('mercadopago_button_discount'))
         # para página web donde no entran dos columnas
         else:
             ret += u"""
+
 <table style="width: 550px;">
     <tbody>
         <tr>
@@ -176,9 +179,11 @@ Martes a viernes de 17 a 20Hs Sabados 11 a 18Hs<br/>
             """
         ret += u"""
 <br />
+<div align="center">
 <img src="http://makeoverlab.com.ar/wp-content/uploads/2016/10/mercadopago.png"
-alt="Mercadopago"
-width="394" height="200" />
+    alt="Mercadopago"
+    width="300" height="152" />
+</div>
             """
         return ret
 
@@ -248,7 +253,7 @@ width="394" height="200" />
                            data.get('mode'),
                            instance.get('vacancy'),
                            )
-        ret += u'<br/>'
+#        ret += u'<br/>'
         return ret
 
     # -----------------------------------------------------------------------------------------

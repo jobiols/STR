@@ -1,37 +1,30 @@
-<p>Hola ${object.first_name}</p>
+<p>Hola ${object.first_name} <br> Como estás?</p>
 
-<p>Aqui está la información que solicitaste, apurate a reservar tu vacante!</p>
-
-${object.info_curso_html('G01') | safe}
-
-<br/><br/>
-
-<table border="0" cellpadding="1" cellspacing="1"
-	   style="color: rgb(76, 76, 76); font-family: 'Lucida Grande', Helvetica, Verdana, Arial, sans-serif;
-	   font-size: 13px; width: 520px;">
-	<tbody>
-		<tr>
-			<td style="text-align: center;">
-			<h3>Se entrega certificado digital</h3>
-			</td>
-			<td style="text-align: center;">
-			<h3>Materiales incluídos.</h3>
-			</td>
-		</tr>
-		<tr>
-			<td style="text-align: left;"><img alt="Diploma Makeover" src="http://makeoverlab.com.ar/wp-content/uploads/2015/09/diplomas_final_curvas-e1469584463484.jpg"
-												 style="width: 260px; height: 172px;"></td>
-			<td style="text-align: right;"><img alt="Materiales para el curso" src="http://makeoverlab.com.ar/wp-content/uploads/2016/07/exhibit-e1469584084626.jpg"
-												 style="width: 260px; height: 172px;"></td>
-		</tr>
-		<tr>
-			<td colspan="2" style="text-align: center;"><br>
-			<br>
-			<img alt="" src="http://makeoverlab.com.ar/wp-content/uploads/2015/09/unnamed-2.jpg" style="width: 600px; height: 168px;"></td>
-		</tr>
-	</tbody>
-</table>
+<div align="center">
+    <img alt="megaoferta clases de automaquillaje de makeover"
+         src="http://makeoverlab.com.ar/wp-content/uploads/2018/05/automaquillaje-mayo18.jpg"
+         style="width: 398px; height: 421px;">
+</div>
 
 <br/>
+<div style="max-width:398px; margin:auto;">
+    <h2 style="box-sizing: border-box; margin: 0px 0px 4px;
+        text-align: justify; ">¿Cómo te inscribís?</h2>
 
-${object.get_mail_footer_html() | safe}
+    <ul style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; text-align: justify;">
+        <li style="box-sizing: border-box;">Elegí el día para cursar.. contanos la fecha
+            y horario del curso que seleccionaste.</li>
+        <li style="box-sizing: border-box;">Envianos tus datos (Nombre y apellido,
+            DNI., casilla de mail, celular de contacto, fecha de nacimiento).</li>
+        <li style="box-sizing: border-box;">Adjuntá el comprobante de pago que acredita
+            la reserva de tu vacante.</li>
+    </ul>
+</div>
+
+<p>${object.info_curso_html('G01',discount=True) | safe}&nbsp;</p>
+
+<br>
+
+<div align="center">
+    ${object.get_mail_footer_html() | safe}
+</div>

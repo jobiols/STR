@@ -105,16 +105,16 @@ class res_partner(models.Model):
         self.c_incomplete = ' '.join(incomplete)
 
     @api.model
-    def info_curso_html(self, default_code, price=True, discount=False):
-        """ Genera página html con la información del curso y si price = True le agrega
-            el precio y el boton de pago.
+    def info_curso_html(self, default_code, price=True, discount=False, email=False):
+        """ Genera página html con la información del curso y si price = True
+            le agrega el precio y el boton de pago.
         """
         producto = self.env['product.product'].search(
                 [('default_code', '=', default_code)])
         data = producto.info_curso_html_data() or {}
         html = html_filter.html_filter()
 
-        ret = html.default_header(data)
+        ret = html.default_header(data, email)
         ret += html.info_curso(data, price=price, discount=discount)
         ret += html.inicios_curso(data)
         return ret
