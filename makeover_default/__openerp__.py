@@ -46,7 +46,8 @@
     'images': [],
 
     'repos': [
-        {'usr': 'jobiols', 'repo': 'jeo', 'branch': '8.0'},
+#        {'usr': 'jobiols', 'repo': 'jeo', 'branch': '8.0'},
+        {'usr': 'jobiols', 'repo': 'odoo-addons', 'branch': '8.0'},
         {'usr': 'jobiols', 'repo': 'cursos', 'branch': '8.0'},
         {'usr': 'jobiols', 'repo': 'odoomrp-wip', 'branch': '8.0'},
 
@@ -55,7 +56,6 @@
         {'name': 'aeroo', 'usr': 'jobiols', 'img': 'aeroo-docs'},
         {'name': 'odoo', 'usr': 'jobiols', 'img': 'odoo-jeo', 'ver': '8.0'},
         {'name': 'postgres', 'usr': 'postgres', 'ver': '9.5'},
-        {'name': 'backup', 'usr': 'jobiols', 'img': 'backup'},
         {'name': 'nginx', 'usr': 'nginx', 'ver': 'latest'},
     ],
 
