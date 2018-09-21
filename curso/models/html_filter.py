@@ -92,7 +92,7 @@ class html_filter:
 
 <p><br /> <span style="font-family: lucida sans unicode,lucida grande,sans-serif; font-size: 20px; color: #ff0000;"> <strong>Makeover Lab</strong> </span><br /><a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a></p>
 <p>Datos de contacto<br/>
-Av Rivadavia 5512 Piso 1 Local "23" Galeria Comercial Caballito<br/>
+Av. La Plata 35 / 39 Local 20 Galeria Alefa (Frente a Cinemark)<br/>
 Horario de atencion personalizada<br/>
 Martes a viernes de 17 a 20Hs Sabados 11 a 18Hs<br/>
 
