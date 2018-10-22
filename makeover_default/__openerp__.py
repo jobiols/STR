@@ -46,7 +46,6 @@
     'images': [],
 
     'repos': [
-#        {'usr': 'jobiols', 'repo': 'jeo', 'branch': '8.0'},
         {'usr': 'jobiols', 'repo': 'odoo-addons', 'branch': '8.0'},
         {'usr': 'jobiols', 'repo': 'cursos', 'branch': '8.0'},
         {'usr': 'jobiols', 'repo': 'odoomrp-wip', 'branch': '8.0'},

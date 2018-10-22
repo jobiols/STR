@@ -150,8 +150,8 @@ Martes a viernes de 17 a 20Hs Sabados 11 a 18Hs<br/>
                 new_price = discount
                 ret += """
 <div align="center">
-<h2>Megaoferta <span style="color:#FF0000;">Ahora ${}</span>&nbsp; <s>${}</s>&nbsp; <br/>
-<a href="{}">Comprá con Mercadopago</a></h2>
+<h2>Megaoferta <span style="color:#FF0000;">Ahora ${}</span>&nbsp; <s>${}</s>&nbsp; <br/><br/>
+<a href="{}">Comprá online en nuestra tienda!!</a></h2>
 </div>
                     """.format(new_price, old_price,  data.get('mercadopago_button_discount'))
         # para página web donde no entran dos columnas
