@@ -37,9 +37,6 @@ install:
   # upgrade pip from 6.0.7
   - pip install --upgrade pip
 
-  # aeroo reports
-  - pip install git+https://github.com/aeroo/aeroolib.git@master pycups==1.9.68
-
   # repository requirements
   - pip install -r requirements.txt
 
