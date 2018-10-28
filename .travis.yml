@@ -13,16 +13,16 @@ addons:
     packages:
       - expect-dev  # provides unbuffer utility
       - python-lxml  # because pip installation is slow
-      - python-simplejson
-      - python-serial
-      - python-yaml
-      - libcups2-dev # for aeroo
-      - python-dev
-      - swig
-      - libffi-dev
-      - libssl-dev
-      - python-m2crypto
-      - python-httplib2
+#      - python-simplejson
+#      - python-serial
+#      - python-yaml
+#      - libcups2-dev # for aeroo
+#      - python-dev
+#      - swig
+#      - libffi-dev
+#      - libssl-dev
+#      - python-m2crypto
+#      - python-httplib2
 
 env:
   global:
@@ -34,8 +34,7 @@ virtualenv:
   system_site_packages: true
 
 install:
-  # upgrade pip from 6.0.7
-  - pip install --upgrade pip
+#  - pip install --upgrade pip
 
   # repository requirements
   - pip install -r requirements.txt
@@ -45,13 +44,13 @@ install:
   - cd ${HOME}/python-markdown && python setup.py install
 
   # Generate locale (es_AR for right odoo es_AR language config, and C.UTF-8 for postgres and general locale data)
-  - sudo apt-get install -y locales -qq
+#  - sudo apt-get install -y locales -qq
 #  - sudo echo 'es_AR.UTF-8 UTF-8' >> /etc/locale.gen
 #  - sudo echo 'es_US.UTF-8 UTF-8' >> /etc/locale.gen
 #  - sudo echo 'C.UTF-8 UTF-8' >> /etc/locale.gen
-  - sudo locale-gen es_AR.UTF-8
-  - sudo dpkg-reconfigure locales
-  - sudo /usr/sbin/update-locale LANG=es_AR.UTF-8 LC_MESSAGES=POSIX
+#  - sudo locale-gen es_AR.UTF-8
+#  - sudo dpkg-reconfigure locales
+#  - sudo /usr/sbin/update-locale LANG=es_AR.UTF-8 LC_MESSAGES=POSIX
 
   - git clone https://github.com/OCA/maintainer-quality-tools.git $HOME/maintainer-quality-tools
   - export PATH=$HOME/maintainer-quality-tools/travis:$PATH
