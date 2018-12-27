@@ -92,12 +92,13 @@ class html_filter:
 
 <p><br /> <span style="font-family: lucida sans unicode,lucida grande,sans-serif; font-size: 20px; color: #ff0000;"> <strong>Makeover Lab</strong> </span><br /><a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a></p>
 <p>Datos de contacto<br/>
-Av. La Plata 35 / 39 Local 20 Galeria Alefa (Frente a Cinemark)<br/>
+Av. La Plata 35 / 39 Local 20 Galeria Alefa (En diagonal al Cinemark)<br/>
 Horario de atencion personalizada<br/>
-Martes a viernes de 17 a 20Hs Sabados 11 a 18Hs<br/>
+Lunes a viernes de 10:30 a 13:00 y de 15:30 a 20Hs Sabados 11 a 19Hs<br/>
 
 <p>Telefono 11 3347 7058</p>
-<p>Consultas y pedidos:<br /><a href="mailto:info@makeoverlab.com.ar">info@makeoverlab.com.ar</a></p>
+<p>Consultas y pedidos:<br />
+<a href="mailto:info@makeoverlab.com.ar">info@makeoverlab.com.ar</a></p>
             """
 
     # -----------------------------------------------------------------------------------------
