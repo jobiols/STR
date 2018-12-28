@@ -105,7 +105,7 @@ class res_partner(models.Model):
         self.c_incomplete = ' '.join(incomplete)
 
     @api.model
-    def info_curso_html(self, default_code, price=True, discount=False, email=False):
+    def info_curso_html(self, default_code, price=True, discount=True, email=False):
         """ Genera página html con la información del curso y si price = True
             le agrega el precio y el boton de pago.
         """
