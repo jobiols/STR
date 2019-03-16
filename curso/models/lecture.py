@@ -222,4 +222,31 @@ class curso_lecture(models.Model):
                 if not contains(presents, atendee):
                     rec.assistance_id.add_atendee(atendee.partner_id, rec)
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    @api.model
+    def fix_lecture(self):
+        date_format = '%Y-%m-%d'
+        datetime_format = '%Y-%m-%d %H:%M:%S'
+        curso_lecture_obj = self.env['curso.lecture'].search([])
+        for lecture in curso_lecture_obj:
+            date = lecture.date
+            date_start = lecture.date_start
+            date_stop = lecture.date_stop
+
+            dt = datetime.strptime(date, date_format)
+            dt_start = datetime.strptime(date_start, datetime_format)
+            dt_stop = datetime.strptime(date_stop, datetime_format)
+
+            lecture.date_start = datetime(
+                year=dt.year,
+                month=dt.month,
+                day=dt.day,
+                hour=dt_start.hour,
+                minute=dt_start.minute).strftime(datetime_format)
+
+            lecture.date_stop = datetime(
+                year=dt.year,
+                month=dt.month,
+                day=dt.day,
+                hour=dt_stop.hour,
+                minute=dt_stop.minute).strftime(datetime_format)
+
