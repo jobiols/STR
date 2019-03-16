@@ -40,7 +40,7 @@ install:
   - pip install -r requirements.txt
 
   # Markdown package
-  - git clone --depth 1 https://github.com/jobiols/Python-Markdown.git ${HOME}/python-markdown
+  - git clone --depth 1 https://github.com/Python-Markdown/markdown.git ${HOME}/python-markdown
   - cd ${HOME}/python-markdown && python setup.py install
 
   # Generate locale (es_AR for right odoo es_AR language config, and C.UTF-8 for postgres and general locale data)
