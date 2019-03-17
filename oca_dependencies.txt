@@ -1,4 +1,4 @@
-adhoc-account-payment https://github.com/jobiols/adhoc-account-payment.git  8.0
+#adhoc-account-payment https://github.com/jobiols/adhoc-account-payment.git  8.0
 
 #adhoc-odoo-argentina https://github.com/jobiols/adhoc-odoo-argentina.git  8.0
 
