@@ -1,6 +1,8 @@
-adhoc-odoo-argentina https://github.com/jobiols/adhoc-odoo-argentina.git  8.0
+adhoc-account-payment https://github.com/jobiols/adhoc-account-payment.git  8.0
 
-#adhoc-account-payment https://github.com/jobiols/adhoc-account-payment.git  8.0
+#adhoc-odoo-argentina https://github.com/jobiols/adhoc-odoo-argentina.git  8.0
+
+
 #adhoc-reporting-engine https://github.com/jobiols/adhoc-reporting-engine.git  8.0
 #adhoc-account-financial-tools https://github.com/jobiols/adhoc-account-financial-tools.git  8.0
 #adhoc-product https://github.com/jobiols/adhoc-product.git  8.0
