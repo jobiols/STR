@@ -92,7 +92,7 @@ class html_filter:
 
 <p><br /> <span style="font-family: lucida sans unicode,lucida grande,sans-serif; font-size: 20px; color: #ff0000;"> <strong>Makeover Lab</strong> </span><br /><a href="http://www.makeoverlab.com.ar">www.makeoverlab.com.ar</a></p>
 <p>Datos de contacto<br/>
-AAv. Rivadavia 4963 Local 8 Galeria Rivadavia<br/>
+Av. Rivadavia 4963 Local 8 Galeria Rivadavia<br/>
 Horario de atencion<br/>
 Lunes a sábados de 11 a 20 hs.<br/>
 
