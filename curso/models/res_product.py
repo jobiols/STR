@@ -139,15 +139,14 @@ class product_product(models.Model):
             self.env.cr, self.env.uid, [pro_pricelist_id], self.id, 1.0,
             context=None)[pro_pricelist_id]
 
-    @api.one
-    @api.constrains('default_code', 'type')
-    def _curso_unique_default_code(self):
-        if self.type == 'curso':
-            recordset = self.search([('default_code', '=', self.default_code)])
+    @api.constrains('default_code')
+    def _unique_default_code(self):
+        for rec in self:
+            recordset = self.search([('default_code', '=', rec.default_code)])
             if len(recordset) > 1:
                 raise ValidationError(
-                    'El curso {} {} ya está ingresado'.format(self.default_code,
-                                                              self.name))
+                    'El producto %s %s ya está ingresado' % (rec.default_code,
+                                                             rec.name))
 
     @api.one
     def button_generate_lecture_templates(self):
@@ -190,7 +189,8 @@ class product_product(models.Model):
         if self.mercadopago_button:
             data['mercadopago_button'] = self.mercadopago_button
         if self.mercadopago_button_discount:
-            data['mercadopago_button_discount'] = self.mercadopago_button_discount
+            data[
+                'mercadopago_button_discount'] = self.mercadopago_button_discount
         if self.mercadopago_discount:
             data['mercadopago_discount'] = self.mercadopago_discount
 
@@ -301,7 +301,8 @@ class product_product(models.Model):
         # recorrer diary agrupando por schedule
         for diary_line in diary:
             # obtengo una referencia a la linea
-            fd_line = self.find_schedule(formatted_diary, diary_line['schedule'])
+            fd_line = self.find_schedule(formatted_diary,
+                                         diary_line['schedule'])
             if fd_line:
                 # si existe el horario le agrego el día a la lista de dias
                 fd_line['list_dias'].append(diary_line['weekday_name'])
@@ -317,4 +318,3 @@ class product_product(models.Model):
             fdl['dias'] = ', '.join(fdl['list_dias'])
 
         return formatted_diary
-
