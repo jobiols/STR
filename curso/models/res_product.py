@@ -142,11 +142,13 @@ class product_product(models.Model):
     @api.constrains('default_code')
     def _unique_default_code(self):
         for rec in self:
-            recordset = self.search([('default_code', '=', rec.default_code)])
-            if len(recordset) > 1:
-                raise ValidationError(
-                    'El producto %s %s ya está ingresado' % (rec.default_code,
-                                                             rec.name))
+            if rec.default_code:
+                recordset = self.search(
+                    [('default_code', '=', rec.default_code)])
+                if len(recordset) > 1:
+                    raise ValidationError(
+                        'El producto %s %s ya está ingresado' %
+                        (rec.default_code, rec.name))
 
     @api.one
     def button_generate_lecture_templates(self):
