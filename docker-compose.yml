@@ -1,0 +1,57 @@
+# Compose file odoo makeover
+# Version 2020-01-07
+
+version: '3.5'
+
+services:
+  aeroo:
+    image: jobiols/aeroo-docs
+    container_name: aeroo
+    restart: unless-stopped
+
+  pg-makeover:
+    image: postgres:9.5
+    container_name: pg-makeover
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+    volumes:
+      - /odoo_ar/odoo-8.0/makeover/postgresql/:/var/lib/postgresql/data
+
+  makeover:
+    image: jobiols/odoo-jeo:8.0
+    container_name: makeover
+    restart: unless-stopped
+    volumes:
+      - /odoo_ar/odoo-8.0/makeover/config:/opt/odoo/etc/
+      - /odoo_ar/odoo-8.0/makeover/data_dir:/opt/odoo/data
+      - /odoo_ar/odoo-8.0/makeover/log:/var/log/odoo
+      - /odoo_ar/odoo-8.0/makeover/sources:/opt/odoo/custom-addons
+      - /odoo_ar/odoo-8.0/makeover/backup_dir:/var/odoo/backups/
+    links:
+      - pg-makeover:db
+      - aeroo:aeroo
+    environment:
+      - SERVER_MODE=
+      - ODOO_CONF=/dev/null
+
+#  nginx-proxy:
+#    image: jwilder/nginx-proxy
+#    restart: unless-stopped
+#    ports:
+#      - "80:80"
+#    volumes:
+#      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - /odoo_ar/nginx/conf/:/etc/nginx/conf.d:ro
+      - /odoo_ar/nginx/log:/var/log/nginx/
+    links:
+      - makeover
