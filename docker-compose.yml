@@ -36,22 +36,43 @@ services:
       - SERVER_MODE=
       - ODOO_CONF=/dev/null
 
-#  nginx-proxy:
-#    image: jwilder/nginx-proxy
-#    restart: unless-stopped
-#    ports:
-#      - "80:80"
-#    volumes:
-#      - /var/run/docker.sock:/tmp/docker.sock:ro
-
   nginx:
     image: nginx:latest
     container_name: nginx
     restart: unless-stopped
-    ports:
-      - "80:80"
+    expose:
+      - "80"
     volumes:
       - /odoo_ar/nginx/conf/:/etc/nginx/conf.d:ro
       - /odoo_ar/nginx/log:/var/log/nginx/
     links:
       - makeover
+    environment:
+      - VIRTUAL_HOST=localhost
+      - LETSENCRYPT_HOST=localhost
+      - LETSENCRYPT_EMAIL=jorge.obiols@gmail.com
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /odoo_ar/nginx/cert:/etc/nginx/certs:ro
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: companion
+    restart: unless-stopped
+    voulmes:
+      - /odoo_ar/nginx/cert:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/docker.sock:ro
+    volumes_from:
+      - nginx-proxy:rw
