@@ -7,12 +7,12 @@ services:
   aeroo:
     image: jobiols/aeroo-docs
     container_name: aeroo
-    restart: unless-stopped
+    restart: always
 
   pg-makeover:
     image: postgres:9.5
     container_name: pg-makeover
-    restart: unless-stopped
+    restart: always
     environment:
       - POSTGRES_USER=odoo
       - POSTGRES_PASSWORD=odoo
@@ -22,7 +22,7 @@ services:
   makeover:
     image: jobiols/odoo-jeo:8.0
     container_name: makeover
-    restart: unless-stopped
+    restart: always
     volumes:
       - /odoo_ar/odoo-8.0/makeover/config:/opt/odoo/etc/
       - /odoo_ar/odoo-8.0/makeover/data_dir:/opt/odoo/data
@@ -39,7 +39,7 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx
-    restart: unless-stopped
+    restart: always
     expose:
       - "80"
     volumes:
@@ -55,7 +55,7 @@ services:
   nginx-proxy:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
-    restart: unless-stopped
+    restart: always
     ports:
       - "80:80"
       - "443:443"
@@ -70,7 +70,7 @@ services:
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: companion
-    restart: unless-stopped
+    restart: always
     voulmes:
       - /odoo_ar/nginx/cert:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/docker.sock:ro
