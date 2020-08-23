@@ -99,4 +99,4 @@ services:
 
   aeroo:
     image: jobiols/aeroo-docs
-    container_name: odoo
+    container_name: aeroo
