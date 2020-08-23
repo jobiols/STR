@@ -1,0 +1,23 @@
+# Configuracion para RCLONE
+# https://github.com/Mumie-hub/
+#
+#
+version: '2'
+services:
+  mount-rclone01:
+    image: mumiehub/rclone-mount
+    cap_add:
+    - SYS_ADMIN
+    devices:
+    - /dev/fuse
+    security_opt:
+    - apparmor:unconfined
+    stdin_open: true
+    tty: true
+    volumes:
+    - /root/.config/rclone:/config
+    - /mnt/gdrive:/mnt/mediaefs:shared
+    environment:
+      ConfigName: rclone.conf
+      RemotePath: 'mediaefs:'
+      MountCommands: --allow-other --uid 1000 --gid 1000 --umask 022 --default-permissions --allow-non-empty --dir-cache-time 168h --poll-interval 5m --buffer-size 128M

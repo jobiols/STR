@@ -1,0 +1,103 @@
+# Compose file for Makeover
+# Version 2020-07-17
+
+version: '3.5'
+
+services:
+
+  postgres:
+    image: postgres:9.5
+    container_name: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+    volumes:
+      - /odoo_ar/odoo-8.0/makeover/postgresql:/var/lib/postgresql/data
+
+  odoo:
+    image: jobiols/odoo-jeo:8.0
+    container_name: makeover
+    restart: always
+    volumes:
+      - /odoo_ar/odoo-8.0/makeover/config:/opt/odoo/etc/
+      - /odoo_ar/odoo-8.0/makeover/data_dir:/opt/odoo/data
+      - /odoo_ar/odoo-8.0/makeover/log:/var/log/odoo
+      - /odoo_ar/odoo-8.0/makeover/sources:/opt/odoo/custom-addons
+      - /odoo_ar/odoo-8.0/makeover/backup_dir:/var/odoo/backups/
+    links:
+      - postgres:db
+    environment:
+      - ODOO_CONF=/dev/null
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    expose:
+      - "80"
+    volumes:
+      - /odoo_ar/nginx/conf1/:/etc/nginx/conf.d:ro
+      - /odoo_ar/nginx/log:/var/log/nginx/
+    links:
+      - odoo
+    environment:
+      - VIRTUAL_HOST=odoo.makeoverlab.com.ar
+      - LETSENCRYPT_HOST=odoo.makeoverlab.com.ar
+      - LETSENCRYPT_EMAIL=jorge.obiols@gmail.com
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - certs:/etc/nginx/certs:ro
+      - vhostd:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /odoo_ar/nginx/conf/:/etc/nginx/conf.d:ro
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: companion
+    restart: always
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+    volumes:
+      - certs:/etc/nginx/certs:rw
+      - vhostd:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+        #  netdata:
+        #    image: netdata/netdata
+        #    hostname: odoo.makeoverlab.com.ar
+        #    restart: unless-stopped
+        #    ports: 19999:19999
+        #    cap_add:
+        #      - SYS_PTRACE
+        #    security_opt:
+        #      - apparmor:unconfined
+        #    volumes:
+        #        #      - /var/run/docker.sock:/var/run/docker.sock:ro
+        #      - netdatalib:/var/lib/netdata
+        #      - netdatacache:/var/cache/netdata
+        #      - /etc/passwd:/host/etc/passwd:ro
+        #      - /etc/group:/host/etc/group:ro
+        #      - /proc:/host/proc:ro
+        #      - /sys:/host/sys:ro
+        #      - /etc/os-release:/host/etc/os-release:ro
+        #    environment:
+        #      - VIRTUALIZATION=${VIRTUALIZATION}
+
+volumes:
+  certs:
+  html:
+  vhostd:
+          #  netdatalib:
+          #  netdatacache:
