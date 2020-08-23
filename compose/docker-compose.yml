@@ -55,6 +55,8 @@ services:
     links:
       - postgres:db
       - aeroo:aeroo
+    environment:
+      - SERVER_MODE= 
     labels:
       # router rou-odoo --> Acceso a odoo en puerto 80
       - traefik.http.routers.rou-odoo.rule=Host(`odoo.makeoverlab.com.ar`)
@@ -99,4 +101,4 @@ services:
 
   aeroo:
     image: jobiols/aeroo-docs
-    container_name: odoo
+    container_name: aeroo
