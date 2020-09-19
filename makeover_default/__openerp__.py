@@ -58,7 +58,7 @@
         {'name': 'nginx', 'usr': 'nginx', 'ver': 'latest'},
     ],
 
-    'port': '8068'
+    'port': '8069'
 
 }
 
